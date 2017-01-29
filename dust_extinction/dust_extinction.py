@@ -5,9 +5,12 @@
 
 from __future__ import print_function, division
 
-import string
+# STDLIB
+import warnings
+
 import numpy as np
 
+import astropy.units as u
 from astropy.modeling import Model, Parameter, InputParameterError
 
 __all__ = ['CCM89']
@@ -19,7 +22,9 @@ class CCM89(Model):
     Parameters
     ----------
     x: float
-        wavelengths in wavenumbers [1/micron]
+        expects either x in units of wavelengths or frequency
+        or assumes wavelengths in wavenumbers [1/micron]
+        internally wavenumbers are used
 
     Rv: float
         R(V) = A(V)/E(B-V) = total-to-selective extinction
@@ -28,6 +33,11 @@ class CCM89(Model):
     -------
     elvebv: float
         E(x-V)/E(B-V) extinction curve [mag]
+
+    Raises
+    ------
+    ValueError
+        Input x values outside of defined range.
 
     Notes
     -----
@@ -69,14 +79,30 @@ class CCM89(Model):
                                       + str(self.Rv_range[1]))
     
     @staticmethod
-    def evaluate(x, Rv):
+    def evaluate(in_x, Rv):
         """
         CCM89 model function.
         """
+        # convert to wavenumbers (1/micron) if x input in units
+        # otherwise, assume x in appropriate wavenumber units
+        with u.add_enabled_equivalencies(u.spectral()):
+            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)       
+
+        # strip the quantity to avoid needing to add units to all the
+        #    polynomical coefficients
+        x = x_quant.value
+
+        # check that the wavenumbers are within the defined range
+        if np.any(x < 0.3):
+            raise ValueError('Input x outside of range defined for CCM89' \
+                             + ' [0.3 <= x <= 10, x has units 1/micron]')
+        
+        # setup the a & b coefficient vectors
         n_x = len(x)
         a = np.zeros(n_x)
         b = np.zeros(n_x)
 
+        # define the ranges
         ir_indxs = np.where(np.logical_and(0.3 <= x,x < 1.1))
         opt_indxs = np.where(np.logical_and(1.1 <= x,x < 3.3))
         nuv_indxs = np.where(np.logical_and(3.3 <= x,x <= 8.0))

@@ -1,6 +1,8 @@
 import numpy as np
 import pytest
 
+import astropy.units as u
+
 from dust_extinction import CCM89
 
 @pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
@@ -11,6 +13,9 @@ def test_extinction_CCM89_values(Rv):
                    3.  ,   2.78,   2.27,   1.82,
                    1.43,   1.11,   0.8 ,   0.63,
                    0.46])
+
+    # add units
+    x = x/u.micron
 
     # correct values
     if Rv == 3.1:
@@ -53,8 +58,8 @@ def test_extinction_CCM89_values(Rv):
         cor_vals = np.array([ 0.0 ])
 
     # initialize extinction model    
-    tlaw = CCM89(Rv=Rv)
+    tmodel = CCM89(Rv=Rv)
 
     # test
-    np.testing.assert_allclose(tlaw(x), cor_vals)
+    np.testing.assert_allclose(tmodel(x), cor_vals)
     
