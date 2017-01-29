@@ -18,5 +18,5 @@ This code is currently in active development.
 License
 -------
 
-The BEAST is licensed under a 3-clause BSD style license (see the
+This code is licensed under a 3-clause BSD style license (see the
 ``LICENSE.rst`` file).

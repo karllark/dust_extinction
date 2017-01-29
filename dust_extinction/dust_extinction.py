@@ -131,7 +131,6 @@ class CCM89(Model):
         # far-NUV
         y = x[fnuv_indxs] - 5.9
         a[fnuv_indxs] += -.04473*(y**2) - .009779*(y**3)
-        # sign changed on both from extinct.py where it was incorrect
         b[fnuv_indxs] += .2130*(y**2) + .1207*(y**3)  
         
         # FUV
