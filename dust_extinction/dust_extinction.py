@@ -93,7 +93,7 @@ class CCM89(Model):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        if np.any(x < 0.3):
+        if np.logical_or(np.any(x < 0.3),np.any(x > 10.0)):
             raise ValueError('Input x outside of range defined for CCM89' \
                              + ' [0.3 <= x <= 10, x has units 1/micron]')
         

@@ -12,6 +12,14 @@ def test_invalid_Rv_input(Rv_invalid):
         tmodel = CCM89(Rv=Rv_invalid)
     assert exc.value.args[0] == 'parameter Rv must be between 2.0 and 6.0'
 
+@pytest.mark.parametrize("x_invalid", [-1.0, 0.2, 10.1, 100.])
+def test_invalid_wavenumbers(x_invalid):
+    tmodel = CCM89(Rv=3.1)
+    with pytest.raises(ValueError) as exc:
+        tmodel([x_invalid])
+    assert exc.value.args[0] == 'Input x outside of range defined for CCM89' \
+        + ' [0.3 <= x <= 10, x has units 1/micron]'
+    
 @pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
 def test_extinction_CCM89_values(Rv):
     # testing wavenumbers
