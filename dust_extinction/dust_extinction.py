@@ -15,6 +15,8 @@ from astropy.modeling import Model, Parameter, InputParameterError
 
 __all__ = ['CCM89']
 
+x_range_CCM89 = [0.3,10.0]
+
 class CCM89(Model):
     """
     CCM89 extinction model calculation
@@ -57,6 +59,7 @@ class CCM89(Model):
                    + "total-to-selective extinction",
                    default=3.1)
     Rv_range = [2.0,6.0]
+    x_range = x_range_CCM89
 
     @Rv.validator
     def Rv(self, value):
@@ -93,9 +96,14 @@ class CCM89(Model):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        if np.logical_or(np.any(x < 0.3),np.any(x > 10.0)):
+        if np.logical_or(np.any(x < x_range_CCM89[0]),
+                         np.any(x > x_range_CCM89[1])):
             raise ValueError('Input x outside of range defined for CCM89' \
-                             + ' [0.3 <= x <= 10, x has units 1/micron]')
+                             + ' ['
+                             + str(x_range_CCM89[0])
+                             +  ' <= x <= '
+                             + str(x_range_CCM89[1])
+                             + ', x has units 1/micron]')
         
         # setup the a & b coefficient vectors
         n_x = len(x)
