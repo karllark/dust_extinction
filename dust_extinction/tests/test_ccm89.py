@@ -3,7 +3,7 @@ import pytest
 
 import astropy.units as u
 
-from dust_extinction import CCM89
+from ..dust_extinction import CCM89
 
 @pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
 def test_extinction_CCM89_values(Rv):
