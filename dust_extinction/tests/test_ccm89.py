@@ -2,8 +2,15 @@ import numpy as np
 import pytest
 
 import astropy.units as u
+from astropy.modeling import InputParameterError
 
 from ..dust_extinction import CCM89
+
+@pytest.mark.parametrize("Rv_invalid", [-1.0,0.0,1.9,6.1,10.])
+def test_invalid_Rv_input(Rv_invalid):
+    with pytest.raises(InputParameterError) as exc:
+        tmodel = CCM89(Rv=Rv_invalid)
+    assert exc.value.args[0] == 'parameter Rv must be between 2.0 and 6.0'
 
 @pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
 def test_extinction_CCM89_values(Rv):
