@@ -1,22 +1,25 @@
 Astronomical dust extinction
 ============================
 
+.. image:: https://readthedocs.org/projects/dust_extinction/badge/?version=latest
+   :target: https://readthedocs.org/projects/dust_extinction/?badge=latest
+   :alt: Documentation Status
+
 .. image:: https://travis-ci.org/karllark/dust_extinction.svg?branch=master
    :target: https://travis-ci.org/karllark/dust_extinction
    :alt: CI Testing Status
 
-.. image:: https://readthedocs.org/projects/dust_extinction/badge/?version=latest
-   :target: https://readthedocs.org/projects/dust_extinction/?badge=latest
-   :alt: Documentation Status
+.. image:: https://coveralls.io/repos/github/karllark/dust_extinction/badge.svg?branch=master
+:target: https://coveralls.io/github/karllark/dust_extinction?branch=master
 
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
     
-Astronomical dust extinction curves implemented in the
-astropy.modeling framework.
+This package provides astronomical interstellar dust extinction curves
+implemented using the astropy.modeling framework.
 
-dust_extinction is an potentially affiliated package of `AstroPy`_.
+This package is potentially an affiliated package of `AstroPy`_.
 
 In Development!
 ---------------
