@@ -16,7 +16,7 @@ Astronomical dust extinction
 Astronomical dust extinction curves implemented in the
 astropy.modeling framework.
 
-A potential astropy affiliated package.
+dust_extinction is an potentially affiliated package of `AstroPy`_.
 
 In Development!
 ---------------

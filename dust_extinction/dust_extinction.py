@@ -3,7 +3,7 @@
 #  adaption needed as we are directly interested in the extinction curve
 #  not in dereddening a spectrum (forward instead of reverse modeling)
 
-from __future__ import print_function, division
+from __future__ import (absolute_import, print_function, division)
 
 # STDLIB
 import warnings
