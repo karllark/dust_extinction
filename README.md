@@ -1,6 +1,14 @@
 Astronomical dust extinction
 ============================
 
+.. image:: https://travis-ci.org/karllark/dust_extinction.svg?branch=master
+    :target: https://travis-ci.org/karllark/dust_extinction
+    :alt: CI Testing Status
+
+.. image:: https://readthedocs.org/projects/dust_extinction/badge/?version=latest
+    :target: https://readthedocs.org/projects/dust_extinction/?badge=latest
+    :alt: Documentation Status
+    
 Astronomical dust extinction curves implemented in the
 astropy.modeling framework.
 
