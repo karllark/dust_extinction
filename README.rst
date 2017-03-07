@@ -1,10 +1,10 @@
 Astronomical dust extinction
 ============================
 
-.. image:: https://readthedocs.org/projects/dust_extinction/badge/?version=latest
-   :target: https://readthedocs.org/projects/dust_extinction/?badge=latest
+.. image:: http://readthedocs.org/projects/dust-extinction/badge/?version=latest
+   :target: http://dust-extinction.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
-
+	 
 .. image:: https://travis-ci.org/karllark/dust_extinction.svg?branch=master
    :target: https://travis-ci.org/karllark/dust_extinction
    :alt: CI Testing Status
