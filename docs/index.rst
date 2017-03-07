@@ -1,25 +1,17 @@
-Interstellar Dust Extinction
-============================
-
-Interstellar dust extinction curves implemnted as astropy models
-
-Uses the astropy affiliated package template
-
-BEAST Repository
-================
-
-Github: <https://github.com/karllark/dust_extinction>
-
-Reference API
+Documentation
 =============
+
+This is an affiliated package for the AstroPy package. The documentation for
+this package is here:
+
 .. toctree::
-   :maxdepth: 1
+  :maxdepth: 2
 
-.. automodapi:: dust_extinction.dust_extinction
-	      
-Indices and tables
-==================
+  dust_extinction/index.rst
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. note:: The layout of this directory is simply a suggestion.  To follow
+          traditional practice, do *not* edit this page, but instead place
+          all documentation for the affiliated package inside ``packagename/``.
+          The traditional practice was intended to allow the affiliated
+          package to eventually be merged into the main astropy package.
+          You can follow this practice or choose your own layout.
