@@ -8,5 +8,6 @@ dependencies:
     - Cython
     - matplotlib
     - numpy
+    - Sphinx >= 1.5.1
 #   - pip:
 #       - dependency_from_pip
