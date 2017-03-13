@@ -149,3 +149,31 @@ class CCM89(Model):
         # return Al/Av
         return a + b/Rv
         
+def dust_extinguish(modelname, x, Rv=3.1, Av=1.0):
+    """
+    Program to provide the factor to use to extinguish a spectrum
+
+    Parameters
+    ----------
+    modelname: str
+       name of dust extinction model to use
+       modelname must be a class in dust_extinction
+
+    x: float
+        expects either x in units of wavelengths or frequency
+        or assumes wavelengths in wavenumbers [1/micron]
+        internally wavenumbers are used
+
+    Rv: float
+        R(V) = A(V)/E(B-V) = total-to-selective extinction
+
+    Av: float
+        A(V) of dust column
+    """
+    # define the model
+    ext_model = modelname(Rv=Rv)
+    
+    # get the extinction curve
+    ext_curve = ext_model(x)
+
+    print(ext_curve)
