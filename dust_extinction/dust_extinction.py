@@ -33,7 +33,7 @@ class CCM89(Model):
 
     Returns
     -------
-    elvebv: float
+    elvebv: np.array(dtype=float)
         E(x-V)/E(B-V) extinction curve [mag]
 
     Raises
@@ -50,8 +50,6 @@ class CCM89(Model):
     F99 should be used instead as it is based on 10x more observations 
     and a better treatment of the optical/NIR photometry based portion 
     of the curves.
-
-    CCM89 is mainly for historical puposes
     """
     inputs = ('x',)
     outputs = ('elvebv',)
@@ -146,34 +144,47 @@ class CCM89(Model):
         a[fuv_indxs] = np.polyval((-.070, .137, -.628, -1.073), y)
         b[fuv_indxs] = np.polyval((.374, -.42, 4.257, 13.67), y)
 
-        # return Al/Av
+        # return E(lambda-V)/E(B-V)
         return a + b/Rv
+
+    def extinguish(self, x, Av=None, Ebv=None):
+        """
+        Calculate the extinction as a fraction
+
+        Parameters
+        ----------
+        x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+           internally wavenumbers are used
+
+        Av: float
+           A(V) value of dust column
+           Av or Ebv must be set
+
+        Ebv: float
+           E(B-V) value of dust column
+           Av or Ebv must be set
+
+        Returns
+        -------
+        frac_ext: np.array(dtype=float)
+           extinction as a function of x 
+        """
+        # get the extinction curve
+        elvebv = self(x)
+
+        # check that av or ebv is set
+        if (Av is None) and (Ebv is None):
+            raise ValueError('neither Av or Ebv passed, one is required')
+            
+        # if Av is not set and Ebv set, convert to Av
+        if Av is None:
+            Av = self.Rv*Ebv
         
-def dust_extinguish(modelname, x, Rv=3.1, Av=1.0):
-    """
-    Program to provide the factor to use to extinguish a spectrum
+        # convert to A(lambda)/A(V)
+        alav = elvebv/self.Rv + 1
 
-    Parameters
-    ----------
-    modelname: str
-       name of dust extinction model to use
-       modelname must be a class in dust_extinction
-
-    x: float
-        expects either x in units of wavelengths or frequency
-        or assumes wavelengths in wavenumbers [1/micron]
-        internally wavenumbers are used
-
-    Rv: float
-        R(V) = A(V)/E(B-V) = total-to-selective extinction
-
-    Av: float
-        A(V) of dust column
-    """
-    # define the model
-    ext_model = modelname(Rv=Rv)
-    
-    # get the extinction curve
-    ext_curve = ext_model(x)
-
-    print(ext_curve)
+        # return fractional extinction
+        return np.power(10.0,-0.4*alav*Av)
+        
