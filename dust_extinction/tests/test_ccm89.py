@@ -63,6 +63,23 @@ def test_invalid_micron(x_invalid_angstrom):
                                 + str(tmodel.x_range[1]) \
                                 + ', x has units 1/micron]'
 
+def test_elvebv_ccm89_table3():
+    # values from Table 3 of Cardelli et al. (1989)
+    #   ignoring the last value at L band as it is outside the
+    #   valid range for the relationship
+    #  updated for correction for incorrect value in the table for B band
+    #    correction from Geoff Clayton via email
+    x = np.array([2.78, 2.27, 1.82, 1.43,
+                  1.11, 0.80, 0.63, 0.46])
+    cor_vals = np.array([1.569, 1.322, 1.000, 0.751,
+                         0.479, 0.282, 0.190, 0.114])
+
+    # initialize extinction model    
+    tmodel = CCM89(Rv=3.1)
+
+    # test (table in paper has limited precision)
+    np.testing.assert_allclose(tmodel(x), cor_vals, atol=1e-2)
+    
 def get_elvebv_cor_vals(Rv):
     # testing wavenumbers
     x = np.array([ 10.  ,   9.  ,   8.  ,   7.  ,
