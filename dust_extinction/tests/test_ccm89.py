@@ -128,8 +128,14 @@ def test_extinction_CCM89_values(Rv):
     # test
     np.testing.assert_allclose(tmodel(x), cor_vals)
 
+def test_extinguish_no_av_or_ebv():
+    tmodel = CCM89()
+    with pytest.raises(InputParameterError) as exc:
+        tmodel.extinguish([1.0])
+    assert exc.value.args[0] == 'neither Av or Ebv passed, one required'
+
 @pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
-def test_extinction_CCM89_extinguish_values(Rv):
+def test_extinction_CCM89_extinguish_values_Av(Rv):
     # get the correct values
     x, cor_vals = get_elvebv_cor_vals(Rv)
 
@@ -142,9 +148,20 @@ def test_extinction_CCM89_extinguish_values(Rv):
 
     # test
     np.testing.assert_allclose(tmodel.extinguish(x, Av=Av), cor_vals)
+
+@pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
+def test_extinction_CCM89_extinguish_values_Ebv(Rv):
+    # get the correct values
+    x, cor_vals = get_elvebv_cor_vals(Rv)
+
+    # calculate the cor_vals in fractional units
+    Ebv = 1.0
+    Av = Ebv*Rv
+    cor_vals = np.power(10.0,-0.4*(cor_vals/Rv+1)*Av)
     
-def test_extinguish_no_av_or_ebv():
-    tmodel = CCM89()
-    with pytest.raises(InputParameterError) as exc:
-        tmodel.extinguish([1.0])
-    assert exc.value.args[0] == 'neither Av or Ebv passed, one required'
+    # initialize extinction model    
+    tmodel = CCM89(Rv=Rv)
+
+    # test
+    np.testing.assert_allclose(tmodel.extinguish(x, Ebv=Ebv), cor_vals)
+    
