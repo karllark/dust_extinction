@@ -176,7 +176,7 @@ class CCM89(Model):
 
         # check that av or ebv is set
         if (Av is None) and (Ebv is None):
-            raise ValueError('neither Av or Ebv passed, one is required')
+            raise InputParameterError('neither Av or Ebv passed, one required')
             
         # if Av is not set and Ebv set, convert to Av
         if Av is None:
