@@ -23,7 +23,7 @@ class BaseExtRvModel(Model):
     Base Extinction R(V)-dependent Model.  Do not use.
     """
     inputs = ('x',)
-    outputs = ('exvebv',)
+    outputs = ('axav',)
     
     Rv = Parameter(description="R(V) = A(V)/E(B-V) = " \
                    + "total-to-selective extinction",
@@ -75,7 +75,7 @@ class BaseExtRvModel(Model):
            fractional extinction as a function of x 
         """
         # get the extinction curve
-        exvebv = self(x)
+        axav = self(x)
 
         # check that av or ebv is set
         if (Av is None) and (Ebv is None):
@@ -85,9 +85,6 @@ class BaseExtRvModel(Model):
         if Av is None:
             Av = self.Rv*Ebv
         
-        # convert to A(x)/A(V)
-        axav = exvebv/self.Rv + 1
-
         # return fractional extinction
         return np.power(10.0,-0.4*axav*Av)
         
@@ -137,7 +134,7 @@ class CCM89(BaseExtRvModel):
            ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$E(\lambda - V)/E(B - V)$')
+        ax.set_ylabel('$A(x)/A(V)$')
     
         ax.legend(loc='best')
         plt.show()
@@ -160,8 +157,8 @@ class CCM89(BaseExtRvModel):
 
         Returns
         -------
-        exvebv: np array (float)
-            E(x-V)/E(B-V) extinction curve [mag]
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
 
         Raises
         ------
@@ -228,7 +225,7 @@ class CCM89(BaseExtRvModel):
         a[fuv_indxs] = np.polyval((-.070, .137, -.628, -1.073), y)
         b[fuv_indxs] = np.polyval((.374, -.42, 4.257, 13.67), y)
 
-        # return E(lambda-V)/E(B-V)
+        # return A(x)/A(V)
         return a + b/Rv
 
 class FM90(Model):
