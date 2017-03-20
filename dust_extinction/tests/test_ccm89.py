@@ -63,7 +63,7 @@ def test_invalid_micron(x_invalid_angstrom):
                                 + str(tmodel.x_range[1]) \
                                 + ', x has units 1/micron]'
 
-def test_elvebv_ccm89_table3():
+def test_axav_ccm89_table3():
     # values from Table 3 of Cardelli et al. (1989)
     #   ignoring the last value at L band as it is outside the
     #   valid range for the relationship
@@ -80,7 +80,7 @@ def test_elvebv_ccm89_table3():
     # test (table in paper has limited precision)
     np.testing.assert_allclose(tmodel(x), cor_vals, atol=1e-2)
     
-def get_elvebv_cor_vals(Rv):
+def get_axav_cor_vals(Rv):
     # testing wavenumbers
     x = np.array([ 10.  ,   9.  ,   8.  ,   7.  ,
                    6.  ,   5.  ,   4.6 ,   4.  ,
@@ -137,7 +137,7 @@ def get_elvebv_cor_vals(Rv):
 @pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
 def test_extinction_CCM89_values(Rv):
     # get the correct values
-    x, cor_vals = get_elvebv_cor_vals(Rv)
+    x, cor_vals = get_axav_cor_vals(Rv)
     
     # initialize extinction model    
     tmodel = CCM89(Rv=Rv)
@@ -154,11 +154,11 @@ def test_extinguish_no_av_or_ebv():
 @pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
 def test_extinction_CCM89_extinguish_values_Av(Rv):
     # get the correct values
-    x, cor_vals = get_elvebv_cor_vals(Rv)
+    x, cor_vals = get_axav_cor_vals(Rv)
 
     # calculate the cor_vals in fractional units
     Av = 1.0
-    cor_vals = np.power(10.0,-0.4*(cor_vals/Rv+1)*Av)
+    cor_vals = np.power(10.0,-0.4*(cor_vals*Av))
     
     # initialize extinction model    
     tmodel = CCM89(Rv=Rv)
@@ -169,12 +169,12 @@ def test_extinction_CCM89_extinguish_values_Av(Rv):
 @pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
 def test_extinction_CCM89_extinguish_values_Ebv(Rv):
     # get the correct values
-    x, cor_vals = get_elvebv_cor_vals(Rv)
+    x, cor_vals = get_axav_cor_vals(Rv)
 
     # calculate the cor_vals in fractional units
     Ebv = 1.0
     Av = Ebv*Rv
-    cor_vals = np.power(10.0,-0.4*(cor_vals/Rv+1)*Av)
+    cor_vals = np.power(10.0,-0.4*(cor_vals*Av))
     
     # initialize extinction model    
     tmodel = CCM89(Rv=Rv)
