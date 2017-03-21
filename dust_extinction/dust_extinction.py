@@ -359,7 +359,7 @@ class FM90(Model):
         exvebv += C3*(x2/((x2 - xo**2)**2 + x2*(gamma**2)))
 
         # FUV rise term
-        fnuv_indxs, = np.where(x >= 5.9)
+        fnuv_indxs = np.where(x >= 5.9)
         if len(fnuv_indxs) > 0:
             y = x[fnuv_indxs] - 5.9
             exvebv[fnuv_indxs] += C4*(0.5392*(y**2) + 0.05644*(y**3))
