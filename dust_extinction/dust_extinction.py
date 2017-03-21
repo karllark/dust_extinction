@@ -489,7 +489,7 @@ class F99(BaseExtRvModel):
         x_splineval_uv = 10000.0/np.array([2700.0,2600.0])
 
         # UV points in input x
-        indxs_uv = np.where(x >= x_cutval_uv)
+        indxs_uv, = np.where(x >= x_cutval_uv)
 
         # add in required spline points, otherwise just spline points
         if len(indxs_uv) > 0:
@@ -513,23 +513,23 @@ class F99(BaseExtRvModel):
         #   using cubic spline anchored in UV, optical, and IR
 
         # optical/NIR points in input x
-        indxs_opir = np.where(x < x_cutval_uv)
-
-        # spline points
-        x_splineval_optir = 10000./np.array([26500.0,12200.0,6000.0,
-                                             5470.0,4670.0,4110.0])
-        # add in zero extinction at infinite wavelength
-        x_splineval_optir = np.insert(x_splineval_optir, 0, 0.0)
-
-        # determine optical/IR values at splint points
-        y_splineval_opt   = np.array([-0.426 + 1.0044*Rv,
-                                      -0.050 + 1.0016*Rv,
-                                      0.701 + 1.016*Rv,
-                                      1.208 + 1.0032*Rv - 0.00033*(Rv**2)])
-        y_splineval_ir    = np.array([0.0,0.265,0.829])*Rv/3.1 
-        y_splineval_optir = np.concatenate([y_splineval_ir,y_splineval_opt])
+        indxs_opir, = np.where(x < x_cutval_uv)
 
         if len(indxs_opir) > 0:
+            # spline points
+            x_splineval_optir = 10000./np.array([26500.0,12200.0,6000.0,
+                                                 5470.0,4670.0,4110.0])
+            # add in zero extinction at infinite wavelength
+            x_splineval_optir = np.insert(x_splineval_optir, 0, 0.0)
+
+            # determine optical/IR values at spline points
+            y_splineval_opt   = np.array([-0.426 + 1.0044*Rv,
+                                          -0.050 + 1.0016*Rv,
+                                          0.701 + 1.016*Rv,
+                                          1.208 + 1.0032*Rv - 0.00033*(Rv**2)])
+            y_splineval_ir    = np.array([0.0,0.265,0.829])*Rv/3.1 
+            y_splineval_optir = np.concatenate([y_splineval_ir,y_splineval_opt])
+
             spline_x = np.concatenate([x_splineval_optir, x_splineval_uv])
             spline_y = np.concatenate([y_splineval_optir, y_splineval_uv])
             spline_rep = interpolate.splrep(spline_x, spline_y)

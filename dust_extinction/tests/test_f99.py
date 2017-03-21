@@ -80,3 +80,19 @@ def test_extinction_F99_values():
     # test
     np.testing.assert_allclose(tmodel(x), cor_vals, rtol=1e-05)
 
+
+test_vals = zip([0.5, 1.0, 2.0, 2.5, 3.0, 3.5, 4.0,
+                 4.5, 5.0, 6.0, 7.0, 8.0],
+                [0.124997,  0.377073,  1.130636,  1.419644,
+                 1.630377,  1.888546,  2.275900,  3.014577,
+                 2.762256,  2.475272,  2.711508,  3.197144])
+@pytest.mark.parametrize("test_vals", test_vals)
+def test_extinction_F99_single_values(test_vals):
+    x, cor_val = test_vals
+    
+    # initialize extinction model    
+    tmodel = F99()
+
+    # test
+    np.testing.assert_allclose(tmodel(x), cor_val, rtol=1e-05)
+    
