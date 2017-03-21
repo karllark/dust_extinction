@@ -386,6 +386,7 @@ class F99(BaseExtRvModel):
     F99 Milky Way R(V) dependent extinction model
 
     From Fitzpatrick (1999, PASP, 111, 63)
+
     Updated for the C1 vs C2 correlation in
        Fitzpatrick & Massa (2007, ApJ, 663, 320)
 
@@ -454,7 +455,7 @@ class F99(BaseExtRvModel):
         # check that the wavenumbers are within the defined range
         if np.logical_or(np.any(x < x_range_F99[0]),
                          np.any(x > x_range_F99[1])):
-            raise ValueError('Input x outside of range defined for CCM89' \
+            raise ValueError('Input x outside of range defined for F99' \
                              + ' ['
                              + str(x_range_F99[0])
                              +  ' <= x <= '
