@@ -6,6 +6,12 @@ from astropy.modeling import InputParameterError
 
 from ..dust_extinction import G03
 
+@pytest.mark.parametrize("Index_invalid", [-1, 0, 4])
+def test_invalid_AveNameIndex_input(Index_invalid):
+    with pytest.raises(InputParameterError) as exc:
+        tmodel = G03(AveNameIndex=Index_invalid)
+    assert exc.value.args[0] == 'parameter AveNameIndex must be in 1 2 3'
+
 x_bad = [-1.0, 0.1, 10.1, 100.]
 @pytest.mark.parametrize("x_invalid", x_bad)
 def test_invalid_wavenumbers(x_invalid):
