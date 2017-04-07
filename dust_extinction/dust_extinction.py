@@ -1,7 +1,3 @@
-# routine to compute the CCM89 R(V) dependent extinction curve
-# some code adapted from google code extinct.py by Erik Tollerud
-#  adaption needed as we are directly interested in the extinction curve
-#  not in dereddening a spectrum (forward instead of reverse modeling)
 
 from __future__ import (absolute_import, print_function, division)
 
@@ -14,7 +10,8 @@ from scipy import interpolate
 import astropy.units as u
 from astropy.modeling import Model, Parameter, InputParameterError
 
-__all__ = ['BaseExtRvModel', 'CCM89', 'FM90', 'F99']
+__all__ = ['BaseExtModel','BaseExtRvModel',
+           'CCM89', 'FM90', 'F99', 'G03']
 
 x_range_CCM89 = [0.3,10.0]
 x_range_FM90 = [1.0/0.32,1.0/0.0912]
@@ -37,6 +34,7 @@ class BaseExtModel(Model):
         x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
+
            internally wavenumbers are used
 
         Av: float
@@ -157,6 +155,7 @@ class CCM89(BaseExtRvModel):
         in_x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
+
            internally wavenumbers are used
 
         Returns
@@ -326,6 +325,7 @@ class FM90(Model):
         in_x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
+
            internally wavenumbers are used
 
         Returns
@@ -437,6 +437,7 @@ class F99(BaseExtRvModel):
         in_x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
+
            internally wavenumbers are used
 
         Returns
@@ -551,14 +552,17 @@ class G03(BaseExtModel):
 
     Parameters
     ----------
-    AveName: str
-       name of the average extinction curve
-       [allowed values = 'SMCBar', 'LMCavg', 'LMC2']
+    AveNameIndex: int
+       index of allowed name
+
+       [allowed numbers = 1, 2, 3]
+
+       [allowed names = 'SMCBar', 'LMCave', 'LMC2']
 
     Raises
     ------
     InputParameterError
-       AveName not in allowed list
+       AveNameIndex not in allowed list
 
     Notes
     -----
@@ -580,12 +584,14 @@ class G03(BaseExtModel):
         fig, ax = plt.subplots()
 
         # generate the curves and plot them
-        x = np.arange(0.2,8.7,0.1)/u.micron
+        x = np.arange(0.3,10.0,0.1)/u.micron
     
-        AveNames = ['SMCBar']
-        for cur_avename in AveNames:
-           ext_model = G03(AveName=cur_avename)
-           ax.plot(x,ext_model(x),label=cur_avename)
+        AveNames = ['SMCBar', 'LMCAve', 'LMC2']
+        AveName_Indexs = [1, 2, 3]
+        for cur_ave_idx in AveName_Indexs:
+           ext_model = G03(AveNameIndex=cur_ave_idx)
+           ax.plot(x,ext_model(x),label=str(cur_ave_idx) + 
+                                        ": " + AveNames[cur_ave_idx-1])
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]')
         ax.set_ylabel('$A(x)/A(V)$')
@@ -594,33 +600,34 @@ class G03(BaseExtModel):
         plt.show()
     """
 
-    AveName = Parameter(description="G03 Average Curve Name",
-                        default='SMCBar')
+    AveNameIndex = Parameter(description="G03 Average Curve Name Index",
+                        default=1)
 
     x_range = x_range_G03
 
-    @AveName.validator
-    def AveName(self, value):
+    @AveNameIndex.validator
+    def AveNameIndex(self, value):
         """
         Check that AveName has a valid value
 
         Parameters
         ----------
-        value: string
-            AveName to check
+        value: int
+            index of allowed name
 
         Raises
         ------
         InputParameterError
-           Input AveName not valid
+           Input AveName number not valid
         """
-        allowed_names = ['SMCBar', 'LMCAvg', 'LMC2']
-        if AveName not in ['SMCBar', 'LMCAvg', 'LMC2']:
-            raise InputParameterError("parameter AveName must be in " + 
-                                      + allowed_names)
+        allowed_names = ['SMCBar', 'LMCAve', 'LMC2']
+        allowed_numbers = [1, 2, 3]
+        if value not in allowed_numbers:
+            raise InputParameterError("parameter AveNameIndex must be in "
+                            + " ".join(str(an) for an in allowed_numbers))
 
     @staticmethod
-    def evaluate(in_x):
+    def evaluate(in_x, AveNameIndex):
         """
         G03 function
 
@@ -629,6 +636,7 @@ class G03(BaseExtModel):
         in_x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
+
            internally wavenumbers are used
 
         Returns
@@ -664,11 +672,39 @@ class G03(BaseExtModel):
         axav = np.zeros(len(x))
 
         # get the parameters for the requested AveName
-        if AveName == 'LMCAvg':
-            pass
-        elif AveNmae == 'LMC2':
-            pass
-        else:   # AveName = 'SMCBar'
+        #   From Tables 2, 3, and 4 of Gordon et al. (2003)
+        
+        if AveNameIndex == 2: # LMCAve
+            Rv = 3.41
+            C1 = -0.890
+            C2 = 0.998
+            C3 = 2.719
+            C4 = 0.400
+            xo = 4.579
+            gamma = 0.934
+
+            optnir_axav_x = 1./np.array([2.198, 1.65, 1.25, 
+                                         0.55, 0.44, 0.37])
+            # value at 2.198 changed to provide smooth interpolation
+            # as noted in Gordon et al. (2016, ApJ, 826, 104) for SMCBar
+            optnir_axav_y = [0.10, 0.186, 0.257,
+                             1.000, 1.293, 1.518] 
+        elif AveNameIndex == 3: # LMC2
+            Rv = 2.76
+            C1 = -1.475
+            C2 = 1.132
+            C3 = 1.463
+            C4 = 0.294
+            xo = 4.558
+            gamma = 0.945
+
+            optnir_axav_x = 1./np.array([2.198, 1.65, 1.25, 
+                                         0.55, 0.44, 0.37])
+            # value at 1.65 changed to provide smooth interpolation
+            # as noted in Gordon et al. (2016, ApJ, 826, 104) for SMCBar
+            optnir_axav_y = [0.101, 0.15, 0.299,
+                             1.000, 1.349, 1.665] 
+        else:   # AveNameIndex = 1 # SMCBar
             Rv = 2.74
             C1 = -4.959
             C2 = 2.264
@@ -677,24 +713,14 @@ class G03(BaseExtModel):
             xo = 4.6
             gamma = 1.0
 
-            optnir_axav_x = 10000./np.array([2.198, 1.65, 1.25, 0.81, 0.65,
-                                             0.55, 0.44, 0.37])
-            # values at 2.198 and 1.25 updated to provide smooth interpolation
+            optnir_axav_x = 1./np.array([2.198, 1.65, 1.25, 0.81, 0.65,
+                                         0.55, 0.44, 0.37])
+
+            # values at 2.198 and 1.25 changed to provide smooth interpolation
             # as noted in Gordon et al. (2016, ApJ, 826, 104)
             optnir_axav_y = [0.11, 0.169, 0.25, 0.567, 0.801,
                              1.00, 1.374, 1.672]
             
-            xsplopir[0] = 0.0
-            xsplopir[1: 10] = 1.0 / np.array([2.198, 1.65, 1.25, 0.81,
-                                              0.65, 0.55, 0.44, 0.37])
-
-            ysplopir = np.array([0.0, 0.11, 0.169, 0.25, 0.567,
-                                 0.801, 1.00, 1.374, 1.672])
-
-            tck = interpolate.splrep(np.hstack([xsplopir, xspluv]),
-                                     np.hstack([ysplopir, yspluv]), k=3)
-            k[ind] = interpolate.splev(x[ind], tck)
-
         # x value above which FM90 parametrization used
         x_cutval_uv = 10000.0/2700.0
 
@@ -732,16 +758,13 @@ class G03(BaseExtModel):
             # spline points
             x_splineval_optir = optnir_axav_x
                                            
-            # add in zero extinction at infinite wavelength
-            x_splineval_optir = np.insert(x_splineval_optir, 0, 0.0)
-
             # determine optical/IR values at spline points
             y_splineval_optir   = optnir_axav_y
 
             # add in zero extinction at infinite wavelength
             x_splineval_optir = np.insert(x_splineval_optir, 0, 0.0)
             y_splineval_optir = np.insert(y_splineval_optir, 0, 0.0)
-            
+
             spline_x = np.concatenate([x_splineval_optir, x_splineval_uv])
             spline_y = np.concatenate([y_splineval_optir, y_splineval_uv])
             spline_rep = interpolate.splrep(spline_x, spline_y)
