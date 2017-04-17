@@ -4,18 +4,12 @@ import pytest
 import astropy.units as u
 from astropy.modeling import InputParameterError
 
-from ..dust_extinction import G03
-
-@pytest.mark.parametrize("Index_invalid", [-1, 0, 4])
-def test_invalid_AveNameIndex_input(Index_invalid):
-    with pytest.raises(InputParameterError) as exc:
-        tmodel = G03(AveNameIndex=Index_invalid)
-    assert exc.value.args[0] == 'parameter AveNameIndex must be in 1 2 3'
+from ..dust_extinction_averages import G03_SMCBar
 
 x_bad = [-1.0, 0.1, 10.1, 100.]
 @pytest.mark.parametrize("x_invalid", x_bad)
 def test_invalid_wavenumbers(x_invalid):
-    tmodel = G03()
+    tmodel = G03_SMCBar()
     with pytest.raises(ValueError) as exc:
         tmodel(x_invalid)
     assert exc.value.args[0] == 'Input x outside of range defined for G03' \
@@ -27,7 +21,7 @@ def test_invalid_wavenumbers(x_invalid):
 
 @pytest.mark.parametrize("x_invalid_wavenumber", x_bad/u.micron)
 def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
-    tmodel = G03()
+    tmodel = G03_SMCBar()
     with pytest.raises(ValueError) as exc:
         tmodel(x_invalid_wavenumber)
     assert exc.value.args[0] == 'Input x outside of range defined for G03' \
@@ -39,7 +33,7 @@ def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
 
 @pytest.mark.parametrize("x_invalid_micron", u.micron/x_bad)
 def test_invalid_micron(x_invalid_micron):
-    tmodel = G03()
+    tmodel = G03_SMCBar()
     with pytest.raises(ValueError) as exc:
         tmodel(x_invalid_micron)
     assert exc.value.args[0] == 'Input x outside of range defined for G03' \
@@ -51,7 +45,7 @@ def test_invalid_micron(x_invalid_micron):
     
 @pytest.mark.parametrize("x_invalid_angstrom", u.angstrom*1e4/x_bad)
 def test_invalid_micron(x_invalid_angstrom):
-    tmodel = G03()
+    tmodel = G03_SMCBar()
     with pytest.raises(ValueError) as exc:
         tmodel(x_invalid_angstrom)
     assert exc.value.args[0] == 'Input x outside of range defined for G03' \
@@ -122,16 +116,13 @@ def get_axav_cor_vals(index):
 
     return (x, cor_vals)
         
-@pytest.mark.parametrize("index", [1, 2, 3])
-def test_extinction_G03_values(index):
+def test_extinction_G03_values():
     # get the correct values
-    x, cor_vals = get_axav_cor_vals(index)
+    x, cor_vals = get_axav_cor_vals(1)
     
     # initialize extinction model    
-    tmodel = G03(AveNameIndex=index)
+    tmodel = G03_SMCBar()
 
-    print((tmodel(x)-cor_vals)/cor_vals)
-    
     # test
     #  not to numerical precision as we are using the FM90 fits
     #  and spline functions and the correct values are the data 
@@ -160,7 +151,7 @@ def test_extinction_G03_single_values(test_vals):
     x, cor_val = test_vals
     
     # initialize extinction model    
-    tmodel = G03()
+    tmodel = G03_SMCBar()
 
     # test
     np.testing.assert_allclose(tmodel(x), cor_val, rtol=6e-02)
