@@ -9,7 +9,7 @@ from astropy.modeling import Model, Parameter, InputParameterError
 
 from dust_extinction.dust_extinction import FM90
 
-__all__ = ['BaseExtAve', 'G03_SMCBar']
+__all__ = ['BaseExtAve', 'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2']
 
 x_range_G03 = [0.3,10.0]
 
@@ -221,7 +221,7 @@ class G03_SMCBar(BaseExtAve):
 
     From Gordon et al. (2003, ApJ, 594, 279)
 
-    Example showing the G03 SMCBar average curve
+    Example showing the average curve
 
     .. plot::
         :include-source:
@@ -239,6 +239,8 @@ class G03_SMCBar(BaseExtAve):
     
         ext_model = G03_SMCBar()
         ax.plot(x,ext_model(x),label='G03 SMCBar')
+        ax.plot(ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]')
         ax.set_ylabel('$A(x)/A(V)$')
@@ -249,10 +251,29 @@ class G03_SMCBar(BaseExtAve):
 
     x_range = x_range_G03
 
+    obsdata_x = np.array([0.455, 0.606, 0.800,
+                          1.235, 1.538,
+                          1.818, 2.273, 2.703,
+                          3.375, 3.625, 3.875,
+                          4.125, 4.375, 4.625, 4.875,
+                          5.125, 5.375, 5.625, 5.875, 
+                          6.125, 6.375, 6.625, 6.875, 
+                          7.125, 7.375, 7.625, 7.875, 
+                          8.125, 8.375, 8.625])
+    obsdata_axav = np.array([0.110, 0.169, 0.250,
+                             0.567, 0.801,
+                             1.000, 1.374, 1.672,
+                             2.000, 2.220, 2.428,
+                             2.661, 2.947, 3.161, 3.293,
+                             3.489, 3.637, 3.866, 4.013,
+                             4.243, 4.472, 4.776, 5.000,
+                             5.272, 5.575, 5.795, 6.074,
+                             6.297, 6.436, 6.992])
+
     @staticmethod
     def evaluate(in_x):
         """
-        G03 function
+        G03 SMCBar function
 
         Parameters
         ----------
@@ -286,6 +307,222 @@ class G03_SMCBar(BaseExtAve):
         # as noted in Gordon et al. (2016, ApJ, 826, 104)
         optnir_axav_y = [0.11, 0.169, 0.25, 0.567, 0.801,
                          1.00, 1.374, 1.672]
+            
+        # return A(x)/A(V)
+        return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
+                                 optnir_axav_x, optnir_axav_y)
+
+    
+class G03_LMCAvg(BaseExtAve):
+    """
+    G03 LMCAvg Average Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    LMCAvg G03 average extinction curve
+
+    From Gordon et al. (2003, ApJ, 594, 279)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.dust_extinction_averages import G03_LMCAvg
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        x = np.arange(0.3,10.0,0.1)/u.micron
+    
+        ext_model = G03_LMCAvg()
+        ax.plot(x,ext_model(x),label='G03 LMCAvg')
+        ax.plot(ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel('$A(x)/A(V)$')
+    
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = x_range_G03
+
+    obsdata_x = np.array([0.455, 0.606, 0.800,
+                          1.818, 2.273, 2.703,
+                          3.375, 3.625, 3.875,
+                          4.125, 4.375, 4.625, 4.875,
+                          5.125, 5.375, 5.625, 5.875, 
+                          6.125, 6.375, 6.625, 6.875, 
+                          7.125, 7.375, 7.625, 7.875, 
+                          8.125])
+    obsdata_axav = np.array([0.100, 0.186, 0.257,
+                             1.000, 1.293, 1.518,
+                             1.786, 1.969, 2.149,
+                             2.391, 2.771, 2.967, 2.846,
+                             2.646, 2.565, 2.566, 2.598,
+                             2.607, 2.668, 2.787, 2.874,
+                             2.983, 3.118, 3.231, 3.374,
+                             3.366])
+
+    @staticmethod
+    def evaluate(in_x):
+        """
+        G03 LMCAvg function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        Rv = 3.41
+        C1 = -0.890
+        C2 = 0.998
+        C3 = 2.719
+        C4 = 0.400
+        xo = 4.579
+        gamma = 0.934
+
+        optnir_axav_x = 1./np.array([2.198, 1.65, 1.25, 
+                                     0.55, 0.44, 0.37])
+        # value at 2.198 changed to provide smooth interpolation
+        # as noted in Gordon et al. (2016, ApJ, 826, 104) for SMCBar
+        optnir_axav_y = [0.10, 0.186, 0.257,
+                         1.000, 1.293, 1.518] 
+            
+        # return A(x)/A(V)
+        return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
+                                 optnir_axav_x, optnir_axav_y)
+
+    
+class G03_LMC2(BaseExtAve):
+    """
+    G03 LMC2 Average Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    LMC2 G03 average extinction curve
+
+    From Gordon et al. (2003, ApJ, 594, 279)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.dust_extinction_averages import G03_LMC2
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        x = np.arange(0.3,10.0,0.1)/u.micron
+    
+        ext_model = G03_LMC2()
+        ax.plot(x,ext_model(x),label='G03 LMC2')
+        ax.plot(ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel('$A(x)/A(V)$')
+    
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = x_range_G03
+
+    obsdata_x = np.array([0.455, 0.606, 0.800,
+                          1.818, 2.273, 2.703,
+                          3.375, 3.625, 3.875,
+                          4.125, 4.375, 4.625, 4.875,
+                          5.125, 5.375, 5.625, 5.875, 
+                          6.125, 6.375, 6.625, 6.875, 
+                          7.125, 7.375, 7.625, 7.875, 
+                          8.125])
+    obsdata_axav = np.array([0.101, 0.150, 0.299,
+                             1.000, 1.349, 1.665,
+                             1.899, 2.067, 2.249,
+                             2.447, 2.777, 2.922, 2.921,
+                             2.812, 2.805, 2.863, 2.932,
+                             3.060, 3.110, 3.299, 3.408,
+                             3.515, 3.670, 3.862, 3.937,
+                             4.055])
+
+    @staticmethod
+    def evaluate(in_x):
+        """
+        G03 LMC2 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        Rv = 2.76
+        C1 = -1.475
+        C2 = 1.132
+        C3 = 1.463
+        C4 = 0.294
+        xo = 4.558
+        gamma = 0.945
+
+        optnir_axav_x = 1./np.array([2.198, 1.65, 1.25, 
+                                     0.55, 0.44, 0.37])
+        # value at 1.65 changed to provide smooth interpolation
+        # as noted in Gordon et al. (2016, ApJ, 826, 104) for SMCBar
+        optnir_axav_y = [0.101, 0.15, 0.299,
+                         1.000, 1.349, 1.665] 
             
         # return A(x)/A(V)
         return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
