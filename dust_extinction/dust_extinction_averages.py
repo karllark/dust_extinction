@@ -272,8 +272,7 @@ class G03_SMCBar(BaseExtAve):
                              5.272, 5.575, 5.795, 6.074,
                              6.297, 6.436, 6.992])
 
-    @staticmethod
-    def evaluate(in_x):
+    def evaluate(self, in_x):
         """
         G03 SMCBar function
 
@@ -295,7 +294,6 @@ class G03_SMCBar(BaseExtAve):
         ValueError
            Input x values outside of defined range
         """
-        Rv = 2.74
         C1 = -4.959
         C2 = 2.264
         C3 = 0.389
@@ -311,7 +309,7 @@ class G03_SMCBar(BaseExtAve):
                          1.00, 1.374, 1.672]
             
         # return A(x)/A(V)
-        return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
+        return _curve_F99_method(in_x, self.Rv, C1, C2, C3, C4, xo, gamma,
                                  optnir_axav_x, optnir_axav_y)
 
     
@@ -382,8 +380,7 @@ class G03_LMCAvg(BaseExtAve):
                              2.983, 3.118, 3.231, 3.374,
                              3.366])
 
-    @staticmethod
-    def evaluate(in_x):
+    def evaluate(self, in_x):
         """
         G03 LMCAvg function
 
@@ -405,7 +402,6 @@ class G03_LMCAvg(BaseExtAve):
         ValueError
            Input x values outside of defined range
         """
-        Rv = 3.41
         C1 = -0.890
         C2 = 0.998
         C3 = 2.719
@@ -421,7 +417,7 @@ class G03_LMCAvg(BaseExtAve):
                          1.000, 1.293, 1.518] 
             
         # return A(x)/A(V)
-        return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
+        return _curve_F99_method(in_x, self.Rv, C1, C2, C3, C4, xo, gamma,
                                  optnir_axav_x, optnir_axav_y)
 
     
@@ -492,8 +488,7 @@ class G03_LMC2(BaseExtAve):
                              3.515, 3.670, 3.862, 3.937,
                              4.055])
 
-    @staticmethod
-    def evaluate(in_x):
+    def evaluate(self, in_x):
         """
         G03 LMC2 function
 
@@ -515,7 +510,6 @@ class G03_LMC2(BaseExtAve):
         ValueError
            Input x values outside of defined range
         """
-        Rv = 2.76
         C1 = -1.475
         C2 = 1.132
         C3 = 1.463
@@ -531,7 +525,7 @@ class G03_LMC2(BaseExtAve):
                          1.000, 1.349, 1.665] 
             
         # return A(x)/A(V)
-        return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
+        return _curve_F99_method(in_x, self.Rv, C1, C2, C3, C4, xo, gamma,
                                  optnir_axav_x, optnir_axav_y)
 
     
