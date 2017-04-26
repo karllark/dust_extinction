@@ -251,6 +251,8 @@ class G03_SMCBar(BaseExtAve):
 
     x_range = x_range_G03
 
+    Rv = 2.74
+    
     obsdata_x = np.array([0.455, 0.606, 0.800,
                           1.235, 1.538,
                           1.818, 2.273, 2.703,
@@ -361,6 +363,8 @@ class G03_LMCAvg(BaseExtAve):
 
     x_range = x_range_G03
 
+    Rv = 3.41
+
     obsdata_x = np.array([0.455, 0.606, 0.800,
                           1.818, 2.273, 2.703,
                           3.375, 3.625, 3.875,
@@ -468,6 +472,8 @@ class G03_LMC2(BaseExtAve):
     """
 
     x_range = x_range_G03
+
+    Rv = 2.76
 
     obsdata_x = np.array([0.455, 0.606, 0.800,
                           1.818, 2.273, 2.703,

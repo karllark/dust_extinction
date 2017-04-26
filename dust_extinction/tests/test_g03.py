@@ -59,6 +59,12 @@ def test_invalid_micron(x_invalid_angstrom, tmodel):
                                 + ', x has units 1/micron]'
 
 @pytest.mark.parametrize("tmodel", models)
+def test_extinguish_no_av_or_ebv(tmodel):
+    with pytest.raises(InputParameterError) as exc:
+        tmodel.extinguish([1.0])
+    assert exc.value.args[0] == 'neither Av or Ebv passed, one required'
+
+@pytest.mark.parametrize("tmodel", models)
 def test_extinction_G03_values(tmodel):
     # test
     #  not to numerical precision as we are using the FM90 fits
@@ -71,4 +77,29 @@ def test_extinction_G03_single_values(tmodel):
     # test
     for x, cor_val in zip(tmodel.obsdata_x, tmodel.obsdata_axav):
         np.testing.assert_allclose(tmodel(x), cor_val, rtol=6e-02)
+    
+@pytest.mark.parametrize("tmodel", models)
+def test_extinction_G03_extinguish_values_Av(tmodel):
+    cor_vals = tmodel.obsdata_axav
+
+    # calculate the cor_vals in fractional units
+    Av = 1.0
+    cor_vals = np.power(10.0,-0.4*(cor_vals*Av))
+    
+    # test
+    np.testing.assert_allclose(tmodel.extinguish(tmodel.obsdata_x, Av=Av),
+                               cor_vals, atol=0.01)
+
+@pytest.mark.parametrize("tmodel", models)
+def test_extinction_G03_extinguish_values_Ebv(tmodel):
+    cor_vals = tmodel.obsdata_axav
+
+    # calculate the cor_vals in fractional units
+    Ebv = 1.0
+    Av = Ebv*tmodel.Rv
+    cor_vals = np.power(10.0,-0.4*(cor_vals*Av))
+    
+    # test
+    np.testing.assert_allclose(tmodel.extinguish(tmodel.obsdata_x, Ebv=Ebv),
+                               cor_vals, atol=0.01)
     
