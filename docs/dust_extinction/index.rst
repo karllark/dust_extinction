@@ -23,9 +23,9 @@ There are three differnet types of models (to be completed).
    import matplotlib.pyplot as plt
    import astropy.units as u
    
-   from dust_extinction.dust_extinction_averages import (G03_SMCBar,
-                                                         G03_LMCAvg,
-							 G03_LMC2)
+   from dust_extinction.dust_extinction import (G03_SMCBar,
+                                                G03_LMCAvg,
+					        G03_LMC2)
       
    fig, ax = plt.subplots()
       
@@ -73,8 +73,6 @@ Reference API
 =============
 .. toctree::
    :maxdepth: 1
-
-.. automodapi:: dust_extinction.dust_extinction_averages
 
 .. automodapi:: dust_extinction.dust_extinction
 		

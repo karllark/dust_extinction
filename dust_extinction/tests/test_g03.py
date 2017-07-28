@@ -4,7 +4,7 @@ import pytest
 import astropy.units as u
 from astropy.modeling import InputParameterError
 
-from ..dust_extinction_averages import G03_SMCBar, G03_LMCAvg, G03_LMC2
+from ..dust_extinction import G03_SMCBar, G03_LMCAvg, G03_LMC2
 
 x_bad = [-1.0, 0.1, 10.1, 100.]
 models = [G03_SMCBar(), G03_LMCAvg(), G03_LMC2()]

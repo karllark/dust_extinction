@@ -6,7 +6,7 @@ from astropy.modeling import InputParameterError
 
 from ..dust_extinction import F99
 
-x_bad = [-1.0, 0.1, 9.0, 100.]
+x_bad = [-1.0, 0.1, 12.0, 100.]
 @pytest.mark.parametrize("x_invalid", x_bad)
 def test_invalid_wavenumbers(x_invalid):
     tmodel = F99()
