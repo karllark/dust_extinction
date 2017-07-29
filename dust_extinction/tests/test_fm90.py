@@ -42,7 +42,7 @@ def test_invalid_micron(x_invalid_micron):
                                 +  ' <= x <= ' \
                                 + str(tmodel.x_range[1]) \
                                 + ', x has units 1/micron]'
-    
+
 @pytest.mark.parametrize("x_invalid_angstrom", u.angstrom*1e4/x_bad)
 def test_invalid_micron(x_invalid_angstrom):
     tmodel = FM90()
@@ -67,15 +67,14 @@ def get_elvebv_cor_vals():
                          4.7573250, 5.4905843, 9.2853567, 12.462238])
 
     return (x, cor_vals)
-        
+
 
 def test_extinction_FM90_values():
     # get the correct values
     x, cor_vals = get_elvebv_cor_vals()
-    
-    # initialize extinction model    
+
+    # initialize extinction model
     tmodel = FM90()
 
     # test
     np.testing.assert_allclose(tmodel(x), cor_vals)
-

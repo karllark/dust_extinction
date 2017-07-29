@@ -49,7 +49,7 @@ def test_invalid_micron(x_invalid_micron):
                                 +  ' <= x <= ' \
                                 + str(tmodel.x_range[1]) \
                                 + ', x has units 1/micron]'
-    
+
 @pytest.mark.parametrize("x_invalid_angstrom",
                          u.angstrom*1e4/[-1.0, 0.2, 10.1, 100.])
 def test_invalid_micron(x_invalid_angstrom):
@@ -74,12 +74,12 @@ def test_axav_ccm89_table3():
     cor_vals = np.array([1.569, 1.322, 1.000, 0.751,
                          0.479, 0.282, 0.190, 0.114])
 
-    # initialize extinction model    
+    # initialize extinction model
     tmodel = CCM89(Rv=3.1)
 
     # test (table in paper has limited precision)
     np.testing.assert_allclose(tmodel(x), cor_vals, atol=1e-2)
-    
+
 def get_axav_cor_vals(Rv):
     # testing wavenumbers
     x = np.array([ 10.  ,   9.  ,   8.  ,   7.  ,
@@ -109,7 +109,7 @@ def get_axav_cor_vals(Rv):
                               2.6124774 ,  2.9392494 ,  3.2922643 ,  2.38061642,
                               1.66838089,  1.58933588,  1.33333103,  1.        ,
                               0.74733525,  0.47133573,  0.27811315,  0.18931496,
-                              0.11410029])        
+                              0.11410029])
     elif Rv == 4.0:
         cor_vals = np.array([ 3.533     ,  2.83625   ,  2.34465863,  2.03154717,
                               1.91092092,  2.18964643,  2.46863199,  1.87454675,
@@ -132,14 +132,14 @@ def get_axav_cor_vals(Rv):
         cor_vals = np.array([ 0.0 ])
 
     return (x, cor_vals)
-        
-    
+
+
 @pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
 def test_extinction_CCM89_values(Rv):
     # get the correct values
     x, cor_vals = get_axav_cor_vals(Rv)
-    
-    # initialize extinction model    
+
+    # initialize extinction model
     tmodel = CCM89(Rv=Rv)
 
     # test
@@ -159,8 +159,8 @@ def test_extinction_CCM89_extinguish_values_Av(Rv):
     # calculate the cor_vals in fractional units
     Av = 1.0
     cor_vals = np.power(10.0,-0.4*(cor_vals*Av))
-    
-    # initialize extinction model    
+
+    # initialize extinction model
     tmodel = CCM89(Rv=Rv)
 
     # test
@@ -175,10 +175,9 @@ def test_extinction_CCM89_extinguish_values_Ebv(Rv):
     Ebv = 1.0
     Av = Ebv*Rv
     cor_vals = np.power(10.0,-0.4*(cor_vals*Av))
-    
-    # initialize extinction model    
+
+    # initialize extinction model
     tmodel = CCM89(Rv=Rv)
 
     # test
     np.testing.assert_allclose(tmodel.extinguish(x, Ebv=Ebv), cor_vals)
-    

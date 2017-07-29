@@ -42,7 +42,7 @@ def test_invalid_micron(x_invalid_micron):
                                 +  ' <= x <= ' \
                                 + str(tmodel.x_range[1]) \
                                 + ', x has units 1/micron]'
-    
+
 @pytest.mark.parametrize("x_invalid_angstrom", u.angstrom*1e4/x_bad)
 def test_invalid_micron(x_invalid_angstrom):
     tmodel = F99()
@@ -68,13 +68,13 @@ def get_axav_cor_vals():
                          2.762256,  2.475272,  2.711508,  3.197144])
 
     return (x, cor_vals)
-        
+
 
 def test_extinction_F99_values():
     # get the correct values
     x, cor_vals = get_axav_cor_vals()
-    
-    # initialize extinction model    
+
+    # initialize extinction model
     tmodel = F99()
 
     # test
@@ -89,10 +89,9 @@ test_vals = zip([0.5, 1.0, 2.0, 2.5, 3.0, 3.5, 4.0,
 @pytest.mark.parametrize("test_vals", test_vals)
 def test_extinction_F99_single_values(test_vals):
     x, cor_val = test_vals
-    
-    # initialize extinction model    
+
+    # initialize extinction model
     tmodel = F99()
 
     # test
     np.testing.assert_allclose(tmodel(x), cor_val, rtol=1e-05)
-    
