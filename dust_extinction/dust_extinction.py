@@ -195,7 +195,7 @@ class BaseExtModel(Model):
         Returns
         -------
         frac_ext: np array (float)
-           fractional extinction as a function of x 
+           fractional extinction as a function of x
         """
         # get the extinction curve
         axav = self(x)
@@ -387,7 +387,7 @@ class FM90(Model):
        amplitude of "2175 A" bump
 
     C4: float
-       amplitude of FUV rise 
+       amplitude of FUV rise
 
     xo: float
        centroid of "2175 A" bump
