@@ -11,11 +11,159 @@ import astropy.units as u
 from astropy.modeling import Model, Parameter, InputParameterError
 
 __all__ = ['BaseExtModel','BaseExtRvModel',
-           'CCM89', 'FM90', 'F99']
+           'CCM89', 'FM90', 'F99',
+           'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
+           'G16']
 
 x_range_CCM89 = [0.3,10.0]
 x_range_FM90 = [1.0/0.32,1.0/0.0912]
-x_range_F99 = [1.0/6.0,8.7]
+x_range_F99 = [0.3,10.0]
+x_range_G03 = [0.3,10.0]
+x_range_G16 = x_range_G03
+
+def _test_valid_x_range(x, x_range, outname):
+    """
+    Test if any of the x values are outside of the valid range
+
+    Parameters
+    ----------
+    x : float array
+       wavenumbers in inverse microns
+
+    x_range: 2 floats
+       allowed min/max of x
+
+    outname: str
+       name of curve for error message
+    """
+    if np.logical_or(np.any(x < x_range[0]),
+                     np.any(x > x_range[1])):
+        raise ValueError('Input x outside of range defined for ' + outname \
+                         + ' ['
+                         + str(x_range[0])
+                         +  ' <= x <= '
+                         + str(x_range[1])
+                         + ', x has units 1/micron]')
+
+def _curve_F99_method(in_x, Rv,
+                      C1, C2, C3, C4, xo, gamma,
+                      optnir_axav_x, optnir_axav_y,
+                      valid_x_range, model_name):
+    """
+    Function to return extinction using F99 method
+
+    Parameters
+    ----------
+    in_x: float
+        expects either x in units of wavelengths or frequency
+        or assumes wavelengths in wavenumbers [1/micron]
+
+        internally wavenumbers are used
+
+    Rv: float
+       ratio of total to selective extinction = A(V)/E(B-V)
+
+    C1: float
+        y-intercept of linear term: FM90 parameter
+
+    C2: float
+        slope of liner term: FM90 parameter
+
+    C3: float
+        amplitude of "2175 A" bump: FM90 parameter
+
+    C4: float
+        amplitude of FUV rise: FM90 parameter
+
+    xo: float
+        centroid of "2175 A" bump: FM90 parameter
+
+    gamma: float
+        width of "2175 A" bump: FM90 parameter
+
+    optnir_axav_x: float array
+        vector of x values for optical/NIR A(x)/A(V) curve
+
+    optnir_axav_y: float array
+        vector of y values for optical/NIR A(x)/A(V) curve
+
+    Returns
+    -------
+    axav: np array (float)
+        A(x)/A(V) extinction curve [mag]
+
+    Raises
+    ------
+    ValueError
+        Input x values outside of defined range
+    """
+    # convert to wavenumbers (1/micron) if x input in units
+    # otherwise, assume x in appropriate wavenumber units
+    with u.add_enabled_equivalencies(u.spectral()):
+        x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
+
+    # strip the quantity to avoid needing to add units to all the
+    #    polynomical coefficients
+    x = x_quant.value
+
+    # check that the wavenumbers are within the defined range
+    _test_valid_x_range(x, valid_x_range, model_name)
+
+    # initialize extinction curve storage
+    axav = np.zeros(len(x))
+
+    # x value above which FM90 parametrization used
+    x_cutval_uv = 10000.0/2700.0
+
+    # required UV points for spline interpolation
+    x_splineval_uv = 10000.0/np.array([2700.0,2600.0])
+
+    # UV points in input x
+    indxs_uv, = np.where(x >= x_cutval_uv)
+
+    # add in required spline points, otherwise just spline points
+    if len(indxs_uv) > 0:
+        xuv = np.concatenate([x_splineval_uv, x[indxs_uv]])
+    else:
+        xuv = x_splineval_uv
+
+    # FM90 model and values
+    fm90_model = FM90(C1=C1, C2=C2, C3=C3, C4=C4, xo=xo, gamma=gamma)
+    # evaluate model and get results in A(x)/A(V)
+    axav_fm90 = fm90_model(xuv)/Rv + 1.0
+
+    # save spline points
+    y_splineval_uv = axav_fm90[0:2]
+
+    # ingore the spline points
+    if len(indxs_uv) > 0:
+        axav[indxs_uv] = axav_fm90[2:]
+
+    # **Optical Portion**
+    #   using cubic spline anchored in UV, optical, and IR
+
+    # optical/NIR points in input x
+    indxs_opir, = np.where(x < x_cutval_uv)
+
+    if len(indxs_opir) > 0:
+        # spline points
+        x_splineval_optir = optnir_axav_x
+
+        # determine optical/IR values at spline points
+        y_splineval_optir   = optnir_axav_y
+
+        # add in zero extinction at infinite wavelength
+        x_splineval_optir = np.insert(x_splineval_optir, 0, 0.0)
+        y_splineval_optir = np.insert(y_splineval_optir, 0, 0.0)
+
+        spline_x = np.concatenate([x_splineval_optir, x_splineval_uv])
+        spline_y = np.concatenate([y_splineval_optir, y_splineval_uv])
+        spline_rep = interpolate.splrep(spline_x, spline_y)
+        axav[indxs_opir] = interpolate.splev(x[indxs_opir],
+                                             spline_rep, der=0)
+
+    # return A(x)/A(V)
+    return axav
 
 class BaseExtModel(Model):
     """
@@ -23,7 +171,7 @@ class BaseExtModel(Model):
     """
     inputs = ('x',)
     outputs = ('axav',)
-            
+
     def extinguish(self, x, Av=None, Ebv=None):
         """
         Calculate the extinction as a fraction
@@ -47,7 +195,7 @@ class BaseExtModel(Model):
         Returns
         -------
         frac_ext: np array (float)
-           fractional extinction as a function of x 
+           fractional extinction as a function of x
         """
         # get the extinction curve
         axav = self(x)
@@ -55,11 +203,11 @@ class BaseExtModel(Model):
         # check that av or ebv is set
         if (Av is None) and (Ebv is None):
             raise InputParameterError('neither Av or Ebv passed, one required')
-            
+
         # if Av is not set and Ebv set, convert to Av
         if Av is None:
             Av = self.Rv*Ebv
-        
+
         # return fractional extinction
         return np.power(10.0,-0.4*axav*Av)
 
@@ -67,7 +215,7 @@ class BaseExtRvModel(BaseExtModel):
     """
     Base Extinction R(V)-dependent Model.  Do not use.
     """
-    
+
     Rv = Parameter(description="R(V) = A(V)/E(B-V) = " \
                    + "total-to-selective extinction",
                    default=3.1)
@@ -92,7 +240,7 @@ class BaseExtRvModel(BaseExtModel):
                                       + str(self.Rv_range[0])
                                       + " and "
                                       + str(self.Rv_range[1]))
-    
+
 class CCM89(BaseExtRvModel):
     """
     CCM89 extinction model calculation
@@ -128,7 +276,7 @@ class CCM89(BaseExtRvModel):
 
         # generate the curves and plot them
         x = np.arange(0.5,10.0,0.1)/u.micron
-    
+
         Rvs = ['2.0','3.0','4.0','5.0','6.0']
         for cur_Rv in Rvs:
            ext_model = CCM89(Rv=cur_Rv)
@@ -136,7 +284,7 @@ class CCM89(BaseExtRvModel):
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]')
         ax.set_ylabel('$A(x)/A(V)$')
-    
+
         ax.legend(loc='best')
         plt.show()
     """
@@ -170,22 +318,15 @@ class CCM89(BaseExtRvModel):
         # convert to wavenumbers (1/micron) if x input in units
         # otherwise, assume x in appropriate wavenumber units
         with u.add_enabled_equivalencies(u.spectral()):
-            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)       
+            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
 
         # strip the quantity to avoid needing to add units to all the
         #    polynomical coefficients
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        if np.logical_or(np.any(x < x_range_CCM89[0]),
-                         np.any(x > x_range_CCM89[1])):
-            raise ValueError('Input x outside of range defined for CCM89' \
-                             + ' ['
-                             + str(x_range_CCM89[0])
-                             +  ' <= x <= '
-                             + str(x_range_CCM89[1])
-                             + ', x has units 1/micron]')
-        
+        _test_valid_x_range(x, x_range_CCM89, 'CCM89')
+
         # setup the a & b coefficient vectors
         n_x = len(x)
         a = np.zeros(n_x)
@@ -197,31 +338,31 @@ class CCM89(BaseExtRvModel):
         nuv_indxs = np.where(np.logical_and(3.3 <= x,x <= 8.0))
         fnuv_indxs = np.where(np.logical_and(5.9 <= x,x <= 8))
         fuv_indxs = np.where(np.logical_and(8 < x,x <= 10))
-    
+
         # Infrared
         y = x[ir_indxs]**1.61
         a[ir_indxs] = .574*y
         b[ir_indxs] = -0.527*y
-    
+
         # NIR/optical
         y = x[opt_indxs] - 1.82
         a[opt_indxs] = np.polyval((.32999, -.7753, .01979, .72085, -.02427,
                                    -.50447, .17699, 1), y)
         b[opt_indxs] = np.polyval((-2.09002, 5.3026, -.62251, -5.38434,
                                    1.07233, 2.28305, 1.41338, 0), y)
-    
+
         # NUV
         a[nuv_indxs] = 1.752-.316*x[nuv_indxs] \
                        - 0.104/((x[nuv_indxs] - 4.67)**2 + .341)
         b[nuv_indxs] = -3.09 + \
                        1.825*x[nuv_indxs] \
                        + 1.206/((x[nuv_indxs] - 4.62)**2 + .263)
-        
+
         # far-NUV
         y = x[fnuv_indxs] - 5.9
         a[fnuv_indxs] += -.04473*(y**2) - .009779*(y**3)
-        b[fnuv_indxs] += .2130*(y**2) + .1207*(y**3)  
-        
+        b[fnuv_indxs] += .2130*(y**2) + .1207*(y**3)
+
         # FUV
         y = x[fuv_indxs] - 8.0
         a[fuv_indxs] = np.polyval((-.070, .137, -.628, -1.073), y)
@@ -233,7 +374,7 @@ class CCM89(BaseExtRvModel):
 class FM90(Model):
     """
     FM90 extinction model calculation
-    
+
     Parameters
     ----------
     C1: float
@@ -246,11 +387,11 @@ class FM90(Model):
        amplitude of "2175 A" bump
 
     C4: float
-       amplitude of FUV rise 
+       amplitude of FUV rise
 
     xo: float
        centroid of "2175 A" bump
-   
+
     gamma: float
        width of "2175 A" bump
 
@@ -277,7 +418,7 @@ class FM90(Model):
 
         # generate the curves and plot them
         x = np.arange(3.8,8.6,0.1)/u.micron
-    
+
         ext_model = FM90()
         ax.plot(x,ext_model(x),label='total')
 
@@ -292,13 +433,13 @@ class FM90(Model):
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]')
         ax.set_ylabel('$E(\lambda - V)/E(B - V)$')
-    
+
         ax.legend(loc='best')
         plt.show()
     """
     inputs = ('x',)
     outputs = ('exvebv',)
-    
+
     C1 = Parameter(description="linear term: y-intercept",
                    default=0.10)
     C2 = Parameter(description="linear term: slope",
@@ -340,21 +481,14 @@ class FM90(Model):
         # convert to wavenumbers (1/micron) if x input in units
         # otherwise, assume x in appropriate wavenumber units
         with u.add_enabled_equivalencies(u.spectral()):
-            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)       
+            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
 
         # strip the quantity to avoid needing to add units to all the
         #    polynomical coefficients
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        if np.logical_or(np.any(x < x_range_FM90[0]),
-                         np.any(x > x_range_FM90[1])):
-            raise ValueError('Input x outside of range defined for FM90' \
-                             + ' ['
-                             + str(x_range_FM90[0])
-                             +  ' <= x <= '
-                             + str(x_range_FM90[1])
-                             + ', x has units 1/micron]')
+        _test_valid_x_range(x, x_range_FM90, 'FM90')
 
         # linear term
         exvebv = C1 + C2*x
@@ -408,9 +542,12 @@ class F99(BaseExtRvModel):
 
         fig, ax = plt.subplots()
 
+        # temp model to get the correct x range
+        text_model = F99()
+
         # generate the curves and plot them
-        x = np.arange(0.2,8.7,0.1)/u.micron
-    
+        x = np.arange(text_model.x_range[0], text_model.x_range[1],0.1)/u.micron
+
         Rvs = ['2.0','3.0','4.0','5.0','6.0']
         for cur_Rv in Rvs:
            ext_model = F99(Rv=cur_Rv)
@@ -418,7 +555,7 @@ class F99(BaseExtRvModel):
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]')
         ax.set_ylabel('$A(x)/A(V)$')
-    
+
         ax.legend(loc='best')
         plt.show()
     """
@@ -426,10 +563,540 @@ class F99(BaseExtRvModel):
     Rv_range = [2.0,6.0]
     x_range = x_range_F99
 
-    @staticmethod
-    def evaluate(in_x, Rv):
+    def evaluate(self, in_x, Rv):
         """
         F99 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        # ensure Rv is a single element, not numpy array
+        Rv = Rv[0]
+
+        # constant terms
+        C3 = 3.23
+        C4 = 0.41
+        xo = 4.596
+        gamma = 0.99
+
+        # terms depending on Rv
+        C2 = -0.824 + 4.717/Rv
+        # updated for FM07 correlation between C1 and C2
+        C1 = 2.030 - 3.007*C2
+
+        # spline points
+        optnir_axav_x = 10000./np.array([26500.0,12200.0,6000.0,
+                                         5470.0,4670.0,4110.0])
+
+        # determine optical/IR values at spline points
+        opt_axebv_y = np.array([-0.426 + 1.0044*Rv,
+                                -0.050 + 1.0016*Rv,
+                                0.701 + 1.016*Rv,
+                                1.208 + 1.0032*Rv - 0.00033*(Rv**2)])
+        nir_axebv_y = np.array([0.265,0.829])*Rv/3.1
+        optnir_axebv_y = np.concatenate([nir_axebv_y,opt_axebv_y])
+
+        # return A(x)/A(V)
+        return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
+                                 optnir_axav_x, optnir_axebv_y/Rv,
+                                 self.x_range, 'F99')
+
+class G03_SMCBar(BaseExtModel):
+    """
+    G03 SMCBar Average Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    SMCBar G03 average extinction curve
+
+    From Gordon et al. (2003, ApJ, 594, 279)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.dust_extinction import G03_SMCBar
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = G03_SMCBar()
+
+        # generate the curves and plot them
+        x = np.arange(ext_model.x_range[0], ext_model.x_range[1],0.1)/u.micron
+
+        ax.plot(x,ext_model(x),label='G03 SMCBar')
+        ax.plot(ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel('$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = x_range_G03
+
+    Rv = 2.74
+
+    obsdata_x = np.array([0.455, 0.606, 0.800,
+                          1.235, 1.538,
+                          1.818, 2.273, 2.703,
+                          3.375, 3.625, 3.875,
+                          4.125, 4.375, 4.625, 4.875,
+                          5.125, 5.375, 5.625, 5.875,
+                          6.125, 6.375, 6.625, 6.875,
+                          7.125, 7.375, 7.625, 7.875,
+                          8.125, 8.375, 8.625])
+    obsdata_axav = np.array([0.110, 0.169, 0.250,
+                             0.567, 0.801,
+                             1.000, 1.374, 1.672,
+                             2.000, 2.220, 2.428,
+                             2.661, 2.947, 3.161, 3.293,
+                             3.489, 3.637, 3.866, 4.013,
+                             4.243, 4.472, 4.776, 5.000,
+                             5.272, 5.575, 5.795, 6.074,
+                             6.297, 6.436, 6.992])
+
+    def evaluate(self, in_x):
+        """
+        G03 SMCBar function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        C1 = -4.959
+        C2 = 2.264
+        C3 = 0.389
+        C4 = 0.461
+        xo = 4.6
+        gamma = 1.0
+
+        optnir_axav_x = 1./np.array([2.198, 1.65, 1.25, 0.81, 0.65,
+                                     0.55, 0.44, 0.37])
+        # values at 2.198 and 1.25 changed to provide smooth interpolation
+        # as noted in Gordon et al. (2016, ApJ, 826, 104)
+        optnir_axav_y = [0.11, 0.169, 0.25, 0.567, 0.801,
+                         1.00, 1.374, 1.672]
+
+        # return A(x)/A(V)
+        return _curve_F99_method(in_x, self.Rv, C1, C2, C3, C4, xo, gamma,
+                                 optnir_axav_x, optnir_axav_y,
+                                 self.x_range, 'G03')
+
+class G03_LMCAvg(BaseExtModel):
+    """
+    G03 LMCAvg Average Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    LMCAvg G03 average extinction curve
+
+    From Gordon et al. (2003, ApJ, 594, 279)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.dust_extinction import G03_LMCAvg
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = G03_LMCAvg()
+
+        # generate the curves and plot them
+        x = np.arange(ext_model.x_range[0], ext_model.x_range[1],0.1)/u.micron
+
+        ax.plot(x,ext_model(x),label='G03 LMCAvg')
+        ax.plot(ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel('$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = x_range_G03
+
+    Rv = 3.41
+
+    obsdata_x = np.array([0.455, 0.606, 0.800,
+                          1.818, 2.273, 2.703,
+                          3.375, 3.625, 3.875,
+                          4.125, 4.375, 4.625, 4.875,
+                          5.125, 5.375, 5.625, 5.875,
+                          6.125, 6.375, 6.625, 6.875,
+                          7.125, 7.375, 7.625, 7.875,
+                          8.125])
+    obsdata_axav = np.array([0.100, 0.186, 0.257,
+                             1.000, 1.293, 1.518,
+                             1.786, 1.969, 2.149,
+                             2.391, 2.771, 2.967, 2.846,
+                             2.646, 2.565, 2.566, 2.598,
+                             2.607, 2.668, 2.787, 2.874,
+                             2.983, 3.118, 3.231, 3.374,
+                             3.366])
+
+    def evaluate(self, in_x):
+        """
+        G03 LMCAvg function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        C1 = -0.890
+        C2 = 0.998
+        C3 = 2.719
+        C4 = 0.400
+        xo = 4.579
+        gamma = 0.934
+
+        optnir_axav_x = 1./np.array([2.198, 1.65, 1.25,
+                                     0.55, 0.44, 0.37])
+        # value at 2.198 changed to provide smooth interpolation
+        # as noted in Gordon et al. (2016, ApJ, 826, 104) for SMCBar
+        optnir_axav_y = [0.10, 0.186, 0.257,
+                         1.000, 1.293, 1.518]
+
+        # return A(x)/A(V)
+        return _curve_F99_method(in_x, self.Rv, C1, C2, C3, C4, xo, gamma,
+                                 optnir_axav_x, optnir_axav_y,
+                                 self.x_range, 'G03')
+
+
+class G03_LMC2(BaseExtModel):
+    """
+    G03 LMC2 Average Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    LMC2 G03 average extinction curve
+
+    From Gordon et al. (2003, ApJ, 594, 279)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.dust_extinction import G03_LMC2
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        x = np.arange(0.3,10.0,0.1)/u.micron
+
+        # define the extinction model
+        ext_model = G03_LMC2()
+
+        # generate the curves and plot them
+        x = np.arange(ext_model.x_range[0], ext_model.x_range[1],0.1)/u.micron
+
+        ax.plot(x,ext_model(x),label='G03 LMC2')
+        ax.plot(ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel('$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = x_range_G03
+
+    Rv = 2.76
+
+    obsdata_x = np.array([0.455, 0.606, 0.800,
+                          1.818, 2.273, 2.703,
+                          3.375, 3.625, 3.875,
+                          4.125, 4.375, 4.625, 4.875,
+                          5.125, 5.375, 5.625, 5.875,
+                          6.125, 6.375, 6.625, 6.875,
+                          7.125, 7.375, 7.625, 7.875,
+                          8.125])
+    obsdata_axav = np.array([0.101, 0.150, 0.299,
+                             1.000, 1.349, 1.665,
+                             1.899, 2.067, 2.249,
+                             2.447, 2.777, 2.922, 2.921,
+                             2.812, 2.805, 2.863, 2.932,
+                             3.060, 3.110, 3.299, 3.408,
+                             3.515, 3.670, 3.862, 3.937,
+                             4.055])
+
+    def evaluate(self, in_x):
+        """
+        G03 LMC2 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        C1 = -1.475
+        C2 = 1.132
+        C3 = 1.463
+        C4 = 0.294
+        xo = 4.558
+        gamma = 0.945
+
+        optnir_axav_x = 1./np.array([2.198, 1.65, 1.25,
+                                     0.55, 0.44, 0.37])
+        # value at 1.65 changed to provide smooth interpolation
+        # as noted in Gordon et al. (2016, ApJ, 826, 104) for SMCBar
+        optnir_axav_y = [0.101, 0.15, 0.299,
+                         1.000, 1.349, 1.665]
+
+        # return A(x)/A(V)
+        return _curve_F99_method(in_x, self.Rv, C1, C2, C3, C4, xo, gamma,
+                                 optnir_axav_x, optnir_axav_y,
+                                 self.x_range, 'G03')
+
+
+class G16(BaseExtModel):
+    """
+    G16 extinction model calculation
+
+    Mixture model between the F99 R(V) dependent model (component A)
+    and the G03_SMCBar model (component B)
+
+    Parameters
+    ----------
+    RvA: float
+         R_A(V) = A(V)/E(B-V) = total-to-selective extinction
+         R(V) of the A component
+
+    fA: float
+        f_A is the mixture coefficent between the R(V)
+
+    Raises
+    ------
+    InputParameterError
+       Input RvA values outside of defined range
+       Input fA values outside of defined range
+
+    Notes
+    -----
+    G16 R_A(V) and f_A dependent model
+
+    From Gordon et al. (2016, ApJ, 826, 104)
+
+    Example showing G16 curves for a range of R_A(V) values
+    and f_A values.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.dust_extinction import G16
+
+        fig, ax = plt.subplots()
+
+        # temp model to get the correct x range
+        text_model = G16()
+
+        # generate the curves and plot them
+        x = np.arange(text_model.x_range[0], text_model.x_range[1],0.1)/u.micron
+
+        Rvs = ['2.0','3.0','4.0','5.0','6.0']
+        for cur_Rv in Rvs:
+           ext_model = G16(RvA=cur_Rv, fA=1.0)
+           ax.plot(x,ext_model(x),label=r'$R_A(V) = ' + str(cur_Rv) + '$')
+
+        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel('$A(x)/A(V)$')
+
+        ax.legend(loc='best', title=r'$f_A = 1.0$')
+        plt.show()
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.dust_extinction import G16
+
+        fig, ax = plt.subplots()
+
+        # temp model to get the correct x range
+        text_model = G16()
+
+        # generate the curves and plot them
+        x = np.arange(text_model.x_range[0], text_model.x_range[1],0.1)/u.micron
+
+        fAs = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+        for cur_fA in fAs:
+           ext_model = G16(RvA=3.1, fA=cur_fA)
+           ax.plot(x,ext_model(x),label=r'$f_A = ' + str(cur_fA) + '$')
+
+        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel('$A(x)/A(V)$')
+
+        ax.legend(loc='best', title=r'$R_A(V) = 3.1$')
+        plt.show()
+    """
+
+    RvA = Parameter(description="R_A(V) = A(V)/E(B-V) = " \
+                   + "total-to-selective extinction of component A",
+                   default=3.1)
+    fA = Parameter(description="f_A = mixture coefficent of component A",
+                   default=1.0)
+
+    RvA_range = [2.0, 6.0]
+    fA_range = [0.0, 1.0]
+    x_range = x_range_G16
+
+    @RvA.validator
+    def RvA(self, value):
+        """
+        Check that RvA is in the valid range
+
+        Parameters
+        ----------
+        value: float
+            RvA value to check
+
+        Raises
+        ------
+        InputParameterError
+           Input R_A(V) values outside of defined range
+        """
+        if not (self.RvA_range[0] <= value <= self.RvA_range[1]):
+            raise InputParameterError("parameter RvA must be between "
+                                      + str(self.RvA_range[0])
+                                      + " and "
+                                      + str(self.RvA_range[1]))
+
+    @fA.validator
+    def fA(self, value):
+        """
+        Check that fA is in the valid range
+
+        Parameters
+        ----------
+        value: float
+            fA value to check
+
+        Raises
+        ------
+        InputParameterError
+           Input fA values outside of defined range
+        """
+        if not (self.fA_range[0] <= value <= self.fA_range[1]):
+            raise InputParameterError("parameter fA must be between "
+                                      + str(self.fA_range[0])
+                                      + " and "
+                                      + str(self.fA_range[1]))
+
+    @staticmethod
+    def evaluate(in_x, RvA, fA):
+        """
+        G16 function
 
         Parameters
         ----------
@@ -452,96 +1119,28 @@ class F99(BaseExtRvModel):
         # convert to wavenumbers (1/micron) if x input in units
         # otherwise, assume x in appropriate wavenumber units
         with u.add_enabled_equivalencies(u.spectral()):
-            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)       
+            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
 
         # strip the quantity to avoid needing to add units to all the
         #    polynomical coefficients
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        if np.logical_or(np.any(x < x_range_F99[0]),
-                         np.any(x > x_range_F99[1])):
-            raise ValueError('Input x outside of range defined for F99' \
-                             + ' ['
-                             + str(x_range_F99[0])
-                             +  ' <= x <= '
-                             + str(x_range_F99[1])
-                             + ', x has units 1/micron]')
-        
+        _test_valid_x_range(x, x_range_G16, 'G16')
+
         # ensure Rv is a single element, not numpy array
-        Rv = Rv[0]
+        RvA = RvA[0]
 
-        # initialize extinction curve storage
-        axebv = np.zeros(len(x))
+        # get the A component extinction model
+        extA_model = F99(Rv=RvA)
+        alav_A = extA_model(x)
 
-        # **Ultraviolet** portion
-        #   calculated using the FM90 parameterization
+        # get the B component extinction model
+        extB_model = G03_SMCBar()
+        alav_B = extB_model(x)
 
-        # constant terms
-        C3 = 3.23
-        C4 = 0.41
-        xo = 4.596
-        gamma = 0.99
-
-        # terms depending on Rv
-        C2 = -0.824 + 4.717/Rv
-        # updated for FM07 correlation between C1 and C2
-        C1 = 2.030 - 3.007*C2
-
-        # x value above which FM90 parametrization used
-        x_cutval_uv = 10000.0/2700.0
-
-        # required UV points for spline interpolation
-        x_splineval_uv = 10000.0/np.array([2700.0,2600.0])
-
-        # UV points in input x
-        indxs_uv, = np.where(x >= x_cutval_uv)
-
-        # add in required spline points, otherwise just spline points
-        if len(indxs_uv) > 0:
-            xuv = np.concatenate([x_splineval_uv, x[indxs_uv]])
-        else:
-            xuv = x_splineval_uv
-
-        # FM90 model and values
-        fm90_model = FM90(C1=C1, C2=C2, C3=C3, C4=C4, xo=xo, gamma=gamma)
-        # evaluate model and get results in A(x)/E(B-V)
-        axebv_fm90 = fm90_model(xuv) + Rv
-
-        # save spline points
-        y_splineval_uv = axebv_fm90[0:2]
-
-        # ingore the spline points
-        if len(indxs_uv) > 0:
-            axebv[indxs_uv] = axebv_fm90[2:]
-        
-        # **Optical Portion**
-        #   using cubic spline anchored in UV, optical, and IR
-
-        # optical/NIR points in input x
-        indxs_opir, = np.where(x < x_cutval_uv)
-
-        if len(indxs_opir) > 0:
-            # spline points
-            x_splineval_optir = 10000./np.array([26500.0,12200.0,6000.0,
-                                                 5470.0,4670.0,4110.0])
-            # add in zero extinction at infinite wavelength
-            x_splineval_optir = np.insert(x_splineval_optir, 0, 0.0)
-
-            # determine optical/IR values at spline points
-            y_splineval_opt   = np.array([-0.426 + 1.0044*Rv,
-                                          -0.050 + 1.0016*Rv,
-                                          0.701 + 1.016*Rv,
-                                          1.208 + 1.0032*Rv - 0.00033*(Rv**2)])
-            y_splineval_ir    = np.array([0.0,0.265,0.829])*Rv/3.1 
-            y_splineval_optir = np.concatenate([y_splineval_ir,y_splineval_opt])
-
-            spline_x = np.concatenate([x_splineval_optir, x_splineval_uv])
-            spline_y = np.concatenate([y_splineval_optir, y_splineval_uv])
-            spline_rep = interpolate.splrep(spline_x, spline_y)
-            axebv[indxs_opir] = interpolate.splev(x[indxs_opir],
-                                                  spline_rep, der=0)
+        # create the mixture model
+        alav = fA*alav_A + (1.0 - fA)*alav_B
 
         # return A(x)/A(V)
-        return axebv/Rv
-
+        return alav
