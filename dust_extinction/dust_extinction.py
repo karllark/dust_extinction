@@ -8,7 +8,8 @@ import numpy as np
 from scipy import interpolate
 
 import astropy.units as u
-from astropy.modeling import Model, Parameter, InputParameterError
+from astropy.modeling import (Model, Fittable1DModel,
+                              Parameter, InputParameterError)
 
 __all__ = ['BaseExtModel','BaseExtRvModel', 'BaseExtAve',
            'CCM89', 'FM90', 'F99',
@@ -417,7 +418,7 @@ class CCM89(BaseExtRvModel):
         # return A(x)/A(V)
         return a + b/Rv
 
-class FM90(Model):
+class FM90(Fittable1DModel):
     """
     FM90 extinction model calculation
 
@@ -552,6 +553,40 @@ class FM90(Model):
         # return E(x-V)/E(B-V)
         return exvebv
 
+    @staticmethod
+    def fit_deriv(in_x, C1, C2, C3, C4, xo, gamma):
+        """
+        Derivatives of the FM90 function with respect to the parameters
+        """
+        x = in_x
+        
+        # useful quantitites
+        x2 = x**2
+        xo2 = xo**2
+        g2 = gamma**2
+        x2mxo2_2 = (x2 - xo2)**2
+        denom = (x2mxo2_2 - x2*g2)**2
+        
+        # derivatives
+        d_C1 = np.full((len(x)),1.)
+        d_C2 = x
+
+        d_C3 = (x2/(x2mxo2_2 + x2*g2))
+
+        d_xo = (4.*C2*x2*xo*(x2 - xo2))/denom
+        
+        d_gamma = (2.*C2*(x2**2)*gamma)/denom
+        
+        d_C4 = np.zeros((len(x)))
+        fuv_indxs = np.where(x >= 5.9)
+        if len(fuv_indxs) > 0:
+            y = x[fuv_indxs] - 5.9
+            d_C4[fuv_indxs] = (0.5392*(y**2) + 0.05644*(y**3))
+
+        return [d_C1, d_C2, d_C3, d_C4, d_xo, d_gamma]
+    
+    #fit_deriv = None
+        
 class F99(BaseExtRvModel):
     """
     F99 extinction model calculation
