@@ -10,7 +10,7 @@ from scipy import interpolate
 import astropy.units as u
 from astropy.modeling import Model, Parameter, InputParameterError
 
-__all__ = ['BaseExtModel','BaseExtRvModel',
+__all__ = ['BaseExtModel','BaseExtRvModel', 'BaseExtAve',
            'CCM89', 'FM90', 'F99',
            'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
            'G16']
@@ -168,6 +168,52 @@ def _curve_F99_method(in_x, Rv,
 class BaseExtModel(Model):
     """
     Base Extinction Model.  Do not use.
+    """
+    inputs = ('x',)
+    outputs = ('axav',)
+
+    def extinguish(self, x, Av=None, Ebv=None):
+        """
+        Calculate the extinction as a fraction
+
+        Parameters
+        ----------
+        x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Av: float
+           A(V) value of dust column
+           Av or Ebv must be set
+
+        Ebv: float
+           E(B-V) value of dust column
+           Av or Ebv must be set
+
+        Returns
+        -------
+        frac_ext: np array (float)
+           fractional extinction as a function of x
+        """
+        # get the extinction curve
+        axav = self(x)
+
+        # check that av or ebv is set
+        if (Av is None) and (Ebv is None):
+            raise InputParameterError('neither Av or Ebv passed, one required')
+
+        # if Av is not set and Ebv set, convert to Av
+        if Av is None:
+            Av = self.Rv*Ebv
+
+        # return fractional extinction
+        return np.power(10.0,-0.4*axav*Av)
+
+class BaseExtAve(Model):
+    """
+    Base Extinction Average.  Do not use.
     """
     inputs = ('x',)
     outputs = ('axav',)
@@ -616,7 +662,7 @@ class F99(BaseExtRvModel):
                                  optnir_axav_x, optnir_axebv_y/Rv,
                                  self.x_range, 'F99')
 
-class G03_SMCBar(BaseExtModel):
+class G03_SMCBar(BaseExtAve):
     """
     G03 SMCBar Average Extinction Curve
 
@@ -728,7 +774,7 @@ class G03_SMCBar(BaseExtModel):
                                  optnir_axav_x, optnir_axav_y,
                                  self.x_range, 'G03')
 
-class G03_LMCAvg(BaseExtModel):
+class G03_LMCAvg(BaseExtAve):
     """
     G03 LMCAvg Average Extinction Curve
 
@@ -839,7 +885,7 @@ class G03_LMCAvg(BaseExtModel):
                                  self.x_range, 'G03')
 
 
-class G03_LMC2(BaseExtModel):
+class G03_LMC2(BaseExtAve):
     """
     G03 LMC2 Average Extinction Curve
 
