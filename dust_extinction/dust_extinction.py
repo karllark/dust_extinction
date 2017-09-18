@@ -8,9 +8,10 @@ import numpy as np
 from scipy import interpolate
 
 import astropy.units as u
-from astropy.modeling import Model, Parameter, InputParameterError
+from astropy.modeling import (Model, Fittable1DModel,
+                              Parameter, InputParameterError)
 
-__all__ = ['BaseExtModel','BaseExtRvModel',
+__all__ = ['BaseExtModel','BaseExtRvModel', 'BaseExtAve',
            'CCM89', 'FM90', 'F99',
            'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
            'G16']
@@ -168,6 +169,52 @@ def _curve_F99_method(in_x, Rv,
 class BaseExtModel(Model):
     """
     Base Extinction Model.  Do not use.
+    """
+    inputs = ('x',)
+    outputs = ('axav',)
+
+    def extinguish(self, x, Av=None, Ebv=None):
+        """
+        Calculate the extinction as a fraction
+
+        Parameters
+        ----------
+        x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Av: float
+           A(V) value of dust column
+           Av or Ebv must be set
+
+        Ebv: float
+           E(B-V) value of dust column
+           Av or Ebv must be set
+
+        Returns
+        -------
+        frac_ext: np array (float)
+           fractional extinction as a function of x
+        """
+        # get the extinction curve
+        axav = self(x)
+
+        # check that av or ebv is set
+        if (Av is None) and (Ebv is None):
+            raise InputParameterError('neither Av or Ebv passed, one required')
+
+        # if Av is not set and Ebv set, convert to Av
+        if Av is None:
+            Av = self.Rv*Ebv
+
+        # return fractional extinction
+        return np.power(10.0,-0.4*axav*Av)
+
+class BaseExtAve(Model):
+    """
+    Base Extinction Average.  Do not use.
     """
     inputs = ('x',)
     outputs = ('axav',)
@@ -371,7 +418,7 @@ class CCM89(BaseExtRvModel):
         # return A(x)/A(V)
         return a + b/Rv
 
-class FM90(Model):
+class FM90(Fittable1DModel):
     """
     FM90 extinction model calculation
 
@@ -506,6 +553,40 @@ class FM90(Model):
         # return E(x-V)/E(B-V)
         return exvebv
 
+    @staticmethod
+    def fit_deriv(in_x, C1, C2, C3, C4, xo, gamma):
+        """
+        Derivatives of the FM90 function with respect to the parameters
+        """
+        x = in_x
+        
+        # useful quantitites
+        x2 = x**2
+        xo2 = xo**2
+        g2 = gamma**2
+        x2mxo2_2 = (x2 - xo2)**2
+        denom = (x2mxo2_2 - x2*g2)**2
+        
+        # derivatives
+        d_C1 = np.full((len(x)),1.)
+        d_C2 = x
+
+        d_C3 = (x2/(x2mxo2_2 + x2*g2))
+
+        d_xo = (4.*C2*x2*xo*(x2 - xo2))/denom
+        
+        d_gamma = (2.*C2*(x2**2)*gamma)/denom
+        
+        d_C4 = np.zeros((len(x)))
+        fuv_indxs = np.where(x >= 5.9)
+        if len(fuv_indxs) > 0:
+            y = x[fuv_indxs] - 5.9
+            d_C4[fuv_indxs] = (0.5392*(y**2) + 0.05644*(y**3))
+
+        return [d_C1, d_C2, d_C3, d_C4, d_xo, d_gamma]
+    
+    #fit_deriv = None
+        
 class F99(BaseExtRvModel):
     """
     F99 extinction model calculation
@@ -616,7 +697,7 @@ class F99(BaseExtRvModel):
                                  optnir_axav_x, optnir_axebv_y/Rv,
                                  self.x_range, 'F99')
 
-class G03_SMCBar(BaseExtModel):
+class G03_SMCBar(BaseExtAve):
     """
     G03 SMCBar Average Extinction Curve
 
@@ -728,7 +809,7 @@ class G03_SMCBar(BaseExtModel):
                                  optnir_axav_x, optnir_axav_y,
                                  self.x_range, 'G03')
 
-class G03_LMCAvg(BaseExtModel):
+class G03_LMCAvg(BaseExtAve):
     """
     G03 LMCAvg Average Extinction Curve
 
@@ -839,7 +920,7 @@ class G03_LMCAvg(BaseExtModel):
                                  self.x_range, 'G03')
 
 
-class G03_LMC2(BaseExtModel):
+class G03_LMC2(BaseExtAve):
     """
     G03 LMC2 Average Extinction Curve
 
