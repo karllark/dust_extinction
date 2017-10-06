@@ -76,14 +76,14 @@ def test_extinction_G16_fA_1_values():
 
     # initialize extinction model
     tmodel = G16(RvA=3.1, fA=1.0)
-    
+
     # test
     np.testing.assert_allclose(tmodel(x), cor_vals, rtol=tolerance)
 
 def test_extinction_G16_fA_0_values():
     # initialize the model
     tmodel = G16(fA=0.0)
-    
+
     # get the correct values
     gmodel = G03_SMCBar()
     x = gmodel.obsdata_x

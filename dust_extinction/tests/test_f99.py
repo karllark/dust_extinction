@@ -72,7 +72,7 @@ def get_axav_cor_vals():
     cor_vals = np.array([0.265, 0.829, 2.688, 3.055, 3.806, 4.315,
                          6.265, 6.591])
     tolerance = 2e-3
-    
+
     # convert from A(x)/E(B-V) to A(x)/A(V)
     cor_vals /= 3.1
 
