@@ -559,14 +559,14 @@ class FM90(Fittable1DModel):
         Derivatives of the FM90 function with respect to the parameters
         """
         x = in_x
-        
+
         # useful quantitites
         x2 = x**2
         xo2 = xo**2
         g2 = gamma**2
         x2mxo2_2 = (x2 - xo2)**2
         denom = (x2mxo2_2 - x2*g2)**2
-        
+
         # derivatives
         d_C1 = np.full((len(x)),1.)
         d_C2 = x
@@ -574,9 +574,9 @@ class FM90(Fittable1DModel):
         d_C3 = (x2/(x2mxo2_2 + x2*g2))
 
         d_xo = (4.*C2*x2*xo*(x2 - xo2))/denom
-        
+
         d_gamma = (2.*C2*(x2**2)*gamma)/denom
-        
+
         d_C4 = np.zeros((len(x)))
         fuv_indxs = np.where(x >= 5.9)
         if len(fuv_indxs) > 0:
@@ -584,9 +584,9 @@ class FM90(Fittable1DModel):
             d_C4[fuv_indxs] = (0.5392*(y**2) + 0.05644*(y**3))
 
         return [d_C1, d_C2, d_C3, d_C4, d_xo, d_gamma]
-    
+
     #fit_deriv = None
-        
+
 class F99(BaseExtRvModel):
     """
     F99 extinction model calculation
@@ -687,7 +687,7 @@ class F99(BaseExtRvModel):
         # determine optical/IR values at spline points
         opt_axebv_y = np.array([-0.426 + 1.0044*Rv,
                                 -0.050 + 1.0016*Rv,
-                                0.701 + 1.016*Rv,
+                                0.701 + 1.0016*Rv,
                                 1.208 + 1.0032*Rv - 0.00033*(Rv**2)])
         nir_axebv_y = np.array([0.265,0.829])*Rv/3.1
         optnir_axebv_y = np.concatenate([nir_axebv_y,opt_axebv_y])
@@ -767,6 +767,8 @@ class G03_SMCBar(BaseExtAve):
                              4.243, 4.472, 4.776, 5.000,
                              5.272, 5.575, 5.795, 6.074,
                              6.297, 6.436, 6.992])
+    # accuracy of the observed data based on published table
+    obsdata_tolerance = 6e-2
 
     def evaluate(self, in_x):
         """
@@ -877,6 +879,8 @@ class G03_LMCAvg(BaseExtAve):
                              2.607, 2.668, 2.787, 2.874,
                              2.983, 3.118, 3.231, 3.374,
                              3.366])
+    # accuracy of the observed data based on published table
+    obsdata_tolerance = 6e-2
 
     def evaluate(self, in_x):
         """
@@ -991,6 +995,8 @@ class G03_LMC2(BaseExtAve):
                              3.060, 3.110, 3.299, 3.408,
                              3.515, 3.670, 3.862, 3.937,
                              4.055])
+    # accuracy of the observed data based on published table
+    obsdata_tolerance = 6e-2
 
     def evaluate(self, in_x):
         """

@@ -5,6 +5,8 @@ import astropy.units as u
 from astropy.modeling import InputParameterError
 
 from ..dust_extinction import G16
+from ..dust_extinction import G03_SMCBar
+from .test_f99 import get_axav_cor_vals as get_axav_cor_vals_fA_1
 
 @pytest.mark.parametrize("RvA_invalid", [-1.0,0.0,1.9,6.1,10.])
 def test_invalid_RvA_input(RvA_invalid):
@@ -67,43 +69,38 @@ def test_invalid_micron(x_invalid_angstrom):
                                 + str(tmodel.x_range[1]) \
                                 + ', x has units 1/micron]'
 
-def get_axav_cor_vals():
-    # testing wavenumbers
-    x = np.array([0.5, 1.0, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0, 7.0, 8.0])
 
-    # add units
-    x = x/u.micron
-
-    # correct values
-    cor_vals = np.array([0.124997,  0.377073,  1.130636,  1.419644,
-                         1.630377,  1.888546,  2.275900,  3.014577,
-                         2.762256,  2.475272,  2.711508,  3.197144])
-
-    return (x, cor_vals)
-
-
-def test_extinction_G16_values():
+def test_extinction_G16_fA_1_values():
     # get the correct values
-    x, cor_vals = get_axav_cor_vals()
+    x, cor_vals, tolerance = get_axav_cor_vals_fA_1()
 
     # initialize extinction model
-    tmodel = G16()
+    tmodel = G16(RvA=3.1, fA=1.0)
 
     # test
-    np.testing.assert_allclose(tmodel(x), cor_vals, rtol=1e-05)
+    np.testing.assert_allclose(tmodel(x), cor_vals, rtol=tolerance)
 
+def test_extinction_G16_fA_0_values():
+    # initialize the model
+    tmodel = G16(fA=0.0)
 
-test_vals = zip([0.5, 1.0, 2.0, 2.5, 3.0, 3.5, 4.0,
-                 4.5, 5.0, 6.0, 7.0, 8.0],
-                [0.124997,  0.377073,  1.130636,  1.419644,
-                 1.630377,  1.888546,  2.275900,  3.014577,
-                 2.762256,  2.475272,  2.711508,  3.197144])
+    # get the correct values
+    gmodel = G03_SMCBar()
+    x = gmodel.obsdata_x
+    cor_vals = gmodel.obsdata_axav
+    tolerance = gmodel.obsdata_tolerance
+
+    # test
+    np.testing.assert_allclose(tmodel(x), cor_vals, rtol=tolerance)
+
+x_vals, axav_vals, tolerance = get_axav_cor_vals_fA_1()
+test_vals = zip(x_vals, axav_vals, np.full(len(x_vals),tolerance))
 @pytest.mark.parametrize("test_vals", test_vals)
-def test_extinction_G16_single_values(test_vals):
-    x, cor_val = test_vals
+def test_extinction_G16_fA_1_single_values(test_vals):
+    x, cor_val, tolerance = test_vals
 
     # initialize extinction model
-    tmodel = G16()
+    tmodel = G16(RvA=3.1, fA=1.0)
 
     # test
-    np.testing.assert_allclose(tmodel(x), cor_val, rtol=1e-05)
+    np.testing.assert_allclose(tmodel(x), cor_val, rtol=tolerance)

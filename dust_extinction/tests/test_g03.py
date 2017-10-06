@@ -70,13 +70,15 @@ def test_extinction_G03_values(tmodel):
     #  not to numerical precision as we are using the FM90 fits
     #  and spline functions and the correct values are the data
     np.testing.assert_allclose(tmodel(tmodel.obsdata_x),
-                               tmodel.obsdata_axav, rtol=6e-02)
+                               tmodel.obsdata_axav,
+                               rtol=tmodel.obsdata_tolerance)
 
 @pytest.mark.parametrize("tmodel", models)
 def test_extinction_G03_single_values(tmodel):
     # test
     for x, cor_val in zip(tmodel.obsdata_x, tmodel.obsdata_axav):
-        np.testing.assert_allclose(tmodel(x), cor_val, rtol=6e-02)
+        np.testing.assert_allclose(tmodel(x), cor_val,
+                                   rtol=tmodel.obsdata_tolerance)
 
 @pytest.mark.parametrize("tmodel", models)
 def test_extinction_G03_extinguish_values_Av(tmodel):
