@@ -12,12 +12,13 @@ from astropy.modeling import (Model, Fittable1DModel,
                               Parameter, InputParameterError)
 
 __all__ = ['BaseExtModel','BaseExtRvModel', 'BaseExtAve',
-           'CCM89', 'FM90', 'F99',
+           'CCM89', 'FM90', 'P92', 'F99',
            'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
            'G16']
 
 x_range_CCM89 = [0.3,10.0]
 x_range_FM90 = [1.0/0.32,1.0/0.0912]
+x_range_P92 = [1.0/1e3,1.0/1e-3]
 x_range_F99 = [0.3,10.0]
 x_range_G03 = [0.3,10.0]
 x_range_G16 = x_range_G03
@@ -586,6 +587,293 @@ class FM90(Fittable1DModel):
         return [d_C1, d_C2, d_C3, d_C4, d_xo, d_gamma]
 
     #fit_deriv = None
+
+class P92(Fittable1DModel):
+    """
+    P92 extinction model calculation
+
+    Parameters
+    ----------
+    BKG_amp : float
+      background term amplitude
+    BKG_lambda : float
+      background term central wavelength
+    BKG_b : float
+      background term b coefficient
+    BKG_n : float
+      background term n coefficient [FIXED at n = 2]
+
+    FUV_amp : float
+      far-ultraviolet term amplitude
+    FUV_lambda : float
+      far-ultraviolet term central wavelength
+    FUV_b : float
+      far-ultraviolet term b coefficent
+    FUV_n : float
+      far-ultraviolet term n coefficient
+
+    NUV_amp : float
+      near-ultraviolet (2175 A) term amplitude
+    NUV_lambda : float
+      near-ultraviolet (2175 A) term central wavelength
+    NUV_b : float
+      near-ultraviolet (2175 A) term b coefficent
+    NUV_n : float
+      near-ultraviolet (2175 A) term n coefficient [FIXED at n = 2]
+
+    SIL1_amp : float
+      1st silicate feature (~10 micron) term amplitude
+    SIL1_lambda : float
+      1st silicate feature (~10 micron) term central wavelength
+    SIL1_b : float
+      1st silicate feature (~10 micron) term b coefficent
+    SIL1_n : float
+      1st silicate feature (~10 micron) term n coefficient [FIXED at n = 2]
+
+    SIL2_amp : float
+      2nd silicate feature (~18 micron) term amplitude
+    SIL2_lambda : float
+      2nd silicate feature (~18 micron) term central wavelength
+    SIL2_b : float
+      2nd silicate feature (~18 micron) term b coefficient
+    SIL2_n : float
+      2nd silicate feature (~18 micron) term n coefficient [FIXED at n = 2]
+
+    FIR_amp : float
+      far-infrared term amplitude
+    FIR_lambda : float
+      far-infrared term central wavelength
+    FIR_b : float
+      far-infrared term b coefficent
+    FIR_n : float
+      far-infrared term n coefficient [FIXED at n = 2]
+
+    Notes
+    -----
+    P92 extinction model
+
+    From Pei (1992)
+
+    Applicable from the extreme UV to far-IR
+
+    Example showing a P92 curve with components identified.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.dust_extinction import P92
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        lam = np.logspace(-3.0, 3.0, num=1000)
+        x = (1.0/lam)/u.micron
+
+        ext_model = P92()
+        ax.plot(1/x,ext_model(x),label='total')
+
+        ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+                        SIL1_amp=0.0, SIL2_amp=0.0, FIR_amp=0.0)
+        ax.plot(1./x,ext_model(x),label='BKG only')
+
+        ext_model = P92(NUV_amp=0.0, 
+                        SIL1_amp=0.0, SIL2_amp=0.0, FIR_amp=0.0)
+        ax.plot(1./x,ext_model(x),label='BKG+FUV only')
+
+        ext_model = P92(FUV_amp=0.,
+                        SIL1_amp=0.0, SIL2_amp=0.0, FIR_amp=0.0)
+        ax.plot(1./x,ext_model(x),label='BKG+NUV only')
+
+        ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+                        SIL2_amp=0.0)
+        ax.plot(1./x,ext_model(x),label='BKG+FIR+SIL1 only')
+
+        ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+                        SIL1_amp=0.0)
+        ax.plot(1./x,ext_model(x),label='BKG+FIR+SIL2 only')
+
+        ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+                        SIL1_amp=0.0, SIL2_amp=0.0)
+        ax.plot(1./x,ext_model(x),label='BKG+FIR only')
+
+        # Milky Way observed extinction as tabulated by Pei (1992)
+        MW_x = [0.21, 0.29, 0.45, 0.61, 0.80, 1.11, 1.43, 1.82,
+                2.27, 2.50, 2.91, 3.65, 4.00, 4.17, 4.35, 4.57, 4.76,
+                5.00, 5.26, 5.56, 5.88, 6.25, 6.71, 7.18, 7.60,
+                8.00, 8.50, 9.00, 9.50, 10.00]
+        MW_x = np.array(MW_x)
+        MW_exvebv = [-3.02, -2.91, -2.76, -2.58, -2.23, -1.60, -0.78, 0.00,
+                     1.00, 1.30, 1.80, 3.10, 4.19, 4.90, 5.77, 6.57, 6.23,
+                     5.52, 4.90, 4.65, 4.60, 4.73, 4.99, 5.36, 5.91, 
+                     6.55, 7.45, 8.45, 9.80, 11.30]
+        MW_exvebv = np.array(MW_exvebv)
+        Rv = 3.08
+        MW_axav = MW_exvebv/Rv + 1.0
+        ax.plot(1./MW_x, MW_axav, 'o', label='MW Observed')
+
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+
+        ax.set_ylim(1e-3,10.)
+
+        ax.set_xlabel('$\lambda$ [$\mu$m]')
+        ax.set_ylabel('$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+    inputs = ('x',)
+    outputs = ('axav',)
+
+    # constant for conversion from Ax/Ab to (more standard) Ax/Av 
+    AbAv = 1.0/3.08 + 1.0
+
+    BKG_amp = Parameter(description="BKG term: amplitude", 
+                        default=165.*AbAv, min=0.0)
+    BKG_lambda = Parameter(description="BKG term: center wavelength", 
+                           default=0.047)
+    BKG_b = Parameter(description="BKG term: b coefficient", 
+                        default=90.)
+    BKG_n = Parameter(description="BKG term: n coefficient", 
+                        default=2.0, fixed=True)
+
+    FUV_amp = Parameter(description="FUV term: amplitude", 
+                        default=14.*AbAv, min=0.0)
+    FUV_lambda = Parameter(description="FUV term: center wavelength", 
+                           default=0.08, bounds=(0.07,0.09))
+    FUV_b = Parameter(description="FUV term: b coefficient", 
+                        default=4.0)
+    FUV_n = Parameter(description="FUV term: n coefficient", 
+                        default=6.5)
+
+    NUV_amp = Parameter(description="NUV term: amplitude", 
+                        default=0.045*AbAv, min=0.0)
+    NUV_lambda = Parameter(description="NUV term: center wavelength", 
+                           default=0.22, bounds=(0.20,0.24))
+    NUV_b = Parameter(description="NUV term: b coefficient", 
+                        default=-1.95)
+    NUV_n = Parameter(description="NUV term: n coefficient", 
+                        default=2.0, fixed=True)
+
+    SIL1_amp = Parameter(description="SIL1 term: amplitude", 
+                         default=0.002*AbAv, min=0.0)
+    SIL1_lambda = Parameter(description="SIL1 term: center wavelength", 
+                            default=9.7, bounds=(7.0,13.0))
+    SIL1_b = Parameter(description="SIL1 term: b coefficient", 
+                       default=-1.95)
+    SIL1_n = Parameter(description="SIL1 term: n coefficient", 
+                       default=2.0, fixed=True)
+
+    SIL2_amp = Parameter(description="SIL2 term: amplitude", 
+                         default=0.002*AbAv, min=0.0)
+    SIL2_lambda = Parameter(description="SIL2 term: center wavelength", 
+                            default=18.0, bounds=(15.0,21.0))
+    SIL2_b = Parameter(description="SIL2 term: b coefficient", 
+                        default=-1.80)
+    SIL2_n = Parameter(description="SIL2 term: n coefficient", 
+                        default=2.0, fixed=True)
+
+    FIR_amp = Parameter(description="FIR term: amplitude", 
+                        default=0.012*AbAv, min=0.0)
+    FIR_lambda = Parameter(description="FIR term: center wavelength", 
+                           default=25.0, bounds=(20.0,30.0))
+    FIR_b = Parameter(description="FIR term: b coefficient", 
+                        default=0.00)
+    FIR_n = Parameter(description="FIR term: n coefficient", 
+                        default=2.0, fixed=True)
+
+    x_range = x_range_P92
+
+    @staticmethod
+    def _p92_single_term(in_lambda, amplitude, cen_wave, b, n):
+        """
+        Function for calculating a single P92 term
+
+        .. math::
+ 
+           \frac{a}{(\lambda/cen_wave)^n + (cen_wave/\lambda)^n + b}
+
+        when n = 2, this term is equivalent to a Drude profile
+
+        Parameters
+        ----------
+        in_lambda: vector of floats
+           wavelengths in same units as cen_wave
+
+        amplitude: float
+           amplitude
+
+        cen_wave: flaot
+           central wavelength 
+
+        b : float
+           b coefficient
+
+        n : float
+           n coefficient
+        """
+        l_norm = in_lambda/cen_wave
+
+        return amplitude/(np.power(l_norm,n) + np.power(l_norm,-1*n) + b)
+
+    def evaluate(self, in_x,
+                 BKG_amp, BKG_lambda, BKG_b, BKG_n,
+                 FUV_amp, FUV_lambda, FUV_b, FUV_n,
+                 NUV_amp, NUV_lambda, NUV_b, NUV_n,
+                 SIL1_amp, SIL1_lambda, SIL1_b, SIL1_n,
+                 SIL2_amp, SIL2_lambda, SIL2_b, SIL2_n,
+                 FIR_amp, FIR_lambda, FIR_b, FIR_n):
+        """
+        P92 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        # convert to wavenumbers (1/micron) if x input in units
+        # otherwise, assume x in appropriate wavenumber units
+        with u.add_enabled_equivalencies(u.spectral()):
+            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
+
+        # strip the quantity to avoid needing to add units to all the
+        #    polynomical coefficients
+        x = x_quant.value
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, x_range_P92, 'P92')
+
+        # calculate the terms
+        lam = 1.0/x
+        axav = (self._p92_single_term(lam, BKG_amp, BKG_lambda, BKG_b, BKG_n)
+            + self._p92_single_term(lam, FUV_amp, FUV_lambda, FUV_b, FUV_n)
+            + self._p92_single_term(lam, NUV_amp, NUV_lambda, NUV_b, NUV_n)
+            + self._p92_single_term(lam, SIL1_amp, SIL1_lambda, SIL1_b, SIL1_n)
+            + self._p92_single_term(lam, SIL2_amp, SIL2_lambda, SIL2_b, SIL2_n)
+            + self._p92_single_term(lam, FIR_amp, FIR_lambda, FIR_b, FIR_n))
+
+        # return A(x)/A(V)
+        return axav
+
+    # use numerical derivaties (need to add analytic)
+    fit_deriv = None
 
 class F99(BaseExtRvModel):
     """
