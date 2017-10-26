@@ -733,7 +733,7 @@ class P92(Fittable1DModel):
     AbAv = 1.0/3.08 + 1.0
 
     BKG_amp = Parameter(description="BKG term: amplitude", 
-                        default=165.*AbAv)
+                        default=165.*AbAv, min=0.0)
     BKG_lambda = Parameter(description="BKG term: center wavelength", 
                            default=0.047)
     BKG_b = Parameter(description="BKG term: b coefficient", 
@@ -742,45 +742,45 @@ class P92(Fittable1DModel):
                         default=2.0, fixed=True)
 
     FUV_amp = Parameter(description="FUV term: amplitude", 
-                        default=14.*AbAv)
+                        default=14.*AbAv, min=0.0)
     FUV_lambda = Parameter(description="FUV term: center wavelength", 
-                           default=0.08)
+                           default=0.08, bounds=(0.07,0.09))
     FUV_b = Parameter(description="FUV term: b coefficient", 
                         default=4.0)
     FUV_n = Parameter(description="FUV term: n coefficient", 
                         default=6.5)
 
     NUV_amp = Parameter(description="NUV term: amplitude", 
-                        default=0.045*AbAv)
+                        default=0.045*AbAv, min=0.0)
     NUV_lambda = Parameter(description="NUV term: center wavelength", 
-                           default=0.22)
+                           default=0.22, bounds=(0.20,0.24))
     NUV_b = Parameter(description="NUV term: b coefficient", 
                         default=-1.95)
     NUV_n = Parameter(description="NUV term: n coefficient", 
                         default=2.0, fixed=True)
 
     SIL1_amp = Parameter(description="SIL1 term: amplitude", 
-                         default=0.002*AbAv)
+                         default=0.002*AbAv, min=0.0)
     SIL1_lambda = Parameter(description="SIL1 term: center wavelength", 
-                            default=9.7)
+                            default=9.7, bounds=(7.0,13.0))
     SIL1_b = Parameter(description="SIL1 term: b coefficient", 
                        default=-1.95)
     SIL1_n = Parameter(description="SIL1 term: n coefficient", 
                        default=2.0, fixed=True)
 
     SIL2_amp = Parameter(description="SIL2 term: amplitude", 
-                         default=0.002*AbAv)
+                         default=0.002*AbAv, min=0.0)
     SIL2_lambda = Parameter(description="SIL2 term: center wavelength", 
-                            default=18.0)
+                            default=18.0, bounds=(15.0,21.0))
     SIL2_b = Parameter(description="SIL2 term: b coefficient", 
                         default=-1.80)
     SIL2_n = Parameter(description="SIL2 term: n coefficient", 
                         default=2.0, fixed=True)
 
     FIR_amp = Parameter(description="FIR term: amplitude", 
-                        default=0.012*AbAv)
+                        default=0.012*AbAv, min=0.0)
     FIR_lambda = Parameter(description="FIR term: center wavelength", 
-                           default=25.0)
+                           default=25.0, bounds=(20.0,30.0))
     FIR_b = Parameter(description="FIR term: b coefficient", 
                         default=0.00)
     FIR_n = Parameter(description="FIR term: n coefficient", 
@@ -858,7 +858,7 @@ class P92(Fittable1DModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_P92, 'P90')
+        _test_valid_x_range(x, x_range_P92, 'P92')
 
         # calculate the terms
         lam = 1.0/x
