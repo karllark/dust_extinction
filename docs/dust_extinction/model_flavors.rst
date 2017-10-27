@@ -1,16 +1,12 @@
-Interstellar Dust Extinction
-============================
+#############
+Model Flavors
+#############
 
-Interstellar dust extinction curves implemnted as astropy models
+There are three differnet types of models: average, R(V)+ dependent prediction,
+and shape fitting.
 
-Uses the astropy affiliated package template
-
-Flavors of Models
-=================
-
-There are three differnet types of models (to be completed).
-
-1. Average models
+Average models
+==============
 
    These models provide averages from the literature with the ability to
    interpolate between the observed data points.
@@ -48,14 +44,8 @@ There are three differnet types of models (to be completed).
    plt.tight_layout()
    plt.show()
      
-2. Shape fitting models
-
-   These models are used to fit the detailed shape of dust extinction curves.
-   
-   - FM90
-   - others needed (P92)
-     
-3. R(V) (+ other variables) dependent prediction models
+R(V) (+ other variables) dependent prediction models
+====================================================
 
    These models provide predictions of the shape of the dust extinction
    given input variable(s).
@@ -64,21 +54,11 @@ There are three differnet types of models (to be completed).
    - F99 [function of R(V)]
    - others needed (GCC09, G16, etc)
 
-Repository
-==========
+Shape fitting models
+====================
 
-Github: <https://github.com/karllark/dust_extinction>
-
-Reference API
-=============
-.. toctree::
-   :maxdepth: 1
-
-.. automodapi:: dust_extinction.dust_extinction
-		
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   These models are used to fit the detailed shape of dust extinction curves.
+   
+   - FM90
+   - others needed (P92)
+     
