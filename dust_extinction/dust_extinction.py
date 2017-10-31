@@ -973,6 +973,14 @@ class F99(BaseExtRvModel):
                                          5470.0,4670.0,4110.0])
 
         # determine optical/IR values at spline points
+        #    Final term has a "-1.208" in Table 4 of F99, but then does
+        #    not reproduce Table 3.
+        #    Indications are that this is not correct from fm_unred.pro
+        #    which is based on FMRCURVE.pro distributed by Fitzpatrick.
+        #    --> confirmation needed
+        #    
+        #    Also, fm_unred.pro has different coeff and # of terms, possible
+        #    update --> check with Fitzpatrick
         opt_axebv_y = np.array([-0.426 + 1.0044*Rv,
                                 -0.050 + 1.0016*Rv,
                                 0.701 + 1.0016*Rv,
