@@ -102,7 +102,8 @@ extinction curve for the MW as tabulted by Pei (1992).
 
    # fit the data to the P92 model using the fitter
    #   use the initialized model as the starting point
-   p92_fit = fit(p92_init, x, y)
+   #   accuracy set to avoid warning the fit may have failed
+   p92_fit = fit(p92_init, x, y, acc=1e-3)
 
    # plot the observed data, initial guess, and final fit
    fig, ax = plt.subplots()

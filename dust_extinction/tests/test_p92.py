@@ -101,7 +101,8 @@ def test_P92_fitting():
     
     p92_init = P92()
     fit = LevMarLSQFitter()
-    p92_fit = fit(p92_init, x, y)
+    # accuracy set to avoid warning the fit may have failed
+    p92_fit = fit(p92_init, x, y, acc=1e-3)
 
     fit_vals = p92_fit._parameters
     
