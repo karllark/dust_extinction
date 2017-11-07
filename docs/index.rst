@@ -10,8 +10,11 @@ curves contained here, the explicit motivation for this package is to provide
 extinction curves to those using them to model/correct their data and those
 studying extinction curves directly to better undertand interstellar dust.
 
-This package is developed in the astropy affiliated package template and uses
-the astropy.modeling framework.
+This package is developed in the 
+`astropy affiliated package <http://www.astropy.org/affiliated/>`_ 
+template and uses the 
+`astropy.modeling <http://docs.astropy.org/en/stable/modeling/>`_ 
+framework.
 
 Installation
 ============
@@ -25,7 +28,7 @@ User Documenation
    :maxdepth: 2
 
    Flavors of Models <dust_extinction/model_flavors.rst>
-   Extinguish or de-extinguish data <dust_extinction/extinguish.rst>
+   Extinguish (or unextinguish) data <dust_extinction/extinguish.rst>
    Fitting extinction curves <dust_extinction/fit_extinction.rst>
    
               
