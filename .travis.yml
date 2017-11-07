@@ -117,6 +117,14 @@ matrix:
           env: MAIN_CMD='pycodestyle dust_extinction --count' SETUP_CMD=''
 
     allow_failures:
+        - os: linux
+          env: ASTROPY_VERSION=development
+               EVENT_TYPE='pull_request push cron'
+
+        - os: linux
+          env: NUMPY_VERSION=prerelease
+               EVENT_TYPE='pull_request push cron'
+
         # Do a PEP8 test with pycodestyle
         # (allow to fail unless your code completely compliant)
         - os: linux
