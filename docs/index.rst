@@ -26,7 +26,7 @@ User Documenation
 
    Flavors of Models <dust_extinction/model_flavors.rst>
    Extinguish or de-extinguish data <dust_extinction/extinguish.rst>
-   Fit measured extinction curves <dust_extinction/fit_extinction.rst>
+   Fitting extinction curves <dust_extinction/fit_extinction.rst>
    
               
 Reporting Issues
