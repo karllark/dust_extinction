@@ -100,7 +100,7 @@ def test_P92_fitting():
     x = x_quant.value
     
     # change from defaults to make the best fit harder to find
-    p92_init = P92(BKG_amp=150.,NUV_amp=0.1, FUV_amp=10.)
+    p92_init = P92()
 
     fit = LevMarLSQFitter()
     # accuracy set to avoid warning the fit may have failed
