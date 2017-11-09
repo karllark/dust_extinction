@@ -729,61 +729,61 @@ class P92(Fittable1DModel):
     inputs = ('x',)
     outputs = ('axav',)
 
-    # constant for conversion from Ax/Ab to (more standard) Ax/Av 
+    # constant for conversion from Ax/Ab to (more standard) Ax/Av
     AbAv = 1.0/3.08 + 1.0
 
-    BKG_amp = Parameter(description="BKG term: amplitude", 
+    BKG_amp = Parameter(description="BKG term: amplitude",
                         default=165.*AbAv, min=0.0)
-    BKG_lambda = Parameter(description="BKG term: center wavelength", 
+    BKG_lambda = Parameter(description="BKG term: center wavelength",
                            default=0.047)
-    BKG_b = Parameter(description="BKG term: b coefficient", 
+    BKG_b = Parameter(description="BKG term: b coefficient",
                         default=90.)
-    BKG_n = Parameter(description="BKG term: n coefficient", 
+    BKG_n = Parameter(description="BKG term: n coefficient",
                         default=2.0, fixed=True)
 
-    FUV_amp = Parameter(description="FUV term: amplitude", 
+    FUV_amp = Parameter(description="FUV term: amplitude",
                         default=14.*AbAv, min=0.0)
-    FUV_lambda = Parameter(description="FUV term: center wavelength", 
+    FUV_lambda = Parameter(description="FUV term: center wavelength",
                            default=0.08, bounds=(0.07,0.09))
-    FUV_b = Parameter(description="FUV term: b coefficient", 
+    FUV_b = Parameter(description="FUV term: b coefficient",
                         default=4.0)
-    FUV_n = Parameter(description="FUV term: n coefficient", 
+    FUV_n = Parameter(description="FUV term: n coefficient",
                         default=6.5)
 
-    NUV_amp = Parameter(description="NUV term: amplitude", 
+    NUV_amp = Parameter(description="NUV term: amplitude",
                         default=0.045*AbAv, min=0.0)
-    NUV_lambda = Parameter(description="NUV term: center wavelength", 
+    NUV_lambda = Parameter(description="NUV term: center wavelength",
                            default=0.22, bounds=(0.20,0.24))
-    NUV_b = Parameter(description="NUV term: b coefficient", 
+    NUV_b = Parameter(description="NUV term: b coefficient",
                         default=-1.95)
-    NUV_n = Parameter(description="NUV term: n coefficient", 
+    NUV_n = Parameter(description="NUV term: n coefficient",
                         default=2.0, fixed=True)
 
-    SIL1_amp = Parameter(description="SIL1 term: amplitude", 
+    SIL1_amp = Parameter(description="SIL1 term: amplitude",
                          default=0.002*AbAv, min=0.0)
-    SIL1_lambda = Parameter(description="SIL1 term: center wavelength", 
+    SIL1_lambda = Parameter(description="SIL1 term: center wavelength",
                             default=9.7, bounds=(7.0,13.0))
-    SIL1_b = Parameter(description="SIL1 term: b coefficient", 
+    SIL1_b = Parameter(description="SIL1 term: b coefficient",
                        default=-1.95)
-    SIL1_n = Parameter(description="SIL1 term: n coefficient", 
+    SIL1_n = Parameter(description="SIL1 term: n coefficient",
                        default=2.0, fixed=True)
 
-    SIL2_amp = Parameter(description="SIL2 term: amplitude", 
+    SIL2_amp = Parameter(description="SIL2 term: amplitude",
                          default=0.002*AbAv, min=0.0)
-    SIL2_lambda = Parameter(description="SIL2 term: center wavelength", 
+    SIL2_lambda = Parameter(description="SIL2 term: center wavelength",
                             default=18.0, bounds=(15.0,21.0))
-    SIL2_b = Parameter(description="SIL2 term: b coefficient", 
+    SIL2_b = Parameter(description="SIL2 term: b coefficient",
                         default=-1.80)
-    SIL2_n = Parameter(description="SIL2 term: n coefficient", 
+    SIL2_n = Parameter(description="SIL2 term: n coefficient",
                         default=2.0, fixed=True)
 
-    FIR_amp = Parameter(description="FIR term: amplitude", 
+    FIR_amp = Parameter(description="FIR term: amplitude",
                         default=0.012*AbAv, min=0.0)
-    FIR_lambda = Parameter(description="FIR term: center wavelength", 
+    FIR_lambda = Parameter(description="FIR term: center wavelength",
                            default=25.0, bounds=(20.0,30.0))
-    FIR_b = Parameter(description="FIR term: b coefficient", 
+    FIR_b = Parameter(description="FIR term: b coefficient",
                         default=0.00)
-    FIR_n = Parameter(description="FIR term: n coefficient", 
+    FIR_n = Parameter(description="FIR term: n coefficient",
                         default=2.0, fixed=True)
 
     x_range = x_range_P92
@@ -794,7 +794,7 @@ class P92(Fittable1DModel):
         Function for calculating a single P92 term
 
         .. math::
- 
+
            \frac{a}{(\lambda/cen_wave)^n + (cen_wave/\lambda)^n + b}
 
         when n = 2, this term is equivalent to a Drude profile
@@ -978,7 +978,7 @@ class F99(BaseExtRvModel):
         #    Indications are that this is not correct from fm_unred.pro
         #    which is based on FMRCURVE.pro distributed by Fitzpatrick.
         #    --> confirmation needed
-        #    
+        #
         #    Also, fm_unred.pro has different coeff and # of terms, possible
         #    update --> check with Fitzpatrick
         opt_axebv_y = np.array([-0.426 + 1.0044*Rv,
