@@ -676,11 +676,11 @@ class P92(Fittable1DModel):
         ext_model = P92()
         ax.plot(1/x,ext_model(x),label='total')
 
-        ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+        ext_model = P92(FUV_amp=0., NUV_amp=0.0,
                         SIL1_amp=0.0, SIL2_amp=0.0, FIR_amp=0.0)
         ax.plot(1./x,ext_model(x),label='BKG only')
 
-        ext_model = P92(NUV_amp=0.0, 
+        ext_model = P92(NUV_amp=0.0,
                         SIL1_amp=0.0, SIL2_amp=0.0, FIR_amp=0.0)
         ax.plot(1./x,ext_model(x),label='BKG+FUV only')
 
@@ -688,15 +688,15 @@ class P92(Fittable1DModel):
                         SIL1_amp=0.0, SIL2_amp=0.0, FIR_amp=0.0)
         ax.plot(1./x,ext_model(x),label='BKG+NUV only')
 
-        ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+        ext_model = P92(FUV_amp=0., NUV_amp=0.0,
                         SIL2_amp=0.0)
         ax.plot(1./x,ext_model(x),label='BKG+FIR+SIL1 only')
 
-        ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+        ext_model = P92(FUV_amp=0., NUV_amp=0.0,
                         SIL1_amp=0.0)
         ax.plot(1./x,ext_model(x),label='BKG+FIR+SIL2 only')
 
-        ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+        ext_model = P92(FUV_amp=0., NUV_amp=0.0,
                         SIL1_amp=0.0, SIL2_amp=0.0)
         ax.plot(1./x,ext_model(x),label='BKG+FIR only')
 
@@ -708,7 +708,7 @@ class P92(Fittable1DModel):
         MW_x = np.array(MW_x)
         MW_exvebv = [-3.02, -2.91, -2.76, -2.58, -2.23, -1.60, -0.78, 0.00,
                      1.00, 1.30, 1.80, 3.10, 4.19, 4.90, 5.77, 6.57, 6.23,
-                     5.52, 4.90, 4.65, 4.60, 4.73, 4.99, 5.36, 5.91, 
+                     5.52, 4.90, 4.65, 4.60, 4.73, 4.99, 5.36, 5.91,
                      6.55, 7.45, 8.45, 9.80, 11.30]
         MW_exvebv = np.array(MW_exvebv)
         Rv = 3.08
@@ -808,7 +808,7 @@ class P92(Fittable1DModel):
            amplitude
 
         cen_wave: flaot
-           central wavelength 
+           central wavelength
 
         b : float
            b coefficient
