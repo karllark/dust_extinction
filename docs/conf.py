@@ -105,8 +105,8 @@ release = package.__version__
 
 # Please update these texts to match the name of your package.
 html_theme_options = {
-    'logotext1': 'package',  # white,  semi-bold
-    'logotext2': '-template',  # orange, light
+    'logotext1': 'dust_',  # white,  semi-bold
+    'logotext2': 'extinction',  # orange, light
     'logotext3': ':docs'   # white,  light
     }
 
@@ -131,6 +131,10 @@ html_theme_options = {
 # pixels large.
 #html_favicon = ''
 
+#  example from imexam
+#from os.path import join
+#html_favicon = join('_static', 'imexam.ico')
+
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
 #html_last_updated_fmt = ''
@@ -141,6 +145,13 @@ html_title = '{0} v{1}'.format(project, release)
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = project + 'doc'
+
+# more examples from imexam
+#html_logo = '_static/imexam_logo_trans.png'
+
+# Static files to copy after template files
+#html_static_path = ['_static']
+#html_style = 'imexam.css'
 
 
 # -- Options for LaTeX output -------------------------------------------------
