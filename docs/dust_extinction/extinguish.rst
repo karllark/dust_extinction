@@ -7,8 +7,9 @@ factor to multiple (extinguish) or divide (unextinguish) a spectrum by
 to add or remove the effects of dust, respectively.  
 
 Extinguish is also often called reddening.  Extinguishing a spectrum often
-reddens the flux, but not always (e.g, on the short wavelength side of the 
-2175 A bump.  So extinguish is the more generic term.
+reddens the flux, but sometimes 'bluens' the flux
+(e.g, on the short wavelength side of the 2175 A bump).
+So extinguish is the more generic term.
 
 Example: Extinguish a Blackbody
 ===============================
