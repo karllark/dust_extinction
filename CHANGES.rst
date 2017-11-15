@@ -3,7 +3,7 @@
 
 - initial release
 
-0.6 (unreleased)
+0.6 (2017-11-15)
 ================
 
-- no changes yet
+- minor updates to release version, notes
