@@ -1,4 +1,4 @@
-0.5 (unreleased)
+0.5 (2017-11-15)
 ================
 
 - initial release
