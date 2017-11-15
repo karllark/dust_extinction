@@ -2,3 +2,8 @@
 ================
 
 - initial release
+
+0.6 (unreleased)
+================
+
+- no changes yet
