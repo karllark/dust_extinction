@@ -5,6 +5,9 @@ Astronomical dust extinction
    :target: http://dust-extinction.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 	 
+.. image:: https://badge.fury.io/py/dust-extinction.svg
+   :target: https://badge.fury.io/py/dust-extinction
+
 .. image:: https://travis-ci.org/karllark/dust_extinction.svg?branch=master
    :target: https://travis-ci.org/karllark/dust_extinction
    :alt: CI Testing Status

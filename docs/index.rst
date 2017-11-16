@@ -19,7 +19,10 @@ framework.
 Installation
 ============
 
-To be added
+.. toctree
+  :maxdepth: 1
+
+  <dust_extinction/install.rst>
 
 User Documenation
 =================
