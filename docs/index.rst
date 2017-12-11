@@ -16,11 +16,6 @@ template and uses the
 `astropy.modeling <http://docs.astropy.org/en/stable/modeling/>`_ 
 framework.
 
-Installation
-============
-
-To be added
-
 User Documenation
 =================
 
@@ -30,8 +25,15 @@ User Documenation
    Flavors of Models <dust_extinction/model_flavors.rst>
    Extinguish (or unextinguish) data <dust_extinction/extinguish.rst>
    Fitting extinction curves <dust_extinction/fit_extinction.rst>
-   
               
+Installation
+============
+
+.. toctree::
+  :maxdepth: 2
+
+  How to install <dust_extinction/install.rst>
+
 Reporting Issues
 ================
 
