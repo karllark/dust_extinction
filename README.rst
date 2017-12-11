@@ -25,6 +25,11 @@ implemented using the astropy.modeling framework.
 
 This package is potentially an affiliated package of `AstroPy`_.
 
+Documenation
+------------
+
+Using readthedocs: <http://dust-extinction.readthedocs.io>
+
 In Development!
 ---------------
 
