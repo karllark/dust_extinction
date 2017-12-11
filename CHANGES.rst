@@ -1,7 +1,7 @@
 0.7 (unreleased)
 ================
 
-- no changes yet
+- added how to install documentation
 
 0.6 (2017-11-15)
 ================
