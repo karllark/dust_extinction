@@ -11,8 +11,7 @@ import astropy.units as u
 from astropy.modeling import (Model, Fittable1DModel,
                               Parameter, InputParameterError)
 
-__all__ = ['BaseExtModel','BaseExtRvModel', 'BaseExtAve',
-           'CCM89', 'FM90', 'P92', 'F99',
+__all__ = ['CCM89', 'FM90', 'P92', 'F99',
            'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
            'G16']
 
@@ -289,6 +288,59 @@ class BaseExtRvModel(BaseExtModel):
                                       + " and "
                                       + str(self.Rv_range[1]))
 
+class BaseExtRvAfAModel(BaseExtModel):
+    """
+    Base Extinction R(V)_A, f_A -dependent Model.  Do not use.
+    """
+
+    RvA = Parameter(description="R_A(V) = A(V)/E(B-V) = " \
+                   + "total-to-selective extinction of component A",
+                   default=3.1)
+    fA = Parameter(description="f_A = mixture coefficent of component A",
+                   default=1.0)
+
+    @RvA.validator
+    def RvA(self, value):
+        """
+        Check that RvA is in the valid range
+
+        Parameters
+        ----------
+        value: float
+            RvA value to check
+
+        Raises
+        ------
+        InputParameterError
+           Input R_A(V) values outside of defined range
+        """
+        if not (self.RvA_range[0] <= value <= self.RvA_range[1]):
+            raise InputParameterError("parameter RvA must be between "
+                                      + str(self.RvA_range[0])
+                                      + " and "
+                                      + str(self.RvA_range[1]))
+
+    @fA.validator
+    def fA(self, value):
+        """
+        Check that fA is in the valid range
+
+        Parameters
+        ----------
+        value: float
+            fA value to check
+
+        Raises
+        ------
+        InputParameterError
+           Input fA values outside of defined range
+        """
+        if not (self.fA_range[0] <= value <= self.fA_range[1]):
+            raise InputParameterError("parameter fA must be between "
+                                      + str(self.fA_range[0])
+                                      + " and "
+                                      + str(self.fA_range[1]))
+        
 class CCM89(BaseExtRvModel):
     """
     CCM89 extinction model calculation
@@ -1336,7 +1388,7 @@ class G03_LMC2(BaseExtAve):
                                  self.x_range, 'G03')
 
 
-class G16(BaseExtModel):
+class G16(BaseExtRvAfAModel):
     """
     G16 extinction model calculation
 
@@ -1424,57 +1476,9 @@ class G16(BaseExtModel):
         plt.show()
     """
 
-    RvA = Parameter(description="R_A(V) = A(V)/E(B-V) = " \
-                   + "total-to-selective extinction of component A",
-                   default=3.1)
-    fA = Parameter(description="f_A = mixture coefficent of component A",
-                   default=1.0)
-
     RvA_range = [2.0, 6.0]
     fA_range = [0.0, 1.0]
     x_range = x_range_G16
-
-    @RvA.validator
-    def RvA(self, value):
-        """
-        Check that RvA is in the valid range
-
-        Parameters
-        ----------
-        value: float
-            RvA value to check
-
-        Raises
-        ------
-        InputParameterError
-           Input R_A(V) values outside of defined range
-        """
-        if not (self.RvA_range[0] <= value <= self.RvA_range[1]):
-            raise InputParameterError("parameter RvA must be between "
-                                      + str(self.RvA_range[0])
-                                      + " and "
-                                      + str(self.RvA_range[1]))
-
-    @fA.validator
-    def fA(self, value):
-        """
-        Check that fA is in the valid range
-
-        Parameters
-        ----------
-        value: float
-            fA value to check
-
-        Raises
-        ------
-        InputParameterError
-           Input fA values outside of defined range
-        """
-        if not (self.fA_range[0] <= value <= self.fA_range[1]):
-            raise InputParameterError("parameter fA must be between "
-                                      + str(self.fA_range[0])
-                                      + " and "
-                                      + str(self.fA_range[1]))
 
     @staticmethod
     def evaluate(in_x, RvA, fA):
