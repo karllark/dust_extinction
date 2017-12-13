@@ -56,10 +56,11 @@ R(V) (+ other variables) dependent prediction models
    These models provide predictions of the shape of the dust extinction
    given input variable(s).  
 
-   These include CCM89 the original R(V) dependent model from 
-   Cardelli, Clayton, and Mathis (1989) and updated versions F99 
+   The R(V) dependent models include CCM89 the original such model
+   (Cardelli, Clayton, and Mathis 1989), the O94 model that updates the
+   optical portion of the CCM89 model (O'Donnell 1994), and F99 model
    (Fitzpatrick 1999).  These models are based on the average
-   behavior of extinction in the Milky Way.
+   behavior of extinction in the Milky Way as a function of R(V).
 
    In addition, the (R(V), f_A) two parameter relationship from 
    Gordon et al. (2016) is included.  This model is based on the average
@@ -93,6 +94,33 @@ R(V) (+ other variables) dependent prediction models
    plt.tight_layout()
    plt.show()
 
+.. plot::
+
+   import numpy as np
+   import matplotlib.pyplot as plt
+   import astropy.units as u
+
+   from dust_extinction.dust_extinction import O94
+
+   fig, ax = plt.subplots()
+
+   # generate the curves and plot them
+   x = np.arange(0.5,10.0,0.1)/u.micron
+
+   Rvs = ['2.0','3.0','4.0','5.0','6.0']
+   for cur_Rv in Rvs:
+      ext_model = O94(Rv=cur_Rv)
+      ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+
+   ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+   ax.set_ylabel('$A(x)/A(V)$')
+
+   ax.set_title('O94')
+
+   ax.legend(loc='best')
+   plt.tight_layout()
+   plt.show()
+   
 .. plot::
 
    import numpy as np

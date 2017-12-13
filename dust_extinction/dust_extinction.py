@@ -11,13 +11,14 @@ import astropy.units as u
 from astropy.modeling import (Model, Fittable1DModel,
                               Parameter, InputParameterError)
 
-__all__ = ['CCM89', 'FM90', 'P92', 'F99',
+__all__ = ['CCM89', 'FM90', 'P92', 'O94', 'F99',
            'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
            'G16']
 
 x_range_CCM89 = [0.3,10.0]
 x_range_FM90 = [1.0/0.32,1.0/0.0912]
 x_range_P92 = [1.0/1e3,1.0/1e-3]
+x_range_O94 = x_range_CCM89
 x_range_F99 = [0.3,10.0]
 x_range_G03 = [0.3,10.0]
 x_range_G16 = x_range_G03
@@ -926,6 +927,137 @@ class P92(Fittable1DModel):
 
     # use numerical derivaties (need to add analytic)
     fit_deriv = None
+
+class O94(BaseExtRvModel):
+    """
+    O94 extinction model calculation
+
+    Parameters
+    ----------
+    Rv: float
+        R(V) = A(V)/E(B-V) = total-to-selective extinction
+
+    Raises
+    ------
+    InputParameterError
+       Input Rv values outside of defined range
+
+    Notes
+    -----
+    O94 Milky Way R(V) dependent extinction model
+
+    From O'Donnell (1994, ApJ, 422, 158)
+      Updates/improves the optical portion of the CCM89 model
+
+    Example showing O94 curves for a range of R(V) values.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.dust_extinction import O94
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        x = np.arange(0.5,10.0,0.1)/u.micron
+
+        Rvs = ['2.0','3.0','4.0','5.0','6.0']
+        for cur_Rv in Rvs:
+           ext_model = O94(Rv=cur_Rv)
+           ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+
+        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel('$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    Rv_range = [2.0,6.0]
+    x_range = x_range_O94
+
+    @staticmethod
+    def evaluate(in_x, Rv):
+        """
+        O94 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        # convert to wavenumbers (1/micron) if x input in units
+        # otherwise, assume x in appropriate wavenumber units
+        with u.add_enabled_equivalencies(u.spectral()):
+            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
+
+        # strip the quantity to avoid needing to add units to all the
+        #    polynomical coefficients
+        x = x_quant.value
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, x_range_O94, 'O94')
+
+        # setup the a & b coefficient vectors
+        n_x = len(x)
+        a = np.zeros(n_x)
+        b = np.zeros(n_x)
+
+        # define the ranges
+        ir_indxs = np.where(np.logical_and(0.3 <= x,x < 1.1))
+        opt_indxs = np.where(np.logical_and(1.1 <= x,x < 3.3))
+        nuv_indxs = np.where(np.logical_and(3.3 <= x,x <= 8.0))
+        fnuv_indxs = np.where(np.logical_and(5.9 <= x,x <= 8))
+        fuv_indxs = np.where(np.logical_and(8 < x,x <= 10))
+
+        # Infrared
+        y = x[ir_indxs]**1.61
+        a[ir_indxs] = .574*y
+        b[ir_indxs] = -0.527*y
+
+        # NIR/optical
+        y = x[opt_indxs] - 1.82
+        a[opt_indxs] = np.polyval((-0.505, 1.647, -0.827, -1.718,
+                                   1.137, 0.701, -0.609, 0.104, 1), y)
+        b[opt_indxs] = np.polyval((3.347, -10.805, 5.491, 11.102,
+                                   -7.985, -3.989, 2.908, 1.952, 0), y)
+
+        # NUV
+        a[nuv_indxs] = 1.752-.316*x[nuv_indxs] \
+                       - 0.104/((x[nuv_indxs] - 4.67)**2 + .341)
+        b[nuv_indxs] = -3.09 + \
+                       1.825*x[nuv_indxs] \
+                       + 1.206/((x[nuv_indxs] - 4.62)**2 + .263)
+
+        # far-NUV
+        y = x[fnuv_indxs] - 5.9
+        a[fnuv_indxs] += -.04473*(y**2) - .009779*(y**3)
+        b[fnuv_indxs] += .2130*(y**2) + .1207*(y**3)
+
+        # FUV
+        y = x[fuv_indxs] - 8.0
+        a[fuv_indxs] = np.polyval((-.070, .137, -.628, -1.073), y)
+        b[fuv_indxs] = np.polyval((.374, -.42, 4.257, 13.67), y)
+
+        # return A(x)/A(V)
+        return a + b/Rv
 
 class F99(BaseExtRvModel):
     """
