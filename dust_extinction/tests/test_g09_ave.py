@@ -4,18 +4,16 @@ import pytest
 import astropy.units as u
 from astropy.modeling import InputParameterError
 
-from ..dust_extinction import G03_SMCBar, G03_LMCAvg, G03_LMC2
+from ..dust_extinction import G09_MWAvg
 
-x_bad = [-1.0, 0.1, 10.1, 100.]
-models = [G03_SMCBar(), G03_LMCAvg(), G03_LMC2()]
+x_bad = [-1.0, 0.1, 11., 100.]
 
 @pytest.mark.parametrize("x_invalid", x_bad)
-@pytest.mark.parametrize("tmodel", models)
-def test_invalid_wavenumbers(x_invalid, tmodel):
-
+def test_invalid_wavenumbers(x_invalid):
+    tmodel = G09_MWAvg()
     with pytest.raises(ValueError) as exc:
         tmodel(x_invalid)
-    assert exc.value.args[0] == 'Input x outside of range defined for G03' \
+    assert exc.value.args[0] == 'Input x outside of range defined for G09' \
                                 + ' [' \
                                 + str(tmodel.x_range[0]) \
                                 +  ' <= x <= ' \
@@ -23,11 +21,11 @@ def test_invalid_wavenumbers(x_invalid, tmodel):
                                 + ', x has units 1/micron]'
 
 @pytest.mark.parametrize("x_invalid_wavenumber", x_bad/u.micron)
-@pytest.mark.parametrize("tmodel", models)
-def test_invalid_wavenumbers_imicron(x_invalid_wavenumber, tmodel):
+def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
+    tmodel = G09_MWAvg()
     with pytest.raises(ValueError) as exc:
         tmodel(x_invalid_wavenumber)
-    assert exc.value.args[0] == 'Input x outside of range defined for G03' \
+    assert exc.value.args[0] == 'Input x outside of range defined for G09' \
                                 + ' [' \
                                 + str(tmodel.x_range[0]) \
                                 +  ' <= x <= ' \
@@ -35,11 +33,11 @@ def test_invalid_wavenumbers_imicron(x_invalid_wavenumber, tmodel):
                                 + ', x has units 1/micron]'
 
 @pytest.mark.parametrize("x_invalid_micron", u.micron/x_bad)
-@pytest.mark.parametrize("tmodel", models)
-def test_invalid_micron(x_invalid_micron, tmodel):
+def test_invalid_micron(x_invalid_micron):
+    tmodel = G09_MWAvg()
     with pytest.raises(ValueError) as exc:
         tmodel(x_invalid_micron)
-    assert exc.value.args[0] == 'Input x outside of range defined for G03' \
+    assert exc.value.args[0] == 'Input x outside of range defined for G09' \
                                 + ' [' \
                                 + str(tmodel.x_range[0]) \
                                 +  ' <= x <= ' \
@@ -47,25 +45,25 @@ def test_invalid_micron(x_invalid_micron, tmodel):
                                 + ', x has units 1/micron]'
 
 @pytest.mark.parametrize("x_invalid_angstrom", u.angstrom*1e4/x_bad)
-@pytest.mark.parametrize("tmodel", models)
-def test_invalid_micron(x_invalid_angstrom, tmodel):
+def test_invalid_micron(x_invalid_angstrom):
+    tmodel = G09_MWAvg()
     with pytest.raises(ValueError) as exc:
         tmodel(x_invalid_angstrom)
-    assert exc.value.args[0] == 'Input x outside of range defined for G03' \
+    assert exc.value.args[0] == 'Input x outside of range defined for G09' \
                                 + ' [' \
                                 + str(tmodel.x_range[0]) \
                                 +  ' <= x <= ' \
                                 + str(tmodel.x_range[1]) \
                                 + ', x has units 1/micron]'
 
-@pytest.mark.parametrize("tmodel", models)
-def test_extinguish_no_av_or_ebv(tmodel):
+def test_extinguish_no_av_or_ebv():
+    tmodel = G09_MWAvg()
     with pytest.raises(InputParameterError) as exc:
         tmodel.extinguish([1.0])
     assert exc.value.args[0] == 'neither Av or Ebv passed, one required'
 
-@pytest.mark.parametrize("tmodel", models)
-def test_extinction_G03_values(tmodel):
+def test_extinction_G09_values():
+    tmodel = G09_MWAvg()
     # test
     #  not to numerical precision as we are using the FM90 fits
     #  and spline functions and the correct values are the data
@@ -73,28 +71,30 @@ def test_extinction_G03_values(tmodel):
                                tmodel.obsdata_axav,
                                rtol=tmodel.obsdata_tolerance)
 
-@pytest.mark.parametrize("tmodel", models)
-def test_extinction_G03_single_values(tmodel):
+def test_extinction_G09_single_values():
+    tmodel = G09_MWAvg()
     # test
     for x, cor_val in zip(tmodel.obsdata_x, tmodel.obsdata_axav):
         np.testing.assert_allclose(tmodel(x), cor_val,
                                    rtol=tmodel.obsdata_tolerance)
 
-@pytest.mark.parametrize("tmodel", models)
-def test_extinction_G03_extinguish_values_Av(tmodel):
-    x = np.arange(0.3,10.0,0.1)/u.micron
+def test_extinction_G09_extinguish_values_Av():
+    tmodel = G09_MWAvg()
+
+    x = np.arange(0.3,1.0/0.0912,0.1)/u.micron
     cor_vals = tmodel(x)
 
     # calculate the cor_vals in fractional units
     Av = 1.0
-    cor_vals = np.power(10.0,-0.4*(cor_vals*Av))
+    cor_vals = np.power(10.0,-0.4*cor_vals*Av)
 
     # test
     np.testing.assert_equal(tmodel.extinguish(x, Av=Av), cor_vals)
 
-@pytest.mark.parametrize("tmodel", models)
-def test_extinction_G03_extinguish_values_Ebv(tmodel):
-    x = np.arange(0.3,10.0,0.1)/u.micron
+def test_extinction_G09_extinguish_values_Ebv():
+    tmodel = G09_MWAvg()
+
+    x = np.arange(0.3,1.0/0.0912,0.1)/u.micron
     cor_vals = tmodel(x)
 
     # calculate the cor_vals in fractional units

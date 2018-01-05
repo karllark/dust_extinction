@@ -10,10 +10,11 @@ Average models
 
    These models provide averages from the literature with the ability to
    interpolate between the observed data points.
-   For the Milky Way, one of the R(V) dependent models  with R(V) = 3.1
-   (see next section) are often used for the Milky Way 'average'.
-   Models are provided for the Magellanic Clouds from Gordon et al. (2003).
-   Models for the Milky Way still to be added (both UV/optical/NIR and IR).
+   Models are provided for the Milky Way (Gordon, Cartlege, & Clayton 2009)
+   and the Magellanic Clouds (Gordon et al. 2003).
+
+   For the Milky Way, one of the R(V) dependent models with R(V) = 3.1
+   (see next section) can also be used for the Milky Way 'average'.
 
 .. plot::
 
@@ -21,7 +22,7 @@ Average models
    import matplotlib.pyplot as plt
    import astropy.units as u
    
-   from dust_extinction.dust_extinction import (F99,
+   from dust_extinction.dust_extinction import (G09_MWAvg,
                                                 G03_SMCBar,
                                                 G03_LMCAvg,
 					        G03_LMC2)
@@ -31,8 +32,8 @@ Average models
    # generate the curves and plot them
    x = np.arange(0.3,10.0,0.1)/u.micron
 
-   ext_model = F99()
-   ax.plot(x,ext_model(x),label='MW Average (F99 w/ $R(V)=3.1$)')
+   ext_model = G09_MWAvg()
+   ax.plot(x,ext_model(x),label='G09 MWAvg')
    
    ext_model = G03_SMCBar()
    ax.plot(x,ext_model(x),label='G03 SMCBar')

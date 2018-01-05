@@ -78,8 +78,6 @@ contributors page on Github
 
 Reference API
 =============
-.. toctree::
-   :maxdepth: 1
 
-   dust_extinction/reference_api.rst
+.. automodapi:: dust_extinction.dust_extinction
 
