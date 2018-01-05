@@ -110,7 +110,7 @@ between data points.
    # fit the data to the P92 model using the fitter
    #   use the initialized model as the starting point
    #   accuracy set to avoid warning the fit may have failed
-   p92_fit = fit(p92_init, x, y, weights=1.0/y_unc)
+   p92_fit = fit(p92_init, x, y, weights=1.0/y_unc, acc=1e-3)
 
    # plot the observed data, initial guess, and final fit
    fig, ax = plt.subplots()
