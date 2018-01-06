@@ -342,7 +342,7 @@ class BaseExtRvAfAModel(BaseExtModel):
                                       + str(self.fA_range[0])
                                       + " and "
                                       + str(self.fA_range[1]))
-        
+
 class CCM89(BaseExtRvModel):
     """
     CCM89 extinction model calculation
@@ -1520,7 +1520,7 @@ class G03_LMC2(BaseExtAve):
                                  optnir_axav_x, optnir_axav_y,
                                  self.x_range, 'G03')
 
-    
+
 class G09_MWAvg(BaseExtAve):
     """
     G09 MW Average Extinction Curve
@@ -1825,7 +1825,7 @@ class G09_MWAvg(BaseExtAve):
                       SIL2_b=-1.80, SIL2_n=2.0,
                       FIR_amp=0.01589610389, FIR_lambda=25.0,
                       FIR_b=0.0, FIR_n=2.0)
-        
+
         # return A(x)/A(V)
         return p92_fit(in_x)
 
