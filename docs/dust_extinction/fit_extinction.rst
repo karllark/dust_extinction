@@ -75,6 +75,9 @@ between data points.
    import matplotlib.pyplot as plt
    import numpy as np
 
+   import warnings
+   from astropy.utils.exceptions import AstropyWarning
+
    from astropy.modeling.fitting import LevMarLSQFitter
 
    from dust_extinction.dust_extinction import (P92, G09_MWAvg)
@@ -107,10 +110,14 @@ between data points.
    # pick the fitter
    fit = LevMarLSQFitter()
 
+   # set to avoid the "fit may have been unsuccessful" warning
+   #   fit is fine, but this means the build of the docs fails
+   warnings.simplefilter('ignore', category=AstropyWarning)
+   
    # fit the data to the P92 model using the fitter
    #   use the initialized model as the starting point
    #   accuracy set to avoid warning the fit may have failed
-   p92_fit = fit(p92_init, x, y, weights=1.0/y_unc, acc=1e-3)
+   p92_fit = fit(p92_init, x, y, weights=1.0/y_unc)
 
    # plot the observed data, initial guess, and final fit
    fig, ax = plt.subplots()
