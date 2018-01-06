@@ -13,7 +13,8 @@ Simple Average Curves
 ---------------------
 
 These are straightforward averages of observed extinction curves.  They are the
-simpliest models and include models for the Mw (TBA), the LMC
+simpliest models and include models for the MW
+(:class:`~dust_extinction.dust_extinction.G09_MWAvg`), the LMC
 (:class:`~dust_extinction.dust_extinction.G03_LMCAvg`,
 :class:`~dust_extinction.dust_extinction.G03_LMC2`) and the SMC
 (:class:`~dust_extinction.dust_extinction.G03_SMCBar`).
@@ -25,9 +26,11 @@ Way, the usual average used is R(V) = 3.1.
 +------------+-------------+------------------+--------------+
 | Model      | x range     | wavelength range |       galaxy | 
 +============+=============+==================+==============+
+| G09_MWAvg  | 0.3 - 10.96 |     0.0912 - 3.3 |           MW |
++------------+-------------+------------------+--------------+
 | G03_LMCAvg |  0.3 - 10.0 |        0.1 - 3.3 |          LMC |
 +------------+-------------+------------------+--------------+
-| G03_LMC2   |  0.3 - 10.0 |        0.1 - 3.3 | 30 Dor (LMC) |
+| G03_LMC2   |  0.3 - 10.0 |        0.1 - 3.3 | LMC (30 Dor) |
 +------------+-------------+------------------+--------------+
 | G03_SMCBar |  0.3 - 10.0 |        0.1 - 3.3 |          SMC |
 +------------+-------------+------------------+--------------+
