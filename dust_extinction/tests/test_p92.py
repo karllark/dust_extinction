@@ -2,23 +2,29 @@ import numpy as np
 import pytest
 
 import astropy.units as u
-from astropy.modeling import InputParameterError
 from astropy.modeling.fitting import LevMarLSQFitter
 
 from ..dust_extinction import P92
 
 x_bad = [-1.0, 1001.]
-@pytest.mark.parametrize("x_invalid", x_bad)
-def test_invalid_wavenumbers(x_invalid):
-    tmodel = P92()
+
+
+def _invalid_x_range(x, tmodel, modname):
     with pytest.raises(ValueError) as exc:
-        tmodel(x_invalid)
-    assert exc.value.args[0] == 'Input x outside of range defined for P92' \
+        tmodel(x)
+    assert exc.value.args[0] == 'Input x outside of range defined for ' \
+                                + modname \
                                 + ' [' \
                                 + str(tmodel.x_range[0]) \
-                                +  ' <= x <= ' \
+                                + ' <= x <= ' \
                                 + str(tmodel.x_range[1]) \
                                 + ', x has units 1/micron]'
+
+
+@pytest.mark.parametrize("x_invalid", x_bad)
+def test_invalid_wavenumbers(x_invalid):
+    _invalid_x_range(x_invalid, P92(), 'P92')
+
 
 @pytest.mark.parametrize("x_invalid_wavenumber", x_bad/u.micron)
 def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
@@ -28,9 +34,10 @@ def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
     assert exc.value.args[0] == 'Input x outside of range defined for P92' \
                                 + ' [' \
                                 + str(tmodel.x_range[0]) \
-                                +  ' <= x <= ' \
+                                + ' <= x <= ' \
                                 + str(tmodel.x_range[1]) \
                                 + ', x has units 1/micron]'
+
 
 @pytest.mark.parametrize("x_invalid_micron", u.micron/x_bad)
 def test_invalid_micron(x_invalid_micron):
@@ -40,9 +47,10 @@ def test_invalid_micron(x_invalid_micron):
     assert exc.value.args[0] == 'Input x outside of range defined for P92' \
                                 + ' [' \
                                 + str(tmodel.x_range[0]) \
-                                +  ' <= x <= ' \
+                                + ' <= x <= ' \
                                 + str(tmodel.x_range[1]) \
                                 + ', x has units 1/micron]'
+
 
 @pytest.mark.parametrize("x_invalid_angstrom", u.angstrom*1e4/x_bad)
 def test_invalid_micron(x_invalid_angstrom):
@@ -52,9 +60,10 @@ def test_invalid_micron(x_invalid_angstrom):
     assert exc.value.args[0] == 'Input x outside of range defined for P92' \
                                 + ' [' \
                                 + str(tmodel.x_range[0]) \
-                                +  ' <= x <= ' \
+                                + ' <= x <= ' \
                                 + str(tmodel.x_range[1]) \
                                 + ', x has units 1/micron]'
+
 
 def get_axav_cor_vals():
 
@@ -79,6 +88,7 @@ def get_axav_cor_vals():
     cor_vals = MW_axav
 
     return (x, cor_vals)
+
 
 def test_extinction_P92_values():
     # get the correct values
