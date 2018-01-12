@@ -31,8 +31,7 @@ Average models
 
    # generate the curves and plot them
    x = np.arange(0.3,10.0,0.1)/u.micron
-
-   ext_model = G09_MWAvg()
+   ext_model = GCC09_MWAvg()
    ax.plot(x,ext_model(x),label='GCC09 MWAvg')
 
    ext_model = G03_SMCBar()

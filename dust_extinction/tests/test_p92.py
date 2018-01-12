@@ -72,7 +72,6 @@ def get_axav_cor_vals():
     Rv = 3.08
     MW_axav = MW_exvebv/Rv + 1.0
 
-
     # add units
     x = MW_x/u.micron
 
