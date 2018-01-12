@@ -2,9 +2,9 @@
 How to Choose a Model
 #####################
 
-The ``dust_extinction`` package provides a suite of dust extinction models.  
+The ``dust_extinction`` package provides a suite of dust extinction models.
 Which model to use can depend on the wavelength range of interest, the expected
-type of extinction, or some other property. 
+type of extinction, or some other property.
 
 Average Models
 ==============
@@ -14,7 +14,7 @@ Simple Average Curves
 
 These are straightforward averages of observed extinction curves.  They are the
 simpliest models and include models for the MW
-(:class:`~dust_extinction.dust_extinction.G09_MWAvg`), the LMC
+(:class:`~dust_extinction.dust_extinction.GCC09_MWAvg`), the LMC
 (:class:`~dust_extinction.dust_extinction.G03_LMCAvg`,
 :class:`~dust_extinction.dust_extinction.G03_LMC2`) and the SMC
 (:class:`~dust_extinction.dust_extinction.G03_SMCBar`).
@@ -23,17 +23,17 @@ One often used alternative to these straight average models is to use one of
 the parameter dependent models with the average R(V) value.  For the Milky
 Way, the usual average used is R(V) = 3.1.
 
-+------------+-------------+------------------+--------------+
-| Model      | x range     | wavelength range |       galaxy | 
-+============+=============+==================+==============+
-| G09_MWAvg  | 0.3 - 10.96 |     0.0912 - 3.3 |           MW |
-+------------+-------------+------------------+--------------+
-| G03_LMCAvg |  0.3 - 10.0 |        0.1 - 3.3 |          LMC |
-+------------+-------------+------------------+--------------+
-| G03_LMC2   |  0.3 - 10.0 |        0.1 - 3.3 | LMC (30 Dor) |
-+------------+-------------+------------------+--------------+
-| G03_SMCBar |  0.3 - 10.0 |        0.1 - 3.3 |          SMC |
-+------------+-------------+------------------+--------------+
++--------------+-------------+------------------+--------------+
+| Model        | x range     | wavelength range |       galaxy |
++==============+=============+==================+==============+
+| GCC09_MWAvg  | 0.3 - 10.96 |     0.0912 - 3.3 |           MW |
++--------------+-------------+------------------+--------------+
+| G03_LMCAvg   |  0.3 - 10.0 |        0.1 - 3.3 |          LMC |
++--------------+-------------+------------------+--------------+
+| G03_LMC2     |  0.3 - 10.0 |        0.1 - 3.3 | LMC (30 Dor) |
++--------------+-------------+------------------+--------------+
+| G03_SMCBar   |  0.3 - 10.0 |        0.1 - 3.3 |          SMC |
++--------------+-------------+------------------+--------------+
 
 
 Parameter Dependent Average Curves
@@ -55,14 +55,14 @@ is based on signifincatly more extinction curves than the
 :class:`~dust_extinction.dust_extinction.O94` models.
 
 +---------+-------------+-------------+------------------+--------------+
-| Model   | Parameters  | x range     | wavelength range |       galaxy | 
+| Model   | Parameters  | x range     | wavelength range |       galaxy |
 |         |             | [1/micron]  | [micron]         |              |
 +=========+=============+=============+==================+==============+
 | CCM89   |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW |
 +---------+-------------+-------------+------------------+--------------+
 | O94     |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW |
 +---------+-------------+-------------+------------------+--------------+
-| F99     |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW | 
+| F99     |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW |
 +---------+-------------+-------------+------------------+--------------+
 | G16     | R(V)_A, f_A |  0.3 - 10.0 |        0.1 - 3.3 | MW, LMC, SMC |
 +---------+-------------+-------------+------------------+--------------+
@@ -85,4 +85,3 @@ but only covers the UV wavelength range.
 +------------+--------------+------------------+-------------------+
 | P92        | 0.001 - 1000 |     0.001 - 1000 |  19 (24 possible) |
 +------------+--------------+------------------+-------------------+
-

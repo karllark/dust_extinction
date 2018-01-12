@@ -2,7 +2,7 @@
 Model Flavors
 #############
 
-There are three differnet types of models: average, R(V)+ dependent prediction,
+There are three different types of models: average, R(V)+ dependent prediction,
 and shape fitting.
 
 Average models
@@ -21,41 +21,41 @@ Average models
    import numpy as np
    import matplotlib.pyplot as plt
    import astropy.units as u
-   
-   from dust_extinction.dust_extinction import (G09_MWAvg,
+
+   from dust_extinction.dust_extinction import (GCC09_MWAvg,
                                                 G03_SMCBar,
                                                 G03_LMCAvg,
-					        G03_LMC2)
-      
+					                                      G03_LMC2)
+
    fig, ax = plt.subplots()
-      
+
    # generate the curves and plot them
    x = np.arange(0.3,10.0,0.1)/u.micron
 
    ext_model = G09_MWAvg()
-   ax.plot(x,ext_model(x),label='G09 MWAvg')
-   
+   ax.plot(x,ext_model(x),label='GCC09 MWAvg')
+
    ext_model = G03_SMCBar()
    ax.plot(x,ext_model(x),label='G03 SMCBar')
 
    ext_model = G03_LMCAvg()
    ax.plot(x,ext_model(x),label='G03 LMCAvg')
-   
+
    ext_model = G03_LMC2()
    ax.plot(x,ext_model(x),label='G03 LMC2')
-   
+
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
-      
+
    ax.legend(loc='best')
    plt.tight_layout()
    plt.show()
-     
+
 R(V) (+ other variables) dependent prediction models
 ====================================================
 
    These models provide predictions of the shape of the dust extinction
-   given input variable(s).  
+   given input variable(s).
 
    The R(V) dependent models include CCM89 the original such model
    (Cardelli, Clayton, and Mathis 1989), the O94 model that updates the
@@ -63,9 +63,9 @@ R(V) (+ other variables) dependent prediction models
    (Fitzpatrick 1999).  These models are based on the average
    behavior of extinction in the Milky Way as a function of R(V).
 
-   In addition, the (R(V), f_A) two parameter relationship from 
+   In addition, the (R(V), f_A) two parameter relationship from
    Gordon et al. (2016) is included.  This model is based on the average
-   behavior of extinction in the Milky Way, Large Magellanic Cloud, and 
+   behavior of extinction in the Milky Way, Large Magellanic Cloud, and
    Small Magellanic Cloud.
 
 .. plot::
@@ -121,7 +121,7 @@ R(V) (+ other variables) dependent prediction models
    ax.legend(loc='best')
    plt.tight_layout()
    plt.show()
-   
+
 .. plot::
 
    import numpy as np
@@ -219,7 +219,7 @@ Shape fitting models
    These models are used to fit the detailed shape of dust extinction curves.
    The FM90 (Fitzpatrick & Mass 1990) model uses 6 parameters to fit the
    shape of the ultraviolet extinction.
-   The P92 (Pei 1992) uses 19 parameters to fit the shape of the X-ray to 
+   The P92 (Pei 1992) uses 19 parameters to fit the shape of the X-ray to
    far-infrared extinction.
 
 .. plot::
@@ -273,11 +273,11 @@ Shape fitting models
    ext_model = P92()
    ax.plot(1/x,ext_model(x),label='total')
 
-   ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+   ext_model = P92(FUV_amp=0., NUV_amp=0.0,
                    SIL1_amp=0.0, SIL2_amp=0.0, FIR_amp=0.0)
    ax.plot(1./x,ext_model(x),label='BKG only')
 
-   ext_model = P92(NUV_amp=0.0, 
+   ext_model = P92(NUV_amp=0.0,
                    SIL1_amp=0.0, SIL2_amp=0.0, FIR_amp=0.0)
    ax.plot(1./x,ext_model(x),label='BKG+FUV only')
 
@@ -285,15 +285,15 @@ Shape fitting models
                    SIL1_amp=0.0, SIL2_amp=0.0, FIR_amp=0.0)
    ax.plot(1./x,ext_model(x),label='BKG+NUV only')
 
-   ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+   ext_model = P92(FUV_amp=0., NUV_amp=0.0,
                    SIL2_amp=0.0)
    ax.plot(1./x,ext_model(x),label='BKG+FIR+SIL1 only')
 
-   ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+   ext_model = P92(FUV_amp=0., NUV_amp=0.0,
                    SIL1_amp=0.0)
    ax.plot(1./x,ext_model(x),label='BKG+FIR+SIL2 only')
 
-   ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+   ext_model = P92(FUV_amp=0., NUV_amp=0.0,
                    SIL1_amp=0.0, SIL2_amp=0.0)
    ax.plot(1./x,ext_model(x),label='BKG+FIR only')
 
@@ -310,6 +310,3 @@ Shape fitting models
    ax.legend(loc='best')
    plt.tight_layout()
    plt.show()
-
-
-     
