@@ -11,7 +11,7 @@ from astropy.modeling import (Model, Fittable1DModel,
 __all__ = ['CCM89', 'FM90', 'P92', 'O94', 'F99',
            'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
            'GCC09_MWAvg', 'G16',
-           'AlAvToElv']
+           'AxAvToExv']
 
 x_range_CCM89 = [0.3, 10.0]
 x_range_FM90 = [1.0/0.32, 1.0/0.0912]
@@ -347,37 +347,37 @@ class BaseExtRvAfAModel(BaseExtModel):
                                       + str(self.fA_range[1]))
 
 
-class AlAvToElv(Fittable1DModel):
+class AxAvToExv(Fittable1DModel):
     """
-    Model to convert from A(lambda)/A(V) to E(lambda-V)
+    Model to convert from A(x)/A(V) to E(x-V)
 
     Paramters
     ---------
     Av : float
       dust column in A(V) [mag]
     """
-    inputs = ('alav',)
-    outputs = ('elv',)
+    inputs = ('axav',)
+    outputs = ('exv',)
 
     Av = Parameter(description="A(V)",
                    default=1.0, min=0.0)
 
     @staticmethod
-    def evaluate(alav, Av):
+    def evaluate(axav, Av):
         """
         AlAvToElv function
 
         Paramters
         ---------
-        alav : np array (float)
-           E(lambda-V)/E(B-V) values
+        axav : np array (float)
+           E(x-V)/E(B-V) values
 
         Returns
         -------
-        elv : np array (float)
-           E(lamda - V)
+        exv : np array (float)
+           E(x - V)
         """
-        return (alav - 1.0)*Av
+        return (axav - 1.0)*Av
 
     # use numerical derivaties (need to add analytic)
     fit_deriv = None

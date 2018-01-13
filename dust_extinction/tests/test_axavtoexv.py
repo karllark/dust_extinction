@@ -3,7 +3,7 @@ import astropy.units as u
 
 from astropy.modeling.fitting import LevMarLSQFitter
 
-from ..dust_extinction import (P92, AlAvToElv)
+from ..dust_extinction import (P92, AxAvToExv)
 
 
 def get_axav_cor_vals():
@@ -25,9 +25,9 @@ def get_axav_cor_vals():
     return (MW_x/u.micron, MW_axav)
 
 
-class P92_Elv(P92 | AlAvToElv):
+class P92_Exv(P92 | AxAvToExv):
     """
-    Evalute P92 on E(l-V) data including solving for A(V)
+    Evalute P92 on E(x-V) data including solving for A(V)
     """
 
 
@@ -44,7 +44,7 @@ def test_P92_fitting():
     y = (y_axav - 1.0)*av
 
     # change from defaults to make the best fit harder to find
-    p92_init = P92_Elv()
+    p92_init = P92_Exv()
 
     fit = LevMarLSQFitter()
     # accuracy set to avoid warning the fit may have failed
