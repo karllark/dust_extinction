@@ -5,6 +5,7 @@ import astropy.units as u
 from astropy.modeling import InputParameterError
 
 from ..dust_extinction import O94
+from .helpers import _invalid_x_range
 
 
 @pytest.mark.parametrize("Rv_invalid", [-1.0, 0.0, 1.9, 6.1, 10.])
@@ -16,57 +17,25 @@ def test_invalid_Rv_input(Rv_invalid):
 
 @pytest.mark.parametrize("x_invalid", [-1.0, 0.2, 10.1, 100.])
 def test_invalid_wavenumbers(x_invalid):
-    tmodel = O94(Rv=3.1)
-    with pytest.raises(ValueError) as exc:
-        tmodel(x_invalid)
-    assert exc.value.args[0] == 'Input x outside of range defined for O94' \
-                                + ' [' \
-                                + str(tmodel.x_range[0]) \
-                                + ' <= x <= ' \
-                                + str(tmodel.x_range[1]) \
-                                + ', x has units 1/micron]'
+    _invalid_x_range(x_invalid, O94(Rv=3.1), 'O94')
 
 
 @pytest.mark.parametrize("x_invalid_wavenumber",
                          [-1.0, 0.2, 10.1, 100.]/u.micron)
 def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
-    tmodel = O94(Rv=3.1)
-    with pytest.raises(ValueError) as exc:
-        tmodel(x_invalid_wavenumber)
-    assert exc.value.args[0] == 'Input x outside of range defined for O94' \
-                                + ' [' \
-                                + str(tmodel.x_range[0]) \
-                                + ' <= x <= ' \
-                                + str(tmodel.x_range[1]) \
-                                + ', x has units 1/micron]'
+    _invalid_x_range(x_invalid_wavenumber, O94(Rv=3.1), 'O94')
 
 
 @pytest.mark.parametrize("x_invalid_micron",
                          u.micron/[-1.0, 0.2, 10.1, 100.])
 def test_invalid_micron(x_invalid_micron):
-    tmodel = O94(Rv=3.1)
-    with pytest.raises(ValueError) as exc:
-        tmodel(x_invalid_micron)
-    assert exc.value.args[0] == 'Input x outside of range defined for O94' \
-                                + ' [' \
-                                + str(tmodel.x_range[0]) \
-                                + ' <= x <= ' \
-                                + str(tmodel.x_range[1]) \
-                                + ', x has units 1/micron]'
+    _invalid_x_range(x_invalid_micron, O94(Rv=3.1), 'O94')
 
 
 @pytest.mark.parametrize("x_invalid_angstrom",
                          u.angstrom*1e4/[-1.0, 0.2, 10.1, 100.])
 def test_invalid_micron(x_invalid_angstrom):
-    tmodel = O94(Rv=3.1)
-    with pytest.raises(ValueError) as exc:
-        tmodel(x_invalid_angstrom)
-    assert exc.value.args[0] == 'Input x outside of range defined for O94' \
-                                + ' [' \
-                                + str(tmodel.x_range[0]) \
-                                + ' <= x <= ' \
-                                + str(tmodel.x_range[1]) \
-                                + ', x has units 1/micron]'
+    _invalid_x_range(x_invalid_angstrom, O94(Rv=3.1), 'O94')
 
 
 def test_axav_o94_rv31():
