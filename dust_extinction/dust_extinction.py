@@ -379,8 +379,15 @@ class AxAvToExv(Fittable1DModel):
         """
         return (axav - 1.0)*Av
 
-    # use numerical derivaties (need to add analytic)
-    fit_deriv = None
+    @staticmethod
+    def fit_deriv(axav, Av):
+        """
+        Derivatives of the AxAvtoElv function with respect to the parameters
+        """
+        # derivatives
+        d_Av = (axav - 1.0)
+
+        return [d_Av]
 
 
 class CCM89(BaseExtRvModel):
