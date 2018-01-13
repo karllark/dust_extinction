@@ -31,7 +31,7 @@ class P92_Exv(P92 | AxAvToExv):
     """
 
 
-def test_P92_fitting():
+def test_AxAvtoExv_with_P92_fitting():
 
     # get an observed extinction curve to fit
     x_quant, y_axav = get_axav_cor_vals()
