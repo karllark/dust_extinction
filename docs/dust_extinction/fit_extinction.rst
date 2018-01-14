@@ -6,14 +6,14 @@ The ``dust_extinction`` package is built on the `astropy.modeling
 <http://docs.astropy.org/en/stable/modeling/>`_ package.  Fitting is
 done in the standard way for this package where the model is initialized
 with a starting point (either the default or user input), the fitter
-is choosen, and the fit performed.  
+is choosen, and the fit performed.
 
 Example: FM90 Fit
 =================
 
 In this example, the FM90 model is used to fit the observed average
-extinction curve for the LMC outside of the LMC2 supershell region 
-(G03_LMCAvg ``dust_extinction`` model). 
+extinction curve for the LMC outside of the LMC2 supershell region
+(G03_LMCAvg ``dust_extinction`` model).
 
 .. plot::
    :include-source:
@@ -50,7 +50,7 @@ extinction curve for the LMC outside of the LMC2 supershell region
    ax.plot(x, y, 'ko', label='Observed Curve')
    ax.plot(x[gindxs], fm90_init(x[gindxs]), label='Initial guess')
    ax.plot(x[gindxs], g03_fit(x[gindxs]), label='Fitted model')
-   
+
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$E(x-V)/E(B-V)$')
 
@@ -64,7 +64,7 @@ Example: P92 Fit
 ================
 
 In this example, the P92 model is used to fit the observed average
-extinction curve for the MW (G09_MWAvg ``dust_extinction`` model).
+extinction curve for the MW (GCC09_MWAvg ``dust_extinction`` model).
 The fit is done using the observed uncertainties that are passed
 as weights.  The weights assume the noise is Gaussian and not correlated
 between data points.
@@ -80,10 +80,10 @@ between data points.
 
    from astropy.modeling.fitting import LevMarLSQFitter
 
-   from dust_extinction.dust_extinction import (P92, G09_MWAvg)
+   from dust_extinction.dust_extinction import (P92, GCC09_MWAvg)
 
    # get an observed extinction curve to fit
-   g09_model = G09_MWAvg()
+   g09_model = GCC09_MWAvg()
 
    # get an observed extinction curve to fit
    x = g09_model.obsdata_x
@@ -106,14 +106,14 @@ between data points.
    p92_init.FIR_amp.fixed = True
    p92_init.FIR_lambda.fixed = True
    p92_init.FIR_b.fixed = True
-   
+
    # pick the fitter
    fit = LevMarLSQFitter()
 
    # set to avoid the "fit may have been unsuccessful" warning
    #   fit is fine, but this means the build of the docs fails
    warnings.simplefilter('ignore', category=AstropyWarning)
-   
+
    # fit the data to the P92 model using the fitter
    #   use the initialized model as the starting point
    #   accuracy set to avoid warning the fit may have failed
@@ -129,7 +129,7 @@ between data points.
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
 
-   ax.set_title('Example P92 Fit to MW average curve')
+   ax.set_title('Example P92 Fit to GCC09_MWAvg average curve')
 
    ax.legend(loc='best')
    plt.tight_layout()

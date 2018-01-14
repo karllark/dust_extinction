@@ -2,59 +2,33 @@ import numpy as np
 import pytest
 
 import astropy.units as u
-from astropy.modeling import InputParameterError
 from astropy.modeling.fitting import LevMarLSQFitter
 
 from ..dust_extinction import P92
+from .helpers import _invalid_x_range
 
 x_bad = [-1.0, 1001.]
+
+
 @pytest.mark.parametrize("x_invalid", x_bad)
 def test_invalid_wavenumbers(x_invalid):
-    tmodel = P92()
-    with pytest.raises(ValueError) as exc:
-        tmodel(x_invalid)
-    assert exc.value.args[0] == 'Input x outside of range defined for P92' \
-                                + ' [' \
-                                + str(tmodel.x_range[0]) \
-                                +  ' <= x <= ' \
-                                + str(tmodel.x_range[1]) \
-                                + ', x has units 1/micron]'
+    _invalid_x_range(x_invalid, P92(), 'P92')
+
 
 @pytest.mark.parametrize("x_invalid_wavenumber", x_bad/u.micron)
 def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
-    tmodel = P92()
-    with pytest.raises(ValueError) as exc:
-        tmodel(x_invalid_wavenumber)
-    assert exc.value.args[0] == 'Input x outside of range defined for P92' \
-                                + ' [' \
-                                + str(tmodel.x_range[0]) \
-                                +  ' <= x <= ' \
-                                + str(tmodel.x_range[1]) \
-                                + ', x has units 1/micron]'
+    _invalid_x_range(x_invalid_wavenumber, P92(), 'P92')
+
 
 @pytest.mark.parametrize("x_invalid_micron", u.micron/x_bad)
 def test_invalid_micron(x_invalid_micron):
-    tmodel = P92()
-    with pytest.raises(ValueError) as exc:
-        tmodel(x_invalid_micron)
-    assert exc.value.args[0] == 'Input x outside of range defined for P92' \
-                                + ' [' \
-                                + str(tmodel.x_range[0]) \
-                                +  ' <= x <= ' \
-                                + str(tmodel.x_range[1]) \
-                                + ', x has units 1/micron]'
+    _invalid_x_range(x_invalid_micron, P92(), 'P92')
+
 
 @pytest.mark.parametrize("x_invalid_angstrom", u.angstrom*1e4/x_bad)
 def test_invalid_micron(x_invalid_angstrom):
-    tmodel = P92()
-    with pytest.raises(ValueError) as exc:
-        tmodel(x_invalid_angstrom)
-    assert exc.value.args[0] == 'Input x outside of range defined for P92' \
-                                + ' [' \
-                                + str(tmodel.x_range[0]) \
-                                +  ' <= x <= ' \
-                                + str(tmodel.x_range[1]) \
-                                + ', x has units 1/micron]'
+    _invalid_x_range(x_invalid_angstrom, P92(), 'P92')
+
 
 def get_axav_cor_vals():
 
@@ -72,7 +46,6 @@ def get_axav_cor_vals():
     Rv = 3.08
     MW_axav = MW_exvebv/Rv + 1.0
 
-
     # add units
     x = MW_x/u.micron
 
@@ -80,6 +53,7 @@ def get_axav_cor_vals():
     cor_vals = MW_axav
 
     return (x, cor_vals)
+
 
 def test_extinction_P92_values():
     # get the correct values
@@ -89,7 +63,7 @@ def test_extinction_P92_values():
     tmodel = P92()
 
     # test
-    np.testing.assert_allclose(tmodel(x), cor_vals, rtol=0.1, atol=0.01)
+    np.testing.assert_allclose(tmodel(x), cor_vals, rtol=0.25, atol=0.01)
 
 
 def test_P92_fitting():
@@ -108,11 +82,11 @@ def test_P92_fitting():
 
     fit_vals = p92_fit._parameters
 
-    good_vals = [222.820720554, 0.0468116978742, 87.5683270158, 2.0,
-                 18.1622695074, 0.0770527204445, 2.83090815471, 6.40496987921,
-                 0.0518566585953, 0.218641802256, -1.95087797308, 2.0,
-                 0.00600017900912, 13.0, 109.369888618, 2.0,
-                 0.09441454528, 15.0, -251.33735749, 2.0,
-                 0.189219789029, 20.0, -1130.90875587, 2.0]
+    good_vals = [218.957451206, 0.0481323587043, 89.8639079339, 2.0,
+                 19.8918861271, 0.0674934514694, 0.919702726068, 5.1217891448,
+                 0.0548568919776, 0.218664938289, -1.9496661308, 2.0,
+                 0.0, 13.0, 38.279150331, 2.0,
+                 0.0, 15.0, -76.7467816812, 2.0,
+                 0.0, 20.0, -2508.60124085, 2.0]
 
     np.testing.assert_allclose(good_vals, fit_vals)
