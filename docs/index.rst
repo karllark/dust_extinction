@@ -10,10 +10,10 @@ curves contained here, the explicit motivation for this package is to provide
 extinction curves to those using them to model/correct their data and those
 studying extinction curves directly to better undertand interstellar dust.
 
-This package is developed in the 
-`astropy affiliated package <http://www.astropy.org/affiliated/>`_ 
-template and uses the 
-`astropy.modeling <http://docs.astropy.org/en/stable/modeling/>`_ 
+This package is developed in the
+`astropy affiliated package <http://www.astropy.org/affiliated/>`_
+template and uses the
+`astropy.modeling <http://docs.astropy.org/en/stable/modeling/>`_
 framework.
 
 User Documenation
@@ -26,7 +26,8 @@ User Documenation
    Extinguish (or unextinguish) data <dust_extinction/extinguish.rst>
    Fitting extinction curves <dust_extinction/fit_extinction.rst>
    How to choose a model <dust_extinction/choose_model.rst>
-              
+   References <dust_extinction/references.rst>
+
 Installation
 ============
 
@@ -34,6 +35,93 @@ Installation
   :maxdepth: 2
 
   How to install <dust_extinction/install.rst>
+
+Quick Start
+===========
+
+How to extinguish (reddend) and unextinguish (deredden) a spectrum:
+
+Generate a spectrum to use.  In this case a blackbody model, but can be
+an observed spectrum.  The `dust_extinction` models are unit aware and the
+wavelength array should have astropy.units associated with it.
+
+.. code-block:: python
+
+    import numpy as np
+    from astropy.modeling.blackbody import blackbody_lambda
+    import astropy.units as u
+
+    # wavelengths and spectrum are 1D arrays
+    # wavelengths between 1000 and 30000 A
+    wavelengths = np.logspace(np.log10(1000), np.log10(3e4), num=1000)*u.AA
+    spectrum = blackbody_lambda(wavelengths, 10000*u.K)
+
+Define a model, specifically the F99 model with an R(V) = 3.1.
+
+.. code-block:: python
+
+    from dust_extinction.dust_extinction import F99
+
+    # define the model
+    ext = F99(Rv=3.1)
+
+Extinguish (redden) a spectrum with a screen of F99 dust with
+an E(B-V) of 0.5.  Can also specify the dust column with Av
+(this case equivalent to Av = 0.5*Rv = 1.55).
+
+.. code-block:: python
+
+    # extinguish (redden) the spectrum
+    spectrum_ext = spectrum*ext.extinguish(wavelengths, Ebv=0.5)
+
+Unextinguish (deredden) a spectrum with a screen of F99 dust with the
+equivalent A(V) column.
+
+.. code-block:: python
+
+    # unextinguish (deredden) the spectrum
+    spectrum_noext = spectrum_ext/ext.extinguish(wavelengths, Av=1.55)
+
+.. plot::
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import astropy.units as u
+    from astropy.modeling.blackbody import blackbody_lambda
+    from dust_extinction.dust_extinction import F99
+
+    # define the model
+    ext = F99(Rv=3.1)
+
+    # wavelengths and spectrum are 1D arrays
+    # wavelengths between 1000 and 30000 A
+    wavelengths = np.logspace(np.log10(1000), np.log10(3e4), num=1000)*u.AA
+    spectrum = blackbody_lambda(wavelengths, 10000*u.K)
+
+    # extinguish (redden) the spectrum
+    spectrum_ext = spectrum*ext.extinguish(wavelengths, Ebv=0.5)
+
+    # unextinguish (deredden) the spectrum
+    spectrum_noext = spectrum_ext/ext.extinguish(wavelengths, Av=1.55)
+
+    # plot the intrinsic and extinguished fluxes
+    fig, ax = plt.subplots()
+
+    ax.plot(wavelengths, spectrum, label='spectrum', linewidth=6, alpha=0.5)
+    ax.plot(wavelengths, spectrum_ext, label='spectrum_ext')
+    ax.plot(wavelengths, spectrum_noext, 'k', label='spectrum_noext')
+
+    ax.set_xlabel('$\lambda$ [$\AA$]')
+    ax.set_ylabel('$Flux$')
+
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+
+    ax.legend(loc='best')
+    plt.tight_layout()
+    plt.show()
+
+
 
 Reporting Issues
 ================
@@ -80,4 +168,3 @@ Reference API
 =============
 
 .. automodapi:: dust_extinction.dust_extinction
-

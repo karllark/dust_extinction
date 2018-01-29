@@ -73,22 +73,28 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import CCM89
+   from dust_extinction.dust_extinction import (CCM89, O94, F99)
 
    fig, ax = plt.subplots()
 
    # generate the curves and plot them
    x = np.arange(0.5,10.0,0.1)/u.micron
 
-   Rvs = ['2.0','3.0','4.0','5.0','6.0']
-   for cur_Rv in Rvs:
-      ext_model = CCM89(Rv=cur_Rv)
-      ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+   Rv = 3.1
+
+   ext_model = CCM89(Rv=Rv)
+   ax.plot(x,ext_model(x),label='CCM89')
+
+   ext_model = O94(Rv=Rv)
+   ax.plot(x,ext_model(x),label='O94')
+
+   ext_model = F99(Rv=Rv)
+   ax.plot(x,ext_model(x),label='F99')
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
 
-   ax.set_title('CCM89')
+   ax.set_title('R(V) = 3.1')
 
    ax.legend(loc='best')
    plt.tight_layout()
@@ -100,26 +106,33 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import O94
+   from dust_extinction.dust_extinction import (CCM89, O94, F99)
 
    fig, ax = plt.subplots()
 
    # generate the curves and plot them
    x = np.arange(0.5,10.0,0.1)/u.micron
 
-   Rvs = ['2.0','3.0','4.0','5.0','6.0']
-   for cur_Rv in Rvs:
-      ext_model = O94(Rv=cur_Rv)
-      ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+   Rv = 2.0
+
+   ext_model = CCM89(Rv=Rv)
+   ax.plot(x,ext_model(x),label='CCM89')
+
+   ext_model = O94(Rv=Rv)
+   ax.plot(x,ext_model(x),label='O94')
+
+   ext_model = F99(Rv=Rv)
+   ax.plot(x,ext_model(x),label='F99')
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
 
-   ax.set_title('O94')
+   ax.set_title('R(V) = 2.0')
 
    ax.legend(loc='best')
    plt.tight_layout()
    plt.show()
+
 
 .. plot::
 
@@ -127,25 +140,28 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import F99
+   from dust_extinction.dust_extinction import (CCM89, O94, F99)
 
    fig, ax = plt.subplots()
 
-   # temp model to get the correct x range
-   text_model = F99()
-
    # generate the curves and plot them
-   x = np.arange(text_model.x_range[0], text_model.x_range[1],0.1)/u.micron
+   x = np.arange(0.5,10.0,0.1)/u.micron
 
-   Rvs = ['2.0','3.0','4.0','5.0','6.0']
-   for cur_Rv in Rvs:
-      ext_model = F99(Rv=cur_Rv)
-      ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+   Rv = 5.5
+
+   ext_model = CCM89(Rv=Rv)
+   ax.plot(x,ext_model(x),label='CCM89')
+
+   ext_model = O94(Rv=Rv)
+   ax.plot(x,ext_model(x),label='O94')
+
+   ext_model = F99(Rv=Rv)
+   ax.plot(x,ext_model(x),label='F99')
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
 
-   ax.set_title('F99')
+   ax.set_title('R(V) = 5.5')
 
    ax.legend(loc='best')
    plt.tight_layout()
