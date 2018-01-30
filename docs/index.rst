@@ -111,8 +111,8 @@ equivalent A(V) column.
     ax.plot(wavelengths, spectrum_ext, label='spectrum_ext')
     ax.plot(wavelengths, spectrum_noext, 'k', label='spectrum_noext')
 
-    ax.set_xlabel('$\lambda$ [$\AA$]')
-    ax.set_ylabel('$Flux$')
+    ax.set_xlabel('$\lambda$ [{}]'.format(wavelengths.unit))
+    ax.set_ylabel('$Flux$ [{}]'.format(spectrum.unit))
 
     ax.set_xscale('log')
     ax.set_yscale('log')
