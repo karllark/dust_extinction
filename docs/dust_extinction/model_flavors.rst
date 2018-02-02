@@ -2,7 +2,7 @@
 Model Flavors
 #############
 
-There are three differnet types of models: average, R(V)+ dependent prediction,
+There are three different types of models: average, R(V)+ dependent prediction,
 and shape fitting.
 
 Average models
@@ -10,51 +10,51 @@ Average models
 
    These models provide averages from the literature with the ability to
    interpolate between the observed data points.
-   For the Milky Way, one of the R(V) dependent models  with R(V) = 3.1
-   (see next section) are often used for the Milky Way 'average'.
-   Models are provided for the Magellanic Clouds from Gordon et al. (2003).
-   Models for the Milky Way still to be added (both UV/optical/NIR and IR).
+   Models are provided for the Milky Way (Gordon, Cartlege, & Clayton 2009)
+   and the Magellanic Clouds (Gordon et al. 2003).
+
+   For the Milky Way, one of the R(V) dependent models with R(V) = 3.1
+   (see next section) can also be used for the Milky Way 'average'.
 
 .. plot::
 
    import numpy as np
    import matplotlib.pyplot as plt
    import astropy.units as u
-   
-   from dust_extinction.dust_extinction import (F99,
+
+   from dust_extinction.dust_extinction import (GCC09_MWAvg,
                                                 G03_SMCBar,
                                                 G03_LMCAvg,
-					        G03_LMC2)
-      
+					                                      G03_LMC2)
+
    fig, ax = plt.subplots()
-      
+
    # generate the curves and plot them
    x = np.arange(0.3,10.0,0.1)/u.micron
+   ext_model = GCC09_MWAvg()
+   ax.plot(x,ext_model(x),label='GCC09 MWAvg')
 
-   ext_model = F99()
-   ax.plot(x,ext_model(x),label='MW Average (F99 w/ $R(V)=3.1$)')
-   
    ext_model = G03_SMCBar()
    ax.plot(x,ext_model(x),label='G03 SMCBar')
 
    ext_model = G03_LMCAvg()
    ax.plot(x,ext_model(x),label='G03 LMCAvg')
-   
+
    ext_model = G03_LMC2()
    ax.plot(x,ext_model(x),label='G03 LMC2')
-   
+
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
-      
+
    ax.legend(loc='best')
    plt.tight_layout()
    plt.show()
-     
+
 R(V) (+ other variables) dependent prediction models
 ====================================================
 
    These models provide predictions of the shape of the dust extinction
-   given input variable(s).  
+   given input variable(s).
 
    The R(V) dependent models include CCM89 the original such model
    (Cardelli, Clayton, and Mathis 1989), the O94 model that updates the
@@ -62,9 +62,9 @@ R(V) (+ other variables) dependent prediction models
    (Fitzpatrick 1999).  These models are based on the average
    behavior of extinction in the Milky Way as a function of R(V).
 
-   In addition, the (R(V), f_A) two parameter relationship from 
+   In addition, the (R(V), f_A) two parameter relationship from
    Gordon et al. (2016) is included.  This model is based on the average
-   behavior of extinction in the Milky Way, Large Magellanic Cloud, and 
+   behavior of extinction in the Milky Way, Large Magellanic Cloud, and
    Small Magellanic Cloud.
 
 .. plot::
@@ -73,22 +73,28 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import CCM89
+   from dust_extinction.dust_extinction import (CCM89, O94, F99)
 
    fig, ax = plt.subplots()
 
    # generate the curves and plot them
    x = np.arange(0.5,10.0,0.1)/u.micron
 
-   Rvs = ['2.0','3.0','4.0','5.0','6.0']
-   for cur_Rv in Rvs:
-      ext_model = CCM89(Rv=cur_Rv)
-      ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+   Rv = 3.1
+
+   ext_model = CCM89(Rv=Rv)
+   ax.plot(x,ext_model(x),label='CCM89')
+
+   ext_model = O94(Rv=Rv)
+   ax.plot(x,ext_model(x),label='O94')
+
+   ext_model = F99(Rv=Rv)
+   ax.plot(x,ext_model(x),label='F99')
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
 
-   ax.set_title('CCM89')
+   ax.set_title('R(V) = 3.1')
 
    ax.legend(loc='best')
    plt.tight_layout()
@@ -100,52 +106,62 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import O94
+   from dust_extinction.dust_extinction import (CCM89, O94, F99)
 
    fig, ax = plt.subplots()
 
    # generate the curves and plot them
    x = np.arange(0.5,10.0,0.1)/u.micron
 
-   Rvs = ['2.0','3.0','4.0','5.0','6.0']
-   for cur_Rv in Rvs:
-      ext_model = O94(Rv=cur_Rv)
-      ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+   Rv = 2.0
+
+   ext_model = CCM89(Rv=Rv)
+   ax.plot(x,ext_model(x),label='CCM89')
+
+   ext_model = O94(Rv=Rv)
+   ax.plot(x,ext_model(x),label='O94')
+
+   ext_model = F99(Rv=Rv)
+   ax.plot(x,ext_model(x),label='F99')
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
 
-   ax.set_title('O94')
+   ax.set_title('R(V) = 2.0')
 
    ax.legend(loc='best')
    plt.tight_layout()
    plt.show()
-   
+
+
 .. plot::
 
    import numpy as np
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import F99
+   from dust_extinction.dust_extinction import (CCM89, O94, F99)
 
    fig, ax = plt.subplots()
 
-   # temp model to get the correct x range
-   text_model = F99()
-
    # generate the curves and plot them
-   x = np.arange(text_model.x_range[0], text_model.x_range[1],0.1)/u.micron
+   x = np.arange(0.5,10.0,0.1)/u.micron
 
-   Rvs = ['2.0','3.0','4.0','5.0','6.0']
-   for cur_Rv in Rvs:
-      ext_model = F99(Rv=cur_Rv)
-      ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+   Rv = 5.5
+
+   ext_model = CCM89(Rv=Rv)
+   ax.plot(x,ext_model(x),label='CCM89')
+
+   ext_model = O94(Rv=Rv)
+   ax.plot(x,ext_model(x),label='O94')
+
+   ext_model = F99(Rv=Rv)
+   ax.plot(x,ext_model(x),label='F99')
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
 
-   ax.set_title('F99')
+   ax.set_title('R(V) = 5.5')
 
    ax.legend(loc='best')
    plt.tight_layout()
@@ -218,7 +234,7 @@ Shape fitting models
    These models are used to fit the detailed shape of dust extinction curves.
    The FM90 (Fitzpatrick & Mass 1990) model uses 6 parameters to fit the
    shape of the ultraviolet extinction.
-   The P92 (Pei 1992) uses 19 parameters to fit the shape of the X-ray to 
+   The P92 (Pei 1992) uses 19 parameters to fit the shape of the X-ray to
    far-infrared extinction.
 
 .. plot::
@@ -272,11 +288,11 @@ Shape fitting models
    ext_model = P92()
    ax.plot(1/x,ext_model(x),label='total')
 
-   ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+   ext_model = P92(FUV_amp=0., NUV_amp=0.0,
                    SIL1_amp=0.0, SIL2_amp=0.0, FIR_amp=0.0)
    ax.plot(1./x,ext_model(x),label='BKG only')
 
-   ext_model = P92(NUV_amp=0.0, 
+   ext_model = P92(NUV_amp=0.0,
                    SIL1_amp=0.0, SIL2_amp=0.0, FIR_amp=0.0)
    ax.plot(1./x,ext_model(x),label='BKG+FUV only')
 
@@ -284,15 +300,15 @@ Shape fitting models
                    SIL1_amp=0.0, SIL2_amp=0.0, FIR_amp=0.0)
    ax.plot(1./x,ext_model(x),label='BKG+NUV only')
 
-   ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+   ext_model = P92(FUV_amp=0., NUV_amp=0.0,
                    SIL2_amp=0.0)
    ax.plot(1./x,ext_model(x),label='BKG+FIR+SIL1 only')
 
-   ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+   ext_model = P92(FUV_amp=0., NUV_amp=0.0,
                    SIL1_amp=0.0)
    ax.plot(1./x,ext_model(x),label='BKG+FIR+SIL2 only')
 
-   ext_model = P92(FUV_amp=0., NUV_amp=0.0, 
+   ext_model = P92(FUV_amp=0., NUV_amp=0.0,
                    SIL1_amp=0.0, SIL2_amp=0.0)
    ax.plot(1./x,ext_model(x),label='BKG+FIR only')
 
@@ -309,6 +325,3 @@ Shape fitting models
    ax.legend(loc='best')
    plt.tight_layout()
    plt.show()
-
-
-     

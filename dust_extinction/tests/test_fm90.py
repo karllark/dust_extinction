@@ -2,59 +2,34 @@ import numpy as np
 import pytest
 
 import astropy.units as u
-from astropy.modeling import InputParameterError
 from astropy.modeling.fitting import LevMarLSQFitter
 
-from ..dust_extinction import FM90, G03_LMCAvg
+from ..dust_extinction import (FM90, G03_LMCAvg)
+from .helpers import _invalid_x_range
+
 
 x_bad = [-1.0, 0.2, 3.0, 11.0, 100.]
+
+
 @pytest.mark.parametrize("x_invalid", x_bad)
 def test_invalid_wavenumbers(x_invalid):
-    tmodel = FM90()
-    with pytest.raises(ValueError) as exc:
-        tmodel(x_invalid)
-    assert exc.value.args[0] == 'Input x outside of range defined for FM90' \
-                                + ' [' \
-                                + str(tmodel.x_range[0]) \
-                                +  ' <= x <= ' \
-                                + str(tmodel.x_range[1]) \
-                                + ', x has units 1/micron]'
+    _invalid_x_range(x_invalid, FM90(), 'FM90')
+
 
 @pytest.mark.parametrize("x_invalid_wavenumber", x_bad/u.micron)
 def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
-    tmodel = FM90()
-    with pytest.raises(ValueError) as exc:
-        tmodel(x_invalid_wavenumber)
-    assert exc.value.args[0] == 'Input x outside of range defined for FM90' \
-                                + ' [' \
-                                + str(tmodel.x_range[0]) \
-                                +  ' <= x <= ' \
-                                + str(tmodel.x_range[1]) \
-                                + ', x has units 1/micron]'
+    _invalid_x_range(x_invalid_wavenumber, FM90(), 'FM90')
+
 
 @pytest.mark.parametrize("x_invalid_micron", u.micron/x_bad)
 def test_invalid_micron(x_invalid_micron):
-    tmodel = FM90()
-    with pytest.raises(ValueError) as exc:
-        tmodel(x_invalid_micron)
-    assert exc.value.args[0] == 'Input x outside of range defined for FM90' \
-                                + ' [' \
-                                + str(tmodel.x_range[0]) \
-                                +  ' <= x <= ' \
-                                + str(tmodel.x_range[1]) \
-                                + ', x has units 1/micron]'
+    _invalid_x_range(x_invalid_micron, FM90(), 'FM90')
+
 
 @pytest.mark.parametrize("x_invalid_angstrom", u.angstrom*1e4/x_bad)
 def test_invalid_micron(x_invalid_angstrom):
-    tmodel = FM90()
-    with pytest.raises(ValueError) as exc:
-        tmodel(x_invalid_angstrom)
-    assert exc.value.args[0] == 'Input x outside of range defined for FM90' \
-                                + ' [' \
-                                + str(tmodel.x_range[0]) \
-                                +  ' <= x <= ' \
-                                + str(tmodel.x_range[1]) \
-                                + ', x has units 1/micron]'
+    _invalid_x_range(x_invalid_angstrom, FM90(), 'FM90')
+
 
 def get_elvebv_cor_vals():
     # testing wavenumbers

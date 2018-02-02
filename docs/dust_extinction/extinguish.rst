@@ -2,9 +2,9 @@
 Extinguish or Unextinguish Data
 ###############################
 
-Two of the three flavors of models include a function to calculate the 
+Two of the three flavors of models include a function to calculate the
 factor to multiple (extinguish) or divide (unextinguish) a spectrum by
-to add or remove the effects of dust, respectively.  
+to add or remove the effects of dust, respectively.
 
 Extinguish is also often called reddening.  Extinguishing a spectrum often
 reddens the flux, but sometimes 'bluens' the flux
@@ -23,10 +23,10 @@ Example: Extinguish a Blackbody
    import astropy.units as u
    from astropy.modeling.blackbody import blackbody_lambda
 
-   from dust_extinction.dust_extinction import CCM89
+   from dust_extinction.dust_extinction import F99
 
    # generate wavelengths between 0.1 and 3 microns
-   #    within the valid range for the CCM89 R(V) dependent relationship
+   #    within the valid range for the F99 R(V) dependent relationship
    lam = np.logspace(np.log10(0.1), np.log10(3.0), num=1000)
 
    # setup the inputs for the blackbody function
@@ -35,9 +35,9 @@ Example: Extinguish a Blackbody
 
    # get the blackbody flux
    flux = blackbody_lambda(wavelengths, temperature)
-   
+
    # initialize the model
-   ext = CCM89(Rv=3.1)
+   ext = F99(Rv=3.1)
 
    # get the extinguished blackbody flux for different amounts of dust
    flux_ext_av05 = flux*ext.extinguish(wavelengths, Av=0.5)
@@ -51,7 +51,7 @@ Example: Extinguish a Blackbody
    ax.plot(wavelengths, flux_ext_av05, label='$A(V) = 0.5$')
    ax.plot(wavelengths, flux_ext_av15, label='$A(V) = 1.5$')
    ax.plot(wavelengths, flux_ext_ebv10, label='$E(B-V) = 1.0$')
-   
+
    ax.set_xlabel('$\lambda$ [$\AA$]')
    ax.set_ylabel('$Flux$')
 
@@ -63,5 +63,3 @@ Example: Extinguish a Blackbody
    ax.legend(loc='best')
    plt.tight_layout()
    plt.show()
-    
-    
