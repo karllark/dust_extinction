@@ -1342,8 +1342,10 @@ class F99FM07(BaseExtRvModel):
                                 0.701 + 1.0016*Rv,
                                 1.208 + 1.0032*Rv - 0.00033*(Rv**2)])
         # updated NIR curve, note R dependendence
-        nir_axebv_y = (0.63*Rv - 0.83)*(optnir_axav_x[0:1])**1.84
-
+        # would be better to refer to x points above?
+        nir_axebv_y = np.array([(0.63*Rv - 0.83)*2.65**-1.84,
+                                (0.63*Rv - 0.83)*1.22**-1.84])
+        
         optnir_axebv_y = np.concatenate([nir_axebv_y, opt_axebv_y])
 
 
