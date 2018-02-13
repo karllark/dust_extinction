@@ -8,7 +8,7 @@ import astropy.units as u
 from astropy.modeling import (Model, Fittable1DModel,
                               Parameter, InputParameterError)
 
-__all__ = ['CCM89', 'FM90', 'P92', 'O94', 'F99',
+__all__ = ['CCM89', 'FM90', 'P92', 'O94', 'F99', 'F99FM07'
            'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
            'GCC09_MWAvg', 'G16',
            'AxAvToExv']
@@ -1130,9 +1130,6 @@ class F99(BaseExtRvModel):
 
     From Fitzpatrick (1999, PASP, 111, 63)
 
-    Updated for the C1 vs C2 correlation in
-       Fitzpatrick & Massa (2007, ApJ, 663, 320)
-
     Example showing F99 curves for a range of R(V) values.
 
     .. plot::
@@ -1200,7 +1197,6 @@ class F99(BaseExtRvModel):
 
         # terms depending on Rv
         C2 = -0.824 + 4.717/Rv
-        # updated for FM07 correlation between C1 and C2
         C1 = 2.030 - 3.007*C2
 
         # spline points
@@ -1208,14 +1204,16 @@ class F99(BaseExtRvModel):
                                          5470.0, 4670.0, 4110.0])
 
         # determine optical/IR values at spline points
-        #    Final term has a "-1.208" in Table 4 of F99, but then does
-        #    not reproduce Table 3.
-        #    Indications are that this is not correct from fm_unred.pro
+        #    Final optical spline point has a leading "-1.208" in Table 4
+        #    of F99, but that does not reproduce Table 3.
+        #    Additional indication that this is not correct is from
+        #    fm_unred.pro
         #    which is based on FMRCURVE.pro distributed by Fitzpatrick.
-        #    --> confirmation needed
+        #    --> confirmation needed?
         #
-        #    Also, fm_unred.pro has different coeff and # of terms, possible
-        #    update --> check with Fitzpatrick
+        #    Also, fm_unred.pro has different coeff and # of terms,
+        #    but later work does not include these terms
+        #    --> check with Fitzpatrick?
         opt_axebv_y = np.array([-0.426 + 1.0044*Rv,
                                 -0.050 + 1.0016*Rv,
                                 0.701 + 1.0016*Rv,
@@ -1227,6 +1225,130 @@ class F99(BaseExtRvModel):
         return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
                                  optnir_axav_x, optnir_axebv_y/Rv,
                                  self.x_range, 'F99')
+
+class F99F07(BaseExtRvModel):
+    """
+    F99 extinction model calculation
+
+    Updated with the NIR Rv dependence and C1-C2 relationship in
+       Fitzpatrick & Massa (2007, ApJ, 663, 320)
+
+
+
+    Parameters
+    ----------
+    Rv: float
+        R(V) = A(V)/E(B-V) = total-to-selective extinction
+
+    Raises
+    ------
+    InputParameterError
+       Input Rv values outside of defined range
+
+    Notes
+    -----
+    F99 Milky Way R(V) dependent extinction model
+
+    From Fitzpatrick (1999, PASP, 111, 63)
+
+    Updated with the NIR Rv dependence and C1-C2 relationship in
+    Fitzpatrick & Massa (2007, ApJ, 663, 320)
+
+    Example showing F99FM07 curves for a range of R(V) values.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.dust_extinction import F99FM07
+
+        fig, ax = plt.subplots()
+
+        # temp model to get the correct x range
+        text_model = F99FM07()
+
+        # generate the curves and plot them
+        x = np.arange(text_model.x_range[0],
+                      text_model.x_range[1],0.1)/u.micron
+
+        Rvs = ['2.0','3.0','4.0','5.0','6.0']
+        for cur_Rv in Rvs:
+           ext_model = F99FM07(Rv=cur_Rv)
+           ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+
+        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel('$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+    Rv_range = [2.0, 6.0]
+    x_range = x_range_F99
+
+    def evaluate(self, in_x, Rv):
+        """
+        F99FM07 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        # ensure Rv is a single element, not numpy array
+        Rv = Rv[0]
+
+        # constant terms
+        C3 = 2.991
+        C4 = 0.319
+        xo = 4.592
+        gamma = 0.922
+        # using relationship from F99, deprecatetd in FM07
+        C2 = -0.824 + 4.717/Rv
+
+        # updated for FM07 correlation between C1 and C2
+        C1 = 2.09 - 2.84*C2
+
+        # spline points
+        optnir_axav_x = 10000./np.array([26500.0, 12200.0, 6000.0,
+                                         5470.0, 4670.0, 4110.0])
+
+        # **Keep optical spline points from F99:
+        #    Final optical spline point has a leading "-1.208" in Table 4
+        #    of F99, but that does not reproduce Table 3.
+        #    Additional indication that this is not correct is from
+        #    fm_unred.pro
+        #    which is based on FMRCURVE.pro distributed by Fitzpatrick.
+        #    --> confirmation needed?
+        # **Use NIR spline points with function in FM07
+        opt_axebv_y = np.array([-0.426 + 1.0044*Rv,
+                                -0.050 + 1.0016*Rv,
+                                0.701 + 1.0016*Rv,
+                                1.208 + 1.0032*Rv - 0.00033*(Rv**2)])
+        optnir_axebv_y = np.concatenate([nir_axebv_y, opt_axebv_y])
+
+        # updated NIR curve, note R dependendence
+        nir_axebv_y = (0.63*Rv - 0.83)*(optnir_axav_x[0:1])**1.84
+
+        # return A(x)/A(V)
+        return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
+                                 optnir_axav_x, optnir_axebv_y/Rv,
+                                 self.x_range, 'F99FM07')
 
 
 class G03_SMCBar(BaseExtAve):
