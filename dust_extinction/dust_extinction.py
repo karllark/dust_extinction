@@ -9,7 +9,7 @@ from astropy.modeling import (Model, Fittable1DModel,
                               Parameter, InputParameterError)
 
 __all__ = ['CCM89', 'FM90', 'P92', 'O94', 'F99', 'F99FM07'
-           'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
+           'FM07', 'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
            'GCC09_MWAvg', 'G16',
            'AxAvToExv']
 
@@ -18,6 +18,7 @@ x_range_FM90 = [1.0/0.32, 1.0/0.0912]
 x_range_P92 = [1.0/1e3, 1.0/1e-3]
 x_range_O94 = x_range_CCM89
 x_range_F99 = [0.3, 10.0]
+x_range_F99FM07 = x_range_F99
 x_range_G03 = [0.3, 10.0]
 x_range_GCC09 = [0.3, 1.0/0.0912]
 x_range_G16 = x_range_G03
@@ -1226,7 +1227,7 @@ class F99(BaseExtRvModel):
                                  optnir_axav_x, optnir_axebv_y/Rv,
                                  self.x_range, 'F99')
 
-class F99F07(BaseExtRvModel):
+class F99FM07(BaseExtRvModel):
     """
     F99 extinction model calculation
 
@@ -1335,15 +1336,17 @@ class F99F07(BaseExtRvModel):
         #    fm_unred.pro
         #    which is based on FMRCURVE.pro distributed by Fitzpatrick.
         #    --> confirmation needed?
-        # **Use NIR spline points with function in FM07
+        # **Use NIR spline points from F99 with function in FM07
         opt_axebv_y = np.array([-0.426 + 1.0044*Rv,
                                 -0.050 + 1.0016*Rv,
                                 0.701 + 1.0016*Rv,
                                 1.208 + 1.0032*Rv - 0.00033*(Rv**2)])
-        optnir_axebv_y = np.concatenate([nir_axebv_y, opt_axebv_y])
-
         # updated NIR curve, note R dependendence
         nir_axebv_y = (0.63*Rv - 0.83)*(optnir_axav_x[0:1])**1.84
+
+        optnir_axebv_y = np.concatenate([nir_axebv_y, opt_axebv_y])
+
+
 
         # return A(x)/A(V)
         return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
