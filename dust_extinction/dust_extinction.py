@@ -9,7 +9,7 @@ from astropy.modeling import (Model, Fittable1DModel,
                               Parameter, InputParameterError)
 
 __all__ = ['CCM89', 'FM90', 'P92', 'O94', 'F99', 'F99FM07'
-           'FM07', 'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
+           'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
            'GCC09_MWAvg', 'G16',
            'AxAvToExv']
 
@@ -1198,6 +1198,7 @@ class F99(BaseExtRvModel):
 
         # terms depending on Rv
         C2 = -0.824 + 4.717/Rv
+        # original F99 C1-C2 correlation
         C1 = 2.030 - 3.007*C2
 
         # spline points
@@ -1231,9 +1232,11 @@ class F99FM07(BaseExtRvModel):
     """
     F99 extinction model calculation
 
-    Updated with the NIR Rv dependence and C1-C2 relationship in
+    Updated with the NIR Rv dependence in
+       Fitzpatrick (2004, ASP Conf. Ser. 309, Astrophysics of Dust, 33)
+       and Fitzpatrick & Massa (2007, ApJ, 663, 320)
+    Updated with C1-C2 relationship in
        Fitzpatrick & Massa (2007, ApJ, 663, 320)
-
 
 
     Parameters
@@ -1345,7 +1348,7 @@ class F99FM07(BaseExtRvModel):
         # would be better to refer to x points above?
         nir_axebv_y = np.array([(0.63*Rv - 0.83)*2.65**-1.84,
                                 (0.63*Rv - 0.83)*1.22**-1.84])
-        
+
         optnir_axebv_y = np.concatenate([nir_axebv_y, opt_axebv_y])
 
 
