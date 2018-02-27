@@ -8,7 +8,7 @@ import astropy.units as u
 from astropy.modeling import (Model, Fittable1DModel,
                               Parameter, InputParameterError)
 
-__all__ = ['CCM89', 'FM90', 'P92', 'O94', 'F99', 'F99FM07'
+__all__ = ['CCM89', 'FM90', 'P92', 'O94', 'F99', 'F99FM07',
            'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
            'GCC09_MWAvg', 'G16',
            'AxAvToExv']
