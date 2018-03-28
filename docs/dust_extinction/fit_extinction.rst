@@ -6,7 +6,7 @@ The ``dust_extinction`` package is built on the `astropy.modeling
 <http://docs.astropy.org/en/stable/modeling/>`_ package.  Fitting is
 done in the standard way for this package where the model is initialized
 with a starting point (either the default or user input), the fitter
-is choosen, and the fit performed.
+is chosen, and the fit performed.
 
 Example: FM90 Fit
 =================
@@ -125,7 +125,7 @@ between data points.
    ax.errorbar(x, y, yerr=y_unc, fmt='ko', label='Observed Curve')
    ax.plot(x, p92_init(x), label='Initial guess')
    ax.plot(x, p92_fit(x), label='Fitted model')
-   
+
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
 

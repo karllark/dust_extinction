@@ -17,6 +17,12 @@ OD94: `O'Donnell 1994, 422, 1580
 F99: `Fitzpatrick 1999, PASP, 111, 63
 <http://adsabs.harvard.edu/abs/1999PASP..111...63F>`_
 
+F04: `Fitzpatrick 2004, ASP Conf. Ser. 309, Astrophysics of Dust, 33
+<http://adsabs.harvard.edu/abs/2004ASPC..309...33F>`_
+
+FM07: `Fitzpatrick & Massa 2007, ApJ, 663, 320
+<http://adsabs.harvard.edu/abs/2007ApJ...663..320F>`_
+
 G03: `Gordon et al. 2003, ApJ, 594, 279
 <http://adsabs.harvard.edu/abs/2003ApJ...594..279G>`_
 

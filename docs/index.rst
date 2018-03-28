@@ -39,7 +39,7 @@ Installation
 Quick Start
 ===========
 
-How to extinguish (reddend) and unextinguish (deredden) a spectrum:
+How to extinguish (redden) and unextinguish (deredden) a spectrum:
 
 Generate a spectrum to use.  In this case a blackbody model, but can be
 an observed spectrum.  The `dust_extinction` models are unit aware and the

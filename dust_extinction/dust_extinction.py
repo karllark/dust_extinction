@@ -8,7 +8,7 @@ import astropy.units as u
 from astropy.modeling import (Model, Fittable1DModel,
                               Parameter, InputParameterError)
 
-__all__ = ['CCM89', 'FM90', 'P92', 'O94', 'F99', 'F99FM07',
+__all__ = ['CCM89', 'FM90', 'P92', 'O94', 'F99', 'F04',
            'G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
            'GCC09_MWAvg', 'G16',
            'AxAvToExv']
@@ -18,7 +18,7 @@ x_range_FM90 = [1.0/0.32, 1.0/0.0912]
 x_range_P92 = [1.0/1e3, 1.0/1e-3]
 x_range_O94 = x_range_CCM89
 x_range_F99 = [0.3, 10.0]
-x_range_F99FM07 = x_range_F99
+x_range_F04 = [0.0, 10.0]
 x_range_G03 = [0.3, 10.0]
 x_range_GCC09 = [0.3, 1.0/0.0912]
 x_range_G16 = x_range_G03
@@ -1228,15 +1228,13 @@ class F99(BaseExtRvModel):
                                  optnir_axav_x, optnir_axebv_y/Rv,
                                  self.x_range, 'F99')
 
-class F99FM07(BaseExtRvModel):
+class F04(BaseExtRvModel):
     """
     F99 extinction model calculation
 
     Updated with the NIR Rv dependence in
        Fitzpatrick (2004, ASP Conf. Ser. 309, Astrophysics of Dust, 33)
-       and Fitzpatrick & Massa (2007, ApJ, 663, 320)
-    Updated with C1-C2 relationship in
-       Fitzpatrick & Massa (2007, ApJ, 663, 320)
+    See also Fitzpatrick & Massa (2007, ApJ, 663, 320)
 
 
     Parameters
@@ -1255,10 +1253,11 @@ class F99FM07(BaseExtRvModel):
 
     From Fitzpatrick (1999, PASP, 111, 63)
 
-    Updated with the NIR Rv dependence and C1-C2 relationship in
-    Fitzpatrick & Massa (2007, ApJ, 663, 320)
+    Updated with the NIR Rv dependence in
+       Fitzpatrick (2004, ASP Conf. Ser. 309, Astrophysics of Dust, 33)
+    See also Fitzpatrick & Massa (2007, ApJ, 663, 320)
 
-    Example showing F99FM07 curves for a range of R(V) values.
+    Example showing F04 curves for a range of R(V) values.
 
     .. plot::
         :include-source:
@@ -1267,12 +1266,12 @@ class F99FM07(BaseExtRvModel):
         import matplotlib.pyplot as plt
         import astropy.units as u
 
-        from dust_extinction.dust_extinction import F99FM07
+        from dust_extinction.dust_extinction import F04
 
         fig, ax = plt.subplots()
 
         # temp model to get the correct x range
-        text_model = F99FM07()
+        text_model = F04()
 
         # generate the curves and plot them
         x = np.arange(text_model.x_range[0],
@@ -1280,7 +1279,7 @@ class F99FM07(BaseExtRvModel):
 
         Rvs = ['2.0','3.0','4.0','5.0','6.0']
         for cur_Rv in Rvs:
-           ext_model = F99FM07(Rv=cur_Rv)
+           ext_model = F04(Rv=cur_Rv)
            ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]')
@@ -1290,11 +1289,11 @@ class F99FM07(BaseExtRvModel):
         plt.show()
     """
     Rv_range = [2.0, 6.0]
-    x_range = x_range_F99
+    x_range = x_range_F04
 
     def evaluate(self, in_x, Rv):
         """
-        F99FM07 function
+        F04 function
 
         Parameters
         ----------
@@ -1322,15 +1321,17 @@ class F99FM07(BaseExtRvModel):
         C4 = 0.319
         xo = 4.592
         gamma = 0.922
-        # using relationship from F99, deprecatetd in FM07
-        C2 = -0.824 + 4.717/Rv
 
-        # updated for FM07 correlation between C1 and C2
-        C1 = 2.09 - 2.84*C2
+        # original F99 Rv dependence
+        C2 = -0.824 + 4.717/Rv
+        # updated F04 C1-C2 correlation
+        C1 = 2.18 - 2.91*C2
 
         # spline points
-        optnir_axav_x = 10000./np.array([26500.0, 12200.0, 6000.0,
-                                         5470.0, 4670.0, 4110.0])
+        # **Use NIR spline x values listed in FM07
+        opt_axav_x = 10000./np.array([6000.0,5470.0, 4670.0, 4110.0])
+        nir_axav_x = np.array([0.0, 0.25, 0.50, 0.75, 1.0])
+        optnir_axav_x = np.concatenate([opt_axav_x, nir_axav_x])
 
         # **Keep optical spline points from F99:
         #    Final optical spline point has a leading "-1.208" in Table 4
@@ -1339,15 +1340,12 @@ class F99FM07(BaseExtRvModel):
         #    fm_unred.pro
         #    which is based on FMRCURVE.pro distributed by Fitzpatrick.
         #    --> confirmation needed?
-        # **Use NIR spline points from F99 with function in FM07
         opt_axebv_y = np.array([-0.426 + 1.0044*Rv,
                                 -0.050 + 1.0016*Rv,
                                 0.701 + 1.0016*Rv,
                                 1.208 + 1.0032*Rv - 0.00033*(Rv**2)])
-        # updated NIR curve, note R dependendence
-        # would be better to refer to x points above?
-        nir_axebv_y = np.array([(0.63*Rv - 0.83)*2.65**-1.84,
-                                (0.63*Rv - 0.83)*1.22**-1.84])
+        # updated NIR curve from F04, note R dependendence
+        nir_axebv_y = (0.63*Rv - 0.84)*nir_axav_x**1.84
 
         optnir_axebv_y = np.concatenate([nir_axebv_y, opt_axebv_y])
 
@@ -1356,7 +1354,7 @@ class F99FM07(BaseExtRvModel):
         # return A(x)/A(V)
         return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
                                  optnir_axav_x, optnir_axebv_y/Rv,
-                                 self.x_range, 'F99FM07')
+                                 self.x_range, 'F04')
 
 
 class G03_SMCBar(BaseExtAve):

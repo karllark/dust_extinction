@@ -13,7 +13,7 @@ Simple Average Curves
 ---------------------
 
 These are straightforward averages of observed extinction curves.  They are the
-simpliest models and include models for the MW
+simplest models and include models for the MW
 (:class:`~dust_extinction.dust_extinction.GCC09_MWAvg`), the LMC
 (:class:`~dust_extinction.dust_extinction.G03_LMCAvg`,
 :class:`~dust_extinction.dust_extinction.G03_LMC2`) and the SMC
@@ -50,29 +50,29 @@ LMC, and SMC.  The :class:`~dust_extinction.dust_extinction.G16` model reduces
 to the :class:`~dust_extinction.dust_extinction.F99` model with f\ :sub:`A`\ =
 1.0.  If only MW type extinction is expected, then the
 :class:`~dust_extinction.dust_extinction.F99` model should be considered as it
-is based on signifincatly more extinction curves than the
+is based on significantly more extinction curves than the
 :class:`~dust_extinction.dust_extinction.CCM89` or
 :class:`~dust_extinction.dust_extinction.O94` models.
 
-+---------+-------------+-------------+------------------+--------------+
-| Model   | Parameters  | x range     | wavelength range |       galaxy |
-|         |             | [1/micron]  | [micron]         |              |
-+=========+=============+=============+==================+==============+
-| CCM89   |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW |
-+---------+-------------+-------------+------------------+--------------+
-| O94     |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW |
-+---------+-------------+-------------+------------------+--------------+
-| F99     |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW |
-+---------+-------------+-------------+------------------+--------------+
-| G16     | R(V)_A, f_A |  0.3 - 10.0 |        0.1 - 3.3 | MW, LMC, SMC |
-+---------+-------------+-------------+------------------+--------------+
++----------+-------------+-------------+------------------+--------------+
+| Model    | Parameters  | x range     | wavelength range |       galaxy |
+|          |             | [1/micron]  | [micron]         |              |
++==========+=============+=============+==================+==============+
+| CCM89    |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW |
++----------+-------------+-------------+------------------+--------------+
+| O94      |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW |
++----------+-------------+-------------+------------------+--------------+
+| F99, F04 |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW |
++----------+-------------+-------------+------------------+--------------+
+| G16      | R(V)_A, f_A |  0.3 - 10.0 |        0.1 - 3.3 | MW, LMC, SMC |
++----------+-------------+-------------+------------------+--------------+
 
 Shape Models
 ============
 
-The models that focus on decribing the full extinction curve shape are usually
+The models that focus on describing the full extinction curve shape are usually
 used to fit measured extinction curves.  These models allow features in the
-extinction cuve to be measured (e.g., 2175 A bump or 10 micron silicate
+extinction curve to be measured (e.g., 2175 A bump or 10 micron silicate
 feature).  The :class:`~dust_extinction.dust_extinction.P92` is the most
 general as it covers the a very broad wavelength range.  The
 :class:`~dust_extinction.dust_extinction.FM90` model has been extensively used,
