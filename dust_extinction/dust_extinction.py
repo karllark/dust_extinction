@@ -18,7 +18,7 @@ x_range_FM90 = [1.0/0.32, 1.0/0.0912]
 x_range_P92 = [1.0/1e3, 1.0/1e-3]
 x_range_O94 = x_range_CCM89
 x_range_F99 = [0.3, 10.0]
-x_range_F04 = [0.0, 10.0]
+x_range_F04 = [0.3, 10.0]
 x_range_G03 = [0.3, 10.0]
 x_range_GCC09 = [0.3, 1.0/0.0912]
 x_range_G16 = x_range_G03
@@ -1328,10 +1328,10 @@ class F04(BaseExtRvModel):
         C1 = 2.18 - 2.91*C2
 
         # spline points
-        # **Use NIR spline x values listed in FM07
         opt_axav_x = 10000./np.array([6000.0,5470.0, 4670.0, 4110.0])
-        nir_axav_x = np.array([0.0, 0.25, 0.50, 0.75, 1.0])
-        optnir_axav_x = np.concatenate([opt_axav_x, nir_axav_x])
+        # **Use NIR spline x values in FM07, clipped to K band for now
+        nir_axav_x = np.array([0.50,0.75,1.0])
+        optnir_axav_x = np.concatenate([nir_axav_x, opt_axav_x])
 
         # **Keep optical spline points from F99:
         #    Final optical spline point has a leading "-1.208" in Table 4
