@@ -1234,8 +1234,8 @@ class F04(BaseExtRvModel):
 
     Updated with the NIR Rv dependence in
        Fitzpatrick (2004, ASP Conf. Ser. 309, Astrophysics of Dust, 33)
-    See also Fitzpatrick & Massa (2007, ApJ, 663, 320)
 
+    See also Fitzpatrick & Massa (2007, ApJ, 663, 320)
 
     Parameters
     ----------
@@ -1255,6 +1255,7 @@ class F04(BaseExtRvModel):
 
     Updated with the NIR Rv dependence in
        Fitzpatrick (2004, ASP Conf. Ser. 309, Astrophysics of Dust, 33)
+
     See also Fitzpatrick & Massa (2007, ApJ, 663, 320)
 
     Example showing F04 curves for a range of R(V) values.
