@@ -36,10 +36,10 @@ def get_axav_cor_vals():
                   3.704, 3.846])
 
     # keep optical from Fitzpatrick (1999),
-    # replace NIR with Fitzpatrick (2004) function for Rv=3.1:
+    # replce NIR with Fitzpatrick (2004) function for Rv=3.1:
     # (0.63*3.1 - 0.84)*x**1.84
-    cor_vals = np.array([0.185, 0.773, 2.688, 3.055, 3.806, 4.315,
-                         6.265, 6.591])
+    cor_vals = np.array([0.185, 0.772, 2.688, 3.055, 3.805, 4.315,
+                         6.456, 6.781])
     tolerance = 2e-3
 
     # convert from A(x)/E(B-V) to A(x)/A(V)
