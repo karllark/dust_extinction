@@ -59,7 +59,8 @@ R(V) (+ other variables) dependent prediction models
    The R(V) dependent models include CCM89 the original such model
    (Cardelli, Clayton, and Mathis 1989), the O94 model that updates the
    optical portion of the CCM89 model (O'Donnell 1994), and F99 model
-   (Fitzpatrick 1999).  These models are based on the average
+   (Fitzpatrick 1999) updated as F04 (Fitzpatrick 2004).
+   These models are based on the average
    behavior of extinction in the Milky Way as a function of R(V).
 
    In addition, the (R(V), f_A) two parameter relationship from
@@ -73,7 +74,7 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import (CCM89, O94, F99)
+   from dust_extinction.dust_extinction import (CCM89, O94, F99, F04)
 
    fig, ax = plt.subplots()
 
@@ -91,6 +92,9 @@ R(V) (+ other variables) dependent prediction models
    ext_model = F99(Rv=Rv)
    ax.plot(x,ext_model(x),label='F99')
 
+   ext_model = F04(Rv=Rv)
+   ax.plot(x,ext_model(x),label='F04')
+
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
 
@@ -106,7 +110,7 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import (CCM89, O94, F99)
+   from dust_extinction.dust_extinction import (CCM89, O94, F99, F04)
 
    fig, ax = plt.subplots()
 
@@ -124,6 +128,9 @@ R(V) (+ other variables) dependent prediction models
    ext_model = F99(Rv=Rv)
    ax.plot(x,ext_model(x),label='F99')
 
+   ext_model = F04(Rv=Rv)
+   ax.plot(x,ext_model(x),label='F04')
+
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
 
@@ -140,7 +147,7 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import (CCM89, O94, F99)
+   from dust_extinction.dust_extinction import (CCM89, O94, F99, F04)
 
    fig, ax = plt.subplots()
 
@@ -157,6 +164,9 @@ R(V) (+ other variables) dependent prediction models
 
    ext_model = F99(Rv=Rv)
    ax.plot(x,ext_model(x),label='F99')
+
+   ext_model = F04(Rv=Rv)
+   ax.plot(x,ext_model(x),label='F04')
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
