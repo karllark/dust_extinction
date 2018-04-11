@@ -3,6 +3,7 @@
 
 - added how to install documentation
 - made a new base class for R(V)_A, f_A dependent models (G16, expecting more)
+- F04 model added
 
 0.6 (2017-11-15)
 ================
@@ -13,4 +14,3 @@
 ================
 
 - initial release
-

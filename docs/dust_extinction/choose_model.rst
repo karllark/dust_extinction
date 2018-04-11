@@ -49,7 +49,7 @@ model encompasses the average measured behavior of extinction curves in the MW,
 LMC, and SMC.  The :class:`~dust_extinction.dust_extinction.G16` model reduces
 to the :class:`~dust_extinction.dust_extinction.F99` model with f\ :sub:`A`\ =
 1.0.  If only MW type extinction is expected, then the
-:class:`~dust_extinction.dust_extinction.F99` model should be considered as it
+:class:`~dust_extinction.dust_extinction.F04` model should be considered as it
 is based on significantly more extinction curves than the
 :class:`~dust_extinction.dust_extinction.CCM89` or
 :class:`~dust_extinction.dust_extinction.O94` models.

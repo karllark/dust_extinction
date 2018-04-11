@@ -4,7 +4,7 @@ Astronomical dust extinction
 .. image:: http://readthedocs.org/projects/dust-extinction/badge/?version=latest
    :target: http://dust-extinction.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
-	 
+
 .. image:: https://badge.fury.io/py/dust-extinction.svg
    :target: https://badge.fury.io/py/dust-extinction
 
@@ -15,11 +15,11 @@ Astronomical dust extinction
 .. image:: https://coveralls.io/repos/github/karllark/dust_extinction/badge.svg?branch=master
    :target: https://coveralls.io/github/karllark/dust_extinction?branch=master
    :alt: Test Coverage Status
-	    
+
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
-    
+
 This package provides astronomical interstellar dust extinction curves
 implemented using the astropy.modeling framework.
 
@@ -36,9 +36,9 @@ In Development!
 This code is currently in active development.
 Contributions welcome (see below).
 
-Contributors
-------------
-Karl Gordon
+Major Contributors
+------------------
+Karl Gordon, Kristen Larson
 
 Contributing
 ------------
