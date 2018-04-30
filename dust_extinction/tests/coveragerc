@@ -10,9 +10,6 @@ omit =
    {packagename}/tests/*
    {packagename}/*/tests/*
    {packagename}/*/*/tests/*
-   {packagename}/plots/*
-   {packagename}/*/plots/*
-   {packagename}/*/*/plots/*
    {packagename}/version*
 
 [report]
