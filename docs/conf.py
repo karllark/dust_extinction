@@ -103,13 +103,6 @@ release = package.__version__
 # global configuration are listed below, commented out.
 
 
-# Please update these texts to match the name of your package.
-html_theme_options = {
-    'logotext1': 'dust_',  # white,  semi-bold
-    'logotext2': 'extinction',  # orange, light
-    'logotext3': ':docs'   # white,  light
-    }
-
 # Add any paths that contain custom themes here, relative to this directory.
 # To use a different custom theme, add the directory containing the theme.
 #html_theme_path = []
@@ -118,6 +111,15 @@ html_theme_options = {
 # a list of builtin themes. To override the custom theme, set this to the
 # name of a builtin theme or the name of a custom theme in html_theme_path.
 #html_theme = None
+
+
+# Please update these texts to match the name of your package.
+html_theme_options = {
+    'logotext1': 'dust',  # white,  semi-bold
+    'logotext2': '_extinction',  # orange, light
+    'logotext3': ':docs'   # white,  light
+    }
+
 
 # Custom sidebar templates, maps document names to template names.
 #html_sidebars = {}
@@ -131,10 +133,6 @@ html_theme_options = {
 # pixels large.
 #html_favicon = ''
 
-#  example from imexam
-#from os.path import join
-#html_favicon = join('_static', 'imexam.ico')
-
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
 #html_last_updated_fmt = ''
@@ -145,13 +143,6 @@ html_title = '{0} v{1}'.format(project, release)
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = project + 'doc'
-
-# more examples from imexam
-#html_logo = '_static/imexam_logo_trans.png'
-
-# Static files to copy after template files
-#html_static_path = ['_static']
-#html_style = 'imexam.css'
 
 
 # -- Options for LaTeX output -------------------------------------------------
@@ -188,3 +179,28 @@ if eval(setup_cfg.get('edit_on_github')):
 # -- Resolving issue number to links in changelog -----------------------------
 github_issues_url = 'https://github.com/{0}/issues/'.format(setup_cfg['github_project'])
 
+# -- Turn on nitpicky mode for sphinx (to warn about references not found) ----
+#
+# nitpicky = True
+# nitpick_ignore = []
+#
+# Some warnings are impossible to suppress, and you can list specific references
+# that should be ignored in a nitpick-exceptions file which should be inside
+# the docs/ directory. The format of the file should be:
+#
+# <type> <class>
+#
+# for example:
+#
+# py:class astropy.io.votable.tree.Element
+# py:class astropy.io.votable.tree.SimpleElement
+# py:class astropy.io.votable.tree.SimpleElementWithContent
+#
+# Uncomment the following lines to enable the exceptions:
+#
+# for line in open('nitpick-exceptions'):
+#     if line.strip() == "" or line.startswith("#"):
+#         continue
+#     dtype, target = line.split(None, 1)
+#     target = target.strip()
+#     nitpick_ignore.append((dtype, six.u(target)))
