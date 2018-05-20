@@ -22,10 +22,10 @@ Average models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import (GCC09_MWAvg,
-                                                G03_SMCBar,
-                                                G03_LMCAvg,
-					                                      G03_LMC2)
+   from dust_extinction.averages import (GCC09_MWAvg,
+                                         G03_SMCBar,
+                                         G03_LMCAvg,
+					                               G03_LMC2)
 
    fig, ax = plt.subplots()
 
@@ -74,7 +74,7 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import (CCM89, O94, F99, F04)
+   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04)
 
    fig, ax = plt.subplots()
 
@@ -110,7 +110,7 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import (CCM89, O94, F99, F04)
+   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04)
 
    fig, ax = plt.subplots()
 
@@ -147,7 +147,7 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import (CCM89, O94, F99, F04)
+   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04)
 
    fig, ax = plt.subplots()
 
@@ -183,7 +183,7 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import G16
+   from dust_extinction.parameter_averages import G16
 
    fig, ax = plt.subplots()
 
@@ -213,7 +213,7 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import G16
+   from dust_extinction.parameter_averages import G16
 
    fig, ax = plt.subplots()
 
@@ -253,7 +253,7 @@ Shape fitting models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import FM90
+   from dust_extinction.shapes import FM90
 
    fig, ax = plt.subplots()
 
@@ -287,7 +287,7 @@ Shape fitting models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.dust_extinction import P92
+   from dust_extinction.shapes import P92
 
    fig, ax = plt.subplots()
 

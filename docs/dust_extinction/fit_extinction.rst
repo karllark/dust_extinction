@@ -23,7 +23,8 @@ extinction curve for the LMC outside of the LMC2 supershell region
 
    from astropy.modeling.fitting import LevMarLSQFitter
 
-   from dust_extinction.dust_extinction import (G03_LMCAvg, FM90)
+   from dust_extinction.averages import G03_LMCAvg
+   from dust_extinction.shapes import FM90
 
    # get an observed extinction curve to fit
    g03_model = G03_LMCAvg()
@@ -80,7 +81,8 @@ between data points.
 
    from astropy.modeling.fitting import LevMarLSQFitter
 
-   from dust_extinction.dust_extinction import (P92, GCC09_MWAvg)
+   from dust_extinction.averages import GCC09_MWAvg
+   from dust_extinction.shapes import P92
 
    # get an observed extinction curve to fit
    g09_model = GCC09_MWAvg()
