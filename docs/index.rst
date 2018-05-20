@@ -172,3 +172,7 @@ Reference API
 .. automodapi:: dust_extinction.parameter_averages
 
 .. automodapi:: dust_extinction.shapes
+
+.. automodapi:: dust_extinction.conversions
+
+.. automodapi:: dust_extinction.baseclasses
