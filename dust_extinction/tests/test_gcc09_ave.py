@@ -4,7 +4,7 @@ import pytest
 import astropy.units as u
 from astropy.modeling import InputParameterError
 
-from ..dust_extinction import GCC09_MWAvg
+from ..averages import GCC09_MWAvg
 from .helpers import _invalid_x_range
 
 

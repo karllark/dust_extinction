@@ -4,9 +4,9 @@ import numpy as np
 
 import astropy.units as u
 
-from .helpers import (_test_valid_x_range, _curve_F99_method)
+from .helpers import _test_valid_x_range
 from .baseclasses import BaseExtAveModel
-from .shapes import P92
+from .shapes import (P92, _curve_F99_method)
 
 __all__ = ['G03_SMCBar', 'G03_LMCAvg', 'G03_LMC2',
            'GCC09_MWAvg']

@@ -1,4 +1,4 @@
-from astropy.models import (Fittable1DModel, Parameter)
+from astropy.modeling import (Fittable1DModel, Parameter)
 
 __all__ = ['AxAvToExv']
 

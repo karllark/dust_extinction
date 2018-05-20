@@ -5,8 +5,9 @@ import numpy as np
 import astropy.units as u
 
 from .baseclasses import (BaseExtRvModel, BaseExtRvAfAModel)
-from .helpers import (_test_valid_x_range, _curve_F99_method)
+from .helpers import _test_valid_x_range
 from .averages import G03_SMCBar
+from .shapes import _curve_F99_method
 
 __all__ = ['CCM89', 'O94', 'F99', 'F04', 'G16']
 

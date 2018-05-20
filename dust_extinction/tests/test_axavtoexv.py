@@ -3,7 +3,8 @@ import astropy.units as u
 
 from astropy.modeling.fitting import LevMarLSQFitter
 
-from ..dust_extinction import (P92, AxAvToExv)
+from ..shapes import P92
+from ..conversions import AxAvToExv
 
 
 def get_axav_cor_vals():

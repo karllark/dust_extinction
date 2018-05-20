@@ -4,7 +4,8 @@ import pytest
 import astropy.units as u
 from astropy.modeling.fitting import LevMarLSQFitter
 
-from ..dust_extinction import (FM90, G03_LMCAvg)
+from ..shapes import FM90
+from ..averages import G03_LMCAvg
 from .helpers import _invalid_x_range
 
 

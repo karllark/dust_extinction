@@ -3,7 +3,7 @@ import pytest
 
 import astropy.units as u
 
-from ..dust_extinction import F04
+from ..parameter_averages import F04
 from .helpers import _invalid_x_range
 
 
