@@ -4,7 +4,7 @@ import pytest
 import astropy.units as u
 from astropy.modeling import InputParameterError
 
-from ..dust_extinction import CCM89
+from ..parameter_averages import CCM89
 from .helpers import _invalid_x_range
 
 

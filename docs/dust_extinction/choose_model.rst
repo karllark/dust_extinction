@@ -14,10 +14,10 @@ Simple Average Curves
 
 These are straightforward averages of observed extinction curves.  They are the
 simplest models and include models for the MW
-(:class:`~dust_extinction.dust_extinction.GCC09_MWAvg`), the LMC
-(:class:`~dust_extinction.dust_extinction.G03_LMCAvg`,
-:class:`~dust_extinction.dust_extinction.G03_LMC2`) and the SMC
-(:class:`~dust_extinction.dust_extinction.G03_SMCBar`).
+(:class:`~dust_extinction.averages.GCC09_MWAvg`), the LMC
+(:class:`~dust_extinction.averages.G03_LMCAvg`,
+:class:`~dust_extinction.averages.G03_LMC2`) and the SMC
+(:class:`~dust_extinction.averages.G03_SMCBar`).
 
 One often used alternative to these straight average models is to use one of
 the parameter dependent models with the average R(V) value.  For the Milky
@@ -44,15 +44,15 @@ for overall changes in the extinction curve shapes.  For example, the average
 behavior of Milky Way extinction curves has been shown to be dependent on R(V)
 = A(V)/E(B-V).  R(V) roughly tracks with the average dust grain size.
 
-The most general model is :class:`~dust_extinction.dust_extinction.G16` as this
+The most general model is :class:`~dust_extinction.parameter_averages.G16` as this
 model encompasses the average measured behavior of extinction curves in the MW,
-LMC, and SMC.  The :class:`~dust_extinction.dust_extinction.G16` model reduces
-to the :class:`~dust_extinction.dust_extinction.F99` model with f\ :sub:`A`\ =
+LMC, and SMC.  The :class:`~dust_extinction.parameter_averages.G16` model reduces
+to the :class:`~dust_extinction.parameter_averages.F99` model with f\ :sub:`A`\ =
 1.0.  If only MW type extinction is expected, then the
-:class:`~dust_extinction.dust_extinction.F04` model should be considered as it
+:class:`~dust_extinction.parameter_averages.F04` model should be considered as it
 is based on significantly more extinction curves than the
-:class:`~dust_extinction.dust_extinction.CCM89` or
-:class:`~dust_extinction.dust_extinction.O94` models.
+:class:`~dust_extinction.parameter_averages.CCM89` or
+:class:`~dust_extinction.parameter_averages.O94` models.
 
 +----------+-------------+-------------+------------------+--------------+
 | Model    | Parameters  | x range     | wavelength range |       galaxy |
@@ -73,9 +73,9 @@ Shape Models
 The models that focus on describing the full extinction curve shape are usually
 used to fit measured extinction curves.  These models allow features in the
 extinction curve to be measured (e.g., 2175 A bump or 10 micron silicate
-feature).  The :class:`~dust_extinction.dust_extinction.P92` is the most
+feature).  The :class:`~dust_extinction.shapes.P92` is the most
 general as it covers the a very broad wavelength range.  The
-:class:`~dust_extinction.dust_extinction.FM90` model has been extensively used,
+:class:`~dust_extinction.shapes.FM90` model has been extensively used,
 but only covers the UV wavelength range.
 
 +------------+--------------+------------------+-------------------+
