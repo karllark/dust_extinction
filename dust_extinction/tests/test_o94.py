@@ -4,7 +4,7 @@ import pytest
 import astropy.units as u
 from astropy.modeling import InputParameterError
 
-from ..dust_extinction import O94
+from ..parameter_averages import O94
 from .helpers import _invalid_x_range
 
 

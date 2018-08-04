@@ -4,7 +4,7 @@ import pytest
 import astropy.units as u
 from astropy.modeling.fitting import LevMarLSQFitter
 
-from ..dust_extinction import P92
+from ..shapes import P92
 from .helpers import _invalid_x_range
 
 x_bad = [-1.0, 1001.]

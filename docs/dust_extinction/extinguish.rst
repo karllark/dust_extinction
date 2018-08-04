@@ -23,7 +23,7 @@ Example: Extinguish a Blackbody
    import astropy.units as u
    from astropy.modeling.blackbody import blackbody_lambda
 
-   from dust_extinction.dust_extinction import F99
+   from dust_extinction.parameter_averages import F99
 
    # generate wavelengths between 0.1 and 3 microns
    #    within the valid range for the F99 R(V) dependent relationship

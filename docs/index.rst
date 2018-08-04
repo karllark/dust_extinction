@@ -8,7 +8,7 @@ curves.
 While there are other python packages that provide some of the extinction
 curves contained here, the explicit motivation for this package is to provide
 extinction curves to those using them to model/correct their data and those
-studying extinction curves directly to better undertand interstellar dust.
+studying extinction curves directly to better understand interstellar dust.
 
 This package is developed in the
 `astropy affiliated package <http://www.astropy.org/affiliated/>`_
@@ -60,7 +60,7 @@ Define a model, specifically the F99 model with an R(V) = 3.1.
 
 .. code-block:: python
 
-    from dust_extinction.dust_extinction import F99
+    from dust_extinction.parameter_averages import F99
 
     # define the model
     ext = F99(Rv=3.1)
@@ -88,7 +88,7 @@ equivalent A(V) column.
     import matplotlib.pyplot as plt
     import astropy.units as u
     from astropy.modeling.blackbody import blackbody_lambda
-    from dust_extinction.dust_extinction import F99
+    from dust_extinction.parameter_averages import F99
 
     # define the model
     ext = F99(Rv=3.1)
@@ -167,4 +167,12 @@ contributors page on Github
 Reference API
 =============
 
-.. automodapi:: dust_extinction.dust_extinction
+.. automodapi:: dust_extinction.averages
+
+.. automodapi:: dust_extinction.parameter_averages
+
+.. automodapi:: dust_extinction.shapes
+
+.. automodapi:: dust_extinction.conversions
+
+.. automodapi:: dust_extinction.baseclasses

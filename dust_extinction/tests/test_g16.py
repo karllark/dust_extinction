@@ -4,8 +4,8 @@ import pytest
 import astropy.units as u
 from astropy.modeling import InputParameterError
 
-from ..dust_extinction import G16
-from ..dust_extinction import G03_SMCBar
+from ..parameter_averages import G16
+from ..averages import G03_SMCBar
 from .test_f99 import get_axav_cor_vals as get_axav_cor_vals_fA_1
 from .helpers import _invalid_x_range
 
