@@ -2,22 +2,31 @@
 Interstellar Dust Extinction
 ############################
 
-``dust_extinction`` is a python package to provide interstellar dust extinction
-curves.
+``dust_extinction`` is a python package to provide models of
+interstellar dust extinction curves.
 
-While there are other python packages that provide some of the extinction
-curves contained here, the explicit motivation for this package is to provide
-extinction curves to those using them to model/correct their data and those
-studying extinction curves directly to better understand interstellar dust.
+Extinction describes the effects of dust on a single star.  The dust along
+the line-of-sight to the stars removes flux by absorbing photons or scattering
+photons out of the line-of-sight.  In general, extinction models are used
+to model or correct the effects of dust on observations a single star.
 
-This package is developed in the
+In contrast, dust attenuation refers to the effects of dust on the
+measurements of groups of stars mixed with dust.  The effects
+include in attenuation are dust absorption, dust scattering out of the
+line-of-sight, and dust scattering into the line-of-sight.  In general,
+attenuation models are used to model or correct the effects of dust on
+observations of region of galaxies or global measurements of galaxies.
+For attenuation models, see
+the `dust_attenuation package <http://dust-attenuation.readthedocs.io/>`_.
+
+This package is an
 `astropy affiliated package <http://www.astropy.org/affiliated/>`_
-template and uses the
+and uses the
 `astropy.modeling <http://docs.astropy.org/en/stable/modeling/>`_
 framework.
 
-User Documenation
-=================
+User Documentation
+==================
 
 .. toctree::
    :maxdepth: 2
@@ -35,6 +44,11 @@ Installation
   :maxdepth: 2
 
   How to install <dust_extinction/install.rst>
+
+Repository
+==========
+
+GitHub: `dust_extinction <https://github.com/karllark/dust_extinction>`_
 
 Quick Start
 ===========
