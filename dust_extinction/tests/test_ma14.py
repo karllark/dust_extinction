@@ -36,7 +36,7 @@ def get_axav_cor_vals():
 
     # get values of A(x)/A(V) from direct calculation
     # using R5495 = 3.1
-    cor_vals = np.array([ay([0.1323, 1.1412, 2.3111, 2.5219, 4.1340])])
+    cor_vals = np.array([0.1323, 1.1412, 2.3111, 2.5219, 4.1340])
     tolerance = 2e-3
 
     # add units
