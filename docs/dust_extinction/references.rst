@@ -23,6 +23,9 @@ F04: `Fitzpatrick 2004, ASP Conf. Ser. 309, Astrophysics of Dust, 33
 FM07: `Fitzpatrick & Massa 2007, ApJ, 663, 320
 <http://adsabs.harvard.edu/abs/2007ApJ...663..320F>`_
 
+M14: `Ma\’{\i}z Apell\’aniz et al. 2014, A&A, 564, 63
+<http://adsabs.harvard.edu/abs/2014A%26A...564A..63M>`_
+
 G03: `Gordon et al. 2003, ApJ, 594, 279
 <http://adsabs.harvard.edu/abs/2003ApJ...594..279G>`_
 
