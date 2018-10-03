@@ -1,6 +1,7 @@
 from __future__ import (absolute_import, print_function, division)
 
 import numpy as np
+from scipy import interpolate
 
 import astropy.units as u
 
@@ -9,14 +10,14 @@ from .helpers import _test_valid_x_range
 from .averages import G03_SMCBar
 from .shapes import _curve_F99_method
 
-__all__ = ['CCM89', 'O94', 'F99', 'F04', 'G16']
+__all__ = ['CCM89', 'O94', 'F99', 'F04', 'M14', 'G16']
 
 x_range_CCM89 = [0.3, 10.0]
 x_range_O94 = x_range_CCM89
 x_range_F99 = [0.3, 10.0]
 x_range_F04 = [0.3, 10.0]
+x_range_M14 = [0.3, 10.0]
 x_range_G16 = [0.3, 10.0]
-
 
 class CCM89(BaseExtRvModel):
     """
@@ -515,7 +516,7 @@ class F04(BaseExtRvModel):
                                 -0.050 + 1.0016*Rv,
                                 0.701 + 1.0016*Rv,
                                 1.208 + 1.0032*Rv - 0.00033*(Rv**2)])
-        # updated NIR curve from F04, note R dependendence
+        # updated NIR curve from F04, note R dependence
         nir_axebv_y = (0.63*Rv - 0.84)*nir_axav_x**1.84
 
         optnir_axebv_y = np.concatenate([nir_axebv_y, opt_axebv_y])
@@ -524,6 +525,171 @@ class F04(BaseExtRvModel):
         return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
                                  optnir_axav_x, optnir_axebv_y/Rv,
                                  self.x_range, 'F04')
+
+
+class M14(BaseExtRvModel):
+
+    """
+    M14 extinction model calculation
+
+    From Ma\’{\i}z Apell\’aniz et al. (2014, A&A, 564, 63)
+
+    Parameters
+    ----------
+    R5495: float
+        R5495 = A(5485)/E(4405-5495)
+        Spectral equivalent to photometric R(V),
+        standard value is 3.1
+
+    Raises
+    ------
+    InputParameterError
+       Input Rv values outside of defined range
+
+    Notes
+    -----
+    M14 R5485-dependent model
+
+    From Ma\’{\i}z Apell\’aniz et al. (2014, A&A, 564, 63),
+    following structure of IDL code provided in paper appendix
+
+    R5495 = A(5485)/E(4405-5495)
+    Spectral equivalent to photometric R(V),
+    standard value is 3.1
+
+    Example showing M14 curves for a range of R5495 values.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.parameter_averages import M14
+
+        fig, ax = plt.subplots()
+
+        # temp model to get the correct x range
+        text_model = M14()
+
+        # generate the curves and plot them
+        x = np.arange(text_model.x_range[0],
+                      text_model.x_range[1],0.1)/u.micron
+
+        Rvs = ['2.0','3.1','4.0','5.0','6.0']
+        for cur_Rv in Rvs:
+           ext_model = M14(Rv=cur_Rv)
+           ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+
+        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel('$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+    Rv_range = [2.0, 7.0]
+    x_range = x_range_M14
+
+    def evaluate(self, in_x, Rv):
+        """
+        M14 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        # convert to wavenumbers (1/micron) if x input in units
+        # otherwise, assume x in appropriate wavenumber units
+        with u.add_enabled_equivalencies(u.spectral()):
+            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
+
+        # strip the quantity to avoid needing to add units to all the
+        #    polynomical coefficients
+        x = x_quant.value
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, x_range_M14, 'M14')
+
+        # ensure Rv is a single element, not numpy array
+        Rv = Rv[0]
+
+        # Infrared
+        ai = 0.574 * x**1.61
+        bi = -0.527 * x**1.61
+
+        # Optical
+        x1 = np.array([1.0])
+        xi1 = x1[0]
+        x2 = np.array([1.15, 1.81984, 2.1, 2.27015, 2.7])
+        x3 = np.array([3.5, 3.9, 4.0, 4.1, 4.2])
+        xi3 = x3[-1]
+
+        a1v = 0.574 * x1**1.61
+        a1d = 0.574 * 1.61 * xi1**0.61
+        b1v = -0.527 * x1**1.61
+        b1d = -0.527 * 1.61 * xi1**0.61
+
+        a2v = (1 + 0.17699*(x2-1.82) - 0.50447*(x2-1.82)**2
+            - 0.02427*(x2-1.82)**3 + 0.72085*(x2-1.82)**4
+            + 0.01979*(x2-1.82)**5 - 0.77530*(x2-1.82)**6
+            + 0.32999*(x2-1.82)**7 + np.array([0.0,0.0,-0.011,0.0,0.0]))
+        b2v = (1.41338*(x2-1.82) + 2.28305*(x2-1.82)**2
+            + 1.07233*(x2-1.82)**3 - 5.38434*(x2-1.82)**4
+            - 0.62251*(x2-1.82)**5 + 5.30260*(x2-1.82)**6
+            - 2.09002*(x2-1.82)**7 + np.array([0.0,0.0,+0.091,0.0,0.0]))
+
+        a3v = (1.752 - 0.316*x3 - 0.104/((x3-4.67)**2 + 0.341)
+            + np.array([0.442,0.341,0.130,0.020,0.000]))
+        a3d = -0.316 + 0.104*2.0*(xi3-4.67)/((xi3-4.67)**2 + 0.341)**2
+        b3v = (-3.090 + 1.825*x3 + 1.206/((x3-4.62)**2 + 0.263)
+            - np.array([1.256,1.021,0.416,0.064,0.000]))
+        b3d = 1.825 - 1.206*2*(xi3-4.62)/((xi3-4.62)**2 + 0.263)**2
+
+        xn=np.concatenate((x1,x2,x3))
+        anv=np.concatenate((a1v,a2v,a3v))
+        bnv=np.concatenate((b1v,b2v,b3v))
+
+        a_spl = interpolate.CubicSpline(xn,anv,bc_type=((1,a1d),(1,a3d)))
+        b_spl = interpolate.CubicSpline(xn,bnv,bc_type=((1,b1d),(1,b3d)))
+
+        av=a_spl(x)
+        bv=b_spl(x)
+
+        # Ultraviolet
+        y = x - 5.9
+        fa = np.zeros(x.size) + (-0.04473*y**2 - 0.009779*y**3)*((x<8)&(x>5.9))
+        fb = np.zeros(x.size) + ( 0.2130*y**2 + 0.1207*y**3)*((x<8)&(x>5.9))
+
+        au = 1.752 - 0.316*x - 0.104/((x-4.67)**2 + 0.341) + fa
+        bu = -3.090 + 1.825*x + 1.206/((x-4.62)**2 + 0.263) + fb
+
+        # Far ultraviolet
+        y = x - 8.0
+        af = -1.073 - 0.628*y + 0.137*y**2 - 0.070*y**3
+        bf = 13.670 + 4.257*y - 0.420*y**2 + 0.374*y**3
+
+        # Final result
+        a = (ai*(x<xi1) + av*((x>xi1) & (x<xi3))
+                + au*((x>xi3)&(x<8.0)) + af*(x>8.0))
+        b = (bi*(x<xi1) + bv*((x>xi1) & (x<xi3))
+                + bu*((x>xi3)&(x<8.0)) + bf*(x>8.0))
+
+        return a + b/Rv
 
 
 class G16(BaseExtRvAfAModel):

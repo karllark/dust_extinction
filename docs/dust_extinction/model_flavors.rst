@@ -58,10 +58,13 @@ R(V) (+ other variables) dependent prediction models
 
    The R(V) dependent models include CCM89 the original such model
    (Cardelli, Clayton, and Mathis 1989), the O94 model that updates the
-   optical portion of the CCM89 model (O'Donnell 1994), and F99 model
-   (Fitzpatrick 1999) updated as F04 (Fitzpatrick 2004).
+   optical portion of the CCM89 model (O'Donnell 1994), and the F99 model
+   (Fitzpatrick 1999) updated as F04 (Fitzpatrick 2004),
    These models are based on the average
    behavior of extinction in the Milky Way as a function of R(V).
+   The M14 model refines the optical portion of the CCM89 model
+   (Ma\’{\i}z Apell\’aniz et al. 2014), was developed for the LMC but
+   has been shown valid elsewhere in the Milky Way.
 
    In addition, the (R(V), f_A) two parameter relationship from
    Gordon et al. (2016) is included.  This model is based on the average
@@ -74,7 +77,7 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04)
+   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04, M14)
 
    fig, ax = plt.subplots()
 
@@ -95,6 +98,9 @@ R(V) (+ other variables) dependent prediction models
    ext_model = F04(Rv=Rv)
    ax.plot(x,ext_model(x),label='F04')
 
+   ext_model = M14(Rv=Rv)
+   ax.plot(x,ext_model(x),label='M14')
+
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
 
@@ -110,7 +116,7 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04)
+   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04, M14)
 
    fig, ax = plt.subplots()
 
@@ -131,6 +137,9 @@ R(V) (+ other variables) dependent prediction models
    ext_model = F04(Rv=Rv)
    ax.plot(x,ext_model(x),label='F04')
 
+   ext_model = M14(Rv=Rv)
+   ax.plot(x,ext_model(x),label='M14')
+
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
 
@@ -147,7 +156,7 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04)
+   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04, M14)
 
    fig, ax = plt.subplots()
 
@@ -167,6 +176,9 @@ R(V) (+ other variables) dependent prediction models
 
    ext_model = F04(Rv=Rv)
    ax.plot(x,ext_model(x),label='F04')
+
+   ext_model = M14(Rv=Rv)
+   ax.plot(x,ext_model(x),label='M14')
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
