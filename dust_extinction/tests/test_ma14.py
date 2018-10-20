@@ -32,11 +32,11 @@ def test_invalid_micron(x_invalid_angstrom):
 
 def get_axav_cor_vals():
     # choose x values from each portion of the curve
-    x = np.array([0.5, 2. , 4. , 6. , 9. ])
+    x = np.array([0.5, 2.])
 
     # get values of A(x)/A(V) from direct calculation
     # using R5495 = 3.1
-    cor_vals = np.array([0.1323, 1.1412, 2.3111, 2.5219, 4.1340])
+    cor_vals = np.array([0.1323, 1.1412])
     tolerance = 2e-3
 
     # add units

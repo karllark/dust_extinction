@@ -16,7 +16,7 @@ x_range_CCM89 = [0.3, 10.0]
 x_range_O94 = x_range_CCM89
 x_range_F99 = [0.3, 10.0]
 x_range_F04 = [0.3, 10.0]
-x_range_M14 = [0.3, 10.0]
+x_range_M14 = [0.3, 3.3]
 x_range_G16 = [0.3, 10.0]
 
 class CCM89(BaseExtRvModel):
@@ -553,6 +553,14 @@ class M14(BaseExtRvModel):
     From Ma\’{\i}z Apell\’aniz et al. (2014, A&A, 564, 63),
     following structure of IDL code provided in paper appendix
 
+    The published UV extinction curve is identical to Clayton, Cardelli,
+    and Mathis (1989, CCM). Forcing the optical section to match
+    smoothly with CCM introduces a non-physical feature at high
+    values of R5495 around 3.9 inverse microns; see section 5 in
+    Ma\’{\i}z Apell\’aniz et al. (2014) for more discussion.  For
+    that reason, we provide the M14 model only through 3.3 inverse
+    microns, the limit of the optical in CCM.
+
     R5495 = A(5485)/E(4405-5495)
     Spectral equivalent to photometric R(V),
     standard value is 3.1
@@ -670,24 +678,35 @@ class M14(BaseExtRvModel):
         av=a_spl(x)
         bv=b_spl(x)
 
-        # Ultraviolet
-        y = x - 5.9
-        fa = np.zeros(x.size) + (-0.04473*y**2 - 0.009779*y**3)*((x<8)&(x>5.9))
-        fb = np.zeros(x.size) + ( 0.2130*y**2 + 0.1207*y**3)*((x<8)&(x>5.9))
+        # UV extinction curve in the paper repeats CCM. Forcing the
+        # optical section to match smoothly with CCM introduces a
+        # non-physical feature at high values of R5495 at x = 3.9
+        # inverse microns.  This class does not provide the UV curve,
+        # but the code that would calculate it is included below for
+        # completeness.
 
-        au = 1.752 - 0.316*x - 0.104/((x-4.67)**2 + 0.341) + fa
-        bu = -3.090 + 1.825*x + 1.206/((x-4.62)**2 + 0.263) + fb
+        # Ultraviolet
+        # y = x - 5.9
+        # fa = np.zeros(x.size) + (-0.04473*y**2 - 0.009779*y**3)*((x<8)&(x>5.9))
+        # fb = np.zeros(x.size) + ( 0.2130*y**2 + 0.1207*y**3)*((x<8)&(x>5.9))
+
+        # au = 1.752 - 0.316*x - 0.104/((x-4.67)**2 + 0.341) + fa
+        # bu = -3.090 + 1.825*x + 1.206/((x-4.62)**2 + 0.263) + fb
 
         # Far ultraviolet
-        y = x - 8.0
-        af = -1.073 - 0.628*y + 0.137*y**2 - 0.070*y**3
-        bf = 13.670 + 4.257*y - 0.420*y**2 + 0.374*y**3
+        # y = x - 8.0
+        # af = -1.073 - 0.628*y + 0.137*y**2 - 0.070*y**3
+        # bf = 13.670 + 4.257*y - 0.420*y**2 + 0.374*y**3
 
         # Final result
-        a = (ai*(x<xi1) + av*((x>xi1) & (x<xi3))
-                + au*((x>xi3)&(x<8.0)) + af*(x>8.0))
-        b = (bi*(x<xi1) + bv*((x>xi1) & (x<xi3))
-                + bu*((x>xi3)&(x<8.0)) + bf*(x>8.0))
+        # a = (ai*(x<xi1) + av*((x>xi1) & (x<xi3))
+        #         + au*((x>xi3)&(x<8.0)) + af*(x>8.0))
+        # b = (bi*(x<xi1) + bv*((x>xi1) & (x<xi3))
+        #         + bu*((x>xi3)&(x<8.0)) + bf*(x>8.0))
+
+        # Final result
+        a = ai*(x<xi1) + av*((x>xi1) & (x<xi3))
+        b = bi*(x<xi1) + bv*((x>xi1) & (x<xi3))
 
         return a + b/Rv
 
