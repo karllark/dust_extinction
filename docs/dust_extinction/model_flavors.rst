@@ -99,7 +99,7 @@ R(V) (+ other variables) dependent prediction models
    ax.plot(x,ext_model(x),label='F04')
 
    ext_model = M14(Rv=Rv)
-   ax.plot(x,ext_model(x),label='M14')
+   ax.plot(x[x<3.3/u.micron],ext_model(x[x<3.3/u.micron]),label='M14')
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
@@ -138,7 +138,7 @@ R(V) (+ other variables) dependent prediction models
    ax.plot(x,ext_model(x),label='F04')
 
    ext_model = M14(Rv=Rv)
-   ax.plot(x,ext_model(x),label='M14')
+   ax.plot(x[x<3.3/u.micron],ext_model(x[x<3.3/u.micron]),label='M14')
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
@@ -178,7 +178,7 @@ R(V) (+ other variables) dependent prediction models
    ax.plot(x,ext_model(x),label='F04')
 
    ext_model = M14(Rv=Rv)
-   ax.plot(x,ext_model(x),label='M14')
+   ax.plot(x[x<3.3/u.micron],ext_model(x[x<3.3/u.micron]),label='M14')
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
