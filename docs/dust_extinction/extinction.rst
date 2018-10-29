@@ -84,7 +84,7 @@ galaxies (composed of many stars) and  stars with circumstellar dust.
 Attenuation includes two additional effects not include in extinction. These are
 scattering of photons into the observation beam and sources extinguished by
 different columns of dust.  These two additional sources results in the ratio of
-dust attenuations at two different wavelengths does *varies* with different
+dust attenuations at two different wavelengths *varying* with different
 amounts total system dust.  These two additional effects mean that the
 measurement and/or theoretical calculation of attenuation is significantly more
 complex than for extinction.
