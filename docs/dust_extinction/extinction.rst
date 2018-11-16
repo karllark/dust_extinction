@@ -12,8 +12,8 @@ scattered *out* of the line-of-sight by dust grains.
 
 Extinction can be directly measured by observing a star with dust along the
 line-of-sight. Knowledge of the intrinsic spectrum of the star from either an
-observation of a similar star without dust along the line-of-sight or a stellar
-atmosphere model is used.
+observation of a similar star without foreground dust along the line-of-sight
+or a stellar atmosphere model is used.
 
 Extinction can be directly measured towards individual stars.  The specific
 geometry is a star with a column of dust between the observer and the star. The
@@ -25,7 +25,7 @@ ignored.
 Both dust absorption and scattering out of the line-of-sight are processes
 that are directly proportional to the amount of dust along the line-of-sight.
 As a result, the ratio of dust extinctions at two different wavelengths
-does not vary with different amounts of dust.  In other words, extinction
+does not vary with different amounts of otherwise identical dust.  In other words, extinction
 curves normalized by dust column measured towards different different stars
 with different amounts of identical dust grains are equivalent.  This is
 illustrated below where the left plot shows the total extinction as a function
