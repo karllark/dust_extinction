@@ -19,6 +19,7 @@ x_range_F04 = [0.3, 10.0]
 x_range_M14 = [0.3, 3.3]
 x_range_G16 = [0.3, 10.0]
 
+
 class CCM89(BaseExtRvModel):
     """
     CCM89 extinction model calculation
@@ -653,30 +654,34 @@ class M14(BaseExtRvModel):
         b1d = -0.527 * 1.61 * xi1**0.61
 
         a2v = (1 + 0.17699*(x2-1.82) - 0.50447*(x2-1.82)**2
-            - 0.02427*(x2-1.82)**3 + 0.72085*(x2-1.82)**4
-            + 0.01979*(x2-1.82)**5 - 0.77530*(x2-1.82)**6
-            + 0.32999*(x2-1.82)**7 + np.array([0.0,0.0,-0.011,0.0,0.0]))
+               - 0.02427*(x2-1.82)**3 + 0.72085*(x2-1.82)**4
+               + 0.01979*(x2-1.82)**5 - 0.77530*(x2-1.82)**6
+               + 0.32999*(x2-1.82)**7
+               + np.array([0.0, 0.0, -0.011, 0.0, 0.0]))
         b2v = (1.41338*(x2-1.82) + 2.28305*(x2-1.82)**2
-            + 1.07233*(x2-1.82)**3 - 5.38434*(x2-1.82)**4
-            - 0.62251*(x2-1.82)**5 + 5.30260*(x2-1.82)**6
-            - 2.09002*(x2-1.82)**7 + np.array([0.0,0.0,+0.091,0.0,0.0]))
+               + 1.07233*(x2-1.82)**3 - 5.38434*(x2-1.82)**4
+               - 0.62251*(x2-1.82)**5 + 5.30260*(x2-1.82)**6
+               - 2.09002*(x2-1.82)**7
+               + np.array([0.0, 0.0, +0.091, 0.0, 0.0]))
 
         a3v = (1.752 - 0.316*x3 - 0.104/((x3-4.67)**2 + 0.341)
-            + np.array([0.442,0.341,0.130,0.020,0.000]))
+               + np.array([0.442, 0.341, 0.130, 0.020, 0.000]))
         a3d = -0.316 + 0.104*2.0*(xi3-4.67)/((xi3-4.67)**2 + 0.341)**2
         b3v = (-3.090 + 1.825*x3 + 1.206/((x3-4.62)**2 + 0.263)
-            - np.array([1.256,1.021,0.416,0.064,0.000]))
+               - np.array([1.256, 1.021, 0.416, 0.064, 0.000]))
         b3d = 1.825 - 1.206*2*(xi3-4.62)/((xi3-4.62)**2 + 0.263)**2
 
-        xn=np.concatenate((x1,x2,x3))
-        anv=np.concatenate((a1v,a2v,a3v))
-        bnv=np.concatenate((b1v,b2v,b3v))
+        xn = np.concatenate((x1, x2, x3))
+        anv = np.concatenate((a1v, a2v, a3v))
+        bnv = np.concatenate((b1v, b2v, b3v))
 
-        a_spl = interpolate.CubicSpline(xn,anv,bc_type=((1,a1d),(1,a3d)))
-        b_spl = interpolate.CubicSpline(xn,bnv,bc_type=((1,b1d),(1,b3d)))
+        a_spl = interpolate.CubicSpline(xn, anv,
+                                        bc_type=((1, a1d), (1, a3d)))
+        b_spl = interpolate.CubicSpline(xn, bnv,
+                                        bc_type=((1, b1d), (1, b3d)))
 
-        av=a_spl(x)
-        bv=b_spl(x)
+        av = a_spl(x)
+        bv = b_spl(x)
 
         # UV extinction curve in the paper repeats CCM. Forcing the
         # optical section to match smoothly with CCM introduces a
@@ -687,7 +692,8 @@ class M14(BaseExtRvModel):
 
         # Ultraviolet
         # y = x - 5.9
-        # fa = np.zeros(x.size) + (-0.04473*y**2 - 0.009779*y**3)*((x<8)&(x>5.9))
+        # fa = np.zeros(x.size)
+        #      + (-0.04473*y**2 - 0.009779*y**3)*((x<8)&(x>5.9))
         # fb = np.zeros(x.size) + ( 0.2130*y**2 + 0.1207*y**3)*((x<8)&(x>5.9))
 
         # au = 1.752 - 0.316*x - 0.104/((x-4.67)**2 + 0.341) + fa
@@ -705,8 +711,8 @@ class M14(BaseExtRvModel):
         #         + bu*((x>xi3)&(x<8.0)) + bf*(x>8.0))
 
         # Final result
-        a = ai*(x<xi1) + av*((x>xi1) & (x<xi3))
-        b = bi*(x<xi1) + bv*((x>xi1) & (x<xi3))
+        a = ai*(x < xi1) + av*((x > xi1) & (x < xi3))
+        b = bi*(x < xi1) + bv*((x > xi1) & (x < xi3))
 
         return a + b/Rv
 
