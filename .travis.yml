@@ -30,7 +30,6 @@ env:
         - PYTHON_VERSION=3.6
         - NUMPY_VERSION=stable
         - ASTROPY_VERSION=stable
-        - SCIPY_VERSION=stable
         - MAIN_CMD='python setup.py'
         - SETUP_CMD='test'
         - PIP_DEPENDENCIES=''
@@ -56,8 +55,6 @@ env:
     matrix:
         # Make sure that egg_info works without dependencies
         - PYTHON_VERSION=2.7 SETUP_CMD='egg_info'
-        - PYTHON_VERSION=3.3 SETUP_CMD='egg_info'
-        - PYTHON_VERSION=3.4 SETUP_CMD='egg_info'
         - PYTHON_VERSION=3.5 SETUP_CMD='egg_info'
         - PYTHON_VERSION=3.6 SETUP_CMD='egg_info'
 
@@ -98,13 +95,11 @@ matrix:
         # time.
 
         - os: linux
-          env: PYTHON_VERSION=2.7 NUMPY_VERSION=1.9
+          env: PYTHON_VERSION=2.7 NUMPY_VERSION=1.12
         - os: linux
-          env: PYTHON_VERSION=3.4 NUMPY_VERSION=1.10
+          env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.13
         - os: linux
-          env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.11
-        - os: linux
-          env: NUMPY_VERSION=1.12
+          env: NUMPY_VERSION=1.14
 
         # Try numpy pre-release
         - os: linux
