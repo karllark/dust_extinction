@@ -4,6 +4,9 @@
 Extinction versus Attenuation
 #############################
 
+.. note:: All extinction curves are attenuation curves, but not all attenuation
+          curves are extinction curves.
+
 Extinction
 ==========
 
@@ -81,7 +84,7 @@ geometry of the sources and dust in a system is more complex than a single star
 with a foreground screen of dust.  Examples of such systems include dusty
 galaxies (composed of many stars) and  stars with circumstellar dust.
 
-Attenuation includes two additional effects not include in extinction. These are
+Attenuation includes two additional effects not included in extinction. These are
 scattering of photons into the observation beam and sources extinguished by
 different columns of dust.  These two additional sources results in the ratio of
 dust attenuations at two different wavelengths *varying* with different
@@ -92,6 +95,3 @@ complex than for extinction.
 The separate package `dust_attenuation package
 <http://dust-attenuation.readthedocs.io/>`_ exists to provide attenuation
 models.
-
-Note: all extinction curves are attenuation curves, but not all attenuation
-curves are extinction curves.
