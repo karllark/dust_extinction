@@ -195,8 +195,8 @@ class FM90(Fittable1DModel):
         ext_model = FM90(C1=0.0, C2=0.0, C3=0.0)
         ax.plot(x,ext_model(x),label='FUV rise term')
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$E(\lambda - V)/E(B - V)$')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$E(\lambda - V)/E(B - V)$')
 
         ax.legend(loc='best')
         plt.show()
@@ -435,8 +435,8 @@ class P92(Fittable1DModel):
 
         ax.set_ylim(1e-3,10.)
 
-        ax.set_xlabel('$\lambda$ [$\mu$m]')
-        ax.set_ylabel('$A(x)/A(V)$')
+        ax.set_xlabel(r'$\lambda$ [$\mu$m]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
 
         ax.legend(loc='best')
         plt.show()

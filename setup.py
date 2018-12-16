@@ -1,15 +1,36 @@
 #!/usr/bin/env python
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
+# Note: This file needs to be Python 2 / <3.6 compatible, so that the nice
+# "This package only supports Python 3.x+" error prints without syntax errors etc.
 
 import glob
 import os
 import sys
+try:
+    from configparser import ConfigParser
+except ImportError:
+    from ConfigParser import ConfigParser
+
+# Get some values from the setup.cfg
+conf = ConfigParser()
+conf.read(['setup.cfg'])
+metadata = dict(conf.items('metadata'))
+
+PACKAGENAME = metadata.get('package_name', 'dust_extinction')
+DESCRIPTION = metadata.get('description', 'Interstellar Dust Extinction Models')
+AUTHOR = metadata.get('author', 'Karl Gordon and Kristen Larson')
+AUTHOR_EMAIL = metadata.get('author_email', '')
+LICENSE = metadata.get('license', 'unknown')
+URL = metadata.get('url', 'http://dust-extinction.readthedocs.io/')
+__minimum_python_version__ = metadata.get("minimum_python_version", "2.7")
 
 # Enforce Python version check - this is the same check as in __init__.py but
 # this one has to happen before importing ah_bootstrap.
-if sys.version_info < tuple((int(val) for val in "2.7".split('.'))):
-    sys.stderr.write("ERROR: dust_extinction requires Python {} or later\n".format(2.7))
+if sys.version_info < tuple((int(val) for val in __minimum_python_version__.split('.'))):
+    sys.stderr.write("ERROR: dust_extinction requires Python {} or later\n".format(__minimum_python_version__))
     sys.exit(1)
+
+# Import ah_bootstrap after the python version validation
 
 import ah_bootstrap
 from setuptools import setup
@@ -26,22 +47,6 @@ from astropy_helpers.setup_helpers import (register_commands, get_debug_option,
 from astropy_helpers.git_helpers import get_git_devstr
 from astropy_helpers.version_helpers import generate_version_py
 
-# Get some values from the setup.cfg
-try:
-    from ConfigParser import ConfigParser
-except ImportError:
-    from configparser import ConfigParser
-
-conf = ConfigParser()
-conf.read(['setup.cfg'])
-metadata = dict(conf.items('metadata'))
-
-PACKAGENAME = metadata.get('package_name', 'dust_extinction')
-DESCRIPTION = metadata.get('description', 'Interstellar Dust Extinction Models')
-AUTHOR = metadata.get('author', 'Karl Gordon')
-AUTHOR_EMAIL = metadata.get('author_email', '')
-LICENSE = metadata.get('license', 'unknown')
-URL = metadata.get('url', 'http://dust-extinction.readthedocs.io/')
 
 # order of priority for long_description:
 #   (1) set in setup.cfg,
@@ -72,7 +77,7 @@ else:
 builtins._ASTROPY_PACKAGE_NAME_ = PACKAGENAME
 
 # VERSION should be PEP440 compatible (http://www.python.org/dev/peps/pep-0440)
-VERSION = metadata.get('version', '0.0.dev0')
+VERSION = metadata.get('version', '0.0.dev')
 
 # Indicates if this version is a release version
 RELEASE = 'dev' not in VERSION
@@ -142,6 +147,6 @@ setup(name=PACKAGENAME,
       zip_safe=False,
       use_2to3=False,
       entry_points=entry_points,
-      python_requires='>={}'.format("2.7"),
+      python_requires='>={}'.format(__minimum_python_version__),
       **package_info
 )
