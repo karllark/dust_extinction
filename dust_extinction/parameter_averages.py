@@ -551,7 +551,7 @@ class M14(BaseExtRvModel):
     -----
     M14 R5485-dependent model
 
-    From Ma\’{\i}z Apell\’aniz et al. (2014, A&A, 564, 63),
+    From Maiz Apellaniz et al. (2014, A&A, 564, 63),
     following structure of IDL code provided in paper appendix
 
     The published UV extinction curve is identical to Clayton, Cardelli,
