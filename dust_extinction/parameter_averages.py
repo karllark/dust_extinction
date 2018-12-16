@@ -61,8 +61,8 @@ class CCM89(BaseExtRvModel):
            ext_model = CCM89(Rv=cur_Rv)
            ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$A(x)/A(V)$')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
 
         ax.legend(loc='best')
         plt.show()
@@ -192,8 +192,8 @@ class O94(BaseExtRvModel):
            ext_model = O94(Rv=cur_Rv)
            ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$A(x)/A(V)$')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
 
         ax.legend(loc='best')
         plt.show()
@@ -326,8 +326,8 @@ class F99(BaseExtRvModel):
            ext_model = F99(Rv=cur_Rv)
            ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$A(x)/A(V)$')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
 
         ax.legend(loc='best')
         plt.show()
@@ -454,8 +454,8 @@ class F04(BaseExtRvModel):
            ext_model = F04(Rv=cur_Rv)
            ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$A(x)/A(V)$')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
 
         ax.legend(loc='best')
         plt.show()
@@ -591,8 +591,8 @@ class M14(BaseExtRvModel):
            ext_model = M14(Rv=cur_Rv)
            ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$A(x)/A(V)$')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
 
         ax.legend(loc='best')
         plt.show()
@@ -771,8 +771,8 @@ class G16(BaseExtRvAfAModel):
            ext_model = G16(RvA=cur_Rv, fA=1.0)
            ax.plot(x,ext_model(x),label=r'$R_A(V) = ' + str(cur_Rv) + '$')
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$A(x)/A(V)$')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
 
         ax.legend(loc='best', title=r'$f_A = 1.0$')
         plt.show()
@@ -800,8 +800,8 @@ class G16(BaseExtRvAfAModel):
            ext_model = G16(RvA=3.1, fA=cur_fA)
            ax.plot(x,ext_model(x),label=r'$f_A = ' + str(cur_fA) + '$')
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$A(x)/A(V)$')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
 
         ax.legend(loc='best', title=r'$R_A(V) = 3.1$')
         plt.show()

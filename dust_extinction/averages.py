@@ -56,8 +56,8 @@ class G03_SMCBar(BaseExtAveModel):
         ax.plot(ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
                 label='obsdata')
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$A(x)/A(V)$')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
 
         ax.legend(loc='best')
         plt.show()
@@ -171,8 +171,8 @@ class G03_LMCAvg(BaseExtAveModel):
         ax.plot(ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
                 label='obsdata')
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$A(x)/A(V)$')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
 
         ax.legend(loc='best')
         plt.show()
@@ -287,8 +287,8 @@ class G03_LMC2(BaseExtAveModel):
         ax.plot(ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
                 label='obsdata')
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$A(x)/A(V)$')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(t'$A(x)/A(V)$')
 
         ax.legend(loc='best')
         plt.show()
@@ -410,8 +410,8 @@ class GCC09_MWAvg(BaseExtAveModel):
                     yerr=ext_model.obsdata_axav_unc_bands,
                     fmt='g^', label='obsdata (Opt/NIR)')
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$A(x)/A(V)$')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
 
         ax.legend(loc='best')
         plt.show()
