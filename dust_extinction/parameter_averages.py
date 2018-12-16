@@ -558,7 +558,7 @@ class M14(BaseExtRvModel):
     and Mathis (1989, CCM). Forcing the optical section to match
     smoothly with CCM introduces a non-physical feature at high
     values of R5495 around 3.9 inverse microns; see section 5 in
-    Ma\’{\i}z Apell\’aniz et al. (2014) for more discussion.  For
+    Maiz Apellaniz et al. (2014) for more discussion.  For
     that reason, we provide the M14 model only through 3.3 inverse
     microns, the limit of the optical in CCM.
 
