@@ -27,19 +27,22 @@ env:
         # The following versions are the 'default' for tests, unless
         # overridden underneath. They are defined here in order to save having
         # to repeat them for all configurations.
-        - PYTHON_VERSION=3.6
+        - PYTHON_VERSION=3.7
         - NUMPY_VERSION=stable
         - ASTROPY_VERSION=stable
         - MAIN_CMD='python setup.py'
         - SETUP_CMD='test'
-        - PIP_DEPENDENCIES=''
         - EVENT_TYPE='pull_request push'
 
-        # For this package-template, we include examples of Cython modules,
-        # so Cython is required for testing. If your package does not include
-        # Cython code, you can set CONDA_DEPENDENCIES=''
-        - CONDA_DEPENDENCIES='Cython scipy'
-        #- CONDA_ALL_DEPENDENCIES='Cython scipy'
+
+        # List runtime dependencies for the package that are available as conda
+        # packages here.
+        - CONDA_DEPENDENCIES='scipy'
+        - CONDA_DEPENDENCIES_DOC='sphinx-astropy scipy'
+
+        # List other runtime dependencies for the package that are available as
+        # pip packages here.
+        - PIP_DEPENDENCIES=''
 
         # Conda packages for affiliated packages are hosted in channel
         # "astropy" while builds for astropy LTS with recent numpy versions
@@ -52,11 +55,18 @@ env:
         # line to use the X virtual framebuffer.
         # - SETUP_XVFB=True
 
+        # If you want to ignore certain flake8 errors, you can list them
+        # in FLAKE8_OPT, for example:
+        # - FLAKE8_OPT='--ignore=E501'
+        - FLAKE8_OPT=''
+
     matrix:
         # Make sure that egg_info works without dependencies
         - PYTHON_VERSION=2.7 SETUP_CMD='egg_info'
         - PYTHON_VERSION=3.5 SETUP_CMD='egg_info'
         - PYTHON_VERSION=3.6 SETUP_CMD='egg_info'
+        - PYTHON_VERSION=3.7 SETUP_CMD='egg_info'
+
 
 matrix:
 
@@ -76,18 +86,16 @@ matrix:
         # may run for a long time
         - os: linux
           env: SETUP_CMD='build_docs -w'
+               CONDA_DEPENDENCIES=$CONDA_DEPENDENCIES_DOC
 
-        # Now try Astropy dev and LTS vesions with the latest 3.x.
-        #- os: linux
-        #  env: PYTHON_VERSION=2.7 ASTROPY_VERSION=development
-        #       EVENT_TYPE='pull_request push cron'
+        # Now try Astropy dev with the latest Python and LTS with Python 2.7 and 3.x.
         - os: linux
           env: ASTROPY_VERSION=development
                EVENT_TYPE='pull_request push cron'
-        #- os: linux
-        #  env: PYTHON_VERSION=2.7 ASTROPY_VERSION=lts
-        #- os: linux
-        #  env: ASTROPY_VERSION=lts
+        - os: linux
+          env: PYTHON_VERSION=2.7 ASTROPY_VERSION=lts
+        - os: linux
+          env: ASTROPY_VERSION=lts
 
         # Try all python versions and Numpy versions. Since we can assume that
         # the Numpy developers have taken care of testing Numpy with different
@@ -95,9 +103,9 @@ matrix:
         # time.
 
         - os: linux
-          env: PYTHON_VERSION=2.7 NUMPY_VERSION=1.12
+          env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.12
         - os: linux
-          env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.13
+          env: PYTHON_VERSION=3.6 NUMPY_VERSION=1.13
         - os: linux
           env: NUMPY_VERSION=1.14
 
@@ -106,23 +114,15 @@ matrix:
           env: NUMPY_VERSION=prerelease
                EVENT_TYPE='pull_request push cron'
 
-        # Do a PEP8 test with pycodestyle
+        # Do a PEP8 test with flake8
         - os: linux
-          env: MAIN_CMD='pycodestyle dust_extinction --count' SETUP_CMD=''
+          env: MAIN_CMD='flake8 dust_extinction --count --show-source --statistics $FLAKE8_OPT' SETUP_CMD=''
 
     allow_failures:
-        - os: linux
-          env: ASTROPY_VERSION=development
-               EVENT_TYPE='pull_request push cron'
-
-        - os: linux
-          env: NUMPY_VERSION=prerelease
-               EVENT_TYPE='pull_request push cron'
-
-        # Do a PEP8 test with pycodestyle
+        # Do a PEP8 test with flake8
         # (allow to fail unless your code completely compliant)
         - os: linux
-          env: MAIN_CMD='pycodestyle dust_extinction --count' SETUP_CMD=''
+          env: MAIN_CMD='flake8 dust_extinction --count --show-source --statistics $FLAKE8_OPT' SETUP_CMD=''
 
 install:
 
@@ -137,8 +137,8 @@ install:
     # in how to install a package, in which case you can have additional
     # commands in the install: section below.
 
-    - git clone git://github.com/astropy/ci-helpers.git
-    - source ci-helpers/travis/setup_conda_$TRAVIS_OS_NAME.sh
+    - git clone --depth 1 git://github.com/astropy/ci-helpers.git
+    - source ci-helpers/travis/setup_conda.sh
 
     # As described above, using ci-helpers, you should be able to set up an
     # environment with dependencies installed using conda and pip, but in some
@@ -153,7 +153,6 @@ script:
    - $MAIN_CMD $SETUP_CMD
 
 after_success:
-    # If coveralls.io is set up for this package, uncomment the line
-    # below and replace "packagename" with the name of your package.
+    # If coveralls.io is set up for this package, uncomment the line below.
     # The coveragerc file may be customized as needed for your package.
-   - if [[ $SETUP_CMD == *coverage* ]]; then coveralls --rcfile='dust_extinction/tests/coveragerc'; fi
+    - if [[ $SETUP_CMD == *coverage* ]]; then coveralls --rcfile='dust_extinction/tests/coveragerc'; fi
