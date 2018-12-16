@@ -7,8 +7,8 @@ class AxAvToExv(Fittable1DModel):
     """
     Model to convert from A(x)/A(V) to E(x-V)
 
-    Paramters
-    ---------
+    Parameters
+    ----------
     Av : float
       dust column in A(V) [mag]
     """
@@ -23,8 +23,8 @@ class AxAvToExv(Fittable1DModel):
         """
         AlAvToElv function
 
-        Paramters
-        ---------
+        Parameters
+        ----------
         axav : np array (float)
            E(x-V)/E(B-V) values
 

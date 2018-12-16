@@ -288,7 +288,7 @@ class G03_LMC2(BaseExtAveModel):
                 label='obsdata')
 
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel(t'$A(x)/A(V)$')
+        ax.set_ylabel(r'$A(x)/A(V)$')
 
         ax.legend(loc='best')
         plt.show()
