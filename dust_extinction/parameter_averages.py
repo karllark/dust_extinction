@@ -711,8 +711,8 @@ class M14(BaseExtRvModel):
         #         + bu*((x>xi3)&(x<8.0)) + bf*(x>8.0))
 
         # Final result
-        a = ai*(x < xi1) + av*((x > xi1) & (x < xi3))
-        b = bi*(x < xi1) + bv*((x > xi1) & (x < xi3))
+        a = ai*(x < xi1) + av*((x >= xi1) & (x < xi3))
+        b = bi*(x < xi1) + bv*((x >= xi1) & (x < xi3))
 
         return a + b/Rv
 
