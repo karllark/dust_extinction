@@ -1,16 +1,19 @@
 from __future__ import (absolute_import, print_function, division)
 
+import pkg_resources
+
 import numpy as np
 from scipy import interpolate
 
 import astropy.units as u
+from astropy.table import Table
 
 from .baseclasses import (BaseExtRvModel, BaseExtRvAfAModel)
 from .helpers import _test_valid_x_range
 from .averages import G03_SMCBar
 from .shapes import _curve_F99_method
 
-__all__ = ['CCM89', 'O94', 'F99', 'F04', 'M14', 'G16']
+__all__ = ['CCM89', 'O94', 'F99', 'F04', 'M14', 'G16', 'F19']
 
 x_range_CCM89 = [0.3, 10.0]
 x_range_O94 = x_range_CCM89
@@ -18,6 +21,7 @@ x_range_F99 = [0.3, 10.0]
 x_range_F04 = [0.3, 10.0]
 x_range_M14 = [0.3, 3.3]
 x_range_G16 = [0.3, 10.0]
+x_range_F19 = [0.3, 8.7]
 
 
 class CCM89(BaseExtRvModel):
@@ -401,7 +405,7 @@ class F99(BaseExtRvModel):
 
 class F04(BaseExtRvModel):
     """
-    F99 extinction model calculation
+    F04 extinction model calculation
 
     Updated with the NIR Rv dependence in
        Fitzpatrick (2004, ASP Conf. Ser. 309, Astrophysics of Dust, 33)
@@ -862,3 +866,131 @@ class G16(BaseExtRvAfAModel):
 
         # return A(x)/A(V)
         return alav
+
+
+class F19(BaseExtRvModel):
+    """
+    F19 extinction model calculation
+
+    Fitzpatrick, Massa, Gordon et al. (2019, in prep) model.
+    Based on a sample of stars observed spectroscopically in the
+    optical with HST/STIS.
+
+    Parameters
+    ----------
+    Rv: float
+        R(V) = A(V)/E(B-V) = total-to-selective extinction
+
+    Raises
+    ------
+    InputParameterError
+       Input Rv values outside of defined range
+
+    Notes
+    -----
+    F19 Milky Way R(V) dependent extinction model
+
+    Example showing F19 curves for a range of R(V) values.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.parameter_averages import F19
+
+        fig, ax = plt.subplots()
+
+        # temp model to get the correct x range
+        text_model = F19()
+
+        # generate the curves and plot them
+        x = np.arange(text_model.x_range[0],
+                      text_model.x_range[1],0.1)/u.micron
+
+        Rvs = ['2.0','3.0','4.0','5.0','6.0']
+        for cur_Rv in Rvs:
+           ext_model = F19(Rv=cur_Rv)
+           ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+    Rv_range = [2.0, 6.0]
+    x_range = x_range_F19
+
+    def evaluate(self, in_x, Rv):
+        """
+        F19 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        # ensure Rv is a single element, not numpy array
+        Rv = Rv[0]
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename('dust_extinction',
+                                                    'data/')
+        a = Table.read(data_path+'F19_tabulated.dat')
+
+        # compute E(lambda-55)/E(B-55)
+
+        # constant terms
+        C3 = 2.991
+        C4 = 0.319
+        xo = 4.592
+        gamma = 0.922
+
+        # original F99 Rv dependence
+        C2 = -0.824 + 4.717/Rv
+        # updated F04 C1-C2 correlation
+        C1 = 2.18 - 2.91*C2
+
+        # spline points
+        opt_axav_x = 10000./np.array([6000.0, 5470.0,
+                                      4670.0, 4110.0])
+        # **Use NIR spline x values in FM07, clipped to K band for now
+        nir_axav_x = np.array([0.50, 0.75, 1.0])
+        optnir_axav_x = np.concatenate([nir_axav_x, opt_axav_x])
+
+        # **Keep optical spline points from F99:
+        #    Final optical spline point has a leading "-1.208" in Table 4
+        #    of F99, but that does not reproduce Table 3.
+        #    Additional indication that this is not correct is from
+        #    fm_unred.pro
+        #    which is based on FMRCURVE.pro distributed by Fitzpatrick.
+        #    --> confirmation needed?
+        opt_axebv_y = np.array([-0.426 + 1.0044*Rv,
+                                -0.050 + 1.0016*Rv,
+                                0.701 + 1.0016*Rv,
+                                1.208 + 1.0032*Rv - 0.00033*(Rv**2)])
+        # updated NIR curve from F04, note R dependence
+        nir_axebv_y = (0.63*Rv - 0.84)*nir_axav_x**1.84
+
+        optnir_axebv_y = np.concatenate([nir_axebv_y, opt_axebv_y])
+
+        # return A(x)/A(V)
+        return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
+                                 optnir_axav_x, optnir_axebv_y/Rv,
+                                 self.x_range, 'F04')
