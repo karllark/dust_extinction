@@ -13,12 +13,13 @@ from .helpers import _test_valid_x_range
 from .averages import G03_SMCBar
 from .shapes import _curve_F99_method
 
-__all__ = ['CCM89', 'O94', 'F99', 'F04', 'M14', 'G16', 'F19']
+__all__ = ['CCM89', 'O94', 'F99', 'F04', 'V04', 'M14', 'G16', 'F19']
 
 x_range_CCM89 = [0.3, 10.0]
 x_range_O94 = x_range_CCM89
 x_range_F99 = [0.3, 10.0]
 x_range_F04 = [0.3, 10.0]
+x_range_V04 = [3.3, 8.0]
 x_range_M14 = [0.3, 3.3]
 x_range_G16 = [0.3, 10.0]
 x_range_F19 = [0.3, 8.7]
@@ -530,6 +531,116 @@ class F04(BaseExtRvModel):
         return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
                                  optnir_axav_x, optnir_axebv_y/Rv,
                                  self.x_range, 'F04')
+
+
+class V04(BaseExtRvModel):
+    """
+    V04 extinction model calculation
+
+    Parameters
+    ----------
+    Rv: float
+        R(V) = A(V)/E(B-V) = total-to-selective extinction
+
+    Raises
+    ------
+    InputParameterError
+       Input Rv values outside of defined range
+
+    Notes
+    -----
+    V04 Milky Way R(V) dependent extinction model
+
+    From Valencic, Clayton, & Gordon (2004, ApJ, 616, 912)
+
+    Example showing V04 curves for a range of R(V) values.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.parameter_averages import V04
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        x = np.arange(3.3,8.0, 0.1)/u.micron
+
+        Rvs = ['2.0','3.0','4.0','5.0','6.0']
+        for cur_Rv in Rvs:
+           ext_model = V04(Rv=cur_Rv)
+           ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+    Rv_range = [2.0, 6.0]
+    x_range = x_range_V04
+
+    @staticmethod
+    def evaluate(in_x, Rv):
+        """
+        V04 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        # convert to wavenumbers (1/micron) if x input in units
+        # otherwise, assume x in appropriate wavenumber units
+        with u.add_enabled_equivalencies(u.spectral()):
+            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
+
+        # strip the quantity to avoid needing to add units to all the
+        #    polynomical coefficients
+        x = x_quant.value
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, x_range_V04, 'V04')
+
+        # setup the a & b coefficient vectors
+        n_x = len(x)
+        a = np.zeros(n_x)
+        b = np.zeros(n_x)
+
+        # define the ranges
+        nuv_indxs = np.where(np.logical_and(3.3 <= x, x <= 8.0))
+        fnuv_indxs = np.where(np.logical_and(5.9 <= x, x <= 8))
+
+        # NUV
+        a[nuv_indxs] = (1.808 - .215*x[nuv_indxs]
+                        - 0.134/((x[nuv_indxs] - 4.558)**2 + .566))
+        b[nuv_indxs] = (-2.350
+                        + 1.403*x[nuv_indxs]
+                        + 1.103/((x[nuv_indxs] - 4.587)**2 + .263))
+
+        # far-NUV
+        y = x[fnuv_indxs] - 5.9
+        a[fnuv_indxs] += -.0077*(y**2) - .0003*(y**3)
+        b[fnuv_indxs] += .2060*(y**2) + .0550*(y**3)
+
+        # return A(x)/A(V)
+        return a + b/Rv
 
 
 class M14(BaseExtRvModel):
