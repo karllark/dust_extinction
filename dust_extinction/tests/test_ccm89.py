@@ -34,7 +34,7 @@ def test_invalid_micron(x_invalid_micron):
 
 @pytest.mark.parametrize("x_invalid_angstrom",
                          u.angstrom*1e4/[-1.0, 0.2, 10.1, 100.])
-def test_invalid_micron(x_invalid_angstrom):
+def test_invalid_angstrom(x_invalid_angstrom):
     _invalid_x_range(x_invalid_angstrom, CCM89(Rv=3.1), 'CCM89')
 
 

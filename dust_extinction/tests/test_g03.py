@@ -31,7 +31,7 @@ def test_invalid_micron(x_invalid_micron, tmodel):
 
 @pytest.mark.parametrize("x_invalid_angstrom", u.angstrom*1e4/x_bad)
 @pytest.mark.parametrize("tmodel", models)
-def test_invalid_micron(x_invalid_angstrom, tmodel):
+def test_invalid_anstrom(x_invalid_angstrom, tmodel):
     _invalid_x_range(x_invalid_angstrom, tmodel, 'G03')
 
 
