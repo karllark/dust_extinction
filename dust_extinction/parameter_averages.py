@@ -3,10 +3,8 @@ from __future__ import (absolute_import, print_function, division)
 import numpy as np
 from scipy import interpolate
 
-import astropy.units as u
-
 from .baseclasses import (BaseExtRvModel, BaseExtRvAfAModel)
-from .helpers import _test_valid_x_range
+from .helpers import (_get_x_in_wavenumbers, _test_valid_x_range)
 from .averages import G03_SMCBar
 from .shapes import _curve_F99_method
 
@@ -93,14 +91,7 @@ class CCM89(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-        # convert to wavenumbers (1/micron) if x input in units
-        # otherwise, assume x in appropriate wavenumber units
-        with u.add_enabled_equivalencies(u.spectral()):
-            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
-
-        # strip the quantity to avoid needing to add units to all the
-        #    polynomical coefficients
-        x = x_quant.value
+        x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_CCM89, 'CCM89')
@@ -224,14 +215,7 @@ class O94(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-        # convert to wavenumbers (1/micron) if x input in units
-        # otherwise, assume x in appropriate wavenumber units
-        with u.add_enabled_equivalencies(u.spectral()):
-            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
-
-        # strip the quantity to avoid needing to add units to all the
-        #    polynomical coefficients
-        x = x_quant.value
+        x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_O94, 'O94')
@@ -622,14 +606,7 @@ class M14(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-        # convert to wavenumbers (1/micron) if x input in units
-        # otherwise, assume x in appropriate wavenumber units
-        with u.add_enabled_equivalencies(u.spectral()):
-            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
-
-        # strip the quantity to avoid needing to add units to all the
-        #    polynomical coefficients
-        x = x_quant.value
+        x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_M14, 'M14')
@@ -834,14 +811,7 @@ class G16(BaseExtRvAfAModel):
         ValueError
            Input x values outside of defined range
         """
-        # convert to wavenumbers (1/micron) if x input in units
-        # otherwise, assume x in appropriate wavenumber units
-        with u.add_enabled_equivalencies(u.spectral()):
-            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
-
-        # strip the quantity to avoid needing to add units to all the
-        #    polynomical coefficients
-        x = x_quant.value
+        x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_G16, 'G16')
