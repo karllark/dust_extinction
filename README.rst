@@ -27,7 +27,7 @@ Astronomical dust extinction
 This package provides astronomical interstellar dust extinction curves
 implemented using the astropy.modeling framework.
 
-This package is potentially an affiliated package of `AstroPy`_.
+This package is an `affiliated package <https://www.astropy.org/affiliated/>`_ of `AstroPy`_.
 
 Documentation
 -------------
