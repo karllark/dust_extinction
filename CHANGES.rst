@@ -1,4 +1,4 @@
-0.7 (unreleased)
+0.7 (2019-02-11)
 ================
 
 - GCC09_MWAvg, O94, F04, M14 models added
