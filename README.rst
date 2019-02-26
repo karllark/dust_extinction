@@ -10,7 +10,11 @@ Astronomical dust extinction
 
 .. image:: https://travis-ci.org/karllark/dust_extinction.svg?branch=master
    :target: https://travis-ci.org/karllark/dust_extinction
-   :alt: CI Testing Status
+   :alt: Travis Testing Status
+
+.. image:: https://ci.appveyor.com/api/projects/status/6h1qfj4xwxutoari/branch/master?svg=true
+   :target: https://ci.appveyor.com/project/KarlGordon/dust-extinction/branch/master
+   :alt: Apveyor Testing Status
 
 .. image:: https://coveralls.io/repos/github/karllark/dust_extinction/badge.svg?branch=master
    :target: https://coveralls.io/github/karllark/dust_extinction?branch=master
