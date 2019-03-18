@@ -91,6 +91,10 @@ class CCM89(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
+        
+        # converts all input to array 
+        in_x = np.atleast_1d(in_x)
+
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
@@ -215,6 +219,10 @@ class O94(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
+
+        # converts all input to array 
+        in_x = np.atleast_1d(in_x)
+
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
@@ -606,6 +614,10 @@ class M14(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
+
+        # converts all input to array 
+        in_x = np.atleast_1d(in_x)
+
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
@@ -811,6 +823,10 @@ class G16(BaseExtRvAfAModel):
         ValueError
            Input x values outside of defined range
         """
+        
+        # converts all input to array 
+        in_x = np.atleast_1d(in_x)
+
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
