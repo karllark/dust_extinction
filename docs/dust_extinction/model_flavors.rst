@@ -30,18 +30,17 @@ Average models
    fig, ax = plt.subplots()
 
    # generate the curves and plot them
-   x = np.arange(0.3,10.0,0.1)/u.micron
-   ext_model = GCC09_MWAvg()
-   ax.plot(x,ext_model(x),label='GCC09 MWAvg')
+   x = np.arange(0.3,11.0,0.1)/u.micron
 
-   ext_model = G03_SMCBar()
-   ax.plot(x,ext_model(x),label='G03 SMCBar')
+   models = [GCC09_MWAvg, G03_SMCBar, G03_LMCAvg, G03_LMC2]
 
-   ext_model = G03_LMCAvg()
-   ax.plot(x,ext_model(x),label='G03 LMCAvg')
-
-   ext_model = G03_LMC2()
-   ax.plot(x,ext_model(x),label='G03 LMC2')
+   for cmodel in models:
+      ext_model = cmodel()
+      indxs, = np.where(np.logical_and(
+         x.value >= ext_model.x_range[0],
+         x.value <= ext_model.x_range[1]))
+      yvals = ext_model(x[indxs])
+      ax.plot(x[indxs], yvals, label=ext_model.__class__.__name__)
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
@@ -78,16 +77,16 @@ R(V) (+ other variables) dependent prediction models
    import astropy.units as u
 
    from dust_extinction.parameter_averages import (CCM89, O94, F99, F04,
-                                                   GCC09, M14)
+                                                   VCG04, GCC09, M14)
 
    fig, ax = plt.subplots()
 
    # generate the curves and plot them
-   x = np.arange(0.5,10.0,0.1)/u.micron
+   x = np.arange(0.5,11.0,0.1)/u.micron
 
    Rv = 3.1
 
-   models = [CCM89, O94, F99, F04, GCC09, M14]
+   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14]
 
    for cmodel in models:
       ext_model = cmodel(Rv=Rv)
@@ -113,16 +112,16 @@ R(V) (+ other variables) dependent prediction models
    import astropy.units as u
 
    from dust_extinction.parameter_averages import (CCM89, O94, F99, F04,
-                                                   GCC09, M14)
+                                                   VCG04, GCC09, M14)
 
    fig, ax = plt.subplots()
 
    # generate the curves and plot them
-   x = np.arange(0.5,10.0,0.1)/u.micron
+   x = np.arange(0.5,11.0,0.1)/u.micron
 
    Rv = 2.0
 
-   models = [CCM89, O94, F99, F04, GCC09, M14]
+   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14]
 
    for cmodel in models:
       ext_model = cmodel(Rv=Rv)
@@ -149,16 +148,16 @@ R(V) (+ other variables) dependent prediction models
    import astropy.units as u
 
    from dust_extinction.parameter_averages import (CCM89, O94, F99, F04,
-                                                   GCC09, M14)
+                                                   VCG04, GCC09, M14)
 
    fig, ax = plt.subplots()
 
    # generate the curves and plot them
-   x = np.arange(0.5,10.0,0.1)/u.micron
+   x = np.arange(0.5,11.0,0.1)/u.micron
 
    Rv = 5.5
 
-   models = [CCM89, O94, F99, F04, GCC09, M14]
+   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14]
 
    for cmodel in models:
       ext_model = cmodel(Rv=Rv)
@@ -258,7 +257,7 @@ Shape fitting models
    fig, ax = plt.subplots()
 
    # generate the curves and plot them
-   x = np.arange(3.8,8.6,0.1)/u.micron
+   x = np.arange(3.8,11.0,0.1)/u.micron
 
    ext_model = FM90()
    ax.plot(x,ext_model(x),label='total')

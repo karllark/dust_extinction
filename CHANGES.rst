@@ -1,7 +1,7 @@
 0.8 (unreleased)
 ----------------
 
-- No changes yet
+- VCG04, GCC09 models added
 
 0.7 (2019-02-11)
 ================
