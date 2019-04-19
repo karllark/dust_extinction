@@ -9,13 +9,15 @@ from .averages import G03_SMCBar
 from .shapes import _curve_F99_method
 
 __all__ = ['CCM89',
-           'O94', 'F99', 'F04', 'GCC09',
+           'O94', 'F99',
+           'F04', 'VCG04', 'GCC09',
            'M14', 'G16']
 
 x_range_CCM89 = [0.3, 10.0]
 x_range_O94 = x_range_CCM89
 x_range_F99 = [0.3, 10.0]
 x_range_F04 = [0.3, 10.0]
+x_range_VCG04 = [3.3, 8.0]
 x_range_GCC09 = [3.3, 11.0]
 x_range_M14 = [0.3, 3.3]
 x_range_G16 = [0.3, 10.0]
@@ -515,6 +517,113 @@ class F04(BaseExtRvModel):
                                  self.x_range, 'F04')
 
 
+class VCG04(BaseExtRvModel):
+    """
+    VCG04 extinction model calculation
+
+    Parameters
+    ----------
+    Rv: float
+        R(V) = A(V)/E(B-V) = total-to-selective extinction
+
+    Raises
+    ------
+    InputParameterError
+       Input Rv values outside of defined range
+
+    Notes
+    -----
+    VCG04 Milky Way R(V) dependent extinction model
+    From Valencic, Clayton, & Gordon (2004, ApJ, 616, 912)
+    Including erratum: 2014, ApJ, 793, 66
+
+    This model applies to the UV spectral region all the way to 912 A.
+    This model was not derived for the optical or NIR.
+
+    Example showing V04 curves for a range of R(V) values.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.parameter_averages import VCG04
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        x = np.arange(3.3,8.0, 0.1)/u.micron
+
+        Rvs = ['2.0','3.0','4.0','5.0','6.0']
+        for cur_Rv in Rvs:
+           ext_model = VCG04(Rv=cur_Rv)
+           ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+    Rv_range = [2.0, 6.0]
+    x_range = x_range_VCG04
+
+    @staticmethod
+    def evaluate(in_x, Rv):
+        """
+        VCG04 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        # convert to wavenumbers (1/micron) if x input in units
+        # otherwise, assume x in appropriate wavenumber units
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, x_range_VCG04, 'VCG04')
+
+        # setup the a & b coefficient vectors
+        n_x = len(x)
+        a = np.zeros(n_x)
+        b = np.zeros(n_x)
+
+        # define the ranges
+        nuv_indxs = np.where(np.logical_and(3.3 <= x, x <= 8.0))
+        fnuv_indxs = np.where(np.logical_and(5.9 <= x, x <= 8))
+
+        # NUV
+        a[nuv_indxs] = (1.808 - .215*x[nuv_indxs]
+                        - 0.134/((x[nuv_indxs] - 4.558)**2 + .566))
+        b[nuv_indxs] = (-2.350
+                        + 1.403*x[nuv_indxs]
+                        + 1.103/((x[nuv_indxs] - 4.587)**2 + .263))
+
+        # far-NUV
+        y = x[fnuv_indxs] - 5.9
+        a[fnuv_indxs] += -.0077*(y**2) - .0030*(y**3)
+        b[fnuv_indxs] += .2060*(y**2) + .0550*(y**3)
+
+        # return A(x)/A(V)
+        return a + b/Rv
+
+
 class GCC09(BaseExtRvModel):
     """
     GCC09 extinction model calculation
@@ -595,9 +704,6 @@ class GCC09(BaseExtRvModel):
         # convert to wavenumbers (1/micron) if x input in units
         # otherwise, assume x in appropriate wavenumber units
         x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_GCC09, 'GCC09')
 
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_GCC09, 'GCC09')
