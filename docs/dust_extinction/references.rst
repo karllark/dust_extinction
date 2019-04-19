@@ -35,6 +35,9 @@ GCC09: `Gordon, Cartledge, & Clayton 2009, ApJ, 705, 1320
 G16: `Gordon et al. 2016, 826, 104
 <http://adsabs.harvard.edu/abs/2016ApJ...826..104G>`_
 
+VCG04: `Valencic, Clayton, & Gordon 2014, 616, 912
+<http://adsabs.harvard.edu/abs/2004ApJ...616..912V>`_
+
 Naming Convention
 =================
 

@@ -40,6 +40,7 @@ def get_axav_cor_vals(Rv):
     x = x/u.micron
 
     # correct values
+    # from IDL version
     if Rv == 3.1:
         cor_vals = np.array([5.23161, 4.20810, 3.45123, 2.92264, 2.61283,
                              2.85130, 3.19451, 2.34301, 1.89256])
