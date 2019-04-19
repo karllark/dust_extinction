@@ -60,7 +60,6 @@ class G03_SMCBar(BaseExtAveModel):
         ax.legend(loc='best')
         plt.show()
     """
-
     x_range = x_range_G03
 
     Rv = 2.74

@@ -72,3 +72,5 @@ def test_extinction_F99_single_values(test_vals):
 
     # test
     np.testing.assert_allclose(tmodel(x), cor_val, rtol=tolerance)
+    np.testing.assert_allclose(tmodel.evaluate(x, 3.1), cor_val,
+                               rtol=tolerance)

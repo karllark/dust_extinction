@@ -23,6 +23,9 @@ def _get_x_in_wavenumbers(in_x):
     x : floats
         input x values in wavenumbers w/o units
     """
+    # handles the case where x is a scaler
+    in_x = np.atleast_1d(in_x)
+
     # check if in_x is an astropy quantity, if not issue a warning
     if not isinstance(in_x, u.Quantity):
         warnings.warn("x has no units, assuming x units are inverse microns")

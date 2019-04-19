@@ -57,6 +57,25 @@ def test_extinction_FM90_values():
     np.testing.assert_allclose(tmodel(x), cor_vals)
 
 
+x_vals, axav_vals = get_elvebv_cor_vals()
+test_vals = zip(x_vals, axav_vals)
+
+
+@pytest.mark.parametrize("xtest_vals", test_vals)
+def test_extinction_FM90_single_values(xtest_vals):
+    x, cor_val = xtest_vals
+
+    # initialize extinction model
+    tmodel = FM90()
+
+    # test
+    np.testing.assert_allclose(tmodel(x), cor_val)
+    np.testing.assert_allclose(
+        tmodel.evaluate(x, FM90.C1.default, FM90.C2.default, FM90.C3.default,
+                        FM90.C4.default, FM90.xo.default, FM90.gamma.default),
+        cor_val)
+
+
 def test_FM90_fitting():
 
     # get an observed extinction curve to fit

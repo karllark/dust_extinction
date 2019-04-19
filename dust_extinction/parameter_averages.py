@@ -96,10 +96,6 @@ class CCM89(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-        
-        # converts all input to array 
-        in_x = np.atleast_1d(in_x)
-
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
@@ -224,10 +220,6 @@ class O94(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-
-        # converts all input to array 
-        in_x = np.atleast_1d(in_x)
-
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
@@ -354,6 +346,9 @@ class F99(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
+        # just in case someone calls evaluate explicitly
+        Rv = np.atleast_1d(Rv)
+
         # ensure Rv is a single element, not numpy array
         Rv = Rv[0]
 
@@ -482,6 +477,9 @@ class F04(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
+        # just in case someone calls evaluate explicitly
+        Rv = np.atleast_1d(Rv)
+
         # ensure Rv is a single element, not numpy array
         Rv = Rv[0]
 
@@ -835,14 +833,13 @@ class M14(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-
-        # converts all input to array 
-        in_x = np.atleast_1d(in_x)
-
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_M14, 'M14')
+
+        # just in case someone calls evaluate explicitly
+        Rv = np.atleast_1d(Rv)
 
         # ensure Rv is a single element, not numpy array
         Rv = Rv[0]
@@ -1044,14 +1041,13 @@ class G16(BaseExtRvAfAModel):
         ValueError
            Input x values outside of defined range
         """
-        
-        # converts all input to array 
-        in_x = np.atleast_1d(in_x)
-
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_G16, 'G16')
+
+        # just in case someone calls evaluate explicitly
+        RvA = np.atleast_1d(RvA)
 
         # ensure Rv is a single element, not numpy array
         RvA = RvA[0]
