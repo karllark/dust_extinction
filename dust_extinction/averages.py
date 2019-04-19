@@ -2,9 +2,7 @@ from __future__ import (absolute_import, print_function, division)
 
 import numpy as np
 
-import astropy.units as u
-
-from .helpers import _test_valid_x_range
+from .helpers import (_get_x_in_wavenumbers, _test_valid_x_range)
 from .baseclasses import BaseExtAveModel
 from .shapes import (P92, _curve_F99_method)
 
@@ -640,13 +638,8 @@ class GCC09_MWAvg(BaseExtAveModel):
         ValueError
            Input x values outside of defined range
         """
-        # convert to wavenumbers (1/micron) if x input in units
-        with u.add_enabled_equivalencies(u.spectral()):
-            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
+        x = _get_x_in_wavenumbers(in_x)
 
-        # strip the quantity to avoid needing to add units to all the
-        #    polynomical coefficients
-        x = x_quant.value
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_GCC09, 'GCC09')
 
