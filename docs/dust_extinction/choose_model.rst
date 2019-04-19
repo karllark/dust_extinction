@@ -53,16 +53,6 @@ to the :class:`~dust_extinction.parameter_averages.F99` model with f\ :sub:`A`\ 
 is based on significantly more extinction curves than the
 :class:`~dust_extinction.parameter_averages.CCM89` or
 :class:`~dust_extinction.parameter_averages.O94` models.
-The :class:`~dust_extinction.parameter_averages.M14` models focus on refining
-models in the optical, and use the
-:class:`~dust_extinction.parameter_averages.CCM89` models for the NIR and the UV.
-The :class:`~dust_extinction.parameter_averages.M14` models use
-R_5495 = A(5485)/E(4405-5495), the spectroscopic equivalent to
-band-integrated R(V); see the paper for discussion.  Because of a spurious
-feature in the near UV caused by smoothly tying their optical to the
-:class:`~dust_extinction.parameter_averages.CCM89` UV, only the NIR and
-optical portions of the :class:`~dust_extinction.parameter_averages.M14`
-models are provided here.
 
 +----------+-------------+-------------+------------------+--------------+
 | Model    | Parameters  | x range     | wavelength range |       galaxy |
@@ -74,10 +64,30 @@ models are provided here.
 +----------+-------------+-------------+------------------+--------------+
 | F99, F04 |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW |
 +----------+-------------+-------------+------------------+--------------+
+| GCC09    |  R(V)       |  3.3 - 11.0 |     0.091 - 0.31 |           MW |
++----------+-------------+-------------+------------------+--------------+
 | M14      |  R_5495     |  0.3 -  3.3 |       0.31 - 3.3 |      MW, LMC |
 +----------+-------------+-------------+------------------+--------------+
 | G16      | R(V)_A, f_A |  0.3 - 10.0 |        0.1 - 3.3 | MW, LMC, SMC |
 +----------+-------------+-------------+------------------+--------------+
+
+Notes
+-----
+
+The :class:`~dust_extinction.parameter_averages.GCC09` model is the only
+model that applies all the way to 912 A, but has the limitation that it
+only applies to the UV spectral region (not derived in the NIR/Optical).
+
+The :class:`~dust_extinction.parameter_averages.M14` models focus on refining
+models in the optical, and use the
+:class:`~dust_extinction.parameter_averages.CCM89` models for the NIR and the UV.
+The :class:`~dust_extinction.parameter_averages.M14` models use
+R_5495 = A(5485)/E(4405-5495), the spectroscopic equivalent to
+band-integrated R(V); see the paper for discussion.  Because of a spurious
+feature in the near UV caused by smoothly tying their optical to the
+:class:`~dust_extinction.parameter_averages.CCM89` UV, only the NIR and
+optical portions of the :class:`~dust_extinction.parameter_averages.M14`
+models are provided here.
 
 Shape Models
 ============

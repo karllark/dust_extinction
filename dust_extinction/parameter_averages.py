@@ -536,6 +536,9 @@ class GCC09(BaseExtRvModel):
     From Gordon, Cartledge, & Clayton (2009, ApJ, 705, 1320)
     Including erratum: 2014, ApJ, 781, 128
 
+    This model applies to the UV spectral region all the way to 912 A.
+    This model was not derived for the optical or NIR.
+
     Example showing GCC09 curves for a range of R(V) values.
 
     .. plot::
