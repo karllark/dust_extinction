@@ -1,33 +1,47 @@
 Astronomical dust extinction
 ============================
 
+This package provides astronomical interstellar dust extinction curves
+implemented using the astropy.modeling framework.
+
+This package is an `affiliated package <https://www.astropy.org/affiliated/>`_ of `AstroPy`_.
+
+Build checks/status
+-------------------
+
 .. image:: http://readthedocs.org/projects/dust-extinction/badge/?version=latest
    :target: http://dust-extinction.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://badge.fury.io/py/dust-extinction.svg
-   :target: https://badge.fury.io/py/dust-extinction
-
 .. image:: https://travis-ci.org/karllark/dust_extinction.svg?branch=master
    :target: https://travis-ci.org/karllark/dust_extinction
-   :alt: CI Testing Status
+   :alt: Travis Testing Status
+
+.. image:: https://ci.appveyor.com/api/projects/status/6h1qfj4xwxutoari/branch/master?svg=true
+   :target: https://ci.appveyor.com/project/KarlGordon/dust-extinction/branch/master
+   :alt: Apveyor Testing Status
 
 .. image:: https://coveralls.io/repos/github/karllark/dust_extinction/badge.svg?branch=master
    :target: https://coveralls.io/github/karllark/dust_extinction?branch=master
    :alt: Test Coverage Status
 
-.. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
-    :target: http://www.astropy.org
-    :alt: Powered by Astropy Badge
-
 .. image:: https://img.shields.io/lgtm/grade/python/g/karllark/dust_extinction.svg?logo=lgtm&logoWidth=18
   :target: https://lgtm.com/projects/g/karllark/dust_extinction/context:python
   :alt: Language grade: Python
 
-This package provides astronomical interstellar dust extinction curves
-implemented using the astropy.modeling framework.
+Packaging
+---------
 
-This package is potentially an affiliated package of `AstroPy`_.
+.. image:: https://badge.fury.io/py/dust-extinction.svg
+   :target: https://badge.fury.io/py/dust-extinction
+
+.. image:: https://anaconda.org/conda-forge/dust_extinction/badges/version.svg
+  :target: https://github.com/conda-forge/dust_extinction-feedstock
+  :alt: dust_extinction feedstock and install directions
+
+.. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
+    :target: http://www.astropy.org
+    :alt: Powered by Astropy Badge
 
 Documentation
 -------------

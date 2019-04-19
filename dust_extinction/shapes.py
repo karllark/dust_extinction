@@ -3,10 +3,9 @@ from __future__ import (absolute_import, print_function, division)
 import numpy as np
 from scipy import interpolate
 
-import astropy.units as u
 from astropy.modeling import (Fittable1DModel, Parameter)
 
-from .helpers import _test_valid_x_range
+from .helpers import (_get_x_in_wavenumbers, _test_valid_x_range)
 
 __all__ = ['FM90', 'P92']
 
@@ -66,14 +65,7 @@ def _curve_F99_method(in_x, Rv,
     ValueError
         Input x values outside of defined range
     """
-    # convert to wavenumbers (1/micron) if x input in units
-    # otherwise, assume x in appropriate wavenumber units
-    with u.add_enabled_equivalencies(u.spectral()):
-        x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
-
-    # strip the quantity to avoid needing to add units to all the
-    #    polynomical coefficients
-    x = x_quant.value
+    x = _get_x_in_wavenumbers(in_x)
 
     # check that the wavenumbers are within the defined range
     _test_valid_x_range(x, valid_x_range, model_name)
@@ -242,14 +234,7 @@ class FM90(Fittable1DModel):
         ValueError
            Input x values outside of defined range
         """
-        # convert to wavenumbers (1/micron) if x input in units
-        # otherwise, assume x in appropriate wavenumber units
-        with u.add_enabled_equivalencies(u.spectral()):
-            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
-
-        # strip the quantity to avoid needing to add units to all the
-        #    polynomical coefficients
-        x = x_quant.value
+        x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_FM90, 'FM90')
@@ -563,14 +548,7 @@ class P92(Fittable1DModel):
         ValueError
            Input x values outside of defined range
         """
-        # convert to wavenumbers (1/micron) if x input in units
-        # otherwise, assume x in appropriate wavenumber units
-        with u.add_enabled_equivalencies(u.spectral()):
-            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
-
-        # strip the quantity to avoid needing to add units to all the
-        #    polynomical coefficients
-        x = x_quant.value
+        x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_P92, 'P92')
