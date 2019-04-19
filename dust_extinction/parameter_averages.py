@@ -8,12 +8,15 @@ from .helpers import (_get_x_in_wavenumbers, _test_valid_x_range)
 from .averages import G03_SMCBar
 from .shapes import _curve_F99_method
 
-__all__ = ['CCM89', 'O94', 'F99', 'F04', 'M14', 'G16']
+__all__ = ['CCM89',
+           'O94', 'F99', 'F04', 'GCC09',
+           'M14', 'G16']
 
 x_range_CCM89 = [0.3, 10.0]
 x_range_O94 = x_range_CCM89
 x_range_F99 = [0.3, 10.0]
 x_range_F04 = [0.3, 10.0]
+x_range_GCC09 = [3.3, 11.0]
 x_range_M14 = [0.3, 3.3]
 x_range_G16 = [0.3, 10.0]
 
@@ -510,6 +513,118 @@ class F04(BaseExtRvModel):
         return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
                                  optnir_axav_x, optnir_axebv_y/Rv,
                                  self.x_range, 'F04')
+
+
+class GCC09(BaseExtRvModel):
+    """
+    GCC09 extinction model calculation
+
+    Parameters
+    ----------
+    Rv: float
+        R(V) = A(V)/E(B-V) = total-to-selective extinction
+
+    Raises
+    ------
+    InputParameterError
+       Input Rv values outside of defined range
+
+    Notes
+    -----
+    GCC09 Milky Way R(V) dependent extinction model
+
+    From Gordon, Cartledge, & Clayton (2009, ApJ, 705, 1320)
+    Including erratum: 2014, ApJ, 781, 128
+
+    This model applies to the UV spectral region all the way to 912 A.
+    This model was not derived for the optical or NIR.
+
+    Example showing GCC09 curves for a range of R(V) values.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.parameter_averages import GCC09
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        x = np.arange(3.3, 11, 0.1)/u.micron
+
+        Rvs = ['2.0','3.0','4.0','5.0','6.0']
+        for cur_Rv in Rvs:
+           ext_model = GCC09(Rv=cur_Rv)
+           ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+    Rv_range = [2.0, 6.0]
+    x_range = x_range_GCC09
+
+    @staticmethod
+    def evaluate(in_x, Rv):
+        """
+        GCC09 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        # convert to wavenumbers (1/micron) if x input in units
+        # otherwise, assume x in appropriate wavenumber units
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, x_range_GCC09, 'GCC09')
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, x_range_GCC09, 'GCC09')
+
+        # setup the a & b coefficient vectors
+        n_x = len(x)
+        a = np.zeros(n_x)
+        b = np.zeros(n_x)
+
+        # define the ranges
+        nuv_indxs = np.where(np.logical_and(3.3 <= x, x <= 11.0))
+        fnuv_indxs = np.where(np.logical_and(5.9 <= x, x <= 11.0))
+
+        # NUV
+        a[nuv_indxs] = (1.894 - .373*x[nuv_indxs]
+                        - 0.0101/((x[nuv_indxs] - 4.57)**2 + .0384))
+        b[nuv_indxs] = (-3.490
+                        + 2.057*x[nuv_indxs]
+                        + 0.706/((x[nuv_indxs] - 4.59)**2 + .169))
+
+        # far-NUV
+        y = x[fnuv_indxs] - 5.9
+        a[fnuv_indxs] += -.110*(y**2) - .0100*(y**3)
+        b[fnuv_indxs] += .531*(y**2) + .0544*(y**3)
+
+        # return A(x)/A(V)
+        return a + b/Rv
 
 
 class M14(BaseExtRvModel):

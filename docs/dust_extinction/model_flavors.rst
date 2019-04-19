@@ -77,7 +77,8 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04, M14)
+   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04,
+                                                   GCC09, M14)
 
    fig, ax = plt.subplots()
 
@@ -86,20 +87,15 @@ R(V) (+ other variables) dependent prediction models
 
    Rv = 3.1
 
-   ext_model = CCM89(Rv=Rv)
-   ax.plot(x,ext_model(x),label='CCM89')
+   models = [CCM89, O94, F99, F04, GCC09, M14]
 
-   ext_model = O94(Rv=Rv)
-   ax.plot(x,ext_model(x),label='O94')
-
-   ext_model = F99(Rv=Rv)
-   ax.plot(x,ext_model(x),label='F99')
-
-   ext_model = F04(Rv=Rv)
-   ax.plot(x,ext_model(x),label='F04')
-
-   ext_model = M14(Rv=Rv)
-   ax.plot(x[x<3.3/u.micron],ext_model(x[x<3.3/u.micron]),label='M14')
+   for cmodel in models:
+      ext_model = cmodel(Rv=Rv)
+      indxs, = np.where(np.logical_and(
+         x.value >= ext_model.x_range[0],
+         x.value <= ext_model.x_range[1]))
+      yvals = ext_model(x[indxs])
+      ax.plot(x[indxs], yvals, label=ext_model.__class__.__name__)
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
@@ -116,7 +112,8 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04, M14)
+   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04,
+                                                   GCC09, M14)
 
    fig, ax = plt.subplots()
 
@@ -125,20 +122,15 @@ R(V) (+ other variables) dependent prediction models
 
    Rv = 2.0
 
-   ext_model = CCM89(Rv=Rv)
-   ax.plot(x,ext_model(x),label='CCM89')
+   models = [CCM89, O94, F99, F04, GCC09, M14]
 
-   ext_model = O94(Rv=Rv)
-   ax.plot(x,ext_model(x),label='O94')
-
-   ext_model = F99(Rv=Rv)
-   ax.plot(x,ext_model(x),label='F99')
-
-   ext_model = F04(Rv=Rv)
-   ax.plot(x,ext_model(x),label='F04')
-
-   ext_model = M14(Rv=Rv)
-   ax.plot(x[x<3.3/u.micron],ext_model(x[x<3.3/u.micron]),label='M14')
+   for cmodel in models:
+      ext_model = cmodel(Rv=Rv)
+      indxs, = np.where(np.logical_and(
+         x.value >= ext_model.x_range[0],
+         x.value <= ext_model.x_range[1]))
+      yvals = ext_model(x[indxs])
+      ax.plot(x[indxs], yvals, label=ext_model.__class__.__name__)
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
@@ -156,7 +148,8 @@ R(V) (+ other variables) dependent prediction models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04, M14)
+   from dust_extinction.parameter_averages import (CCM89, O94, F99, F04,
+                                                   GCC09, M14)
 
    fig, ax = plt.subplots()
 
@@ -165,20 +158,15 @@ R(V) (+ other variables) dependent prediction models
 
    Rv = 5.5
 
-   ext_model = CCM89(Rv=Rv)
-   ax.plot(x,ext_model(x),label='CCM89')
+   models = [CCM89, O94, F99, F04, GCC09, M14]
 
-   ext_model = O94(Rv=Rv)
-   ax.plot(x,ext_model(x),label='O94')
-
-   ext_model = F99(Rv=Rv)
-   ax.plot(x,ext_model(x),label='F99')
-
-   ext_model = F04(Rv=Rv)
-   ax.plot(x,ext_model(x),label='F04')
-
-   ext_model = M14(Rv=Rv)
-   ax.plot(x[x<3.3/u.micron],ext_model(x[x<3.3/u.micron]),label='M14')
+   for cmodel in models:
+      ext_model = cmodel(Rv=Rv)
+      indxs, = np.where(np.logical_and(
+         x.value >= ext_model.x_range[0],
+         x.value <= ext_model.x_range[1]))
+      yvals = ext_model(x[indxs])
+      ax.plot(x[indxs], yvals, label=ext_model.__class__.__name__)
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
