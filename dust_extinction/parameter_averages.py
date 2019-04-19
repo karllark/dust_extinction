@@ -591,12 +591,10 @@ class GCC09(BaseExtRvModel):
         """
         # convert to wavenumbers (1/micron) if x input in units
         # otherwise, assume x in appropriate wavenumber units
-        with u.add_enabled_equivalencies(u.spectral()):
-            x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
+        x = _get_x_in_wavenumbers(in_x)
 
-        # strip the quantity to avoid needing to add units to all the
-        #    polynomical coefficients
-        x = x_quant.value
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, x_range_GCC09, 'GCC09')
 
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_GCC09, 'GCC09')
