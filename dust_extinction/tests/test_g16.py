@@ -85,3 +85,5 @@ def test_extinction_G16_fA_1_single_values(test_vals):
 
     # test
     np.testing.assert_allclose(tmodel(x), cor_val, rtol=tolerance)
+    np.testing.assert_allclose(tmodel.evaluate(x, 3.1, 1.0),
+                               cor_val, rtol=tolerance)

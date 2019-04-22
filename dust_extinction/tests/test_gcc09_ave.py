@@ -54,6 +54,8 @@ def test_extinction_GCC09_single_values():
     for x, cor_val in zip(tmodel.obsdata_x, tmodel.obsdata_axav):
         np.testing.assert_allclose(tmodel(x), cor_val,
                                    rtol=tmodel.obsdata_tolerance)
+        np.testing.assert_allclose(tmodel.evaluate(x), cor_val,
+                                   rtol=tmodel.obsdata_tolerance)
 
 
 def test_extinction_GCC09_extinguish_values_Av():

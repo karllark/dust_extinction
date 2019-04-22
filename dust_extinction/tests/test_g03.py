@@ -58,6 +58,8 @@ def test_extinction_G03_single_values(tmodel):
     for x, cor_val in zip(tmodel.obsdata_x, tmodel.obsdata_axav):
         np.testing.assert_allclose(tmodel(x), cor_val,
                                    rtol=tmodel.obsdata_tolerance)
+        np.testing.assert_allclose(tmodel.evaluate(x), cor_val,
+                                   rtol=tmodel.obsdata_tolerance)
 
 
 @pytest.mark.parametrize("tmodel", models)

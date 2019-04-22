@@ -66,6 +66,38 @@ def test_extinction_P92_values():
     np.testing.assert_allclose(tmodel(x), cor_vals, rtol=0.25, atol=0.01)
 
 
+x_vals, axav_vals = get_axav_cor_vals()
+test_vals = zip(x_vals, axav_vals)
+
+
+@pytest.mark.parametrize("xtest_vals", test_vals)
+def test_extinction_P92_single_values(xtest_vals):
+    x, cor_val = xtest_vals
+
+    # initialize extinction model
+    tmodel = P92()
+
+    # test
+    np.testing.assert_allclose(tmodel(x), cor_val,
+                               rtol=0.25, atol=0.01)
+    np.testing.assert_allclose(
+        tmodel.evaluate(
+            x,
+            P92.BKG_amp.default, P92.BKG_lambda.default,
+            P92.BKG_b.default, P92.BKG_n.default,
+            P92.FUV_amp.default, P92.FUV_lambda.default,
+            P92.FUV_b.default, P92.FUV_n.default,
+            P92.NUV_amp.default, P92.NUV_lambda.default,
+            P92.NUV_b.default, P92.NUV_n.default,
+            P92.SIL1_amp.default, P92.SIL1_lambda.default,
+            P92.SIL1_b.default, P92.SIL1_n.default,
+            P92.SIL2_amp.default, P92.SIL2_lambda.default,
+            P92.SIL2_b.default, P92.SIL2_n.default,
+            P92.FIR_amp.default, P92.FIR_lambda.default,
+            P92.FIR_b.default, P92.FIR_n.default),
+        cor_val, rtol=0.25, atol=0.01)
+
+
 def test_P92_fitting():
 
     # get an observed extinction curve to fit

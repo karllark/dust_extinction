@@ -73,3 +73,19 @@ def test_extinction_VCG04_values(Rv):
 
     # test
     np.testing.assert_allclose(tmodel(x), cor_vals, rtol=1e-5)
+
+
+x_vals, axav_vals = get_axav_cor_vals(3.1)
+test_vals = zip(x_vals, axav_vals)
+
+
+@pytest.mark.parametrize("test_vals", test_vals)
+def test_extinction_VCG04_single_values(test_vals):
+    x, cor_val = test_vals
+
+    # initialize extinction model
+    tmodel = VCG04()
+
+    # test
+    np.testing.assert_allclose(tmodel(x), cor_val, rtol=1e-5)
+    np.testing.assert_allclose(tmodel.evaluate(x, 3.1), cor_val, rtol=1e-5)

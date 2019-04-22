@@ -160,3 +160,19 @@ def test_extinction_CCM89_extinguish_values_Ebv(Rv):
 
     # test
     np.testing.assert_allclose(tmodel.extinguish(x, Ebv=Ebv), cor_vals)
+
+
+x_vals, axav_vals = get_axav_cor_vals(3.1)
+test_vals = zip(x_vals, axav_vals)
+
+
+@pytest.mark.parametrize("test_vals", test_vals)
+def test_extinction_CCM89_single_values(test_vals):
+    x, cor_val = test_vals
+
+    # initialize extinction model
+    tmodel = CCM89()
+
+    # test
+    np.testing.assert_allclose(tmodel(x), cor_val)
+    np.testing.assert_allclose(tmodel.evaluate(x, 3.1), cor_val)

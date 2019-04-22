@@ -66,12 +66,14 @@ x_vals, axav_vals, tolerance = get_axav_cor_vals()
 test_vals = zip(x_vals, axav_vals, np.full(len(x_vals), tolerance))
 
 
-@pytest.mark.parametrize("test_vals", test_vals)
-def test_extinction_F04_single_values(test_vals):
-    x, cor_val, tolerance = test_vals
+@pytest.mark.parametrize("xtest_vals", test_vals)
+def test_extinction_F04_single_values(xtest_vals):
+    x, cor_val, tolerance = xtest_vals
 
     # initialize extinction model
     tmodel = F04()
 
     # test
     np.testing.assert_allclose(tmodel(x), cor_val, rtol=tolerance)
+    np.testing.assert_allclose(tmodel.evaluate(x, 3.1), cor_val,
+                               rtol=tolerance)
