@@ -49,8 +49,9 @@ model encompasses the average measured behavior of extinction curves in the MW,
 LMC, and SMC.  The :class:`~dust_extinction.parameter_averages.G16` model reduces
 to the :class:`~dust_extinction.parameter_averages.F99` model with f\ :sub:`A`\ =
 1.0.  If only MW type extinction is expected, then the
-:class:`~dust_extinction.parameter_averages.F04` model should be considered as it
-is based on significantly more extinction curves than the
+:class:`~dust_extinction.parameter_averages.F20` model should be considered as it
+is based on spectroscopic extinction curves in the optical and ultraviolet and
+significantly more extinction curves than the
 :class:`~dust_extinction.parameter_averages.CCM89` or
 :class:`~dust_extinction.parameter_averages.O94` models.
 
@@ -71,6 +72,8 @@ is based on significantly more extinction curves than the
 | M14      |  R_5495     |  0.3 -  3.3 |       0.31 - 3.3 |      MW, LMC |
 +----------+-------------+-------------+------------------+--------------+
 | G16      | R(V)_A, f_A |  0.3 - 10.0 |        0.1 - 3.3 | MW, LMC, SMC |
++----------+-------------+-------------+------------------+--------------+
+| F99, F04 |  R(V)       |   0.3 - 8.7 |      0.115 - 3.3 |           MW |
 +----------+-------------+-------------+------------------+--------------+
 
 Notes
