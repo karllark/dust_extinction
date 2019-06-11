@@ -1217,15 +1217,13 @@ class F20(BaseExtRvModel):
         """
         # convert to wavenumbers (1/micron) if x input in units
         # otherwise, assume x in appropriate wavenumber units
-        with u.add_enabled_equivalencies(u.spectral()):
-            x_quant = u.Quantity(in_x, 1.0 / u.micron, dtype=np.float64)
-
-        # strip the quantity to avoid needing to add units to all the
-        #    polynomical coefficients
-        x = x_quant.value
+        x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_F20, "F20")
+
+        # just in case someone calls evaluate explicitly
+        Rv = np.atleast_1d(Rv)
 
         # ensure Rv is a single element, not numpy array
         Rv = Rv[0]
