@@ -1,4 +1,4 @@
-Copyright (c) 2018, Karl Gordon and Kristen Larson
+Copyright (c) 2019, Karl Gordon
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,

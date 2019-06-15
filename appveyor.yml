@@ -11,11 +11,11 @@ environment:
                         # of 32 bit and 64 bit builds are needed, move this
                         # to the matrix section.
 
-
+      
       # List runtime dependencies for the package that are available as conda
       # packages here.
-      CONDA_DEPENDENCIES: "scipy"
-
+      CONDA_DEPENDENCIES: ""
+      
       # List other runtime dependencies for the package that are available as
       # pip packages here.
       PIP_DEPENDENCIES: ""
@@ -28,11 +28,6 @@ environment:
       CONDA_CHANNELS: "astropy-ci-extras astropy"
 
   matrix:
-      # We test Python 2.7 for Python 2 support.
-      # - PYTHON_VERSION: "2.7"
-      #  ASTROPY_VERSION: "stable"
-      #  NUMPY_VERSION: "stable"
-
       # We test Python 3.7 for Python 3 support.
       - PYTHON_VERSION: "3.7"
         ASTROPY_VERSION: "stable"
