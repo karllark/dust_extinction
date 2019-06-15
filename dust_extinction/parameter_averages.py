@@ -5,7 +5,6 @@ import pkg_resources
 import numpy as np
 from scipy import interpolate
 
-import astropy.units as u
 from astropy.table import Table
 
 from .baseclasses import BaseExtRvModel, BaseExtRvAfAModel
@@ -23,7 +22,6 @@ x_range_VCG04 = [3.3, 8.0]
 x_range_GCC09 = [3.3, 11.0]
 x_range_M14 = [0.3, 3.3]
 x_range_G16 = [0.3, 10.0]
-x_range_F20 = [0.3, 8.7]
 
 
 class CCM89(BaseExtRvModel):
@@ -1191,7 +1189,7 @@ class F20(BaseExtRvModel):
     """
 
     Rv_range = [2.0, 6.0]
-    x_range = x_range_F20
+    x_range = [0.3, 8.7]
 
     def evaluate(self, in_x, Rv):
         """
@@ -1220,7 +1218,7 @@ class F20(BaseExtRvModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_F20, "F20")
+        _test_valid_x_range(x, self.x_range, "F20")
 
         # just in case someone calls evaluate explicitly
         Rv = np.atleast_1d(Rv)
