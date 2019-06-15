@@ -23,11 +23,11 @@ Example: Extinguish a Blackbody
    import astropy.units as u
    from astropy.modeling.blackbody import blackbody_lambda
 
-   from dust_extinction.parameter_averages import F99
+   from dust_extinction.parameter_averages import F20
 
-   # generate wavelengths between 0.1 and 3 microns
-   #    within the valid range for the F99 R(V) dependent relationship
-   lam = np.logspace(np.log10(0.1), np.log10(3.0), num=1000)
+   # generate wavelengths between 0.12 and 3 microns
+   #    within the valid range for the F20 R(V) dependent relationship
+   lam = np.logspace(np.log10(0.12), np.log10(3.0), num=1000)
 
    # setup the inputs for the blackbody function
    wavelengths = lam*1e4*u.AA
@@ -37,7 +37,7 @@ Example: Extinguish a Blackbody
    flux = blackbody_lambda(wavelengths, temperature)
 
    # initialize the model
-   ext = F99(Rv=3.1)
+   ext = F20(Rv=3.1)
 
    # get the extinguished blackbody flux for different amounts of dust
    flux_ext_av05 = flux*ext.extinguish(wavelengths, Av=0.5)

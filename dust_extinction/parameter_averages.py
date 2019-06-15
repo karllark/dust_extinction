@@ -1,17 +1,18 @@
-from __future__ import (absolute_import, print_function, division)
+from __future__ import absolute_import, print_function, division
+
+import pkg_resources
 
 import numpy as np
 from scipy import interpolate
 
-from .baseclasses import (BaseExtRvModel, BaseExtRvAfAModel)
-from .helpers import (_get_x_in_wavenumbers, _test_valid_x_range)
+from astropy.table import Table
+
+from .baseclasses import BaseExtRvModel, BaseExtRvAfAModel
+from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .averages import G03_SMCBar
 from .shapes import _curve_F99_method
 
-__all__ = ['CCM89',
-           'O94', 'F99',
-           'F04', 'VCG04', 'GCC09',
-           'M14', 'G16']
+__all__ = ["CCM89", "O94", "F99", "F04", "VCG04", "GCC09", "M14", "G16", "F20"]
 
 x_range_CCM89 = [0.3, 10.0]
 x_range_O94 = x_range_CCM89
@@ -70,6 +71,7 @@ class CCM89(BaseExtRvModel):
         ax.legend(loc='best')
         plt.show()
     """
+
     Rv_range = [2.0, 6.0]
     x_range = x_range_CCM89
 
@@ -99,7 +101,7 @@ class CCM89(BaseExtRvModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_CCM89, 'CCM89')
+        _test_valid_x_range(x, x_range_CCM89, "CCM89")
 
         # setup the a & b coefficient vectors
         n_x = len(x)
@@ -114,36 +116,39 @@ class CCM89(BaseExtRvModel):
         fuv_indxs = np.where(np.logical_and(8 < x, x <= 10))
 
         # Infrared
-        y = x[ir_indxs]**1.61
-        a[ir_indxs] = .574*y
-        b[ir_indxs] = -0.527*y
+        y = x[ir_indxs] ** 1.61
+        a[ir_indxs] = 0.574 * y
+        b[ir_indxs] = -0.527 * y
 
         # NIR/optical
         y = x[opt_indxs] - 1.82
-        a[opt_indxs] = np.polyval((.32999, -.7753, .01979, .72085, -.02427,
-                                   -.50447, .17699, 1), y)
-        b[opt_indxs] = np.polyval((-2.09002, 5.3026, -.62251, -5.38434,
-                                   1.07233, 2.28305, 1.41338, 0), y)
+        a[opt_indxs] = np.polyval(
+            (0.32999, -0.7753, 0.01979, 0.72085, -0.02427, -0.50447, 0.17699, 1), y
+        )
+        b[opt_indxs] = np.polyval(
+            (-2.09002, 5.3026, -0.62251, -5.38434, 1.07233, 2.28305, 1.41338, 0), y
+        )
 
         # NUV
-        a[nuv_indxs] = (1.752-.316*x[nuv_indxs]
-                        - 0.104/((x[nuv_indxs] - 4.67)**2 + .341))
-        b[nuv_indxs] = (-3.09
-                        + 1.825*x[nuv_indxs]
-                        + 1.206/((x[nuv_indxs] - 4.62)**2 + .263))
+        a[nuv_indxs] = (
+            1.752 - 0.316 * x[nuv_indxs] - 0.104 / ((x[nuv_indxs] - 4.67) ** 2 + 0.341)
+        )
+        b[nuv_indxs] = (
+            -3.09 + 1.825 * x[nuv_indxs] + 1.206 / ((x[nuv_indxs] - 4.62) ** 2 + 0.263)
+        )
 
         # far-NUV
         y = x[fnuv_indxs] - 5.9
-        a[fnuv_indxs] += -.04473*(y**2) - .009779*(y**3)
-        b[fnuv_indxs] += .2130*(y**2) + .1207*(y**3)
+        a[fnuv_indxs] += -0.04473 * (y ** 2) - 0.009779 * (y ** 3)
+        b[fnuv_indxs] += 0.2130 * (y ** 2) + 0.1207 * (y ** 3)
 
         # FUV
         y = x[fuv_indxs] - 8.0
-        a[fuv_indxs] = np.polyval((-.070, .137, -.628, -1.073), y)
-        b[fuv_indxs] = np.polyval((.374, -.42, 4.257, 13.67), y)
+        a[fuv_indxs] = np.polyval((-0.070, 0.137, -0.628, -1.073), y)
+        b[fuv_indxs] = np.polyval((0.374, -0.42, 4.257, 13.67), y)
 
         # return A(x)/A(V)
-        return a + b/Rv
+        return a + b / Rv
 
 
 class O94(BaseExtRvModel):
@@ -194,6 +199,7 @@ class O94(BaseExtRvModel):
         ax.legend(loc='best')
         plt.show()
     """
+
     Rv_range = [2.0, 6.0]
     x_range = x_range_O94
 
@@ -223,7 +229,7 @@ class O94(BaseExtRvModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_O94, 'O94')
+        _test_valid_x_range(x, x_range_O94, "O94")
 
         # setup the a & b coefficient vectors
         n_x = len(x)
@@ -238,36 +244,39 @@ class O94(BaseExtRvModel):
         fuv_indxs = np.where(np.logical_and(8 < x, x <= 10))
 
         # Infrared
-        y = x[ir_indxs]**1.61
-        a[ir_indxs] = .574*y
-        b[ir_indxs] = -0.527*y
+        y = x[ir_indxs] ** 1.61
+        a[ir_indxs] = 0.574 * y
+        b[ir_indxs] = -0.527 * y
 
         # NIR/optical
         y = x[opt_indxs] - 1.82
-        a[opt_indxs] = np.polyval((-0.505, 1.647, -0.827, -1.718,
-                                   1.137, 0.701, -0.609, 0.104, 1), y)
-        b[opt_indxs] = np.polyval((3.347, -10.805, 5.491, 11.102,
-                                   -7.985, -3.989, 2.908, 1.952, 0), y)
+        a[opt_indxs] = np.polyval(
+            (-0.505, 1.647, -0.827, -1.718, 1.137, 0.701, -0.609, 0.104, 1), y
+        )
+        b[opt_indxs] = np.polyval(
+            (3.347, -10.805, 5.491, 11.102, -7.985, -3.989, 2.908, 1.952, 0), y
+        )
 
         # NUV
-        a[nuv_indxs] = (1.752-.316*x[nuv_indxs]
-                        - 0.104/((x[nuv_indxs] - 4.67)**2 + .341))
-        b[nuv_indxs] = (-3.09
-                        + 1.825*x[nuv_indxs]
-                        + 1.206/((x[nuv_indxs] - 4.62)**2 + .263))
+        a[nuv_indxs] = (
+            1.752 - 0.316 * x[nuv_indxs] - 0.104 / ((x[nuv_indxs] - 4.67) ** 2 + 0.341)
+        )
+        b[nuv_indxs] = (
+            -3.09 + 1.825 * x[nuv_indxs] + 1.206 / ((x[nuv_indxs] - 4.62) ** 2 + 0.263)
+        )
 
         # far-NUV
         y = x[fnuv_indxs] - 5.9
-        a[fnuv_indxs] += -.04473*(y**2) - .009779*(y**3)
-        b[fnuv_indxs] += .2130*(y**2) + .1207*(y**3)
+        a[fnuv_indxs] += -0.04473 * (y ** 2) - 0.009779 * (y ** 3)
+        b[fnuv_indxs] += 0.2130 * (y ** 2) + 0.1207 * (y ** 3)
 
         # FUV
         y = x[fuv_indxs] - 8.0
-        a[fuv_indxs] = np.polyval((-.070, .137, -.628, -1.073), y)
-        b[fuv_indxs] = np.polyval((.374, -.42, 4.257, 13.67), y)
+        a[fuv_indxs] = np.polyval((-0.070, 0.137, -0.628, -1.073), y)
+        b[fuv_indxs] = np.polyval((0.374, -0.42, 4.257, 13.67), y)
 
         # return A(x)/A(V)
-        return a + b/Rv
+        return a + b / Rv
 
 
 class F99(BaseExtRvModel):
@@ -321,6 +330,7 @@ class F99(BaseExtRvModel):
         ax.legend(loc='best')
         plt.show()
     """
+
     Rv_range = [2.0, 6.0]
     x_range = x_range_F99
 
@@ -359,13 +369,14 @@ class F99(BaseExtRvModel):
         gamma = 0.99
 
         # terms depending on Rv
-        C2 = -0.824 + 4.717/Rv
+        C2 = -0.824 + 4.717 / Rv
         # original F99 C1-C2 correlation
-        C1 = 2.030 - 3.007*C2
+        C1 = 2.030 - 3.007 * C2
 
         # spline points
-        optnir_axav_x = 10000./np.array([26500.0, 12200.0, 6000.0,
-                                         5470.0, 4670.0, 4110.0])
+        optnir_axav_x = 10000.0 / np.array(
+            [26500.0, 12200.0, 6000.0, 5470.0, 4670.0, 4110.0]
+        )
 
         # determine optical/IR values at spline points
         #    Final optical spline point has a leading "-1.208" in Table 4
@@ -378,17 +389,32 @@ class F99(BaseExtRvModel):
         #    Also, fm_unred.pro has different coeff and # of terms,
         #    but later work does not include these terms
         #    --> check with Fitzpatrick?
-        opt_axebv_y = np.array([-0.426 + 1.0044*Rv,
-                                -0.050 + 1.0016*Rv,
-                                0.701 + 1.0016*Rv,
-                                1.208 + 1.0032*Rv - 0.00033*(Rv**2)])
-        nir_axebv_y = np.array([0.265, 0.829])*Rv/3.1
+        opt_axebv_y = np.array(
+            [
+                -0.426 + 1.0044 * Rv,
+                -0.050 + 1.0016 * Rv,
+                0.701 + 1.0016 * Rv,
+                1.208 + 1.0032 * Rv - 0.00033 * (Rv ** 2),
+            ]
+        )
+        nir_axebv_y = np.array([0.265, 0.829]) * Rv / 3.1
         optnir_axebv_y = np.concatenate([nir_axebv_y, opt_axebv_y])
 
         # return A(x)/A(V)
-        return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
-                                 optnir_axav_x, optnir_axebv_y/Rv,
-                                 self.x_range, 'F99')
+        return _curve_F99_method(
+            in_x,
+            Rv,
+            C1,
+            C2,
+            C3,
+            C4,
+            xo,
+            gamma,
+            optnir_axav_x,
+            optnir_axebv_y / Rv,
+            self.x_range,
+            "F99",
+        )
 
 
 class F04(BaseExtRvModel):
@@ -452,6 +478,7 @@ class F04(BaseExtRvModel):
         ax.legend(loc='best')
         plt.show()
     """
+
     Rv_range = [2.0, 6.0]
     x_range = x_range_F04
 
@@ -490,13 +517,12 @@ class F04(BaseExtRvModel):
         gamma = 0.922
 
         # original F99 Rv dependence
-        C2 = -0.824 + 4.717/Rv
+        C2 = -0.824 + 4.717 / Rv
         # updated F04 C1-C2 correlation
-        C1 = 2.18 - 2.91*C2
+        C1 = 2.18 - 2.91 * C2
 
         # spline points
-        opt_axav_x = 10000./np.array([6000.0, 5470.0,
-                                      4670.0, 4110.0])
+        opt_axav_x = 10000.0 / np.array([6000.0, 5470.0, 4670.0, 4110.0])
         # **Use NIR spline x values in FM07, clipped to K band for now
         nir_axav_x = np.array([0.50, 0.75, 1.0])
         optnir_axav_x = np.concatenate([nir_axav_x, opt_axav_x])
@@ -508,19 +534,34 @@ class F04(BaseExtRvModel):
         #    fm_unred.pro
         #    which is based on FMRCURVE.pro distributed by Fitzpatrick.
         #    --> confirmation needed?
-        opt_axebv_y = np.array([-0.426 + 1.0044*Rv,
-                                -0.050 + 1.0016*Rv,
-                                0.701 + 1.0016*Rv,
-                                1.208 + 1.0032*Rv - 0.00033*(Rv**2)])
+        opt_axebv_y = np.array(
+            [
+                -0.426 + 1.0044 * Rv,
+                -0.050 + 1.0016 * Rv,
+                0.701 + 1.0016 * Rv,
+                1.208 + 1.0032 * Rv - 0.00033 * (Rv ** 2),
+            ]
+        )
         # updated NIR curve from F04, note R dependence
-        nir_axebv_y = (0.63*Rv - 0.84)*nir_axav_x**1.84
+        nir_axebv_y = (0.63 * Rv - 0.84) * nir_axav_x ** 1.84
 
         optnir_axebv_y = np.concatenate([nir_axebv_y, opt_axebv_y])
 
         # return A(x)/A(V)
-        return _curve_F99_method(in_x, Rv, C1, C2, C3, C4, xo, gamma,
-                                 optnir_axav_x, optnir_axebv_y/Rv,
-                                 self.x_range, 'F04')
+        return _curve_F99_method(
+            in_x,
+            Rv,
+            C1,
+            C2,
+            C3,
+            C4,
+            xo,
+            gamma,
+            optnir_axav_x,
+            optnir_axebv_y / Rv,
+            self.x_range,
+            "F04",
+        )
 
 
 class VCG04(BaseExtRvModel):
@@ -573,6 +614,7 @@ class VCG04(BaseExtRvModel):
         ax.legend(loc='best')
         plt.show()
     """
+
     Rv_range = [2.0, 6.0]
     x_range = x_range_VCG04
 
@@ -603,7 +645,7 @@ class VCG04(BaseExtRvModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_VCG04, 'VCG04')
+        _test_valid_x_range(x, x_range_VCG04, "VCG04")
 
         # setup the a & b coefficient vectors
         n_x = len(x)
@@ -615,19 +657,22 @@ class VCG04(BaseExtRvModel):
         fnuv_indxs = np.where(np.logical_and(5.9 <= x, x <= 8))
 
         # NUV
-        a[nuv_indxs] = (1.808 - .215*x[nuv_indxs]
-                        - 0.134/((x[nuv_indxs] - 4.558)**2 + .566))
-        b[nuv_indxs] = (-2.350
-                        + 1.403*x[nuv_indxs]
-                        + 1.103/((x[nuv_indxs] - 4.587)**2 + .263))
+        a[nuv_indxs] = (
+            1.808 - 0.215 * x[nuv_indxs] - 0.134 / ((x[nuv_indxs] - 4.558) ** 2 + 0.566)
+        )
+        b[nuv_indxs] = (
+            -2.350
+            + 1.403 * x[nuv_indxs]
+            + 1.103 / ((x[nuv_indxs] - 4.587) ** 2 + 0.263)
+        )
 
         # far-NUV
         y = x[fnuv_indxs] - 5.9
-        a[fnuv_indxs] += -.0077*(y**2) - .0030*(y**3)
-        b[fnuv_indxs] += .2060*(y**2) + .0550*(y**3)
+        a[fnuv_indxs] += -0.0077 * (y ** 2) - 0.0030 * (y ** 3)
+        b[fnuv_indxs] += 0.2060 * (y ** 2) + 0.0550 * (y ** 3)
 
         # return A(x)/A(V)
-        return a + b/Rv
+        return a + b / Rv
 
 
 class GCC09(BaseExtRvModel):
@@ -681,6 +726,7 @@ class GCC09(BaseExtRvModel):
         ax.legend(loc='best')
         plt.show()
     """
+
     Rv_range = [2.0, 6.0]
     x_range = x_range_GCC09
 
@@ -712,7 +758,7 @@ class GCC09(BaseExtRvModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_GCC09, 'GCC09')
+        _test_valid_x_range(x, x_range_GCC09, "GCC09")
 
         # setup the a & b coefficient vectors
         n_x = len(x)
@@ -724,19 +770,22 @@ class GCC09(BaseExtRvModel):
         fnuv_indxs = np.where(np.logical_and(5.9 <= x, x <= 11.0))
 
         # NUV
-        a[nuv_indxs] = (1.894 - .373*x[nuv_indxs]
-                        - 0.0101/((x[nuv_indxs] - 4.57)**2 + .0384))
-        b[nuv_indxs] = (-3.490
-                        + 2.057*x[nuv_indxs]
-                        + 0.706/((x[nuv_indxs] - 4.59)**2 + .169))
+        a[nuv_indxs] = (
+            1.894
+            - 0.373 * x[nuv_indxs]
+            - 0.0101 / ((x[nuv_indxs] - 4.57) ** 2 + 0.0384)
+        )
+        b[nuv_indxs] = (
+            -3.490 + 2.057 * x[nuv_indxs] + 0.706 / ((x[nuv_indxs] - 4.59) ** 2 + 0.169)
+        )
 
         # far-NUV
         y = x[fnuv_indxs] - 5.9
-        a[fnuv_indxs] += -.110*(y**2) - .0100*(y**3)
-        b[fnuv_indxs] += .531*(y**2) + .0544*(y**3)
+        a[fnuv_indxs] += -0.110 * (y ** 2) - 0.0100 * (y ** 3)
+        b[fnuv_indxs] += 0.531 * (y ** 2) + 0.0544 * (y ** 3)
 
         # return A(x)/A(V)
-        return a + b/Rv
+        return a + b / Rv
 
 
 class M14(BaseExtRvModel):
@@ -808,6 +857,7 @@ class M14(BaseExtRvModel):
         ax.legend(loc='best')
         plt.show()
     """
+
     Rv_range = [2.0, 7.0]
     x_range = x_range_M14
 
@@ -836,7 +886,7 @@ class M14(BaseExtRvModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_M14, 'M14')
+        _test_valid_x_range(x, x_range_M14, "M14")
 
         # just in case someone calls evaluate explicitly
         Rv = np.atleast_1d(Rv)
@@ -845,8 +895,8 @@ class M14(BaseExtRvModel):
         Rv = Rv[0]
 
         # Infrared
-        ai = 0.574 * x**1.61
-        bi = -0.527 * x**1.61
+        ai = 0.574 * x ** 1.61
+        bi = -0.527 * x ** 1.61
 
         # Optical
         x1 = np.array([1.0])
@@ -855,37 +905,54 @@ class M14(BaseExtRvModel):
         x3 = np.array([3.5, 3.9, 4.0, 4.1, 4.2])
         xi3 = x3[-1]
 
-        a1v = 0.574 * x1**1.61
-        a1d = 0.574 * 1.61 * xi1**0.61
-        b1v = -0.527 * x1**1.61
-        b1d = -0.527 * 1.61 * xi1**0.61
+        a1v = 0.574 * x1 ** 1.61
+        a1d = 0.574 * 1.61 * xi1 ** 0.61
+        b1v = -0.527 * x1 ** 1.61
+        b1d = -0.527 * 1.61 * xi1 ** 0.61
 
-        a2v = (1 + 0.17699*(x2-1.82) - 0.50447*(x2-1.82)**2
-               - 0.02427*(x2-1.82)**3 + 0.72085*(x2-1.82)**4
-               + 0.01979*(x2-1.82)**5 - 0.77530*(x2-1.82)**6
-               + 0.32999*(x2-1.82)**7
-               + np.array([0.0, 0.0, -0.011, 0.0, 0.0]))
-        b2v = (1.41338*(x2-1.82) + 2.28305*(x2-1.82)**2
-               + 1.07233*(x2-1.82)**3 - 5.38434*(x2-1.82)**4
-               - 0.62251*(x2-1.82)**5 + 5.30260*(x2-1.82)**6
-               - 2.09002*(x2-1.82)**7
-               + np.array([0.0, 0.0, +0.091, 0.0, 0.0]))
+        a2v = (
+            1
+            + 0.17699 * (x2 - 1.82)
+            - 0.50447 * (x2 - 1.82) ** 2
+            - 0.02427 * (x2 - 1.82) ** 3
+            + 0.72085 * (x2 - 1.82) ** 4
+            + 0.01979 * (x2 - 1.82) ** 5
+            - 0.77530 * (x2 - 1.82) ** 6
+            + 0.32999 * (x2 - 1.82) ** 7
+            + np.array([0.0, 0.0, -0.011, 0.0, 0.0])
+        )
+        b2v = (
+            1.41338 * (x2 - 1.82)
+            + 2.28305 * (x2 - 1.82) ** 2
+            + 1.07233 * (x2 - 1.82) ** 3
+            - 5.38434 * (x2 - 1.82) ** 4
+            - 0.62251 * (x2 - 1.82) ** 5
+            + 5.30260 * (x2 - 1.82) ** 6
+            - 2.09002 * (x2 - 1.82) ** 7
+            + np.array([0.0, 0.0, +0.091, 0.0, 0.0])
+        )
 
-        a3v = (1.752 - 0.316*x3 - 0.104/((x3-4.67)**2 + 0.341)
-               + np.array([0.442, 0.341, 0.130, 0.020, 0.000]))
-        a3d = -0.316 + 0.104*2.0*(xi3-4.67)/((xi3-4.67)**2 + 0.341)**2
-        b3v = (-3.090 + 1.825*x3 + 1.206/((x3-4.62)**2 + 0.263)
-               - np.array([1.256, 1.021, 0.416, 0.064, 0.000]))
-        b3d = 1.825 - 1.206*2*(xi3-4.62)/((xi3-4.62)**2 + 0.263)**2
+        a3v = (
+            1.752
+            - 0.316 * x3
+            - 0.104 / ((x3 - 4.67) ** 2 + 0.341)
+            + np.array([0.442, 0.341, 0.130, 0.020, 0.000])
+        )
+        a3d = -0.316 + 0.104 * 2.0 * (xi3 - 4.67) / ((xi3 - 4.67) ** 2 + 0.341) ** 2
+        b3v = (
+            -3.090
+            + 1.825 * x3
+            + 1.206 / ((x3 - 4.62) ** 2 + 0.263)
+            - np.array([1.256, 1.021, 0.416, 0.064, 0.000])
+        )
+        b3d = 1.825 - 1.206 * 2 * (xi3 - 4.62) / ((xi3 - 4.62) ** 2 + 0.263) ** 2
 
         xn = np.concatenate((x1, x2, x3))
         anv = np.concatenate((a1v, a2v, a3v))
         bnv = np.concatenate((b1v, b2v, b3v))
 
-        a_spl = interpolate.CubicSpline(xn, anv,
-                                        bc_type=((1, a1d), (1, a3d)))
-        b_spl = interpolate.CubicSpline(xn, bnv,
-                                        bc_type=((1, b1d), (1, b3d)))
+        a_spl = interpolate.CubicSpline(xn, anv, bc_type=((1, a1d), (1, a3d)))
+        b_spl = interpolate.CubicSpline(xn, bnv, bc_type=((1, b1d), (1, b3d)))
 
         av = a_spl(x)
         bv = b_spl(x)
@@ -918,10 +985,10 @@ class M14(BaseExtRvModel):
         #         + bu*((x>xi3)&(x<8.0)) + bf*(x>8.0))
 
         # Final result
-        a = ai*(x < xi1) + av*((x >= xi1) & (x < xi3))
-        b = bi*(x < xi1) + bv*((x >= xi1) & (x < xi3))
+        a = ai * (x < xi1) + av * ((x >= xi1) & (x < xi3))
+        b = bi * (x < xi1) + bv * ((x >= xi1) & (x < xi3))
 
-        return a + b/Rv
+        return a + b / Rv
 
 
 class G16(BaseExtRvAfAModel):
@@ -1044,7 +1111,7 @@ class G16(BaseExtRvAfAModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_G16, 'G16')
+        _test_valid_x_range(x, x_range_G16, "G16")
 
         # just in case someone calls evaluate explicitly
         RvA = np.atleast_1d(RvA)
@@ -1061,7 +1128,118 @@ class G16(BaseExtRvAfAModel):
         alav_B = extB_model(x)
 
         # create the mixture model
-        alav = fA*alav_A + (1.0 - fA)*alav_B
+        alav = fA * alav_A + (1.0 - fA) * alav_B
 
         # return A(x)/A(V)
         return alav
+
+
+class F20(BaseExtRvModel):
+    """
+    F20 extinction model calculation
+
+    Fitzpatrick, Massa, Gordon et al. (2020, almost submitted) model.
+    Based on a sample of stars observed spectroscopically in the
+    optical with HST/STIS.
+
+    Parameters
+    ----------
+    Rv: float
+        R(V) = A(V)/E(B-V) = total-to-selective extinction
+
+    Raises
+    ------
+    InputParameterError
+       Input Rv values outside of defined range
+
+    Notes
+    -----
+    F20 Milky Way R(V) dependent extinction model
+
+    Example showing F20 curves for a range of R(V) values.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.parameter_averages import F20
+
+        fig, ax = plt.subplots()
+
+        # temp model to get the correct x range
+        text_model = F20()
+
+        # generate the curves and plot them
+        x = np.arange(text_model.x_range[0],
+                      text_model.x_range[1],0.1)/u.micron
+
+        Rvs = ['2.0','3.0','4.0','5.0','6.0']
+        for cur_Rv in Rvs:
+           ext_model = F20(Rv=cur_Rv)
+           ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    Rv_range = [2.0, 6.0]
+    x_range = [0.3, 8.7]
+
+    def evaluate(self, in_x, Rv):
+        """
+        F20 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        # convert to wavenumbers (1/micron) if x input in units
+        # otherwise, assume x in appropriate wavenumber units
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, "F20")
+
+        # just in case someone calls evaluate explicitly
+        Rv = np.atleast_1d(Rv)
+
+        # ensure Rv is a single element, not numpy array
+        Rv = Rv[0]
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        a = Table.read(data_path + "F20_tabulated.dat", format="ascii")
+
+        # compute E(lambda-55)/E(B-55) on the tabulated x points
+        k_rV_tab_x = a["k_3.02"].data + a["deltak"].data * (Rv - 3.10) * 0.990
+
+        # use spline interpolation to evaluate the curve for the input x values
+        spline_rep = interpolate.splrep(a["x"].data, k_rV_tab_x)
+        k_rV = interpolate.splev(x, spline_rep, der=0)
+
+        # convert to A(x)/A(55) from E(x-55)/E(44-55)
+        a_rV = k_rV / Rv + 1.0
+
+        # return A(x)/A(55)
+        return a_rV
