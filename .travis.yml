@@ -77,11 +77,9 @@ matrix:
         - stage: Initial tests
           env: PYTHON_VERSION=3.7 SETUP_CMD='egg_info'
 
-        # Try MacOS X, usually enough only to run from cron as hardly there are
-        # issues that are not picked up by a linux worker
+        # Try MacOS X
         - os: osx
-          stage: Cron tests
-          env: SETUP_CMD='test' EVENT_TYPE='cron'
+          env: SETUP_CMD='test'
 
         # Do a coverage test.
         - os: linux
@@ -114,6 +112,8 @@ matrix:
         # versions of Python, we can vary Python and Numpy versions at the same
         # time.
 
+        - os: linux
+          env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.14
         - os: linux
           env: PYTHON_VERSION=3.6 NUMPY_VERSION=1.14
         - os: linux
