@@ -1,22 +1,32 @@
-from __future__ import (absolute_import, print_function, division)
+from __future__ import absolute_import, print_function, division
 
 import numpy as np
 from scipy import interpolate
 
-from astropy.modeling import (Fittable1DModel, Parameter)
+from astropy.modeling import Fittable1DModel, Parameter
 
-from .helpers import (_get_x_in_wavenumbers, _test_valid_x_range)
+from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 
-__all__ = ['FM90', 'P92']
+__all__ = ["FM90", "P92"]
 
-x_range_FM90 = [1.0/0.32, 1.0/0.0912]
-x_range_P92 = [1.0/1e3, 1.0/1e-3]
+x_range_FM90 = [1.0 / 0.32, 1.0 / 0.0912]
+x_range_P92 = [1.0 / 1e3, 1.0 / 1e-3]
 
 
-def _curve_F99_method(in_x, Rv,
-                      C1, C2, C3, C4, xo, gamma,
-                      optnir_axav_x, optnir_axav_y,
-                      valid_x_range, model_name):
+def _curve_F99_method(
+    in_x,
+    Rv,
+    C1,
+    C2,
+    C3,
+    C4,
+    xo,
+    gamma,
+    optnir_axav_x,
+    optnir_axav_y,
+    valid_x_range,
+    model_name,
+):
     """
     Function to return extinction using F99 method
 
@@ -74,10 +84,10 @@ def _curve_F99_method(in_x, Rv,
     axav = np.zeros(len(x))
 
     # x value above which FM90 parametrization used
-    x_cutval_uv = 10000.0/2700.0
+    x_cutval_uv = 10000.0 / 2700.0
 
     # required UV points for spline interpolation
-    x_splineval_uv = 10000.0/np.array([2700.0, 2600.0])
+    x_splineval_uv = 10000.0 / np.array([2700.0, 2600.0])
 
     # UV points in input x
     indxs_uv, = np.where(x >= x_cutval_uv)
@@ -91,7 +101,7 @@ def _curve_F99_method(in_x, Rv,
     # FM90 model and values
     fm90_model = FM90(C1=C1, C2=C2, C3=C3, C4=C4, xo=xo, gamma=gamma)
     # evaluate model and get results in A(x)/A(V)
-    axav_fm90 = fm90_model(xuv)/Rv + 1.0
+    axav_fm90 = fm90_model(xuv) / Rv + 1.0
 
     # save spline points
     y_splineval_uv = axav_fm90[0:2]
@@ -120,8 +130,7 @@ def _curve_F99_method(in_x, Rv,
         spline_x = np.concatenate([x_splineval_optir, x_splineval_uv])
         spline_y = np.concatenate([y_splineval_optir, y_splineval_uv])
         spline_rep = interpolate.splrep(spline_x, spline_y)
-        axav[indxs_opir] = interpolate.splev(x[indxs_opir],
-                                             spline_rep, der=0)
+        axav[indxs_opir] = interpolate.splev(x[indxs_opir], spline_rep, der=0)
 
     # return A(x)/A(V)
     return axav
@@ -193,21 +202,16 @@ class FM90(Fittable1DModel):
         ax.legend(loc='best')
         plt.show()
     """
-    inputs = ('x',)
-    outputs = ('exvebv',)
 
-    C1 = Parameter(description="linear term: y-intercept",
-                   default=0.10)
-    C2 = Parameter(description="linear term: slope",
-                   default=0.70)
-    C3 = Parameter(description="bump: amplitude",
-                   default=3.23)
-    C4 = Parameter(description="FUV rise: amplitude",
-                   default=0.41)
-    xo = Parameter(description="bump: centroid",
-                   default=4.60)
-    gamma = Parameter(description="bump: width",
-                      default=0.99)
+    inputs = ("x",)
+    outputs = ("exvebv",)
+
+    C1 = Parameter(description="linear term: y-intercept", default=0.10)
+    C2 = Parameter(description="linear term: slope", default=0.70)
+    C3 = Parameter(description="bump: amplitude", default=3.23)
+    C4 = Parameter(description="FUV rise: amplitude", default=0.41)
+    xo = Parameter(description="bump: centroid", default=4.60)
+    gamma = Parameter(description="bump: width", default=0.99)
 
     x_range = x_range_FM90
 
@@ -237,20 +241,20 @@ class FM90(Fittable1DModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_FM90, 'FM90')
+        _test_valid_x_range(x, x_range_FM90, "FM90")
 
         # linear term
-        exvebv = C1 + C2*x
+        exvebv = C1 + C2 * x
 
         # bump term
-        x2 = x**2
-        exvebv += C3*(x2/((x2 - xo**2)**2 + x2*(gamma**2)))
+        x2 = x ** 2
+        exvebv += C3 * (x2 / ((x2 - xo ** 2) ** 2 + x2 * (gamma ** 2)))
 
         # FUV rise term
         fnuv_indxs = np.where(x >= 5.9)
         if len(fnuv_indxs) > 0:
             y = x[fnuv_indxs] - 5.9
-            exvebv[fnuv_indxs] += C4*(0.5392*(y**2) + 0.05644*(y**3))
+            exvebv[fnuv_indxs] += C4 * (0.5392 * (y ** 2) + 0.05644 * (y ** 3))
 
         # return E(x-V)/E(B-V)
         return exvebv
@@ -263,27 +267,27 @@ class FM90(Fittable1DModel):
         x = in_x
 
         # useful quantitites
-        x2 = x**2
-        xo2 = xo**2
-        g2 = gamma**2
-        x2mxo2_2 = (x2 - xo2)**2
-        denom = (x2mxo2_2 - x2*g2)**2
+        x2 = x ** 2
+        xo2 = xo ** 2
+        g2 = gamma ** 2
+        x2mxo2_2 = (x2 - xo2) ** 2
+        denom = (x2mxo2_2 - x2 * g2) ** 2
 
         # derivatives
-        d_C1 = np.full((len(x)), 1.)
+        d_C1 = np.full((len(x)), 1.0)
         d_C2 = x
 
-        d_C3 = (x2/(x2mxo2_2 + x2*g2))
+        d_C3 = x2 / (x2mxo2_2 + x2 * g2)
 
-        d_xo = (4.*C2*x2*xo*(x2 - xo2))/denom
+        d_xo = (4.0 * C2 * x2 * xo * (x2 - xo2)) / denom
 
-        d_gamma = (2.*C2*(x2**2)*gamma)/denom
+        d_gamma = (2.0 * C2 * (x2 ** 2) * gamma) / denom
 
         d_C4 = np.zeros((len(x)))
         fuv_indxs = np.where(x >= 5.9)
         if len(fuv_indxs) > 0:
             y = x[fuv_indxs] - 5.9
-            d_C4[fuv_indxs] = (0.5392*(y**2) + 0.05644*(y**3))
+            d_C4[fuv_indxs] = 0.5392 * (y ** 2) + 0.05644 * (y ** 3)
 
         return [d_C1, d_C2, d_C3, d_C4, d_xo, d_gamma]
 
@@ -426,65 +430,62 @@ class P92(Fittable1DModel):
         ax.legend(loc='best')
         plt.show()
     """
-    inputs = ('x',)
-    outputs = ('axav',)
+
+    inputs = ("x",)
+    outputs = ("axav",)
 
     # constant for conversion from Ax/Ab to (more standard) Ax/Av
-    AbAv = 1.0/3.08 + 1.0
+    AbAv = 1.0 / 3.08 + 1.0
 
-    BKG_amp = Parameter(description="BKG term: amplitude",
-                        default=165.*AbAv, min=0.0)
-    BKG_lambda = Parameter(description="BKG term: center wavelength",
-                           default=0.047)
-    BKG_b = Parameter(description="BKG term: b coefficient",
-                      default=90.)
-    BKG_n = Parameter(description="BKG term: n coefficient",
-                      default=2.0, fixed=True)
+    BKG_amp = Parameter(
+        description="BKG term: amplitude", default=165.0 * AbAv, min=0.0
+    )
+    BKG_lambda = Parameter(description="BKG term: center wavelength", default=0.047)
+    BKG_b = Parameter(description="BKG term: b coefficient", default=90.0)
+    BKG_n = Parameter(description="BKG term: n coefficient", default=2.0, fixed=True)
 
-    FUV_amp = Parameter(description="FUV term: amplitude",
-                        default=14.*AbAv, min=0.0)
-    FUV_lambda = Parameter(description="FUV term: center wavelength",
-                           default=0.07, bounds=(0.06, 0.08))
-    FUV_b = Parameter(description="FUV term: b coefficient",
-                      default=4.0)
-    FUV_n = Parameter(description="FUV term: n coefficient",
-                      default=6.5)
+    FUV_amp = Parameter(description="FUV term: amplitude", default=14.0 * AbAv, min=0.0)
+    FUV_lambda = Parameter(
+        description="FUV term: center wavelength", default=0.07, bounds=(0.06, 0.08)
+    )
+    FUV_b = Parameter(description="FUV term: b coefficient", default=4.0)
+    FUV_n = Parameter(description="FUV term: n coefficient", default=6.5)
 
-    NUV_amp = Parameter(description="NUV term: amplitude",
-                        default=0.045*AbAv, min=0.0)
-    NUV_lambda = Parameter(description="NUV term: center wavelength",
-                           default=0.22, bounds=(0.20, 0.24))
-    NUV_b = Parameter(description="NUV term: b coefficient",
-                      default=-1.95)
-    NUV_n = Parameter(description="NUV term: n coefficient",
-                      default=2.0, fixed=True)
+    NUV_amp = Parameter(
+        description="NUV term: amplitude", default=0.045 * AbAv, min=0.0
+    )
+    NUV_lambda = Parameter(
+        description="NUV term: center wavelength", default=0.22, bounds=(0.20, 0.24)
+    )
+    NUV_b = Parameter(description="NUV term: b coefficient", default=-1.95)
+    NUV_n = Parameter(description="NUV term: n coefficient", default=2.0, fixed=True)
 
-    SIL1_amp = Parameter(description="SIL1 term: amplitude",
-                         default=0.002*AbAv, min=0.0)
-    SIL1_lambda = Parameter(description="SIL1 term: center wavelength",
-                            default=9.7, bounds=(7.0, 13.0))
-    SIL1_b = Parameter(description="SIL1 term: b coefficient",
-                       default=-1.95)
-    SIL1_n = Parameter(description="SIL1 term: n coefficient",
-                       default=2.0, fixed=True)
+    SIL1_amp = Parameter(
+        description="SIL1 term: amplitude", default=0.002 * AbAv, min=0.0
+    )
+    SIL1_lambda = Parameter(
+        description="SIL1 term: center wavelength", default=9.7, bounds=(7.0, 13.0)
+    )
+    SIL1_b = Parameter(description="SIL1 term: b coefficient", default=-1.95)
+    SIL1_n = Parameter(description="SIL1 term: n coefficient", default=2.0, fixed=True)
 
-    SIL2_amp = Parameter(description="SIL2 term: amplitude",
-                         default=0.002*AbAv, min=0.0)
-    SIL2_lambda = Parameter(description="SIL2 term: center wavelength",
-                            default=18.0, bounds=(15.0, 21.0))
-    SIL2_b = Parameter(description="SIL2 term: b coefficient",
-                       default=-1.80)
-    SIL2_n = Parameter(description="SIL2 term: n coefficient",
-                       default=2.0, fixed=True)
+    SIL2_amp = Parameter(
+        description="SIL2 term: amplitude", default=0.002 * AbAv, min=0.0
+    )
+    SIL2_lambda = Parameter(
+        description="SIL2 term: center wavelength", default=18.0, bounds=(15.0, 21.0)
+    )
+    SIL2_b = Parameter(description="SIL2 term: b coefficient", default=-1.80)
+    SIL2_n = Parameter(description="SIL2 term: n coefficient", default=2.0, fixed=True)
 
-    FIR_amp = Parameter(description="FIR term: amplitude",
-                        default=0.012*AbAv, min=0.0)
-    FIR_lambda = Parameter(description="FIR term: center wavelength",
-                           default=25.0, bounds=(20.0, 30.0))
-    FIR_b = Parameter(description="FIR term: b coefficient",
-                      default=0.00)
-    FIR_n = Parameter(description="FIR term: n coefficient",
-                      default=2.0, fixed=True)
+    FIR_amp = Parameter(
+        description="FIR term: amplitude", default=0.012 * AbAv, min=0.0
+    )
+    FIR_lambda = Parameter(
+        description="FIR term: center wavelength", default=25.0, bounds=(20.0, 30.0)
+    )
+    FIR_b = Parameter(description="FIR term: b coefficient", default=0.00)
+    FIR_n = Parameter(description="FIR term: n coefficient", default=2.0, fixed=True)
 
     x_range = x_range_P92
 
@@ -516,17 +517,38 @@ class P92(Fittable1DModel):
         n : float
            n coefficient
         """
-        l_norm = in_lambda/cen_wave
+        l_norm = in_lambda / cen_wave
 
-        return amplitude/(np.power(l_norm, n) + np.power(l_norm, -1*n) + b)
+        return amplitude / (np.power(l_norm, n) + np.power(l_norm, -1 * n) + b)
 
-    def evaluate(self, in_x,
-                 BKG_amp, BKG_lambda, BKG_b, BKG_n,
-                 FUV_amp, FUV_lambda, FUV_b, FUV_n,
-                 NUV_amp, NUV_lambda, NUV_b, NUV_n,
-                 SIL1_amp, SIL1_lambda, SIL1_b, SIL1_n,
-                 SIL2_amp, SIL2_lambda, SIL2_b, SIL2_n,
-                 FIR_amp, FIR_lambda, FIR_b, FIR_n):
+    def evaluate(
+        self,
+        in_x,
+        BKG_amp,
+        BKG_lambda,
+        BKG_b,
+        BKG_n,
+        FUV_amp,
+        FUV_lambda,
+        FUV_b,
+        FUV_n,
+        NUV_amp,
+        NUV_lambda,
+        NUV_b,
+        NUV_n,
+        SIL1_amp,
+        SIL1_lambda,
+        SIL1_b,
+        SIL1_n,
+        SIL2_amp,
+        SIL2_lambda,
+        SIL2_b,
+        SIL2_n,
+        FIR_amp,
+        FIR_lambda,
+        FIR_b,
+        FIR_n,
+    ):
         """
         P92 function
 
@@ -551,19 +573,18 @@ class P92(Fittable1DModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_P92, 'P92')
+        _test_valid_x_range(x, x_range_P92, "P92")
 
         # calculate the terms
-        lam = 1.0/x
-        axav = (self._p92_single_term(lam, BKG_amp, BKG_lambda, BKG_b, BKG_n)
-                + self._p92_single_term(lam, FUV_amp, FUV_lambda, FUV_b, FUV_n)
-                + self._p92_single_term(lam, NUV_amp, NUV_lambda, NUV_b, NUV_n)
-                + self._p92_single_term(lam, SIL1_amp, SIL1_lambda,
-                                        SIL1_b, SIL1_n)
-                + self._p92_single_term(lam, SIL2_amp, SIL2_lambda,
-                                        SIL2_b, SIL2_n)
-                + self._p92_single_term(lam, FIR_amp, FIR_lambda,
-                                        FIR_b, FIR_n))
+        lam = 1.0 / x
+        axav = (
+            self._p92_single_term(lam, BKG_amp, BKG_lambda, BKG_b, BKG_n)
+            + self._p92_single_term(lam, FUV_amp, FUV_lambda, FUV_b, FUV_n)
+            + self._p92_single_term(lam, NUV_amp, NUV_lambda, NUV_b, NUV_n)
+            + self._p92_single_term(lam, SIL1_amp, SIL1_lambda, SIL1_b, SIL1_n)
+            + self._p92_single_term(lam, SIL2_amp, SIL2_lambda, SIL2_b, SIL2_n)
+            + self._p92_single_term(lam, FIR_amp, FIR_lambda, FIR_b, FIR_n)
+        )
 
         # return A(x)/A(V)
         return axav
