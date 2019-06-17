@@ -6,9 +6,6 @@ language: c
 os:
     - linux
 
-# Setting sudo to false opts in to Travis-CI container-based builds.
-sudo: false
-
 # The apt packages below are needed for sphinx builds. A full list of packages
 # that can be included can be found here:
 #
@@ -18,12 +15,22 @@ addons:
     apt:
         packages:
             - graphviz
-            - texlive-latex-extra
-            - dvipng
+
+
+stage: Comprehensive tests
+
+stages:
+   # Do the style check and a single test job, don't proceed if it fails
+   - name: Initial tests
+   # Test docs, astropy dev, and without optional dependencies
+   - name: Comprehensive tests
+   # These will only run when cron is opted in
+   - name: Cron tests
+     if: type = cron
+
 
 env:
     global:
-
         # The following versions are the 'default' for tests, unless
         # overridden underneath. They are defined here in order to save having
         # to repeat them for all configurations.
@@ -49,7 +56,7 @@ env:
         # are in astropy-ci-extras. If your package uses either of these,
         # add the channels to CONDA_CHANNELS along with any other channels
         # you want to use.
-        - CONDA_CHANNELS='astropy-ci-extras astropy'
+        - CONDA_CHANNELS='astropy'
 
         # If there are matplotlib or other GUI tests, uncomment the following
         # line to use the X virtual framebuffer.
@@ -57,15 +64,8 @@ env:
 
         # If you want to ignore certain flake8 errors, you can list them
         # in FLAKE8_OPT, for example:
+        # - FLAKE8_OPT='--ignore=E501'
         - FLAKE8_OPT='--ignore=E501'
-
-    matrix:
-        # Make sure that egg_info works without dependencies
-        - PYTHON_VERSION=2.7 SETUP_CMD='egg_info'
-        - PYTHON_VERSION=3.5 SETUP_CMD='egg_info'
-        - PYTHON_VERSION=3.6 SETUP_CMD='egg_info'
-        - PYTHON_VERSION=3.7 SETUP_CMD='egg_info'
-
 
 matrix:
 
@@ -73,12 +73,17 @@ matrix:
     fast_finish: true
 
     include:
+        # Make sure that egg_info works without dependencies
+        - stage: Initial tests
+          env: PYTHON_VERSION=3.7 SETUP_CMD='egg_info'
+
         # Try MacOS X
         - os: osx
           env: SETUP_CMD='test'
 
         # Do a coverage test.
         - os: linux
+          stage: Initial tests
           env: SETUP_CMD='test --coverage'
 
         # Check for sphinx doc build warnings - we do this first because it
@@ -87,14 +92,20 @@ matrix:
           env: SETUP_CMD='build_docs -w'
                CONDA_DEPENDENCIES=$CONDA_DEPENDENCIES_DOC
 
-        # Now try Astropy dev with the latest Python and LTS with Python 2.7 and 3.x.
+        # Now try Astropy dev with the latest Python and LTS with and 3.x.
         - os: linux
           env: ASTROPY_VERSION=development
                EVENT_TYPE='pull_request push cron'
         - os: linux
-          env: PYTHON_VERSION=2.7 ASTROPY_VERSION=lts
+          env: PYTHON_VERSION=3.6 ASTROPY_VERSION=lts NUMPY_VERSION=1.13
+
+        # Add a job that runs from cron only and tests against astropy dev and
+        # numpy dev to give a change for early discovery of issues and feedback
+        # for both developer teams.
         - os: linux
-          env: ASTROPY_VERSION=lts
+          stage: Cron tests
+          env: ASTROPY_VERSION=development NUMPY_VERSION=development
+               EVENT_TYPE='cron'
 
         # Try all python versions and Numpy versions. Since we can assume that
         # the Numpy developers have taken care of testing Numpy with different
@@ -102,25 +113,22 @@ matrix:
         # time.
 
         - os: linux
-          env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.12
+          env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.14
         - os: linux
-          env: PYTHON_VERSION=3.6 NUMPY_VERSION=1.13
+          env: PYTHON_VERSION=3.6 NUMPY_VERSION=1.14
         - os: linux
-          env: NUMPY_VERSION=1.14
-
-        # Try numpy pre-release
-        - os: linux
-          env: NUMPY_VERSION=prerelease
-               EVENT_TYPE='pull_request push cron'
+          env: NUMPY_VERSION=1.15
 
         # Do a PEP8 test with flake8
         - os: linux
+          stage: Initial tests
           env: MAIN_CMD='flake8 dust_extinction --count --show-source --statistics $FLAKE8_OPT' SETUP_CMD=''
 
     allow_failures:
         # Do a PEP8 test with flake8
-        # (allow to fail unless your code completely compliant)
+        # (do allow to fail unless your code completely compliant)
         - os: linux
+          stage: Initial tests
           env: MAIN_CMD='flake8 dust_extinction --count --show-source --statistics $FLAKE8_OPT' SETUP_CMD=''
 
 install:
@@ -154,4 +162,4 @@ script:
 after_success:
     # If coveralls.io is set up for this package, uncomment the line below.
     # The coveragerc file may be customized as needed for your package.
-    - if [[ $SETUP_CMD == *coverage* ]]; then coveralls --rcfile='dust_extinction/tests/coveragerc'; fi
+    # - if [[ $SETUP_CMD == *coverage* ]]; then coveralls --rcfile='dust_extinction/tests/coveragerc'; fi
