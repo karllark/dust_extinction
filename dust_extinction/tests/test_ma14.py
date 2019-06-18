@@ -7,32 +7,32 @@ from ..parameter_averages import M14
 from .helpers import _invalid_x_range
 
 
-x_bad = [-1.0, 0.1, 12.0, 100.]
+x_bad = [-1.0, 0.1, 12.0, 100.0]
 
 
 @pytest.mark.parametrize("x_invalid", x_bad)
 def test_invalid_wavenumbers(x_invalid):
-    _invalid_x_range(x_invalid, M14(), 'M14')
+    _invalid_x_range(x_invalid, M14(), "M14")
 
 
-@pytest.mark.parametrize("x_invalid_wavenumber", x_bad/u.micron)
+@pytest.mark.parametrize("x_invalid_wavenumber", x_bad / u.micron)
 def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
-    _invalid_x_range(x_invalid_wavenumber, M14(), 'M14')
+    _invalid_x_range(x_invalid_wavenumber, M14(), "M14")
 
 
-@pytest.mark.parametrize("x_invalid_micron", u.micron/x_bad)
+@pytest.mark.parametrize("x_invalid_micron", u.micron / x_bad)
 def test_invalid_micron(x_invalid_micron):
-    _invalid_x_range(x_invalid_micron, M14(), 'M14')
+    _invalid_x_range(x_invalid_micron, M14(), "M14")
 
 
-@pytest.mark.parametrize("x_invalid_angstrom", u.angstrom*1e4/x_bad)
+@pytest.mark.parametrize("x_invalid_angstrom", u.angstrom * 1e4 / x_bad)
 def test_invalid_angstrom(x_invalid_angstrom):
-    _invalid_x_range(x_invalid_angstrom, M14(), 'M14')
+    _invalid_x_range(x_invalid_angstrom, M14(), "M14")
 
 
 def get_axav_cor_vals():
     # choose x values from each portion of the curve
-    x = np.array([0.5, 2.])
+    x = np.array([0.5, 2.0])
 
     # get values of A(x)/A(V) from direct calculation
     # using R5495 = 3.1
@@ -40,7 +40,7 @@ def get_axav_cor_vals():
     tolerance = 2e-3
 
     # add units
-    x = x/u.micron
+    x = x / u.micron
 
     return (x, cor_vals, tolerance)
 
@@ -69,5 +69,4 @@ def test_extinction_M14_single_values(test_vals):
 
     # test
     np.testing.assert_allclose(tmodel(x), cor_val, rtol=tolerance)
-    np.testing.assert_allclose(tmodel.evaluate(x, 3.1), cor_val,
-                               rtol=tolerance)
+    np.testing.assert_allclose(tmodel.evaluate(x, 3.1), cor_val, rtol=tolerance)

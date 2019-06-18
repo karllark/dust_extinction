@@ -1,11 +1,11 @@
-from __future__ import (absolute_import, print_function, division)
+from __future__ import absolute_import, print_function, division
 
 import warnings
 
 import numpy as np
 import astropy.units as u
 
-__all__ = ['_get_x_in_wavenumbers', '_test_valid_x_range']
+__all__ = ["_get_x_in_wavenumbers", "_test_valid_x_range"]
 
 
 def _get_x_in_wavenumbers(in_x):
@@ -33,7 +33,7 @@ def _get_x_in_wavenumbers(in_x):
     # convert to wavenumbers (1/micron) if x input in units
     # otherwise, assume x in appropriate wavenumber units
     with u.add_enabled_equivalencies(u.spectral()):
-        x_quant = u.Quantity(in_x, 1.0/u.micron, dtype=np.float64)
+        x_quant = u.Quantity(in_x, 1.0 / u.micron, dtype=np.float64)
 
     # strip the quantity to avoid needing to add units to all the
     #    polynomical coefficients
@@ -55,11 +55,13 @@ def _test_valid_x_range(x, x_range, outname):
     outname: str
        name of curve for error message
     """
-    if np.logical_or(np.any(x < x_range[0]),
-                     np.any(x > x_range[1])):
-        raise ValueError('Input x outside of range defined for ' + outname
-                         + ' ['
-                         + str(x_range[0])
-                         + ' <= x <= '
-                         + str(x_range[1])
-                         + ', x has units 1/micron]')
+    if np.logical_or(np.any(x < x_range[0]), np.any(x > x_range[1])):
+        raise ValueError(
+            "Input x outside of range defined for "
+            + outname
+            + " ["
+            + str(x_range[0])
+            + " <= x <= "
+            + str(x_range[1])
+            + ", x has units 1/micron]"
+        )
