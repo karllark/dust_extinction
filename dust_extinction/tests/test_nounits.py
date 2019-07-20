@@ -52,7 +52,6 @@ def test_nounits_warning(model):
 def test_units_nowarning_expected(model):
     ext = model()
     x = [0.5 * (ext.x_range[0] + ext.x_range[1])] / u.micron
-    # x = np.arange(ext.x_range[0], ext.x_range[1], 0.1) * u.micron
 
     with pytest.warns(None) as record:
         ext(x)
