@@ -3,6 +3,7 @@ from __future__ import absolute_import, print_function, division
 import numpy as np
 from scipy import interpolate
 
+import astropy.units as u
 from astropy.modeling import Fittable1DModel, Parameter
 
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
@@ -101,7 +102,7 @@ def _curve_F99_method(
     # FM90 model and values
     fm90_model = FM90(C1=C1, C2=C2, C3=C3, C4=C4, xo=xo, gamma=gamma)
     # evaluate model and get results in A(x)/A(V)
-    axav_fm90 = fm90_model(xuv) / Rv + 1.0
+    axav_fm90 = fm90_model(xuv / u.micron) / Rv + 1.0
 
     # save spline points
     y_splineval_uv = axav_fm90[0:2]

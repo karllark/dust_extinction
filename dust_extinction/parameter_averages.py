@@ -5,6 +5,7 @@ import pkg_resources
 import numpy as np
 from scipy import interpolate
 
+import astropy.units as u
 from astropy.table import Table
 
 from .baseclasses import BaseExtRvModel, BaseExtRvAfAModel
@@ -1121,11 +1122,11 @@ class G16(BaseExtRvAfAModel):
 
         # get the A component extinction model
         extA_model = F99(Rv=RvA)
-        alav_A = extA_model(x)
+        alav_A = extA_model(x / u.micron)
 
         # get the B component extinction model
         extB_model = G03_SMCBar()
-        alav_B = extB_model(x)
+        alav_B = extB_model(x / u.micron)
 
         # create the mixture model
         alav = fA * alav_A + (1.0 - fA) * alav_B
