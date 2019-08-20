@@ -82,12 +82,6 @@ def get_axav_cor_vals():
     return (MW_x / u.micron, MW_axav)
 
 
-class P92_Exv(P92 | AxAvToExv):
-    """
-    Evalute P92 on E(x-V) data including solving for A(V)
-    """
-
-
 def test_AxAvtoExv_with_P92_fitting():
 
     # get an observed extinction curve to fit
@@ -101,7 +95,7 @@ def test_AxAvtoExv_with_P92_fitting():
     y = (y_axav - 1.0) * av
 
     # change from defaults to make the best fit harder to find
-    p92_init = P92_Exv()
+    p92_init = P92() | AxAvToExv()
 
     fit = LevMarLSQFitter()
     # accuracy set to avoid warning the fit may have failed
