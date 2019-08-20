@@ -1,7 +1,7 @@
-0.8 (unreleased)
+0.8 (2019-08-20)
 ----------------
 
-- VCG04, GCC09 models added
+- VCG04, GCC09, FM20 models added
 
 0.7 (2019-02-11)
 ================
