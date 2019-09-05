@@ -5,29 +5,6 @@ import astropy.units as u
 from astropy.modeling import InputParameterError
 
 from ..parameter_averages import O94
-from .helpers import _invalid_x_range
-
-
-@pytest.mark.parametrize("x_invalid", [-1.0, 0.2, 10.1, 100.0])
-def test_invalid_wavenumbers(x_invalid):
-    _invalid_x_range(x_invalid, O94(Rv=3.1), "O94")
-
-
-@pytest.mark.parametrize("x_invalid_wavenumber", [-1.0, 0.2, 10.1, 100.0] / u.micron)
-def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
-    _invalid_x_range(x_invalid_wavenumber, O94(Rv=3.1), "O94")
-
-
-@pytest.mark.parametrize("x_invalid_micron", u.micron / [-1.0, 0.2, 10.1, 100.0])
-def test_invalid_micron(x_invalid_micron):
-    _invalid_x_range(x_invalid_micron, O94(Rv=3.1), "O94")
-
-
-@pytest.mark.parametrize(
-    "x_invalid_angstrom", u.angstrom * 1e4 / [-1.0, 0.2, 10.1, 100.0]
-)
-def test_invalid_angstrom(x_invalid_angstrom):
-    _invalid_x_range(x_invalid_angstrom, O94(Rv=3.1), "O94")
 
 
 def test_axav_o94_rv31():

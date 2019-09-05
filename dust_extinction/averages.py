@@ -184,7 +184,7 @@ class G03_SMCBar(BaseExtAveModel):
             optnir_axav_x,
             optnir_axav_y,
             self.x_range,
-            "G03",
+            "G03_SMCBar",
         )
 
 
@@ -350,7 +350,7 @@ class G03_LMCAvg(BaseExtAveModel):
             optnir_axav_x,
             optnir_axav_y,
             self.x_range,
-            "G03",
+            "G03_LMCAvg",
         )
 
 
@@ -519,7 +519,7 @@ class G03_LMC2(BaseExtAveModel):
             optnir_axav_x,
             optnir_axav_y,
             self.x_range,
-            "G03",
+            "G03_LMC2",
         )
 
 
@@ -1577,7 +1577,7 @@ class GCC09_MWAvg(BaseExtAveModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_GCC09, "GCC09")
+        _test_valid_x_range(x, x_range_GCC09, "GCC09_MWAvg")
 
         # P92 parameters fit to the data using uncs as weights
         p92_fit = P92(
