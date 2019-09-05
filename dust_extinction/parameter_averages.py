@@ -859,7 +859,7 @@ class M14(BaseExtRvModel):
         plt.show()
     """
 
-    Rv_range = [2.0, 7.0]
+    Rv_range = [2.0, 6.0]
     x_range = x_range_M14
 
     def evaluate(self, in_x, Rv):

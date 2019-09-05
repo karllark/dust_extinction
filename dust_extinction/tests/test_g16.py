@@ -1,50 +1,9 @@
 import numpy as np
 import pytest
 
-import astropy.units as u
-from astropy.modeling import InputParameterError
-
 from ..parameter_averages import G16
 from ..averages import G03_SMCBar
 from .test_f99 import get_axav_cor_vals as get_axav_cor_vals_fA_1
-from .helpers import _invalid_x_range
-
-
-@pytest.mark.parametrize("RvA_invalid", [-1.0, 0.0, 1.9, 6.1, 10.0])
-def test_invalid_RvA_input(RvA_invalid):
-    with pytest.raises(InputParameterError) as exc:
-        G16(RvA=RvA_invalid)
-    assert exc.value.args[0] == "parameter RvA must be between 2.0 and 6.0"
-
-
-@pytest.mark.parametrize("fA_invalid", [-1.0, -0.1, 1.1, 10.0])
-def test_invalid_fA_input(fA_invalid):
-    with pytest.raises(InputParameterError) as exc:
-        G16(fA=fA_invalid)
-    assert exc.value.args[0] == "parameter fA must be between 0.0 and 1.0"
-
-
-x_bad = [-1.0, 0.1, 12.0, 100.0]
-
-
-@pytest.mark.parametrize("x_invalid", x_bad)
-def test_invalid_wavenumbers(x_invalid):
-    _invalid_x_range(x_invalid, G16(), "G16")
-
-
-@pytest.mark.parametrize("x_invalid_wavenumber", x_bad / u.micron)
-def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
-    _invalid_x_range(x_invalid_wavenumber, G16(), "G16")
-
-
-@pytest.mark.parametrize("x_invalid_micron", u.micron / x_bad)
-def test_invalid_micron(x_invalid_micron):
-    _invalid_x_range(x_invalid_micron, G16(), "G16")
-
-
-@pytest.mark.parametrize("x_invalid_angstrom", u.angstrom * 1e4 / x_bad)
-def test_invalid_angstrom(x_invalid_angstrom):
-    _invalid_x_range(x_invalid_angstrom, G16(), "G16")
 
 
 def test_extinction_G16_fA_1_values():
