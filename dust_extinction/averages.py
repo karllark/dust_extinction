@@ -14,7 +14,7 @@ x_range_GCC09 = [0.3, 1.0 / 0.0912]
 
 class G03_SMCBar(BaseExtAveModel):
     """
-    G03 SMCBar Average Extinction Curve
+    Gordon et al (2003) SMCBar Average Extinction Curve
 
     Parameters
     ----------
@@ -26,9 +26,11 @@ class G03_SMCBar(BaseExtAveModel):
 
     Notes
     -----
-    SMCBar G03 average extinction curve
-
     From Gordon et al. (2003, ApJ, 594, 279)
+
+    The observed A(lambda)/A(V) values at 2.198 and 1.25 microns were
+    changed to provide smooth interpolation as noted in
+    Gordon et al. (2016, ApJ, 826, 104)
 
     Example showing the average curve
 
@@ -190,7 +192,7 @@ class G03_SMCBar(BaseExtAveModel):
 
 class G03_LMCAvg(BaseExtAveModel):
     """
-    G03 LMCAvg Average Extinction Curve
+    Gordon et al (2003) LMCAvg Average Extinction Curve
 
     Parameters
     ----------
@@ -202,8 +204,6 @@ class G03_LMCAvg(BaseExtAveModel):
 
     Notes
     -----
-    LMCAvg G03 average extinction curve
-
     From Gordon et al. (2003, ApJ, 594, 279)
 
     Example showing the average curve
@@ -356,7 +356,7 @@ class G03_LMCAvg(BaseExtAveModel):
 
 class G03_LMC2(BaseExtAveModel):
     """
-    G03 LMC2 Average Extinction Curve
+    Gordon et al (2003) LMC2 Average Extinction Curve
 
     Parameters
     ----------
@@ -368,8 +368,6 @@ class G03_LMC2(BaseExtAveModel):
 
     Notes
     -----
-    LMC2 G03 average extinction curve
-
     From Gordon et al. (2003, ApJ, 594, 279)
 
     Example showing the average curve
@@ -525,7 +523,7 @@ class G03_LMC2(BaseExtAveModel):
 
 class GCC09_MWAvg(BaseExtAveModel):
     """
-    G09 MW Average Extinction Curve
+    Gorodn, Cartledge, & Clayton (2009) Milky Way Average Extinction Curve
 
     Parameters
     ----------
@@ -537,8 +535,6 @@ class GCC09_MWAvg(BaseExtAveModel):
 
     Notes
     -----
-    MW G09 average extinction curve
-
     From Gordon, Cartledge, & Clayton (2009, ApJ, 705, 1320)
 
     Example showing the average curve

@@ -13,7 +13,7 @@ python fashion after downloading it from the git repo::
 Using pip
 =========
 
-``dust_extinction`` can also be installed using pip::
+``dust_extinction`` can be installed using pip::
 
     # from PyPI
     pip install dust_extinction
@@ -24,3 +24,10 @@ Using pip
     # from the master trunk on the repository, considered developmental code
     pip install git+https://github.com/karllark/dust_extinction.git
 
+Using conda
+===========
+
+``dust_extinction`` can be installed using conda via the conda-forge channel::
+
+    conda config --add channels conda-forge
+    conda install dust_extinction
