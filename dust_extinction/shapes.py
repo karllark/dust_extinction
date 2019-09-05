@@ -139,7 +139,7 @@ def _curve_F99_method(
 
 class FM90(Fittable1DModel):
     """
-    FM90 extinction model calculation
+    Fitzpatrick & Massa (1990) 6 parameter ultraviolet shape model
 
     Parameters
     ----------
@@ -163,9 +163,7 @@ class FM90(Fittable1DModel):
 
     Notes
     -----
-    FM90 extinction model
-
-    From Fitzpatrick & Massa (1990)
+    From Fitzpatrick & Massa (1990, ApJS, 72, 163)
 
     Only applicable at UV wavelengths
 
@@ -295,7 +293,7 @@ class FM90(Fittable1DModel):
 
 class P92(Fittable1DModel):
     """
-    P92 extinction model calculation
+    Pei (1992) 24 parameter shape model
 
     Parameters
     ----------
@@ -355,9 +353,7 @@ class P92(Fittable1DModel):
 
     Notes
     -----
-    P92 extinction model
-
-    From Pei (1992)
+    From Pei (1992, ApJ, 395, 130)
 
     Applicable from the extreme UV to far-IR
 

@@ -27,7 +27,7 @@ x_range_G16 = [0.3, 10.0]
 
 class CCM89(BaseExtRvModel):
     """
-    CCM89 extinction model calculation
+    Cardelli, Clayton, & Mathis (1989) Milky Way R(V) dependent model
 
     Parameters
     ----------
@@ -41,8 +41,6 @@ class CCM89(BaseExtRvModel):
 
     Notes
     -----
-    CCM89 Milky Way R(V) dependent extinction model
-
     From Cardelli, Clayton, and Mathis (1989, ApJ, 345, 245)
 
     Example showing CCM89 curves for a range of R(V) values.
@@ -154,7 +152,7 @@ class CCM89(BaseExtRvModel):
 
 class O94(BaseExtRvModel):
     """
-    O94 extinction model calculation
+    O'Donnell (1994) Milky Way R(V) dependent model
 
     Parameters
     ----------
@@ -168,8 +166,6 @@ class O94(BaseExtRvModel):
 
     Notes
     -----
-    O94 Milky Way R(V) dependent extinction model
-
     From O'Donnell (1994, ApJ, 422, 158)
       Updates/improves the optical portion of the CCM89 model
 
@@ -282,7 +278,7 @@ class O94(BaseExtRvModel):
 
 class F99(BaseExtRvModel):
     """
-    F99 extinction model calculation
+    Fitzpatrick (1999) Milky Way R(V) dependent model
 
     Parameters
     ----------
@@ -296,8 +292,6 @@ class F99(BaseExtRvModel):
 
     Notes
     -----
-    F99 Milky Way R(V) dependent extinction model
-
     From Fitzpatrick (1999, PASP, 111, 63)
 
     Example showing F99 curves for a range of R(V) values.
@@ -420,12 +414,7 @@ class F99(BaseExtRvModel):
 
 class F04(BaseExtRvModel):
     """
-    F99 extinction model calculation
-
-    Updated with the NIR Rv dependence in
-       Fitzpatrick (2004, ASP Conf. Ser. 309, Astrophysics of Dust, 33)
-
-    See also Fitzpatrick & Massa (2007, ApJ, 663, 320)
+    Fitzpatrick (2004) Milky Way R(V) dependent model
 
     Parameters
     ----------
@@ -439,12 +428,8 @@ class F04(BaseExtRvModel):
 
     Notes
     -----
-    F99 Milky Way R(V) dependent extinction model
-
-    From Fitzpatrick (1999, PASP, 111, 63)
-
-    Updated with the NIR Rv dependence in
-       Fitzpatrick (2004, ASP Conf. Ser. 309, Astrophysics of Dust, 33)
+    From Fitzpatrick (2004, ASP Conf. Ser. 309, Astrophysics of Dust, 33)
+        Equivalent to the F99 model with an updated NIR Rv dependence
 
     See also Fitzpatrick & Massa (2007, ApJ, 663, 320)
 
@@ -567,7 +552,7 @@ class F04(BaseExtRvModel):
 
 class VCG04(BaseExtRvModel):
     """
-    VCG04 extinction model calculation
+    Valencic, Clayton, & Gordon (2004) Milky Way R(V) dependent model
 
     Parameters
     ----------
@@ -581,7 +566,6 @@ class VCG04(BaseExtRvModel):
 
     Notes
     -----
-    VCG04 Milky Way R(V) dependent extinction model
     From Valencic, Clayton, & Gordon (2004, ApJ, 616, 912)
     Including erratum: 2014, ApJ, 793, 66
 
@@ -678,7 +662,7 @@ class VCG04(BaseExtRvModel):
 
 class GCC09(BaseExtRvModel):
     """
-    GCC09 extinction model calculation
+    Grodon, Cartledge, & Clayton (2009) Milky Way R(V) dependent model
 
     Parameters
     ----------
@@ -692,8 +676,6 @@ class GCC09(BaseExtRvModel):
 
     Notes
     -----
-    GCC09 Milky Way R(V) dependent extinction model
-
     From Gordon, Cartledge, & Clayton (2009, ApJ, 705, 1320)
     Including erratum: 2014, ApJ, 781, 128
 
@@ -792,9 +774,7 @@ class GCC09(BaseExtRvModel):
 class M14(BaseExtRvModel):
 
     """
-    M14 extinction model calculation
-
-    From Maiz Apellaniz et al. (2014, A&A, 564, 63)
+    Maiz Apellaniz et al (2014) Milky Way & LMC R(V) dependent model
 
     Parameters
     ----------
@@ -994,7 +974,7 @@ class M14(BaseExtRvModel):
 
 class G16(BaseExtRvAfAModel):
     """
-    G16 extinction model calculation
+    Gordon et al (2016) Milky Way, LMC, & SMC R(V) and f_A dependent model
 
     Mixture model between the F99 R(V) dependent model (component A)
     and the G03_SMCBar model (component B)
@@ -1016,8 +996,6 @@ class G16(BaseExtRvAfAModel):
 
     Notes
     -----
-    G16 R_A(V) and f_A dependent model
-
     From Gordon et al. (2016, ApJ, 826, 104)
 
     Example showing G16 curves for a range of R_A(V) values
@@ -1137,7 +1115,7 @@ class G16(BaseExtRvAfAModel):
 
 class F20(BaseExtRvModel):
     """
-    F20 extinction model calculation
+    Fitzpatrick et al (2020) extinction model calculation
 
     Fitzpatrick, Massa, Gordon et al. (2020, submitted) model.
     Based on a sample of stars observed spectroscopically in the
