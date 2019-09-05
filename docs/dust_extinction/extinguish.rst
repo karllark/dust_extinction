@@ -11,8 +11,8 @@ reddens the flux, but sometimes 'bluens' the flux
 (e.g, on the short wavelength side of the 2175 A bump).
 So extinguish is the more generic term.
 
-Example: Extinguish a Blackbody
-===============================
+Extinguish a Blackbody
+======================
 
 .. plot::
    :include-source:
@@ -63,3 +63,14 @@ Example: Extinguish a Blackbody
    ax.legend(loc='best')
    plt.tight_layout()
    plt.show()
+
+Notebooks
+=========
+
+A great way to show how to use the `dust_extinction` package is using a
+jupyter notebook.  Check out the
+`Analyzing interstellar reddening and calculating synthetic photometry
+<http://learn.astropy.org/rst-tutorials/color-excess.html>`_
+notebook that was created as part of the
+`Learn.Astropy
+<http://learn.astropy.org/>`_ effort.

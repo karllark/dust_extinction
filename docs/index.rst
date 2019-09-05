@@ -29,9 +29,9 @@ User Documentation
 
    Extinction versus Attenuation <dust_extinction/extinction.rst>
    Flavors of Models <dust_extinction/model_flavors.rst>
+   How to choose a model <dust_extinction/choose_model.rst>
    Extinguish (or unextinguish) data <dust_extinction/extinguish.rst>
    Fitting extinction curves <dust_extinction/fit_extinction.rst>
-   How to choose a model <dust_extinction/choose_model.rst>
    References <dust_extinction/references.rst>
 
 Installation
