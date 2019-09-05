@@ -11,7 +11,7 @@ from .helpers import _invalid_x_range
 @pytest.mark.parametrize("Rv_invalid", [-1.0, 0.0, 1.9, 6.1, 10.0])
 def test_invalid_Rv_input(Rv_invalid):
     with pytest.raises(InputParameterError) as exc:
-        tmodel = CCM89(Rv=Rv_invalid)
+        CCM89(Rv=Rv_invalid)
     assert exc.value.args[0] == "parameter Rv must be between 2.0 and 6.0"
 
 
