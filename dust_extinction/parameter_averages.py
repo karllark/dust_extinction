@@ -1139,7 +1139,7 @@ class F20(BaseExtRvModel):
     """
     F20 extinction model calculation
 
-    Fitzpatrick, Massa, Gordon et al. (2020, almost submitted) model.
+    Fitzpatrick, Massa, Gordon et al. (2020, submitted) model.
     Based on a sample of stars observed spectroscopically in the
     optical with HST/STIS.
 
