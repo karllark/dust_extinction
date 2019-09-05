@@ -157,9 +157,9 @@ install:
     # other dependencies.
 
 script:
-   - $MAIN_CMD $SETUP_CMD
+    - $MAIN_CMD $SETUP_CMD
 
 after_success:
     # If coveralls.io is set up for this package, uncomment the line below.
     # The coveragerc file may be customized as needed for your package.
-    # - if [[ $SETUP_CMD == *coverage* ]]; then coveralls --rcfile='dust_extinction/tests/coveragerc'; fi
+    - if [[ $SETUP_CMD == *coverage* ]]; then coveralls --rcfile='dust_extinction/tests/coveragerc'; fi
