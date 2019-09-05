@@ -10,20 +10,6 @@ from .test_f99 import get_axav_cor_vals as get_axav_cor_vals_fA_1
 from .helpers import _invalid_x_range
 
 
-@pytest.mark.parametrize("RvA_invalid", [-1.0, 0.0, 1.9, 6.1, 10.0])
-def test_invalid_RvA_input(RvA_invalid):
-    with pytest.raises(InputParameterError) as exc:
-        G16(RvA=RvA_invalid)
-    assert exc.value.args[0] == "parameter RvA must be between 2.0 and 6.0"
-
-
-@pytest.mark.parametrize("fA_invalid", [-1.0, -0.1, 1.1, 10.0])
-def test_invalid_fA_input(fA_invalid):
-    with pytest.raises(InputParameterError) as exc:
-        G16(fA=fA_invalid)
-    assert exc.value.args[0] == "parameter fA must be between 0.0 and 1.0"
-
-
 x_bad = [-1.0, 0.1, 12.0, 100.0]
 
 

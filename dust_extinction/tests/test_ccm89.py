@@ -8,13 +8,6 @@ from ..parameter_averages import CCM89
 from .helpers import _invalid_x_range
 
 
-@pytest.mark.parametrize("Rv_invalid", [-1.0, 0.0, 1.9, 6.1, 10.0])
-def test_invalid_Rv_input(Rv_invalid):
-    with pytest.raises(InputParameterError) as exc:
-        CCM89(Rv=Rv_invalid)
-    assert exc.value.args[0] == "parameter Rv must be between 2.0 and 6.0"
-
-
 @pytest.mark.parametrize("x_invalid", [-1.0, 0.2, 10.1, 100.0])
 def test_invalid_wavenumbers(x_invalid):
     _invalid_x_range(x_invalid, CCM89(Rv=3.1), "CCM89")
