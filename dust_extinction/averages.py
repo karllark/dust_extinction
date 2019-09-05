@@ -28,6 +28,10 @@ class G03_SMCBar(BaseExtAveModel):
     -----
     From Gordon et al. (2003, ApJ, 594, 279)
 
+    The observed A(lambda)/A(V) values at 2.198 and 1.25 microns were
+    changed to provide smooth interpolation as noted in
+    Gordon et al. (2016, ApJ, 826, 104)
+
     Example showing the average curve
 
     .. plot::
