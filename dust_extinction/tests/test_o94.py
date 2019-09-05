@@ -12,7 +12,7 @@ from .helpers import _invalid_x_range
 def test_invalid_Rv_input(Rv_invalid):
 
     with pytest.raises(InputParameterError) as exc:
-        tmodel = O94(Rv=Rv_invalid)
+        O94(Rv=Rv_invalid)
     assert exc.value.args[0] == "parameter Rv must be between 2.0 and 6.0"
 
 
