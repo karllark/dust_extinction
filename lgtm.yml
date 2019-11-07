@@ -1,0 +1,12 @@
+# info from documentation:
+# https://help.semmle.com/lgtm-enterprise/user/help/lgtm.yml-configuration-file.html#python_setup
+# and from the example:
+# https://help.semmle.com/lgtm-enterprise/user/Resources/downloads/lgtm.template.yml
+
+extraction:
+  python:
+    python_setup:
+      # Override the version of the Python interpreter used for setup and extraction
+      # Default: Python 3 if no version is explicitly specified, and if there are no
+      # commits to the repository before January 1, 2017. Otherwise Python 2.
+      version: 3
