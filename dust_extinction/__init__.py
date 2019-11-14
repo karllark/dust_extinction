@@ -11,7 +11,7 @@ from ._astropy_init import *   # noqa
 import sys
 from distutils.version import LooseVersion
 
-__minimum_python_version__ = "3.7"
+__minimum_python_version__ = "3.5"
 
 __all__ = []
 
