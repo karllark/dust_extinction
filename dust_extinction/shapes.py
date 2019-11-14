@@ -201,9 +201,8 @@ class FM90(Fittable1DModel):
         ax.legend(loc='best')
         plt.show()
     """
-
-    inputs = ("x",)
-    outputs = ("exvebv",)
+    n_inputs = 1
+    n_outputs = 1
 
     C1 = Parameter(description="linear term: y-intercept", default=0.10)
     C2 = Parameter(description="linear term: slope", default=0.70)
@@ -427,9 +426,8 @@ class P92(Fittable1DModel):
         ax.legend(loc='best')
         plt.show()
     """
-
-    inputs = ("x",)
-    outputs = ("axav",)
+    n_inputs = 1
+    n_outputs = 1
 
     # constant for conversion from Ax/Ab to (more standard) Ax/Av
     AbAv = 1.0 / 3.08 + 1.0
