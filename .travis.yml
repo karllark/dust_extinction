@@ -140,7 +140,7 @@ matrix:
         #   env: MAIN_CMD='flake8 dust_extinction --count --show-source --statistics $FLAKE8_OPT' SETUP_CMD=''
 
         - os: linux
-          env: PYTHON_VERSION=3.6 ASTROPY_VERSION=lts NUMPY_VERSION=1.13 PYTEST_VERSION=<3.7
+          env: PYTHON_VERSION=3.6 ASTROPY_VERSION=lts NUMPY_VERSION=1.13 ATTRS_VERSION=<19.2
 
 
 install:
