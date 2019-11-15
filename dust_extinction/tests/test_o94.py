@@ -7,69 +7,6 @@ from astropy.modeling import InputParameterError
 from ..parameter_averages import O94
 
 
-def test_axav_o94_rv31():
-    # values from Bastiaasen (1992) Table 6
-    x = np.array(
-        [
-            2.939,
-            2.863,
-            2.778,
-            2.642,
-            2.476,
-            2.385,
-            2.275,
-            2.224,
-            2.124,
-            2.000,
-            1.921,
-            1.849,
-            1.785,
-            1.718,
-            1.637,
-            1.563,
-            1.497,
-            1.408,
-            1.332,
-            1.270,
-        ]
-    )
-    cor_vals = np.array(
-        [
-            1.725,
-            1.651,
-            1.559,
-            1.431,
-            1.292,
-            1.206,
-            1.100,
-            1.027,
-            0.907,
-            0.738,
-            0.606,
-            0.491,
-            0.383,
-            0.301,
-            0.190,
-            0.098,
-            -0.004,
-            -0.128,
-            -0.236,
-            -0.327,
-        ]
-    )
-
-    # initialize extinction model
-    tmodel = O94(Rv=3.1)
-
-    # get the model results and change to E(l-1.5)/E(2.2-1.5)
-    mod_vals = tmodel(x)
-    norm_vals = tmodel([1.5, 2.2])
-    mod_vals = (mod_vals - norm_vals[0]) / (norm_vals[1] - norm_vals[0])
-
-    # test (table in paper has limited precision)
-    np.testing.assert_allclose(mod_vals, cor_vals, atol=6e-2)
-
-
 def get_axav_cor_vals(Rv):
     # testing only NIR or UV wavenumbers (optical tested in previous test)
     # O94 is the same as CCM89 for these wavelengths
@@ -180,34 +117,6 @@ def get_axav_cor_vals(Rv):
         cor_vals = np.array([0.0])
 
     return (x, cor_vals)
-
-
-@pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
-def test_extinction_O94_values(Rv):
-    # get the correct values
-    x, cor_vals = get_axav_cor_vals(Rv)
-
-    # initialize extinction model
-    tmodel = O94(Rv=Rv)
-
-    # test
-    np.testing.assert_allclose(tmodel(x), cor_vals)
-
-
-x_vals, axav_vals = get_axav_cor_vals(3.1)
-test_vals = zip(x_vals, axav_vals)
-
-
-@pytest.mark.parametrize("test_vals", test_vals)
-def test_extinction_O94_single_values(test_vals):
-    x, cor_val = test_vals
-
-    # initialize extinction model
-    tmodel = O94()
-
-    # test
-    np.testing.assert_allclose(tmodel(x), cor_val)
-    np.testing.assert_allclose(tmodel.evaluate(x, 3.1), cor_val)
 
 
 def test_extinguish_no_av_or_ebv():
