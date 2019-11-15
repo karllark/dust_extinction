@@ -139,6 +139,10 @@ matrix:
         #   stage: Initial tests
         #   env: MAIN_CMD='flake8 dust_extinction --count --show-source --statistics $FLAKE8_OPT' SETUP_CMD=''
 
+        - os: linux
+          env: PYTHON_VERSION=3.6 ASTROPY_VERSION=lts NUMPY_VERSION=1.13 PYTEST_VERSION=<3.7
+
+
 install:
 
     # We now use the ci-helpers package to set up our testing environment.
