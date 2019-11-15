@@ -24,6 +24,8 @@ stages:
    - name: Initial tests
    # Test docs, astropy dev, and without optional dependencies
    - name: Comprehensive tests
+   # Slow tests that should only run if comprehensive ones passed
+   - name: Slow tests
    # These will only run when cron is opted in
    - name: Cron tests
      if: type = cron
@@ -64,7 +66,6 @@ env:
 
         # If you want to ignore certain flake8 errors, you can list them
         # in FLAKE8_OPT, for example:
-        # - FLAKE8_OPT='--ignore=E501'
         - FLAKE8_OPT='--ignore=E501'
 
 matrix:
@@ -77,9 +78,11 @@ matrix:
         - stage: Initial tests
           env: PYTHON_VERSION=3.7 SETUP_CMD='egg_info'
 
-        # Try MacOS X
+        # Try MacOS X, usually enough only to run from cron as hardly there are
+        # issues that are not picked up by a linux worker
         - os: osx
-          env: SETUP_CMD='test'
+          stage: Cron tests
+          env: SETUP_CMD='test' EVENT_TYPE='cron'
 
         # Do a coverage test.
         - os: linux
@@ -97,7 +100,7 @@ matrix:
           env: ASTROPY_VERSION=development
                EVENT_TYPE='pull_request push cron'
         - os: linux
-          env: PYTHON_VERSION=3.6 ASTROPY_VERSION=lts NUMPY_VERSION=1.13
+          env: PYTHON_VERSION=3.6 ASTROPY_VERSION=lts NUMPY_VERSION=1.13 ATTRS_VERSION="<19.2"
 
         # Add a job that runs from cron only and tests against astropy dev and
         # numpy dev to give a change for early discovery of issues and feedback
@@ -106,6 +109,11 @@ matrix:
           stage: Cron tests
           env: ASTROPY_VERSION=development NUMPY_VERSION=development
                EVENT_TYPE='cron'
+
+        # Try on Windows.
+        - os: windows
+          stage: Slow tests
+          env: SETUP_CMD='test'
 
         # Try all python versions and Numpy versions. Since we can assume that
         # the Numpy developers have taken care of testing Numpy with different
@@ -127,9 +135,13 @@ matrix:
     allow_failures:
         # Do a PEP8 test with flake8
         # (do allow to fail unless your code completely compliant)
+        # - os: linux
+        #   stage: Initial tests
+        #   env: MAIN_CMD='flake8 dust_extinction --count --show-source --statistics $FLAKE8_OPT' SETUP_CMD=''
+
         - os: linux
-          stage: Initial tests
-          env: MAIN_CMD='flake8 dust_extinction --count --show-source --statistics $FLAKE8_OPT' SETUP_CMD=''
+          env: PYTHON_VERSION=3.6 ASTROPY_VERSION=lts NUMPY_VERSION=1.13 ATTRS_VERSION="<19.2"
+
 
 install:
 
@@ -157,9 +169,9 @@ install:
     # other dependencies.
 
 script:
-    - $MAIN_CMD $SETUP_CMD
+   - $MAIN_CMD $SETUP_CMD
 
 after_success:
     # If coveralls.io is set up for this package, uncomment the line below.
     # The coveragerc file may be customized as needed for your package.
-    - if [[ $SETUP_CMD == *coverage* ]]; then coveralls --rcfile='dust_extinction/tests/coveragerc'; fi
+  - if [[ $SETUP_CMD == *coverage* ]]; then coveralls --rcfile='dust_extinction/tests/coveragerc'; fi

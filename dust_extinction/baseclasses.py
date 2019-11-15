@@ -12,8 +12,8 @@ class BaseExtModel(Model):
     Base Extinction Model.  Do not use.
     """
 
-    inputs = ("x",)
-    outputs = ("axav",)
+    n_inputs = 1
+    n_outputs = 1
 
     def extinguish(self, x, Av=None, Ebv=None):
         """
@@ -60,8 +60,8 @@ class BaseExtAveModel(Model):
     Base Extinction Average.  Do not use.
     """
 
-    inputs = ("x",)
-    outputs = ("axav",)
+    n_inputs = 1
+    n_outputs = 1
 
     def extinguish(self, x, Av=None, Ebv=None):
         """
