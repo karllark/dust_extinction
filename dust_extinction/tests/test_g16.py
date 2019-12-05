@@ -1,9 +1,26 @@
 import numpy as np
 import pytest
+import astropy.units as u
 
 from ..parameter_averages import G16
 from ..averages import G03_SMCBar
-from .test_f99 import get_axav_cor_vals as get_axav_cor_vals_fA_1
+
+
+# used to be in test_f99
+def get_axav_cor_vals_fA_1():
+    # from Fitzpatrick (1999) Table 3
+    x = np.array([0.377, 0.820, 1.667, 1.828, 2.141, 2.433, 3.704, 3.846])
+
+    cor_vals = np.array([0.265, 0.829, 2.688, 3.055, 3.806, 4.315, 6.265, 6.591])
+    tolerance = 2e-3
+
+    # convert from A(x)/E(B-V) to A(x)/A(V)
+    cor_vals /= 3.1
+
+    # add units
+    x = x / u.micron
+
+    return (x, cor_vals, tolerance)
 
 
 def test_extinction_G16_fA_1_values():
