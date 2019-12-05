@@ -13,7 +13,7 @@ from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .averages import G03_SMCBar
 from .shapes import _curve_F99_method
 
-__all__ = ["CCM89", "O94", "F99", "F04", "VCG04", "GCC09", "M14", "G16", "F20"]
+__all__ = ["CCM89", "O94", "F99", "F04", "VCG04", "GCC09", "M14", "G16", "F19"]
 
 x_range_CCM89 = [0.3, 10.0]
 x_range_O94 = x_range_CCM89
@@ -1113,11 +1113,11 @@ class G16(BaseExtRvAfAModel):
         return alav
 
 
-class F20(BaseExtRvModel):
+class F19(BaseExtRvModel):
     """
-    Fitzpatrick et al (2020) extinction model calculation
+    Fitzpatrick et al (2019) extinction model calculation
 
-    Fitzpatrick, Massa, Gordon et al. (2020, submitted) model.
+    Fitzpatrick, Massa, Gordon et al. (2019, ApJ, 886, 108) model.
     Based on a sample of stars observed spectroscopically in the
     optical with HST/STIS.
 
@@ -1133,9 +1133,9 @@ class F20(BaseExtRvModel):
 
     Notes
     -----
-    F20 Milky Way R(V) dependent extinction model
+    F19 Milky Way R(V) dependent extinction model
 
-    Example showing F20 curves for a range of R(V) values.
+    Example showing F19 curves for a range of R(V) values.
 
     .. plot::
         :include-source:
@@ -1144,12 +1144,12 @@ class F20(BaseExtRvModel):
         import matplotlib.pyplot as plt
         import astropy.units as u
 
-        from dust_extinction.parameter_averages import F20
+        from dust_extinction.parameter_averages import F19
 
         fig, ax = plt.subplots()
 
         # temp model to get the correct x range
-        text_model = F20()
+        text_model = F19()
 
         # generate the curves and plot them
         x = np.arange(text_model.x_range[0],
@@ -1157,7 +1157,7 @@ class F20(BaseExtRvModel):
 
         Rvs = ['2.0','3.0','4.0','5.0','6.0']
         for cur_Rv in Rvs:
-           ext_model = F20(Rv=cur_Rv)
+           ext_model = F19(Rv=cur_Rv)
            ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
 
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
@@ -1172,7 +1172,7 @@ class F20(BaseExtRvModel):
 
     def evaluate(self, in_x, Rv):
         """
-        F20 function
+        F19 function
 
         Parameters
         ----------
@@ -1197,7 +1197,7 @@ class F20(BaseExtRvModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, "F20")
+        _test_valid_x_range(x, self.x_range, "F19")
 
         # just in case someone calls evaluate explicitly
         Rv = np.atleast_1d(Rv)
@@ -1208,7 +1208,7 @@ class F20(BaseExtRvModel):
         # get the tabulated information
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
-        a = Table.read(data_path + "F20_tabulated.dat", format="ascii")
+        a = Table.read(data_path + "F19_tabulated.dat", format="ascii")
 
         # compute E(lambda-55)/E(B-55) on the tabulated x points
         k_rV_tab_x = a["k_3.02"].data + a["deltak"].data * (Rv - 3.10) * 0.990

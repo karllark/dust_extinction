@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import astropy.units as u
 
-from dust_extinction.parameter_averages import CCM89, O94, F99, F04, M14, F20
+from dust_extinction.parameter_averages import CCM89, O94, F99, F04, M14, F19
 
 # fmt: off
 models_corvals = {
@@ -70,7 +70,7 @@ models_corvals = {
         "y_values": [0.1323, 1.141],
         "atol": 1e-3,
     },
-    F20: {
+    F19: {
         "Rv": 3.1,
         "x_values": [1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0],
         # convert from E(x-V)/E(B-V) to A(x)/A(V)
