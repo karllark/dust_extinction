@@ -1,3 +1,5 @@
+.. _dust-extinction-mainpage:
+
 ############################
 Interstellar Dust Extinction
 ############################
