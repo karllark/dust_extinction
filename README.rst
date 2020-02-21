@@ -6,6 +6,10 @@ implemented using the astropy.modeling framework.
 
 This package is an `affiliated package <https://www.astropy.org/affiliated/>`_ of `AstroPy`_.
 
+To install::
+
+    pip install dust_extinction
+
 Build checks/status
 -------------------
 
