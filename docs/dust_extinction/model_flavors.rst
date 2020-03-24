@@ -58,14 +58,15 @@ Average models
   import matplotlib.pyplot as plt
   import astropy.units as u
 
-  from dust_extinction.averages import RL85_MWAvg
+  from dust_extinction.averages import (RL85_MWAvg,
+                                        I05_MWAvg)
 
   fig, ax = plt.subplots()
 
   # generate the curves and plot them
   x = 1.0 / (np.arange(1.0, 40.0 ,0.1) * u.micron)
 
-  models = [RL85_MWAvg]
+  models = [RL85_MWAvg, I05_MWAvg]
 
   for cmodel in models:
     ext_model = cmodel()

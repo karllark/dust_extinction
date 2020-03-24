@@ -29,6 +29,9 @@ GCC09: `Gordon, Cartledge, & Clayton 2009, ApJ, 705, 1320
 G16: `Gordon et al. 2016, 826, 104
 <http://ui.adsabs.harvard.edu/abs/2016ApJ...826..104G>`_
 
+I05: `Indebetouw et al. 2005, ApJ, 619, 931
+<https://ui.adsabs.harvard.edu/abs/2005ApJ...619..931I>`_
+
 M14: `Ma\’{\i}z Apell\’aniz et al. 2014, A&A, 564, 63
 <http://ui.adsabs.harvard.edu/abs/2014A%26A...564A..63M>`_
 

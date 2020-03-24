@@ -7,12 +7,19 @@ from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .baseclasses import BaseExtAveModel
 from .shapes import P92, _curve_F99_method
 
-__all__ = ["RL85_MWAvg", "G03_SMCBar", "G03_LMCAvg", "G03_LMC2", "GCC09_MWAvg"]
+__all__ = [
+    "RL85_MWAvg",
+    "G03_SMCBar",
+    "G03_LMCAvg",
+    "G03_LMC2",
+    "I05_MWAvg",
+    "GCC09_MWAvg",
+]
 
 
 class RL85_MWAvg(BaseExtAveModel):
     """
-    Reike & Lebossky (1985) MW Average Extinction Curve
+    Reike & Lebofsky (1985) MW Average Extinction Curve
 
     Parameters
     ----------
@@ -614,6 +621,105 @@ class G03_LMC2(BaseExtAveModel):
             self.x_range,
             "G03_LMC2",
         )
+
+
+class I05_MWAvg(BaseExtAveModel):
+    """
+    Indebetouw et al. (2005) MW Average Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Indebetouw et al. (2005, ApJ, 619, 931)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import I05_MWAvg
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = I05_MWAvg()
+
+        # generate the curves and plot them
+        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.1) * u.micron
+
+        ax.plot(x,ext_model(x),label='I05_MWAvg')
+        ax.plot(1.0/ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 7.76, 1.0 / 1.24]
+
+    Rv = 3.1  # assumed!
+
+    # fmt: off
+    obsdata_x = 1.0 / np.array(
+        [1.24, 1.664, 2.164, 3.545, 4.442, 5.675, 7.760]
+    )
+    obsdata_axav = np.array(
+        [2.50, 1.55, 1.00, 0.56, 0.43, 0.43, 0.43]
+    ) / 8.5   # alak = 8.5
+
+    obsdata_axav_unc = np.array(
+        [0.15, 0.08, 0.0, 0.06, 0.08, 0.10, 0.10]
+    ) / 8.5   # alak = 8.5
+    # fmt: on
+
+    # accuracy of the observed data based on published table
+    obsdata_tolerance = 6e-2
+
+    def evaluate(self, in_x):
+        """
+        I05 MWAvg function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, "I05_MWAvg")
+
+        # define the function allowing for spline interpolation
+        f = interp1d(self.obsdata_x, self.obsdata_axav)
+
+        return f(x)
 
 
 class GCC09_MWAvg(BaseExtAveModel):
