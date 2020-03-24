@@ -2,38 +2,10 @@ import numpy as np
 import pytest
 
 import astropy.units as u
-from astropy.modeling import InputParameterError
 
 from ..averages import G03_SMCBar, G03_LMCAvg, G03_LMC2
 
 models = [G03_SMCBar(), G03_LMCAvg(), G03_LMC2()]
-
-
-@pytest.mark.parametrize("tmodel", models)
-def test_extinguish_no_av_or_ebv(tmodel):
-    with pytest.raises(InputParameterError) as exc:
-        tmodel.extinguish([1.0])
-    assert exc.value.args[0] == "neither Av or Ebv passed, one required"
-
-
-@pytest.mark.parametrize("tmodel", models)
-def test_extinction_G03_values(tmodel):
-    # test
-    #  not to numerical precision as we are using the FM90 fits
-    #  and spline functions and the correct values are the data
-    np.testing.assert_allclose(
-        tmodel(tmodel.obsdata_x), tmodel.obsdata_axav, rtol=tmodel.obsdata_tolerance
-    )
-
-
-@pytest.mark.parametrize("tmodel", models)
-def test_extinction_G03_single_values(tmodel):
-    # test
-    for x, cor_val in zip(tmodel.obsdata_x, tmodel.obsdata_axav):
-        np.testing.assert_allclose(tmodel(x), cor_val, rtol=tmodel.obsdata_tolerance)
-        np.testing.assert_allclose(
-            tmodel.evaluate(x), cor_val, rtol=tmodel.obsdata_tolerance
-        )
 
 
 @pytest.mark.parametrize("tmodel", models)

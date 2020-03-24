@@ -1,37 +1,8 @@
 import numpy as np
-import pytest
 
 import astropy.units as u
-from astropy.modeling import InputParameterError
 
 from ..averages import GCC09_MWAvg
-
-
-def test_extinguish_no_av_or_ebv():
-    tmodel = GCC09_MWAvg()
-    with pytest.raises(InputParameterError) as exc:
-        tmodel.extinguish([1.0])
-    assert exc.value.args[0] == "neither Av or Ebv passed, one required"
-
-
-def test_extinction_GCC09_values():
-    tmodel = GCC09_MWAvg()
-    # test
-    #  not to numerical precision as we are using the FM90 fits
-    #  and spline functions and the correct values are the data
-    np.testing.assert_allclose(
-        tmodel(tmodel.obsdata_x), tmodel.obsdata_axav, rtol=tmodel.obsdata_tolerance
-    )
-
-
-def test_extinction_GCC09_single_values():
-    tmodel = GCC09_MWAvg()
-    # test
-    for x, cor_val in zip(tmodel.obsdata_x, tmodel.obsdata_axav):
-        np.testing.assert_allclose(tmodel(x), cor_val, rtol=tmodel.obsdata_tolerance)
-        np.testing.assert_allclose(
-            tmodel.evaluate(x), cor_val, rtol=tmodel.obsdata_tolerance
-        )
 
 
 def test_extinction_GCC09_extinguish_values_Av():
