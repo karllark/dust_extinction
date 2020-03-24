@@ -1,7 +1,10 @@
 from __future__ import absolute_import, print_function, division
 
+import pkg_resources
+
 import numpy as np
 from scipy.interpolate import interp1d
+from astropy.table import Table
 
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .baseclasses import BaseExtAveModel
@@ -14,6 +17,7 @@ __all__ = [
     "G03_LMC2",
     "I05_MWAvg",
     "GCC09_MWAvg",
+    "F11_MWGC",
 ]
 
 
@@ -1807,3 +1811,107 @@ class GCC09_MWAvg(BaseExtAveModel):
 
         # return A(x)/A(V)
         return p92_fit(in_x)
+
+
+class F11_MWGC(BaseExtAveModel):
+    """
+    Fritz et al. (2011) MW Galactic Center Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Fritz et al. (2011, ApJ, 737, 73)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import F11_MWGC
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = F11_MWGC()
+
+        # generate the curves and plot them
+        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.1) * u.micron
+
+        ax.plot(x,ext_model(x),label='F11_MWGC')
+        ax.plot(1.0/ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 19.062, 1.0 / 1.282]
+
+    Rv = 3.1  # assumed!
+
+    def __init__(self, **kwargs):
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        a = Table.read(
+            data_path + "fritz_galcenter.dat", format="ascii.commented_header"
+        )
+
+        self.obsdata_x = 1.0 / a["wave"].data
+        # ext is total extinction to GalCenter
+        # A(K) = 2.42
+        # A(K)/A(V) = 0.112 (F19, R(V) = 3.1)
+        self.obsdata_axav = 0.112 * a["ext"].data / 2.42
+        self.obsdata_axav_unc = 0.112 * a["unc"].data / 2.42
+
+        # accuracy of the observed data based on published table
+        self.obsdata_tolerance = 1e-6
+
+        super().__init__(**kwargs)
+
+    def evaluate(self, in_x):
+        """
+        F11 MWGC function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, "F11_MWGC")
+
+        # define the function allowing for spline interpolation
+        f = interp1d(self.obsdata_x, self.obsdata_axav)
+
+        return f(x)

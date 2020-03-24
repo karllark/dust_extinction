@@ -20,6 +20,9 @@ FM07: `Fitzpatrick & Massa 2007, ApJ, 663, 320
 F19: `Fitzpatrick, Massa, Gordon, et al. 2019, ApJ, 886, 108
 <https://ui.adsabs.harvard.edu/abs/2019ApJ...886..108F>`_
 
+F11: `Fritz et al. 2011, ApJ, 737, 73
+<https://ui.adsabs.harvard.edu/abs/2011ApJ...737...73F>`_
+
 G03: `Gordon et al. 2003, ApJ, 594, 279
 <http://ui.adsabs.harvard.edu/abs/2003ApJ...594..279G>`_
 
