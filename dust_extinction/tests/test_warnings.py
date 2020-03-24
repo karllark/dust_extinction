@@ -82,14 +82,15 @@ def test_invalid_fA_input(model, fA_invalid):
     assert exc.value.args[0] == "parameter fA must be between 0.0 and 1.0"
 
 
-@pytest.mark.parametrize("model", param_ave_models + ave_models)
-@pytest.mark.parametrize("x_invalid", x_bad)
-def test_invalid_wavenumbers(model, x_invalid):
+@pytest.mark.parametrize("model", all_models)
+def test_invalid_wavenumbers(model):
     tmodel = model()
-    _invalid_x_range(x_invalid, tmodel, tmodel.__class__.__name__)
-    _invalid_x_range(x_invalid / u.micron, tmodel, tmodel.__class__.__name__)
-    _invalid_x_range(u.micron / x_invalid, tmodel, tmodel.__class__.__name__)
-    _invalid_x_range(u.angstrom * 1e4 / x_invalid, tmodel, tmodel.__class__.__name__)
+    x_invalid_all = [-1.0, 0.9 * tmodel.x_range[0], 1.1 * tmodel.x_range[1]]
+    for x_invalid in x_invalid_all:
+        _invalid_x_range(x_invalid, tmodel, tmodel.__class__.__name__)
+        _invalid_x_range(x_invalid / u.micron, tmodel, tmodel.__class__.__name__)
+        _invalid_x_range(u.micron / x_invalid, tmodel, tmodel.__class__.__name__)
+        _invalid_x_range(u.angstrom * 1e4 / x_invalid, tmodel, tmodel.__class__.__name__)
 
 
 @pytest.mark.parametrize("model", param_ave_models + ave_models)
