@@ -83,7 +83,7 @@ Average models
     ax.plot(1.0 / x[indxs], yvals, label=ext_model.__class__.__name__)
 
   ax.set_yscale("log")
-  ax.set_xlabel(r'$lambda$ [$\mu m$]')
+  ax.set_xlabel(r'$\lambda$ [$\mu m$]')
   ax.set_ylabel(r'$A(\lambda)/A(V)$')
   ax.set_title('Near- to Mid-Infrared Models')
 
