@@ -10,7 +10,8 @@ Average models
 
    These models provide averages from the literature with the ability to
    interpolate between the observed data points.
-   Models are provided for the Milky Way (Gordon, Cartlege, & Clayton 2009)
+   Models are provided for the Milky Way (Rieke & Lebofsky 1985;
+   Gordon, Cartlege, & Clayton 2009)
    and the Magellanic Clouds (Gordon et al. 2003).
 
    For the Milky Way, one of the R(V) dependent models with R(V) = 3.1
@@ -44,10 +45,43 @@ Average models
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_title('Ultraviolet to Near-Infrared Models')
 
    ax.legend(loc='best')
    plt.tight_layout()
    plt.show()
+
+
+.. plot::
+
+  import numpy as np
+  import matplotlib.pyplot as plt
+  import astropy.units as u
+
+  from dust_extinction.averages import RL85_MWAvg
+
+  fig, ax = plt.subplots()
+
+  # generate the curves and plot them
+  x = 1.0 / (np.arange(1.0, 40.0 ,0.1) * u.micron)
+
+  models = [RL85_MWAvg]
+
+  for cmodel in models:
+    ext_model = cmodel()
+    indxs, = np.where(np.logical_and(
+       x.value >= ext_model.x_range[0],
+       x.value <= ext_model.x_range[1]))
+    yvals = ext_model(x[indxs])
+    ax.plot(1.0 / x[indxs], yvals, label=ext_model.__class__.__name__)
+
+  ax.set_xlabel(r'$lambda$ [$\mu m$]')
+  ax.set_ylabel(r'$A(\lambda)/A(V)$')
+  ax.set_title('Near- to Mid-Infrared Models')
+
+  ax.legend(loc='best')
+  plt.tight_layout()
+  plt.show()
 
 R(V) (+ other variables) dependent prediction models
 ====================================================
@@ -104,6 +138,7 @@ R(V) (+ other variables) dependent prediction models
    ax.legend(loc='best')
    plt.tight_layout()
    plt.show()
+
 
 .. plot::
 

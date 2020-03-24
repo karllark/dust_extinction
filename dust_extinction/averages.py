@@ -1,17 +1,13 @@
 from __future__ import absolute_import, print_function, division
 
 import numpy as np
-from scipy.interpolate import CubicSpline
+from scipy.interpolate import interp1d
 
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .baseclasses import BaseExtAveModel
 from .shapes import P92, _curve_F99_method
 
 __all__ = ["RL85_MWAvg", "G03_SMCBar", "G03_LMCAvg", "G03_LMC2", "GCC09_MWAvg"]
-
-x_range_RL85 = [1.0 / 13.0, 1.0 / 1.25]
-x_range_G03 = [0.3, 10.0]
-x_range_GCC09 = [0.3, 1.0 / 0.0912]
 
 
 class RL85_MWAvg(BaseExtAveModel):
@@ -60,7 +56,7 @@ class RL85_MWAvg(BaseExtAveModel):
         plt.show()
     """
 
-    x_range = x_range_RL85
+    x_range = [1.0 / 13.0, 1.0 / 1.25]
 
     Rv = 3.09
 
@@ -103,10 +99,10 @@ class RL85_MWAvg(BaseExtAveModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_RL85, "RL85_MWAvg")
+        _test_valid_x_range(x, self.x_range, "RL85_MWAvg")
 
         # define the function allowing for spline interpolation
-        f = CubicSpline(self.obsdata_x, self.obsdata_axav)
+        f = interp1d(self.obsdata_x, self.obsdata_axav)
 
         return f(x)
 
@@ -161,7 +157,7 @@ class G03_SMCBar(BaseExtAveModel):
         plt.show()
     """
 
-    x_range = x_range_G03
+    x_range = [0.3, 10.0]
 
     Rv = 2.74
 
@@ -335,7 +331,7 @@ class G03_LMCAvg(BaseExtAveModel):
         plt.show()
     """
 
-    x_range = x_range_G03
+    x_range = [0.3, 10.0]
 
     Rv = 3.41
 
@@ -502,7 +498,7 @@ class G03_LMC2(BaseExtAveModel):
         plt.show()
     """
 
-    x_range = x_range_G03
+    x_range = [0.3, 10.0]
 
     Rv = 2.76
 
@@ -676,7 +672,7 @@ class GCC09_MWAvg(BaseExtAveModel):
         plt.show()
     """
 
-    x_range = x_range_GCC09
+    x_range = [0.3, 1.0 / 0.0912]
 
     Rv = 3.1
 
@@ -1672,7 +1668,7 @@ class GCC09_MWAvg(BaseExtAveModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_GCC09, "GCC09_MWAvg")
+        _test_valid_x_range(x, self.x_range, "GCC09_MWAvg")
 
         # P92 parameters fit to the data using uncs as weights
         p92_fit = P92(
