@@ -1869,7 +1869,7 @@ class F11_MWGC(BaseExtAveModel):
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
         a = Table.read(
-            data_path + "fritz_galcenter.dat", format="ascii.commented_header"
+            data_path + "fritz11_galcenter.dat", format="ascii.commented_header"
         )
 
         self.obsdata_x = 1.0 / a["wave"].data
