@@ -2,18 +2,10 @@ import pytest
 import numpy as np
 import astropy.units as u
 
-from dust_extinction.averages import (
-    RL85_MWAvg,
-    G03_SMCBar,
-    G03_LMCAvg,
-    G03_LMC2,
-    GCC09_MWAvg,
-)
-
-models = [RL85_MWAvg, G03_SMCBar, G03_LMCAvg, G03_LMC2, GCC09_MWAvg]
+from .helpers import ave_models
 
 
-@pytest.mark.parametrize("model_class", models)
+@pytest.mark.parametrize("model_class", ave_models)
 def test_corvals(model_class):
     # instantiate extinction model
     tmodel = model_class()
@@ -30,7 +22,7 @@ def test_corvals(model_class):
         np.testing.assert_allclose(tmodel.evaluate(x), y, rtol=tol)
 
 
-@pytest.mark.parametrize("model_class", models)
+@pytest.mark.parametrize("model_class", ave_models)
 def test_extinguish_values_Av_or_Ebv(model_class):
     ext = model_class()
     x = np.arange(ext.x_range[0], ext.x_range[1]) / u.micron
