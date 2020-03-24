@@ -18,6 +18,8 @@ from dust_extinction.averages import (
     G03_LMCAvg,
     G03_LMC2,
     I05_MWAvg,
+    CT06_MWGC,
+    CT06_MWLoc,
     GCC09_MWAvg,
     F11_MWGC,
 )
@@ -32,6 +34,8 @@ ave_models = [
     G03_LMCAvg,
     G03_LMC2,
     I05_MWAvg,
+    CT06_MWGC,
+    CT06_MWLoc,
     GCC09_MWAvg,
     F11_MWGC,
 ]

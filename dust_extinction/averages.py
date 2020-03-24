@@ -16,6 +16,8 @@ __all__ = [
     "G03_LMCAvg",
     "G03_LMC2",
     "I05_MWAvg",
+    "CT06_MWGC",
+    "CT06_MWLoc",
     "GCC09_MWAvg",
     "F11_MWGC",
 ]
@@ -630,7 +632,7 @@ class G03_LMC2(BaseExtAveModel):
 
 class I05_MWAvg(BaseExtAveModel):
     """
-    Indebetouw et al. (2005) MW Average Extinction Curve
+    Indebetouw et al (2005) MW Average Extinction Curve
 
     Parameters
     ----------
@@ -720,6 +722,210 @@ class I05_MWAvg(BaseExtAveModel):
 
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, self.x_range, "I05_MWAvg")
+
+        # define the function allowing for spline interpolation
+        f = interp1d(self.obsdata_x, self.obsdata_axav)
+
+        return f(x)
+
+
+class CT06_MWGC(BaseExtAveModel):
+    """
+    Chiar & Tielens (2006) MW Galactic Center Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Chiar & Tielens (2006, ApJ, 637 774)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import CT06_MWGC
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = CT06_MWGC()
+
+        # generate the curves and plot them
+        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.1) * u.micron
+
+        ax.plot(x,ext_model(x),label='CT06_MWGC')
+        ax.plot(1.0/ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 27.0, 1.0 / 1.24]
+
+    Rv = 3.1  # assumed!
+
+    def __init__(self, **kwargs):
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        a = Table.read(
+            data_path + "CT06_pixiedust.dat", format="ascii.commented_header"
+        )
+
+        self.obsdata_x = 1.0 / a["wave"].data
+        # ext is A(lambda)/A(K)
+        # A(K)/A(V) = 0.112 (F19, R(V) = 3.1)
+        self.obsdata_axav = 0.112 * a["galcen"].data
+
+        # accuracy of the observed data based on published table
+        self.obsdata_tolerance = 1e-6
+
+        super().__init__(**kwargs)
+
+    def evaluate(self, in_x):
+        """
+        CG06 MWGC function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, "CT06_MWGC")
+
+        # define the function allowing for spline interpolation
+        f = interp1d(self.obsdata_x, self.obsdata_axav)
+
+        return f(x)
+
+
+class CT06_MWLoc(BaseExtAveModel):
+    """
+    Chiar & Tielens (2006) MW Local ISM Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Chiar & Tielens (2006, ApJ, 637 774)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import CT06_MWLoc
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = CT06_MWLoc()
+
+        # generate the curves and plot them
+        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.1) * u.micron
+
+        ax.plot(x,ext_model(x),label='CT06_MWLoc')
+        ax.plot(1.0/ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 27.0, 1.0 / 1.24]
+
+    Rv = 3.1  # assumed!
+
+    def __init__(self, **kwargs):
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        a = Table.read(
+            data_path + "CT06_pixiedust.dat", format="ascii.commented_header"
+        )
+
+        self.obsdata_x = 1.0 / a["wave"].data
+        # ext is A(lambda)/A(K)
+        # A(K)/A(V) = 0.112 (F19, R(V) = 3.1)
+        self.obsdata_axav = 0.112 * a["local"].data
+
+        # accuracy of the observed data based on published table
+        self.obsdata_tolerance = 1e-6
+
+        super().__init__(**kwargs)
+
+    def evaluate(self, in_x):
+        """
+        CG06 MWLoc function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, "CT06_MWLoc")
 
         # define the function allowing for spline interpolation
         f = interp1d(self.obsdata_x, self.obsdata_axav)
@@ -1815,7 +2021,7 @@ class GCC09_MWAvg(BaseExtAveModel):
 
 class F11_MWGC(BaseExtAveModel):
     """
-    Fritz et al. (2011) MW Galactic Center Curve
+    Fritz et al (2011) MW Galactic Center Curve
 
     Parameters
     ----------

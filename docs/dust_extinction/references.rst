@@ -5,6 +5,9 @@ References
 CCM89: `Cardelli, Clayton, & Mathis 1989, ApJ, 345, 245
 <http://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C>`_
 
+CT06: `Chiar & Tielens 2006, ApJ, 637 774
+<https://ui.adsabs.harvard.edu/abs/2006ApJ...637..774C>`_
+
 F99: `Fitzpatrick 1999, PASP, 111, 63
 <http://ui.adsabs.harvard.edu/abs/1999PASP..111...63F>`_
 

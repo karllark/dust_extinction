@@ -16,6 +16,8 @@ These are straightforward averages of observed extinction curves.  They are the
 simplest models and include models for the MW
 (:class:`~dust_extinction.averages.RL85_MWAvg`,
 :class:`~dust_extinction.averages.I05_MWAvg`,
+:class:`~dust_extinction.averages.CT06_MWLoc`,
+:class:`~dust_extinction.averages.CT06_MWGC`,
 :class:`~dust_extinction.averages.GCC09_MWAvg`,
 :class:`~dust_extinction.averages.F11_MWGC`;
 Note the different valid wavelength ranges), the LMC
@@ -36,6 +38,10 @@ Way, the usual average used is R(V) = 3.1.
 | RL85_MWAvg   |  0.08 - 0.8 |      1.25 - 13.0 |           MW |
 +--------------+-------------+------------------+--------------+
 | I05_MWAvg    |  0.13 - 0.8 |      1.24 - 7.76 |           MW |
++--------------+-------------+------------------+--------------+
+| CT06_MWLoc   | 0.037 - 0.8 |      1.24 - 27.0 |   MW (Local) |
++--------------+-------------+------------------+--------------+
+| CT06_MWGC    | 0.037 - 0.8 |      1.24 - 27.0 | MW (GCenter) |
 +--------------+-------------+------------------+--------------+
 | F11_MWGC     |  0.05 - 0.8 |      1.28 - 19.1 | MW (GCenter) |
 +--------------+-------------+------------------+--------------+
