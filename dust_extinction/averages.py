@@ -1,15 +1,114 @@
 from __future__ import absolute_import, print_function, division
 
 import numpy as np
+from scipy.interpolate import CubicSpline
 
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .baseclasses import BaseExtAveModel
 from .shapes import P92, _curve_F99_method
 
-__all__ = ["G03_SMCBar", "G03_LMCAvg", "G03_LMC2", "GCC09_MWAvg"]
+__all__ = ["RL85_MWAvg", "G03_SMCBar", "G03_LMCAvg", "G03_LMC2", "GCC09_MWAvg"]
 
+x_range_RL85 = [1.0 / 13.0, 1.0 / 1.25]
 x_range_G03 = [0.3, 10.0]
 x_range_GCC09 = [0.3, 1.0 / 0.0912]
+
+
+class RL85_MWAvg(BaseExtAveModel):
+    """
+    Reike & Lebossky (1985) MW Average Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Rieke & Lebofsky (1985, ApJ,288, 618)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import RL85_MWAvg
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = RL85_MWAvg()
+
+        # generate the curves and plot them
+        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.1) * u.micron
+
+        ax.plot(x,ext_model(x),label='RL85_MWAvg')
+        ax.plot(1.0/ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = x_range_RL85
+
+    Rv = 3.09
+
+    # fmt: off
+    obsdata_x = 1.0 / np.array(
+        [13.0, 12.5, 12.0, 11.5, 11.0, 10.5, 10.0,
+         9.5, 9.0, 8.5, 8.0, 4.8, 3.5, 2.22, 1.65, 1.25]
+    )
+    obsdata_axav = np.array(
+        [0.027, 0.030, 0.037, 0.047, 0.060, 0.074, 0.083,
+         0.087, 0.074, 0.043, 0.020, 0.023, 0.058, 0.112, 0.175, 0.282]
+    )
+    # fmt: on
+
+    # accuracy of the observed data based on published table
+    obsdata_tolerance = 6e-2
+
+    def evaluate(self, in_x):
+        """
+        RL85 MWAvg function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, x_range_RL85, "RL85_MWAvg")
+
+        # define the function allowing for spline interpolation
+        f = CubicSpline(self.obsdata_x, self.obsdata_axav)
+
+        return f(x)
 
 
 class G03_SMCBar(BaseExtAveModel):
