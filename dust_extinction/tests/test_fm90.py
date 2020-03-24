@@ -4,32 +4,8 @@ import pytest
 import astropy.units as u
 from astropy.modeling.fitting import LevMarLSQFitter
 
-from ..shapes import FM90
 from ..averages import G03_LMCAvg
-from .helpers import _invalid_x_range
-
-
-x_bad = [-1.0, 0.2, 3.0, 11.0, 100.0]
-
-
-@pytest.mark.parametrize("x_invalid", x_bad)
-def test_invalid_wavenumbers(x_invalid):
-    _invalid_x_range(x_invalid, FM90(), "FM90")
-
-
-@pytest.mark.parametrize("x_invalid_wavenumber", x_bad / u.micron)
-def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
-    _invalid_x_range(x_invalid_wavenumber, FM90(), "FM90")
-
-
-@pytest.mark.parametrize("x_invalid_micron", u.micron / x_bad)
-def test_invalid_micron(x_invalid_micron):
-    _invalid_x_range(x_invalid_micron, FM90(), "FM90")
-
-
-@pytest.mark.parametrize("x_invalid_angstrom", u.angstrom * 1e4 / x_bad)
-def test_invalid_angstrom(x_invalid_angstrom):
-    _invalid_x_range(x_invalid_angstrom, FM90(), "FM90")
+from ..shapes import FM90
 
 
 def get_elvebv_cor_vals():

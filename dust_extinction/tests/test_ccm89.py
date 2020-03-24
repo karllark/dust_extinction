@@ -2,7 +2,6 @@ import numpy as np
 import pytest
 
 import astropy.units as u
-from astropy.modeling import InputParameterError
 
 from ..parameter_averages import CCM89
 
@@ -183,13 +182,6 @@ def test_extinction_CCM89_values(Rv):
 
     # test
     np.testing.assert_allclose(tmodel(x), cor_vals)
-
-
-def test_extinguish_no_av_or_ebv():
-    tmodel = CCM89()
-    with pytest.raises(InputParameterError) as exc:
-        tmodel.extinguish([1.0])
-    assert exc.value.args[0] == "neither Av or Ebv passed, one required"
 
 
 @pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])

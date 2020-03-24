@@ -2,7 +2,6 @@ import numpy as np
 import pytest
 
 import astropy.units as u
-from astropy.modeling import InputParameterError
 
 from ..parameter_averages import O94
 
@@ -117,13 +116,6 @@ def get_axav_cor_vals(Rv):
         cor_vals = np.array([0.0])
 
     return (x, cor_vals)
-
-
-def test_extinguish_no_av_or_ebv():
-    tmodel = O94()
-    with pytest.raises(InputParameterError) as exc:
-        tmodel.extinguish([1.0])
-    assert exc.value.args[0] == "neither Av or Ebv passed, one required"
 
 
 @pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
