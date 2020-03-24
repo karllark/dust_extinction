@@ -79,7 +79,7 @@ class RL85_MWAvg(BaseExtAveModel):
     # fmt: on
 
     # accuracy of the observed data based on published table
-    obsdata_tolerance = 6e-2
+    obsdata_tolerance = 1e-6
 
     def evaluate(self, in_x):
         """
@@ -108,7 +108,8 @@ class RL85_MWAvg(BaseExtAveModel):
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, self.x_range, "RL85_MWAvg")
 
-        # define the function allowing for spline interpolation
+        # define the function using simple linear interpolation
+        # avoids negative values of alav that happens with cubic splines
         f = interp1d(self.obsdata_x, self.obsdata_axav)
 
         return f(x)
@@ -687,7 +688,7 @@ class I05_MWAvg(BaseExtAveModel):
     # fmt: on
 
     # accuracy of the observed data based on published table
-    obsdata_tolerance = 6e-2
+    obsdata_tolerance = 1e-6
 
     def evaluate(self, in_x):
         """
