@@ -2,7 +2,6 @@ import numpy as np
 import pytest
 
 import astropy.units as u
-from astropy.modeling import InputParameterError
 
 from ..parameter_averages import O94
 
