@@ -686,11 +686,11 @@ class I05_MWAvg(BaseExtAveModel):
     )
     obsdata_axav = np.array(
         [2.50, 1.55, 1.00, 0.56, 0.43, 0.43, 0.43]
-    ) / 8.5   # alak = 8.5
+    ) * 0.112  # ak/av = 0.112 (F19, Rv = 3.1)
 
     obsdata_axav_unc = np.array(
         [0.15, 0.08, 0.0, 0.06, 0.08, 0.10, 0.10]
-    ) / 8.5   # alak = 8.5
+    ) * 0.112  # ak/av = 0.112 (F19, Rv = 3.1)
     # fmt: on
 
     # accuracy of the observed data based on published table
