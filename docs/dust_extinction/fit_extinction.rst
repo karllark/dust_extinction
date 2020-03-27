@@ -18,10 +18,12 @@ extinction curve for the LMC outside of the LMC2 supershell region
 .. plot::
    :include-source:
 
+   import warnings
    import matplotlib.pyplot as plt
    import numpy as np
 
    from astropy.modeling.fitting import LevMarLSQFitter
+   import astropy.units as u
 
    from dust_extinction.averages import G03_LMCAvg
    from dust_extinction.shapes import FM90
@@ -29,11 +31,11 @@ extinction curve for the LMC outside of the LMC2 supershell region
    # get an observed extinction curve to fit
    g03_model = G03_LMCAvg()
 
-   x = g03_model.obsdata_x
+   x = g03_model.obsdata_x / u.micron
    # convert to E(x-V)/E(B0V)
-   y = (g03_model.obsdata_axav - 1.0)*g03_model.Rv
+   y = (g03_model.obsdata_axav - 1.0) * g03_model.Rv
    # only fit the UV portion (FM90 only valid in UV)
-   gindxs, = np.where(x > 3.125)
+   (gindxs,) = np.where(x > 3.125 / u.micron)
 
    # initialize the model
    fm90_init = FM90()
@@ -43,21 +45,26 @@ extinction curve for the LMC outside of the LMC2 supershell region
 
    # fit the data to the FM90 model using the fitter
    #   use the initialized model as the starting point
-   g03_fit = fit(fm90_init, x[gindxs], y[gindxs])
+
+   # ignore some warnings
+   #   UserWarning is to avoid the units of x warning
+   with warnings.catch_warnings():
+       warnings.simplefilter("ignore", category=UserWarning)
+       g03_fit = fit(fm90_init, x[gindxs].value, y[gindxs])
 
    # plot the observed data, initial guess, and final fit
    fig, ax = plt.subplots()
 
-   ax.plot(x, y, 'ko', label='Observed Curve')
-   ax.plot(x[gindxs], fm90_init(x[gindxs]), label='Initial guess')
-   ax.plot(x[gindxs], g03_fit(x[gindxs]), label='Fitted model')
+   ax.plot(x, y, "ko", label="Observed Curve")
+   ax.plot(x[gindxs], fm90_init(x[gindxs]), label="Initial guess")
+   ax.plot(x[gindxs], g03_fit(x[gindxs]), label="Fitted model")
 
-   ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-   ax.set_ylabel('$E(x-V)/E(B-V)$')
+   ax.set_xlabel("$x$ [$\mu m^{-1}$]")
+   ax.set_ylabel("$E(x-V)/E(B-V)$")
 
-   ax.set_title('Example FM90 Fit to G03_LMCAvg curve')
+   ax.set_title("Example FM90 Fit to G03_LMCAvg curve")
 
-   ax.legend(loc='best')
+   ax.legend(loc="best")
    plt.tight_layout()
    plt.show()
 
@@ -73,11 +80,11 @@ between data points.
 .. plot::
    :include-source:
 
-   import matplotlib.pyplot as plt
-   import numpy as np
-
    import warnings
+   import matplotlib.pyplot as plt
+
    from astropy.utils.exceptions import AstropyWarning
+   import astropy.units as u
 
    from astropy.modeling.fitting import LevMarLSQFitter
 
@@ -88,7 +95,7 @@ between data points.
    g09_model = GCC09_MWAvg()
 
    # get an observed extinction curve to fit
-   x = g09_model.obsdata_x
+   x = g09_model.obsdata_x / u.micron
    y = g09_model.obsdata_axav
    y_unc = g09_model.obsdata_axav_unc
 
@@ -112,21 +119,25 @@ between data points.
    # pick the fitter
    fit = LevMarLSQFitter()
 
-   # set to avoid the "fit may have been unsuccessful" warning
-   #   fit is fine, but this means the build of the docs fails
-   warnings.simplefilter('ignore', category=AstropyWarning)
-
    # fit the data to the P92 model using the fitter
    #   use the initialized model as the starting point
    #   accuracy set to avoid warning the fit may have failed
-   p92_fit = fit(p92_init, x, y, weights=1.0/y_unc)
+
+   # ignore some warnings
+   #   UserWarning is to avoid the units of x warning
+   #   AstropyWarning ignored to avoid the "fit may have been unsuccessful" warning
+   #   fit is fine, but this means the build of the docs fails
+   with warnings.catch_warnings():
+       warnings.simplefilter("ignore", category=UserWarning)
+       warnings.simplefilter("ignore", category=AstropyWarning)
+       p92_fit = fit(p92_init, x.value, y, weights=1.0 / y_unc)
 
    # plot the observed data, initial guess, and final fit
    fig, ax = plt.subplots()
 
-   ax.errorbar(x, y, yerr=y_unc, fmt='ko', label='Observed Curve')
-   ax.plot(x, p92_init(x), label='Initial guess')
-   ax.plot(x, p92_fit(x), label='Fitted model')
+   ax.errorbar(x.value, y, yerr=y_unc, fmt='ko', label='Observed Curve')
+   ax.plot(x.value, p92_init(x), label='Initial guess')
+   ax.plot(x.value, p92_fit(x), label='Fitted model')
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
