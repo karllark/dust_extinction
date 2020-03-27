@@ -1170,6 +1170,21 @@ class F19(BaseExtRvModel):
     Rv_range = [2.0, 6.0]
     x_range = [0.3, 8.7]
 
+    def __init__(self, Rv=3.1, **kwargs):
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        a = Table.read(data_path + "F19_tabulated.dat", format="ascii")
+
+        # compute E(lambda-55)/E(B-55) on the tabulated x points
+        self.k_rV_tab_x = a["k_3.02"].data + a["deltak"].data * (Rv - 3.10) * 0.990
+
+        # setup spline interpolation
+        self.spline_rep = interpolate.splrep(a["x"].data, self.k_rV_tab_x)
+
+        super().__init__(Rv, **kwargs)
+
     def evaluate(self, in_x, Rv):
         """
         F19 function
@@ -1205,17 +1220,8 @@ class F19(BaseExtRvModel):
         # ensure Rv is a single element, not numpy array
         Rv = Rv[0]
 
-        # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = Table.read(data_path + "F19_tabulated.dat", format="ascii")
-
-        # compute E(lambda-55)/E(B-55) on the tabulated x points
-        k_rV_tab_x = a["k_3.02"].data + a["deltak"].data * (Rv - 3.10) * 0.990
-
         # use spline interpolation to evaluate the curve for the input x values
-        spline_rep = interpolate.splrep(a["x"].data, k_rV_tab_x)
-        k_rV = interpolate.splev(x, spline_rep, der=0)
+        k_rV = interpolate.splev(x, self.spline_rep, der=0)
 
         # convert to A(x)/A(55) from E(x-55)/E(44-55)
         a_rV = k_rV / Rv + 1.0
