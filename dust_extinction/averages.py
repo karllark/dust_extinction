@@ -11,7 +11,7 @@ from .baseclasses import BaseExtAveModel
 from .shapes import P92, _curve_F99_method
 
 __all__ = [
-    "RL85_MWAvg",
+    "RL85_MWGC",
     "G03_SMCBar",
     "G03_LMCAvg",
     "G03_LMC2",
@@ -23,7 +23,7 @@ __all__ = [
 ]
 
 
-class RL85_MWAvg(BaseExtAveModel):
+class RL85_MWGC(BaseExtAveModel):
     """
     Reike & Lebofsky (1985) MW Average Extinction Curve
 
@@ -48,17 +48,17 @@ class RL85_MWAvg(BaseExtAveModel):
         import matplotlib.pyplot as plt
         import astropy.units as u
 
-        from dust_extinction.averages import RL85_MWAvg
+        from dust_extinction.averages import RL85_MWGC
 
         fig, ax = plt.subplots()
 
         # define the extinction model
-        ext_model = RL85_MWAvg()
+        ext_model = RL85_MWGC()
 
         # generate the curves and plot them
         x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.1) * u.micron
 
-        ax.plot(x,ext_model(x),label='RL85_MWAvg')
+        ax.plot(x,ext_model(x),label='RL85_MWGC')
         ax.plot(1.0/ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
                 label='obsdata')
 
@@ -89,7 +89,7 @@ class RL85_MWAvg(BaseExtAveModel):
 
     def evaluate(self, in_x):
         """
-        RL85 MWAvg function
+        RL85 MWGC function
 
         Parameters
         ----------
@@ -112,7 +112,7 @@ class RL85_MWAvg(BaseExtAveModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, "RL85_MWAvg")
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
 
         # define the function using simple linear interpolation
         # avoids negative values of alav that happens with cubic splines
@@ -242,7 +242,7 @@ class G03_SMCBar(BaseExtAveModel):
             optnir_axav_x,
             optnir_axav_y,
             self.x_range,
-            "G03_SMCBar",
+            self.__class__.__name__,
         )
 
 
@@ -361,7 +361,7 @@ class G03_LMCAvg(BaseExtAveModel):
             optnir_axav_x,
             optnir_axav_y,
             self.x_range,
-            "G03_LMCAvg",
+            self.__class__.__name__,
         )
 
 
@@ -483,7 +483,7 @@ class G03_LMC2(BaseExtAveModel):
             optnir_axav_x,
             optnir_axav_y,
             self.x_range,
-            "G03_LMC2",
+            self.__class__.__name__,
         )
 
 
@@ -578,7 +578,7 @@ class I05_MWAvg(BaseExtAveModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, "I05_MWAvg")
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
 
         # define the function allowing for spline interpolation
         f = interp1d(self.obsdata_x, self.obsdata_axav)
@@ -680,7 +680,7 @@ class CT06_MWGC(BaseExtAveModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, "CT06_MWGC")
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
 
         # define the function allowing for spline interpolation
         f = interp1d(self.obsdata_x, self.obsdata_axav)
@@ -782,7 +782,7 @@ class CT06_MWLoc(BaseExtAveModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, "CT06_MWLoc")
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
 
         # define the function allowing for spline interpolation
         f = interp1d(self.obsdata_x, self.obsdata_axav)
@@ -920,7 +920,7 @@ class GCC09_MWAvg(BaseExtAveModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, "GCC09_MWAvg")
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
 
         # P92 parameters fit to the data using uncs as weights
         p92_fit = P92(
@@ -1050,7 +1050,7 @@ class F11_MWGC(BaseExtAveModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, "F11_MWGC")
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
 
         # define the function allowing for spline interpolation
         f = interp1d(self.obsdata_x, self.obsdata_axav)
