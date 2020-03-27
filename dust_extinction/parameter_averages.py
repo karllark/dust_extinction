@@ -1155,7 +1155,7 @@ class F19(BaseExtRvModel):
         x = np.arange(text_model.x_range[0],
                       text_model.x_range[1],0.1)/u.micron
 
-        Rvs = ['2.0','3.0','4.0','5.0','6.0']
+        Rvs = [2.0, 3.0, 4.0, 5.0, 6.0]
         for cur_Rv in Rvs:
            ext_model = F19(Rv=cur_Rv)
            ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))

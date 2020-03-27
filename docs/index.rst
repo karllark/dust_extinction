@@ -61,13 +61,14 @@ wavelength array should have astropy.units associated with it.
 .. code-block:: python
 
     import numpy as np
-    from astropy.modeling.blackbody import blackbody_lambda
+    from astropy.modeling.models import BlackBody
     import astropy.units as u
 
     # wavelengths and spectrum are 1D arrays
     # wavelengths between 1000 and 30000 A
     wavelengths = np.logspace(np.log10(1000), np.log10(3e4), num=1000)*u.AA
-    spectrum = blackbody_lambda(wavelengths, 10000*u.K)
+    bb_lam = BlackBody(10000*u.K, scale=1.0 * u.erg / (u.cm ** 2 * u.AA * u.s * u.sr))
+    spectrum = bb_lam(wavelengths)
 
 Define a model, specifically the F99 model with an R(V) = 3.1.
 
@@ -100,7 +101,7 @@ equivalent A(V) column.
     import numpy as np
     import matplotlib.pyplot as plt
     import astropy.units as u
-    from astropy.modeling.blackbody import blackbody_lambda
+    from astropy.modeling.models import BlackBody
     from dust_extinction.parameter_averages import F99
 
     # define the model
@@ -109,7 +110,8 @@ equivalent A(V) column.
     # wavelengths and spectrum are 1D arrays
     # wavelengths between 1000 and 30000 A
     wavelengths = np.logspace(np.log10(1000), np.log10(3e4), num=1000)*u.AA
-    spectrum = blackbody_lambda(wavelengths, 10000*u.K)
+    bb_lam = BlackBody(10000*u.K, scale=1.0 * u.erg / (u.cm ** 2 * u.AA * u.s * u.sr))
+    spectrum = bb_lam(wavelengths)
 
     # extinguish (redden) the spectrum
     spectrum_ext = spectrum*ext.extinguish(wavelengths, Ebv=0.5)

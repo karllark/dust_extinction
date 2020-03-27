@@ -21,7 +21,7 @@ Extinguish a Blackbody
    import numpy as np
 
    import astropy.units as u
-   from astropy.modeling.blackbody import blackbody_lambda
+   from astropy.modeling.models import BlackBody
 
    from dust_extinction.parameter_averages import F19
 
@@ -34,7 +34,8 @@ Extinguish a Blackbody
    temperature = 10000*u.K
 
    # get the blackbody flux
-   flux = blackbody_lambda(wavelengths, temperature)
+   bb_lam = BlackBody(10000*u.K, scale=1.0 * u.erg / (u.cm ** 2 * u.AA * u.s * u.sr))
+   flux = bb_lam(wavelengths)
 
    # initialize the model
    ext = F19(Rv=3.1)
