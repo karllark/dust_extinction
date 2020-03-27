@@ -235,7 +235,7 @@ R(V) (+ other variables) dependent prediction models
    # generate the curves and plot them
    x = np.arange(text_model.x_range[0], text_model.x_range[1],0.1)/u.micron
 
-   Rvs = ['2.0','3.0','4.0','5.0','6.0']
+   Rvs = [2.0, 3.0, 4.0, 5.0, 6.0]
    for cur_Rv in Rvs:
       ext_model = G16(RvA=cur_Rv, fA=1.0)
       ax.plot(x,ext_model(x),label=r'$R_A(V) = ' + str(cur_Rv) + '$')
