@@ -568,7 +568,7 @@ class P92(Fittable1DModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_P92, "P92")
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
 
         # calculate the terms
         lam = 1.0 / x

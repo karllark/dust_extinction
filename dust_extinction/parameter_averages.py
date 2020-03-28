@@ -408,7 +408,7 @@ class F99(BaseExtRvModel):
             optnir_axav_x,
             optnir_axebv_y / Rv,
             self.x_range,
-            "F99",
+            self.__class__.__name__,
         )
 
 
@@ -546,7 +546,7 @@ class F04(BaseExtRvModel):
             optnir_axav_x,
             optnir_axebv_y / Rv,
             self.x_range,
-            "F04",
+            self.__class__.__name__,
         )
 
 
@@ -867,7 +867,7 @@ class M14(BaseExtRvModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_M14, "M14")
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
 
         # just in case someone calls evaluate explicitly
         Rv = np.atleast_1d(Rv)
@@ -1212,7 +1212,7 @@ class F19(BaseExtRvModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, "F19")
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
 
         # just in case someone calls evaluate explicitly
         Rv = np.atleast_1d(Rv)
