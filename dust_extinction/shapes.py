@@ -208,8 +208,8 @@ class FM90(Fittable1DModel):
     C2 = Parameter(description="linear term: slope", default=0.70)
     C3 = Parameter(description="bump: amplitude", default=3.23)
     C4 = Parameter(description="FUV rise: amplitude", default=0.41)
-    xo = Parameter(description="bump: centroid", default=4.60)
-    gamma = Parameter(description="bump: width", default=0.99)
+    xo = Parameter(description="bump: centroid", default=4.60, min=0.)
+    gamma = Parameter(description="bump: width", default=0.99, min=0.)
 
     x_range = x_range_FM90
 
