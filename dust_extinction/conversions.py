@@ -13,9 +13,6 @@ class AxAvToExv(Fittable1DModel):
       dust column in A(V) [mag]
     """
 
-    inputs = ("axav",)
-    outputs = ("exv",)
-
     Av = Parameter(description="A(V)", default=1.0, min=0.0)
 
     @staticmethod
