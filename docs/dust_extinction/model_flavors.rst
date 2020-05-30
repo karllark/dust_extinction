@@ -11,13 +11,13 @@ Average models
    These models provide averages from the literature with the ability to
    interpolate between the observed data points.
    Models are provided for the Milky Way for the ultraviolet, optical, and near-infrared
-   (Gordon, Cartlege, & Clayton 2009) and near- and mid-infrared
+   (Bastiaansen 1992; Gordon, Cartlege, & Clayton 2009) and near- and mid-infrared
    (Rieke & Lebofsky 1985; Indebetouw et al. 2005; Chiar & Tielens 2006; Fritz et al. 2011)
    and the Magellanic Clouds (Gordon et al. 2003).
 
    For the Milky Way for the ultraviolet through near-infrared,
    one of the R(V) dependent models with R(V) = 3.1
-   (see next section) if often used for the Milky Way 'average'.
+   (see next section) is often used for the Milky Way 'average'.
 
 .. plot::
 
@@ -26,6 +26,7 @@ Average models
    import astropy.units as u
 
    from dust_extinction.averages import (GCC09_MWAvg,
+                                         B92_MWAvg,
                                          G03_SMCBar,
                                          G03_LMCAvg,
 					                               G03_LMC2)
@@ -35,7 +36,7 @@ Average models
    # generate the curves and plot them
    x = np.arange(0.3,11.0,0.1)/u.micron
 
-   models = [GCC09_MWAvg, G03_SMCBar, G03_LMCAvg, G03_LMC2]
+   models = [GCC09_MWAvg, B92_MWAvg, G03_SMCBar, G03_LMCAvg, G03_LMC2]
 
    for cmodel in models:
       ext_model = cmodel()

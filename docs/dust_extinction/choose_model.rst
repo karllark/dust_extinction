@@ -15,6 +15,7 @@ Simple Average Curves
 These are straightforward averages of observed extinction curves.  They are the
 simplest models and include models for the MW
 (:class:`~dust_extinction.averages.RL85_MWGC`,
+:class:`~dust_extinction.averages.B92_MWAvg`,
 :class:`~dust_extinction.averages.I05_MWAvg`,
 :class:`~dust_extinction.averages.CT06_MWLoc`,
 :class:`~dust_extinction.averages.CT06_MWGC`,
@@ -34,6 +35,8 @@ Way, the usual average used is R(V) = 3.1.
 |              | [1/micron]  | [micron]         |              |
 +==============+=============+==================+==============+
 | GCC09_MWAvg  | 0.3 - 10.96 |     0.0912 - 3.3 |           MW |
++--------------+-------------+------------------+--------------+
+| B92_MWAvg    | 1.3 - 2.9   |     0.34 - 0.78  |           MW |
 +--------------+-------------+------------------+--------------+
 | I05_MWAvg    |  0.13 - 0.8 |      1.24 - 7.76 |           MW |
 +--------------+-------------+------------------+--------------+

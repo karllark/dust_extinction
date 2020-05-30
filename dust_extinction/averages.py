@@ -12,6 +12,7 @@ from .shapes import P92, _curve_F99_method
 
 __all__ = [
     "RL85_MWGC",
+    "B92_MWAvg",
     "G03_SMCBar",
     "G03_LMCAvg",
     "G03_LMC2",
@@ -121,7 +122,109 @@ class RL85_MWGC(BaseExtModel):
         return f(x)
 
 
-class G03_SMCBar(BaseExtModel):
+class B92_MWAvg(BaseExtAveModel):
+    """
+    Bastiaansen (1992) Optical Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Bastiaansen (1992, A&AS, 93, 449-462)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import B92_MWAvg
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = B92_MWAvg()
+
+        # generate the curves and plot them
+        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.1) * u.micron
+
+        ax.plot(x,ext_model(x),label='B1992')
+        ax.plot(1.0/ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 0.7873, 1.0 / 0.3402]
+
+    rv = 3.1  # assumed!
+
+    # fmt: off
+    obsdata_x = 1.0/np.array(
+        [0.7873, 0.7505, 0.7102, 0.6681, 0.64, 
+        0.6107, 0.5821, 0.5601, 0.5407, 0.5205,
+        0.4999, 0.4708, 0.4496, 0.4395, 0.4192,
+        0.4038, 0.3785, 0.36, 0.3493, 0.3402])
+    
+    obsdata_axav = np.array(
+        [0.849, 0.891, 0.941, 0.998, 1.045, 1.088,
+        1.139, 1.176, 1.226, 1.279, 1.34 , 1.418,
+        1.473, 1.507, 1.556, 1.595, 1.659, 1.718,
+        1.761, 1.795])
+
+    # fmt: on
+
+    # accuracy of the observed data based on published table
+    obsdata_tolerance = 6e-3
+
+    def evaluate(self, in_x):
+        """
+        B1992 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, self.__class__.name)
+
+        # define the function allowing for spline interpolation
+        f = interp1d(self.obsdata_x, self.obsdata_axav)
+
+        return f(x)
+
+
+class G03_SMCBar(BaseExtAveModel):
     r"""
     Gordon et al (2003) SMCBar Average Extinction Curve
 
