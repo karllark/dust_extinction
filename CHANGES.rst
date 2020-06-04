@@ -1,12 +1,17 @@
 0.9 (unreleased)
-----------------
+================
 
-- no changes yet
+- NIR/MIR average models added
+  (RL85_MWGC, I05_MWAvg, CT06_MWLoc, CT06_MWGC, F11_MWGC)
+- updates to be remove astropy 4.0 deprecated modeling features
+- Documentation updates
+- Many tests consolidated
+- Bugfixes
 
 0.8 (2019-08-20)
-----------------
+================
 
-- VCG04, GCC09, FM20 models added
+- VCG04, GCC09, FM19 models added
 
 0.7 (2019-02-11)
 ================
