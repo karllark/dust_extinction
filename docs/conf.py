@@ -151,7 +151,6 @@ latex_documents = [('index', project + '.tex', project + u' Documentation',
 man_pages = [('index', project.lower(), project + u' Documentation',
               [author], 1)]
 
-
 # -- Options for the edit_on_github extension ---------------------------------
 
 if setup_cfg.get('edit_on_github').lower() == 'true':
