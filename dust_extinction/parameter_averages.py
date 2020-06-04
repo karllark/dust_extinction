@@ -26,7 +26,7 @@ x_range_G16 = [0.3, 10.0]
 
 
 class CCM89(BaseExtRvModel):
-    """
+    r"""
     Cardelli, Clayton, & Mathis (1989) Milky Way R(V) dependent model
 
     Parameters
@@ -151,7 +151,7 @@ class CCM89(BaseExtRvModel):
 
 
 class O94(BaseExtRvModel):
-    """
+    r"""
     O'Donnell (1994) Milky Way R(V) dependent model
 
     Parameters
@@ -277,7 +277,7 @@ class O94(BaseExtRvModel):
 
 
 class F99(BaseExtRvModel):
-    """
+    r"""
     Fitzpatrick (1999) Milky Way R(V) dependent model
 
     Parameters
@@ -413,7 +413,7 @@ class F99(BaseExtRvModel):
 
 
 class F04(BaseExtRvModel):
-    """
+    r"""
     Fitzpatrick (2004) Milky Way R(V) dependent model
 
     Parameters
@@ -551,7 +551,7 @@ class F04(BaseExtRvModel):
 
 
 class VCG04(BaseExtRvModel):
-    """
+    r"""
     Valencic, Clayton, & Gordon (2004) Milky Way R(V) dependent model
 
     Parameters
@@ -661,7 +661,7 @@ class VCG04(BaseExtRvModel):
 
 
 class GCC09(BaseExtRvModel):
-    """
+    r"""
     Grodon, Cartledge, & Clayton (2009) Milky Way R(V) dependent model
 
     Parameters
@@ -772,8 +772,7 @@ class GCC09(BaseExtRvModel):
 
 
 class M14(BaseExtRvModel):
-
-    """
+    r"""
     Maiz Apellaniz et al (2014) Milky Way & LMC R(V) dependent model
 
     Parameters
@@ -973,7 +972,7 @@ class M14(BaseExtRvModel):
 
 
 class G16(BaseExtRvAfAModel):
-    """
+    r"""
     Gordon et al (2016) Milky Way, LMC, & SMC R(V) and f_A dependent model
 
     Mixture model between the F99 R(V) dependent model (component A)
@@ -1114,7 +1113,7 @@ class G16(BaseExtRvAfAModel):
 
 
 class F19(BaseExtRvModel):
-    """
+    r"""
     Fitzpatrick et al (2019) extinction model calculation
 
     Fitzpatrick, Massa, Gordon et al. (2019, ApJ, 886, 108) model.

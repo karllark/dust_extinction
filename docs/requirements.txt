@@ -1,4 +1,0 @@
-astropy-helpers
-sphinx
-gitpython
-sphinx-astropy

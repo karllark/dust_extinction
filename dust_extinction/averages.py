@@ -24,7 +24,7 @@ __all__ = [
 
 
 class RL85_MWGC(BaseExtAveModel):
-    """
+    r"""
     Reike & Lebofsky (1985) MW Average Extinction Curve
 
     Parameters
@@ -122,7 +122,7 @@ class RL85_MWGC(BaseExtAveModel):
 
 
 class G03_SMCBar(BaseExtAveModel):
-    """
+    r"""
     Gordon et al (2003) SMCBar Average Extinction Curve
 
     Parameters
@@ -247,7 +247,7 @@ class G03_SMCBar(BaseExtAveModel):
 
 
 class G03_LMCAvg(BaseExtAveModel):
-    """
+    r"""
     Gordon et al (2003) LMCAvg Average Extinction Curve
 
     Parameters
@@ -366,7 +366,7 @@ class G03_LMCAvg(BaseExtAveModel):
 
 
 class G03_LMC2(BaseExtAveModel):
-    """
+    r"""
     Gordon et al (2003) LMC2 Average Extinction Curve
 
     Parameters
@@ -488,7 +488,7 @@ class G03_LMC2(BaseExtAveModel):
 
 
 class I05_MWAvg(BaseExtAveModel):
-    """
+    r"""
     Indebetouw et al (2005) MW Average Extinction Curve
 
     Parameters
@@ -587,7 +587,7 @@ class I05_MWAvg(BaseExtAveModel):
 
 
 class CT06_MWGC(BaseExtAveModel):
-    """
+    r"""
     Chiar & Tielens (2006) MW Galactic Center Curve
 
     Parameters
@@ -657,7 +657,7 @@ class CT06_MWGC(BaseExtAveModel):
 
     def evaluate(self, in_x):
         """
-        CG06 MWGC function
+        CT06 MWGC function
 
         Parameters
         ----------
@@ -689,7 +689,7 @@ class CT06_MWGC(BaseExtAveModel):
 
 
 class CT06_MWLoc(BaseExtAveModel):
-    """
+    r"""
     Chiar & Tielens (2006) MW Local ISM Curve
 
     Parameters
@@ -791,7 +791,7 @@ class CT06_MWLoc(BaseExtAveModel):
 
 
 class GCC09_MWAvg(BaseExtAveModel):
-    """
+    r"""
     Gordon, Cartledge, & Clayton (2009) Milky Way Average Extinction Curve
 
     Parameters
@@ -955,7 +955,7 @@ class GCC09_MWAvg(BaseExtAveModel):
 
 
 class F11_MWGC(BaseExtAveModel):
-    """
+    r"""
     Fritz et al (2011) MW Galactic Center Curve
 
     Parameters

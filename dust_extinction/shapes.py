@@ -138,7 +138,7 @@ def _curve_F99_method(
 
 
 class FM90(Fittable1DModel):
-    """
+    r"""
     Fitzpatrick & Massa (1990) 6 parameter ultraviolet shape model
 
     Parameters
@@ -291,7 +291,7 @@ class FM90(Fittable1DModel):
 
 
 class P92(Fittable1DModel):
-    """
+    r"""
     Pei (1992) 24 parameter shape model
 
     Parameters
@@ -486,7 +486,7 @@ class P92(Fittable1DModel):
 
     @staticmethod
     def _p92_single_term(in_lambda, amplitude, cen_wave, b, n):
-        """
+        r"""
         Function for calculating a single P92 term
 
         .. math::
