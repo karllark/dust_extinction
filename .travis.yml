@@ -157,5 +157,5 @@ after_success:
     pip install coveralls
     coveralls
     # If codecov is set up for this package, uncomment the two lines below
-    # pip install codecov
-    # codecov
+    pip install codecov
+    codecov

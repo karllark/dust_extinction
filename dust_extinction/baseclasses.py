@@ -4,60 +4,12 @@ import numpy as np
 
 from astropy.modeling import Model, Parameter, InputParameterError
 
-__all__ = ["BaseExtModel", "BaseExtAveModel", "BaseExtRvModel", "BaseExtRvAfAModel"]
+__all__ = ["BaseExtModel", "BaseExtRvModel", "BaseExtRvAfAModel"]
 
 
 class BaseExtModel(Model):
     """
     Base Extinction Model.  Do not use.
-    """
-
-    n_inputs = 1
-    n_outputs = 1
-
-    def extinguish(self, x, Av=None, Ebv=None):
-        """
-        Calculate the extinction as a fraction
-
-        Parameters
-        ----------
-        x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
-
-           internally wavenumbers are used
-
-        Av: float
-           A(V) value of dust column
-           Av or Ebv must be set
-
-        Ebv: float
-           E(B-V) value of dust column
-           Av or Ebv must be set
-
-        Returns
-        -------
-        frac_ext: np array (float)
-           fractional extinction as a function of x
-        """
-        # get the extinction curve
-        axav = self(x)
-
-        # check that av or ebv is set
-        if (Av is None) and (Ebv is None):
-            raise InputParameterError("neither Av or Ebv passed, one required")
-
-        # if Av is not set and Ebv set, convert to Av
-        if Av is None:
-            Av = self.Rv * Ebv
-
-        # return fractional extinction
-        return np.power(10.0, -0.4 * axav * Av)
-
-
-class BaseExtAveModel(Model):
-    """
-    Base Extinction Average.  Do not use.
     """
 
     n_inputs = 1

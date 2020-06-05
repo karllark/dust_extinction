@@ -7,7 +7,7 @@ from scipy.interpolate import interp1d
 from astropy.table import Table
 
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
-from .baseclasses import BaseExtAveModel
+from .baseclasses import BaseExtModel
 from .shapes import P92, _curve_F99_method
 
 __all__ = [
@@ -23,7 +23,7 @@ __all__ = [
 ]
 
 
-class RL85_MWGC(BaseExtAveModel):
+class RL85_MWGC(BaseExtModel):
     r"""
     Reike & Lebofsky (1985) MW Average Extinction Curve
 
@@ -121,7 +121,7 @@ class RL85_MWGC(BaseExtAveModel):
         return f(x)
 
 
-class G03_SMCBar(BaseExtAveModel):
+class G03_SMCBar(BaseExtModel):
     r"""
     Gordon et al (2003) SMCBar Average Extinction Curve
 
@@ -246,7 +246,7 @@ class G03_SMCBar(BaseExtAveModel):
         )
 
 
-class G03_LMCAvg(BaseExtAveModel):
+class G03_LMCAvg(BaseExtModel):
     r"""
     Gordon et al (2003) LMCAvg Average Extinction Curve
 
@@ -365,7 +365,7 @@ class G03_LMCAvg(BaseExtAveModel):
         )
 
 
-class G03_LMC2(BaseExtAveModel):
+class G03_LMC2(BaseExtModel):
     r"""
     Gordon et al (2003) LMC2 Average Extinction Curve
 
@@ -487,7 +487,7 @@ class G03_LMC2(BaseExtAveModel):
         )
 
 
-class I05_MWAvg(BaseExtAveModel):
+class I05_MWAvg(BaseExtModel):
     r"""
     Indebetouw et al (2005) MW Average Extinction Curve
 
@@ -586,7 +586,7 @@ class I05_MWAvg(BaseExtAveModel):
         return f(x)
 
 
-class CT06_MWGC(BaseExtAveModel):
+class CT06_MWGC(BaseExtModel):
     r"""
     Chiar & Tielens (2006) MW Galactic Center Curve
 
@@ -688,7 +688,7 @@ class CT06_MWGC(BaseExtAveModel):
         return f(x)
 
 
-class CT06_MWLoc(BaseExtAveModel):
+class CT06_MWLoc(BaseExtModel):
     r"""
     Chiar & Tielens (2006) MW Local ISM Curve
 
@@ -790,7 +790,7 @@ class CT06_MWLoc(BaseExtAveModel):
         return f(x)
 
 
-class GCC09_MWAvg(BaseExtAveModel):
+class GCC09_MWAvg(BaseExtModel):
     r"""
     Gordon, Cartledge, & Clayton (2009) Milky Way Average Extinction Curve
 
@@ -954,7 +954,7 @@ class GCC09_MWAvg(BaseExtAveModel):
         return p92_fit(in_x)
 
 
-class F11_MWGC(BaseExtAveModel):
+class F11_MWGC(BaseExtModel):
     r"""
     Fritz et al (2011) MW Galactic Center Curve
 
