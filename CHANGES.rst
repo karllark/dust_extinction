@@ -1,4 +1,4 @@
-0.9 (unreleased)
+0.9 (2020-06-05)
 ================
 
 - NIR/MIR average models added
