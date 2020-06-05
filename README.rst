@@ -17,7 +17,7 @@ Build checks/status
    :target: http://dust-extinction.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://travis-ci.org/karllark/dust_extinction.svg?branch=master
+.. image:: https://travis-ci.com/karllark/dust_extinction.svg?branch=master
    :target: https://travis-ci.org/karllark/dust_extinction
    :alt: Travis Testing Status
 
