@@ -17,31 +17,32 @@ Build checks/status
    :target: http://dust-extinction.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://travis-ci.com/karllark/dust_extinction.svg?branch=master
-   :target: https://travis-ci.com/karllark/dust_extinction
-   :alt: Travis Testing Status
+.. image:: https://github.com/karllark/dust_extinction/workflows/Python%20Tests/badge.svg
+   :target: https://github.com/karllark/dust_extinction/actions/
+   :alt: Test Status
 
-.. image:: https://coveralls.io/repos/github/karllark/dust_extinction/badge.svg?branch=master
-   :target: https://coveralls.io/github/karllark/dust_extinction?branch=master
+.. image:: https://codecov.io/gh/karllark/dust_extinction/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/karllark/dust_extinction
    :alt: Test Coverage Status
 
 .. image:: https://img.shields.io/lgtm/grade/python/g/karllark/dust_extinction.svg?logo=lgtm&logoWidth=18
-  :target: https://lgtm.com/projects/g/karllark/dust_extinction/context:python
-  :alt: LGTM language grade: Python
+   :target: https://lgtm.com/projects/g/karllark/dust_extinction/context:python
+   :alt: LGTM Status
 
 .. image:: https://api.codacy.com/project/badge/Grade/748429f338714270bb5fffd87a0183b5
-  :target: https://www.codacy.com/manual/kgordon/dust_extinction?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=karllark/dust_extinction&amp;utm_campaign=Badge_Grade
-  :alt: Codacy Badge
+   :target: https://www.codacy.com/manual/kgordon/dust_extinction?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=karllark/dust_extinction&amp;utm_campaign=Badge_Grade
+   :alt: Codacy Status
 
 Packaging
 ---------
 
 .. image:: https://badge.fury.io/py/dust-extinction.svg
    :target: https://badge.fury.io/py/dust-extinction
+   :alt: pypi dust_extinction
 
 .. image:: https://anaconda.org/conda-forge/dust_extinction/badges/version.svg
-  :target: https://github.com/conda-forge/dust_extinction-feedstock
-  :alt: dust_extinction feedstock and install directions
+   :target: https://github.com/conda-forge/dust_extinction-feedstock
+   :alt: dust_extinction feedstock and install directions
 
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org
@@ -58,9 +59,11 @@ In Development!
 This code is currently in active development.
 Contributions welcome (see below).
 
-Major Contributors
-------------------
-Karl Gordon, Kristen Larson
+Contributors
+------------
+Karl Gordon (lead)
+
+`All contributors <https://github.com/karllark/dust_extinction/graphs/contributors>`_
 
 Contributing
 ------------
@@ -83,7 +86,7 @@ welcoming community to all of our users and contributors.
 We love contributions! dust_extinction is open source,
 built on open source, and we'd love to have you hang out in our community.
 
-**Imposter syndrome disclaimer**: We want your help. No, really.
+**Impostor syndrome disclaimer**: We want your help. No, really.
 
 There may be a little voice inside your head that is telling you that you're not
 ready to be an open source contributor; that your skills aren't nearly good
@@ -118,7 +121,7 @@ the `Astropy package template <https://github.com/astropy/package-template>`_
 which is licensed under the BSD 3-clause licence. See the licenses folder for
 more information.
 
-.. _AstroPy: http://www.astropy.org/
-.. _contributing: http://docs.astropy.org/en/stable/index.html#contributing
-.. _developer: http://docs.astropy.org/en/stable/index.html#developer-documentation
-.. _Astropy Code of Conduct:  http://www.astropy.org/about.html#codeofconduct
+.. _AstroPy: https://www.astropy.org/
+.. _contributing: https://docs.astropy.org/en/stable/index.html#contributing
+.. _developer: https://docs.astropy.org/en/stable/index.html#developer-documentation
+.. _Astropy Code of Conduct:  https://www.astropy.org/about.html#codeofconduct

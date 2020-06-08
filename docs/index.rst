@@ -15,12 +15,12 @@ model or correct the effects of dust on observations a single star.
 In contrast, dust attenuation refers to the effects of dust on the measurements
 of groups of stars mixed with dust or stars with circumstellar dust.
 See :ref:`ExtvsAtt`.  For attenuation models, see the `dust_attenuation
-package <http://dust-attenuation.readthedocs.io/>`_.
+package <https://dust-attenuation.readthedocs.io/>`_.
 
 This package is an
-`astropy affiliated package <http://www.astropy.org/affiliated/>`_
+`astropy affiliated package <https://www.astropy.org/affiliated/>`_
 and uses the
-`astropy.modeling <http://docs.astropy.org/en/stable/modeling/>`_
+`astropy.modeling <https://docs.astropy.org/en/stable/modeling/>`_
 framework.
 
 User Documentation
@@ -155,19 +155,17 @@ Like the `Astropy`_ project, ``dust_extinction`` is made both by and for its
 users.  We accept contributions at all levels, spanning the gamut from fixing a
 typo in the documentation to developing a major new feature. We welcome
 contributors who will abide by the `Python Software Foundation Code of Conduct
-<https://www.python.org/psf/codeofconduct/>`_.
+<https://www.python.org/psf/conduct/>`_.
 
 ``dust_extinction`` follows the same workflow and coding guidelines as
 `Astropy`_.  The following pages will help you get started with contributing
 fixes, code, or documentation (no git or GitHub experience necessary):
 
-* `How to make a code contribution <http://astropy.readthedocs.io/en/stable/development/workflow/development_workflow.html>`_
+* `How to make a code contribution <https://docs.astropy.org/en/stable/development/workflow/development_workflow.html>`_
 
-* `Coding Guidelines <http://docs.astropy.io/en/latest/development/codeguide.html>`_
+* `Coding Guidelines <https://docs.astropy.org/en/stable/development/codeguide.html>`_
 
-* `Try the development version <http://astropy.readthedocs.io/en/stable/development/workflow/get_devel_version.html>`_
-
-* `Developer Documentation <http://docs.astropy.org/en/latest/#developer-documentation>`_
+* `Developer Documentation <https://docs.astropy.org/en/stable/#developer-documentation>`_
 
 For the complete list of contributors please see the `dust_extinction
 contributors page on Github

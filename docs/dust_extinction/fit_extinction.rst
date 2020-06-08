@@ -3,7 +3,7 @@ Fit Extinction Curves
 #####################
 
 The ``dust_extinction`` package is built on the `astropy.modeling
-<http://docs.astropy.org/en/stable/modeling/>`_ package.  Fitting is
+<https://docs.astropy.org/en/stable/modeling/>`_ package.  Fitting is
 done in the standard way for this package where the model is initialized
 with a starting point (either the default or user input), the fitter
 is chosen, and the fit performed.
