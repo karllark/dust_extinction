@@ -50,13 +50,12 @@ jobs:
         token: ${{ secrets.CODECOV }}
         fail_ci_if_error: true
 
-    - name: Upload coverage to coveralls
-      if: matrix.tox-env == 'cov' && matrix.python-ver == '8'
-      uses: coverallsapp/github-action@master
-      with:
-        github_token: ${{ secrets.COVERALLS }}
-        # file: ./coverage.xml
-        fail_ci_if_error: true
+#      if: matrix.tox-env == 'cov' && matrix.python-ver == '8'
+#      uses: coverallsapp/github-action@master
+#      with:
+#        github_token: ${{ secrets.COVERALLS }}
+#        # file: ./coverage.xml
+#        fail_ci_if_error: true
 
   # Test building of docs and check the links
   doc_test:
