@@ -63,7 +63,7 @@ Contributors
 ------------
 Karl Gordon (lead)
 
-`All contributors<https://github.com/karllark/dust_extinction/graphs/contributors>`_
+`All contributors <https://github.com/karllark/dust_extinction/graphs/contributors>`_
 
 Contributing
 ------------
