@@ -59,9 +59,11 @@ In Development!
 This code is currently in active development.
 Contributions welcome (see below).
 
-Lead
-----
-Karl Gordon
+Contributors
+------------
+Karl Gordon (lead)
+
+`All contributors<https://github.com/karllark/dust_extinction/graphs/contributors>`_
 
 Contributing
 ------------
