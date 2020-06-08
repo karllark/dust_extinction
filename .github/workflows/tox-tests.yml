@@ -54,7 +54,7 @@ jobs:
       if: matrix.tox-env == 'cov' && matrix.python-ver == '8'
       uses: coverallsapp/github-action@master
       with:
-        token: ${{ secrets.COVERALLS }}
+        github_token: ${{ secrets.COVERALLS }}
         # file: ./coverage.xml
         fail_ci_if_error: true
 
