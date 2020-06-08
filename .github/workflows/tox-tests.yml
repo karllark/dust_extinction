@@ -37,6 +37,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install tox
+        apt install graphviz
     - name: Test with tox
       run: |
         tox -e py3${{ matrix.python-ver }}-${{ matrix.tox-env }}
@@ -47,6 +48,13 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV }}
+        fail_ci_if_error: true
+
+    - name: Upload coverage to coveralls
+      if: matrix.tox-env == 'cov' && matrix.python-ver == '8'
+      uses: coverallsapp/github-action@master
+      with:
+        token: ${{ secrets.COVERALLS }}
         # file: ./coverage.xml
         fail_ci_if_error: true
 
