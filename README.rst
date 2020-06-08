@@ -17,8 +17,8 @@ Build checks/status
    :target: http://dust-extinction.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://travis-ci.org/karllark/dust_extinction.svg?branch=master
-   :target: https://travis-ci.org/karllark/dust_extinction
+.. image:: https://travis-ci.com/karllark/dust_extinction.svg?branch=master
+   :target: https://travis-ci.com/karllark/dust_extinction
    :alt: Travis Testing Status
 
 .. image:: https://coveralls.io/repos/github/karllark/dust_extinction/badge.svg?branch=master
