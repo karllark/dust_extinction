@@ -4,7 +4,13 @@
 
 name: Python Tests
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  schedule:
+    # Weekly Monday 4 AM build
+    # * is a special character in YAML so you have to quote this string
+    - cron: '0 4 * * 1'
 
 jobs:
 
