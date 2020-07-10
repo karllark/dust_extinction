@@ -325,9 +325,7 @@ class G03_SMCBar(BaseExtModel):
         xo = 4.6
         gamma = 1.0
 
-        optnir_axav_x = 1.0 / np.array(
-            [2.198, 1.65, 1.25, 0.81, 0.65, 0.55, 0.44, 0.37]
-        )
+        optnir_axav_x = 1.0 / np.array([2.198, 1.65, 1.25, 0.81, 0.65, 0.55, 0.44, 0.37])
         # values at 2.198 and 1.25 changed to provide smooth interpolation
         # as noted in Gordon et al. (2016, ApJ, 826, 104)
         optnir_axav_y = [0.11, 0.169, 0.25, 0.567, 0.801, 1.00, 1.374, 1.672]
@@ -744,9 +742,7 @@ class CT06_MWGC(BaseExtModel):
         # get the tabulated information
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
-        a = Table.read(
-            data_path + "CT06_pixiedust.dat", format="ascii.commented_header"
-        )
+        a = Table.read(data_path + "CT06_pixiedust.dat", format="ascii.commented_header")
 
         self.obsdata_x = 1.0 / a["wave"].data
         # ext is A(lambda)/A(K)
@@ -846,9 +842,7 @@ class CT06_MWLoc(BaseExtModel):
         # get the tabulated information
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
-        a = Table.read(
-            data_path + "CT06_pixiedust.dat", format="ascii.commented_header"
-        )
+        a = Table.read(data_path + "CT06_pixiedust.dat", format="ascii.commented_header")
 
         self.obsdata_x = 1.0 / a["wave"].data
         # ext is A(lambda)/A(K)
@@ -986,11 +980,7 @@ class GCC09_MWAvg(BaseExtModel):
             (self.obsdata_axav_fuse, self.obsdata_axav_iue, self.obsdata_axav_bands)
         )
         self.obsdata_axav_unc = np.concatenate(
-            (
-                self.obsdata_axav_unc_fuse,
-                self.obsdata_axav_unc_iue,
-                self.obsdata_axav_unc_bands,
-            )
+            (self.obsdata_axav_unc_fuse, self.obsdata_axav_unc_iue, self.obsdata_axav_unc_bands,)
         )
 
         # accuracy of the observed data based on published table
@@ -1112,9 +1102,7 @@ class F11_MWGC(BaseExtModel):
         # get the tabulated information
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
-        a = Table.read(
-            data_path + "fritz11_galcenter.dat", format="ascii.commented_header"
-        )
+        a = Table.read(data_path + "fritz11_galcenter.dat", format="ascii.commented_header")
 
         self.obsdata_x = 1.0 / a["wave"].data
         # ext is total extinction to GalCenter
