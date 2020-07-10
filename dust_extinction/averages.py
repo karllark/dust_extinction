@@ -123,7 +123,7 @@ class RL85_MWGC(BaseExtModel):
 
 
 class B92_MWAvg(BaseExtAveModel):
-    """
+    r"""
     Bastiaansen (1992) Optical Extinction Curve
 
     Parameters
