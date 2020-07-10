@@ -170,7 +170,7 @@ class B92_MWAvg(BaseExtModel):
 
     x_range = [1.0 / 0.7873, 1.0 / 0.3402]
 
-    rv = 3.1  # assumed!
+    Rv = 3.1  # assumed!
 
     # fmt: off
     obsdata_x = 1.0/np.array(
