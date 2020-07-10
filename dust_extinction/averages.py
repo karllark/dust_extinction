@@ -89,7 +89,7 @@ class RL85_MWGC(BaseExtModel):
     obsdata_tolerance = 1e-6
 
     def evaluate(self, in_x):
-        """
+        r"""
         RL85 MWGC function
 
         Parameters
@@ -122,7 +122,7 @@ class RL85_MWGC(BaseExtModel):
         return f(x)
 
 
-class B92_MWAvg(BaseExtAveModel):
+class B92_MWAvg(BaseExtModel):
     """
     Bastiaansen (1992) Optical Extinction Curve
 
@@ -224,7 +224,7 @@ class B92_MWAvg(BaseExtAveModel):
         return f(x)
 
 
-class G03_SMCBar(BaseExtAveModel):
+class G03_SMCBar(BaseExtModel):
     r"""
     Gordon et al (2003) SMCBar Average Extinction Curve
 
