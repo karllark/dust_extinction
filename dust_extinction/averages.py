@@ -12,6 +12,7 @@ from .shapes import P92, _curve_F99_method
 
 __all__ = [
     "RL85_MWGC",
+    "B92_MWAvg",
     "G03_SMCBar",
     "G03_LMCAvg",
     "G03_LMC2",
@@ -88,7 +89,7 @@ class RL85_MWGC(BaseExtModel):
     obsdata_tolerance = 1e-6
 
     def evaluate(self, in_x):
-        """
+        r"""
         RL85 MWGC function
 
         Parameters
@@ -116,6 +117,108 @@ class RL85_MWGC(BaseExtModel):
 
         # define the function using simple linear interpolation
         # avoids negative values of alav that happens with cubic splines
+        f = interp1d(self.obsdata_x, self.obsdata_axav)
+
+        return f(x)
+
+
+class B92_MWAvg(BaseExtModel):
+    r"""
+    Bastiaansen (1992) Optical Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Bastiaansen (1992, A&AS, 93, 449-462)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import B92_MWAvg
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = B92_MWAvg()
+
+        # generate the curves and plot them
+        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.1) * u.micron
+
+        ax.plot(x,ext_model(x),label='B1992')
+        ax.plot(1.0/ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 0.7873, 1.0 / 0.3402]
+
+    Rv = 3.1  # assumed!
+
+    # fmt: off
+    obsdata_x = 1.0 / np.array(
+        [0.7873, 0.7505, 0.7102, 0.6681, 0.64,
+         0.6107, 0.5821, 0.5601, 0.5407, 0.5205,
+         0.4999, 0.4708, 0.4496, 0.4395, 0.4192,
+         0.4038, 0.3785, 0.36, 0.3493, 0.3402]
+    )
+    obsdata_axav = np.array(
+        [0.849, 0.891, 0.941, 0.998, 1.045, 1.088,
+         1.139, 1.176, 1.226, 1.279, 1.34 , 1.418,
+         1.473, 1.507, 1.556, 1.595, 1.659, 1.718,
+         1.761, 1.795]
+    )
+    # fmt: on
+
+    # accuracy of the observed data based on published table
+    obsdata_tolerance = 6e-3
+
+    def evaluate(self, in_x):
+        """
+        B1992 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, self.__class__.name)
+
+        # define the function allowing for spline interpolation
         f = interp1d(self.obsdata_x, self.obsdata_axav)
 
         return f(x)
@@ -222,9 +325,7 @@ class G03_SMCBar(BaseExtModel):
         xo = 4.6
         gamma = 1.0
 
-        optnir_axav_x = 1.0 / np.array(
-            [2.198, 1.65, 1.25, 0.81, 0.65, 0.55, 0.44, 0.37]
-        )
+        optnir_axav_x = 1.0 / np.array([2.198, 1.65, 1.25, 0.81, 0.65, 0.55, 0.44, 0.37])
         # values at 2.198 and 1.25 changed to provide smooth interpolation
         # as noted in Gordon et al. (2016, ApJ, 826, 104)
         optnir_axav_y = [0.11, 0.169, 0.25, 0.567, 0.801, 1.00, 1.374, 1.672]
@@ -641,9 +742,7 @@ class CT06_MWGC(BaseExtModel):
         # get the tabulated information
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
-        a = Table.read(
-            data_path + "CT06_pixiedust.dat", format="ascii.commented_header"
-        )
+        a = Table.read(data_path + "CT06_pixiedust.dat", format="ascii.commented_header")
 
         self.obsdata_x = 1.0 / a["wave"].data
         # ext is A(lambda)/A(K)
@@ -743,9 +842,7 @@ class CT06_MWLoc(BaseExtModel):
         # get the tabulated information
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
-        a = Table.read(
-            data_path + "CT06_pixiedust.dat", format="ascii.commented_header"
-        )
+        a = Table.read(data_path + "CT06_pixiedust.dat", format="ascii.commented_header")
 
         self.obsdata_x = 1.0 / a["wave"].data
         # ext is A(lambda)/A(K)
@@ -883,11 +980,7 @@ class GCC09_MWAvg(BaseExtModel):
             (self.obsdata_axav_fuse, self.obsdata_axav_iue, self.obsdata_axav_bands)
         )
         self.obsdata_axav_unc = np.concatenate(
-            (
-                self.obsdata_axav_unc_fuse,
-                self.obsdata_axav_unc_iue,
-                self.obsdata_axav_unc_bands,
-            )
+            (self.obsdata_axav_unc_fuse, self.obsdata_axav_unc_iue, self.obsdata_axav_unc_bands,)
         )
 
         # accuracy of the observed data based on published table
@@ -1009,9 +1102,7 @@ class F11_MWGC(BaseExtModel):
         # get the tabulated information
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
-        a = Table.read(
-            data_path + "fritz11_galcenter.dat", format="ascii.commented_header"
-        )
+        a = Table.read(data_path + "fritz11_galcenter.dat", format="ascii.commented_header")
 
         self.obsdata_x = 1.0 / a["wave"].data
         # ext is total extinction to GalCenter
