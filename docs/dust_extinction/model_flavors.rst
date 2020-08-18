@@ -395,7 +395,7 @@ Grain models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.grain_models import D03_MWRV31
+   from dust_extinction.grain_models import (D03_MWRV31, D03_MWRV40, D03_MWRV55)
 
    fig, ax = plt.subplots()
 
@@ -403,7 +403,7 @@ Grain models
    lam = np.logspace(-4.0, 4.0, num=1000)
    x = (1.0 / lam) / u.micron
 
-   models = [D03_MWRV31]
+   models = [D03_MWRV31, D03_MWRV40, D03_MWRV55]
 
    for cmodel in models:
       ext_model = cmodel()

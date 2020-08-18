@@ -7,7 +7,7 @@ from astropy.table import Table
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .baseclasses import BaseExtModel
 
-__all__ = ["D03_MWRV31"]
+__all__ = ["D03_MWRV31", "D03_MWRV40", "D03_MWRV55"]
 
 
 class D03_Base(BaseExtModel):
@@ -146,3 +146,115 @@ class D03_MWRV31(D03_Base):
     def __init__(self, **kwargs):
 
         super().__init__("kext_albedo_WD_MW_3.1_60_D03.dat", **kwargs)
+
+
+class D03_MWRV40(D03_Base):
+    r"""
+    Draine (2003) MW RV=4.0 Grain Model Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Draine (2003, ARA&A, 41, 241; 2003, ApJ, 598, 1017).
+    Using Weingartner & Draine (2001, ApJ, 548, 296) size distributions
+
+    Example showing the curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.grain_models import D03_MWRV40
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = D03_MWRV40()
+
+        # generate the curves and plot them
+        lam = np.logspace(-4.0, 4.0, num=1000)
+        x = (1.0 / lam) / u.micron
+
+        ax.plot(1.0/x,ext_model(x),label='D03_MWRV40')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    Rv = 4.0
+
+    def __init__(self, **kwargs):
+
+        super().__init__("kext_albedo_WD_MW_4.0A_40_D03.dat", **kwargs)
+
+
+class D03_MWRV55(D03_Base):
+    r"""
+    Draine (2003) MW RV=5.5 Grain Model Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Draine (2003, ARA&A, 41, 241; 2003, ApJ, 598, 1017).
+    Using Weingartner & Draine (2001, ApJ, 548, 296) size distributions
+
+    Example showing the curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.grain_models import D03_MWRV55
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = D03_MWRV55()
+
+        # generate the curves and plot them
+        lam = np.logspace(-4.0, 4.0, num=1000)
+        x = (1.0 / lam) / u.micron
+
+        ax.plot(1.0/x,ext_model(x),label='D03_MWRV55')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    Rv = 4.0
+
+    def __init__(self, **kwargs):
+
+        super().__init__("kext_albedo_WD_MW_5.5A_30_D03.dat", **kwargs)
