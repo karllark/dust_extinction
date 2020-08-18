@@ -384,8 +384,10 @@ Grain models
 ==============
 
    These models provide literature grain models
-   interpolate between the computed data points.
-   Models are provided for the Milky Way for the X-ray to the submm.
+   interpolated between the computed data points.
+   These dust grain models are based on fitting observed extinction curves and
+   other observed properties of dust (e.g., abundances, IR emission).
+   Models are provided for the Milky Way calculated for the X-ray to the submm.
 
 .. plot::
 
