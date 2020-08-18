@@ -10,6 +10,8 @@ Models
 
 .. automodapi:: dust_extinction.shapes
 
+.. automodapi:: dust_extinction.grain_models
+
 Details
 *******
 

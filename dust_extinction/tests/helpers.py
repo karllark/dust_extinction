@@ -24,6 +24,7 @@ from dust_extinction.averages import (
     GCC09_MWAvg,
     F11_MWGC,
 )
+from dust_extinction.grain_models import D03_MWRV31
 
 param_ave_models_Rv = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19]
 param_ave_models_Rv_fA = [G16]
@@ -41,8 +42,15 @@ ave_models = [
     GCC09_MWAvg,
     F11_MWGC,
 ]
+grain_models = [D03_MWRV31]
 
-all_models = param_ave_models_Rv + param_ave_models_Rv_fA + shape_models + ave_models
+all_models = (
+    param_ave_models_Rv
+    + param_ave_models_Rv_fA
+    + shape_models
+    + ave_models
+    + grain_models
+)
 
 
 def _invalid_x_range(x, tmodel, modname):
