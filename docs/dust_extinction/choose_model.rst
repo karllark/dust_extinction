@@ -133,3 +133,24 @@ but only covers the UV wavelength range.
 +------------+--------------+------------------+-------------------+
 | P92        | 0.001 - 1000 |     0.001 - 1000 |  19 (24 possible) |
 +------------+--------------+------------------+-------------------+
+
+Grain Models
+============
+
+The models are based on dust grain models that are calculated based on
+dust size, composition, and shape distributions.  The distributions
+are constrained by observations of dust extinction, abundances, emission,
+and polarization (usually a subset, not all).  One use of these models
+is to provide extinction measurements at wavelengths not accessible
+observationally (e.g., in the extreme UV below 912 A).
+
++--------------+----------------+------------------+--------------+
+| Model        |    x range     | wavelength range |       galaxy |
+|              |    [1/micron]  | [micron]         |              |
++==============+================+==================+==============+
+| D03_MWRV31   | 0.0001 - 10000 |   0.0001 - 10000 |           MW |
++--------------+----------------+------------------+--------------+
+| D03_MWRV40   | 0.0001 - 10000 |   0.0001 - 10000 |           MW |
++--------------+----------------+------------------+--------------+
+| D03_MWRV55   | 0.0001 - 10000 |   0.0001 - 10000 |           MW |
++--------------+----------------+------------------+--------------+

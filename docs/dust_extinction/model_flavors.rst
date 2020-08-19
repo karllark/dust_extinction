@@ -10,8 +10,9 @@ Average models
 
    These models provide averages from the literature with the ability to
    interpolate between the observed data points.
-   Models are provided for the Milky Way for the ultraviolet, optical, and near-infrared
-   (Bastiaansen 1992; Gordon, Cartlege, & Clayton 2009) and near- and mid-infrared
+   Models are provided for the Milky Way for the optical (Bastiaansen 1992),
+   ultraviolet through near-infrared
+   (Gordon, Cartlege, & Clayton 2009) and near- and mid-infrared
    (Rieke & Lebofsky 1985; Indebetouw et al. 2005; Chiar & Tielens 2006; Fritz et al. 2011)
    and the Magellanic Clouds (Gordon et al. 2003).
 
@@ -374,6 +375,50 @@ Shape fitting models
    ax.set_ylabel('$A(x)/A(V)$')
 
    ax.set_title('P92')
+
+   ax.legend(loc='best')
+   plt.tight_layout()
+   plt.show()
+
+Grain models
+==============
+
+   These models provide literature grain models
+   interpolated between the computed data points.
+   These dust grain models are based on fitting observed extinction curves and
+   other observed properties of dust (e.g., abundances, IR emission).
+   Models are provided for the Milky Way calculated for the X-ray to the submm.
+
+.. plot::
+
+   import numpy as np
+   import matplotlib.pyplot as plt
+   import astropy.units as u
+
+   from dust_extinction.grain_models import (D03_MWRV31, D03_MWRV40, D03_MWRV55)
+
+   fig, ax = plt.subplots()
+
+   # generate the curves and plot them
+   lam = np.logspace(-4.0, 4.0, num=1000)
+   x = (1.0 / lam) / u.micron
+
+   models = [D03_MWRV31, D03_MWRV40, D03_MWRV55]
+
+   for cmodel in models:
+      ext_model = cmodel()
+      indxs, = np.where(np.logical_and(
+         x.value >= ext_model.x_range[0],
+         x.value <= ext_model.x_range[1]))
+      yvals = ext_model(x[indxs])
+      ax.plot(1.0/x[indxs], yvals, label=ext_model.__class__.__name__)
+
+   ax.set_xlabel('$\lambda$ [$\mu m$]')
+   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_title('Grain Models')
+
+   ax.set_xscale('log')
+   ax.set_yscale('log')
 
    ax.legend(loc='best')
    plt.tight_layout()

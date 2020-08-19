@@ -8,6 +8,11 @@ CCM89: `Cardelli, Clayton, & Mathis 1989, ApJ, 345, 245
 CT06: `Chiar & Tielens 2006, ApJ, 637 774
 <https://ui.adsabs.harvard.edu/abs/2006ApJ...637..774C>`_
 
+D03: `Draine 2003, ARA&A, 41, 241
+<https://ui.adsabs.harvard.edu/abs/2003ARA%26A..41..241D/abstract>`_;
+`Draine 2003, ApJ, 598, 1017
+<https://ui.adsabs.harvard.edu/abs/2003ApJ...598.1017D/abstract>`_
+
 F99: `Fitzpatrick 1999, PASP, 111, 63
 <https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F>`_
 
@@ -38,7 +43,7 @@ G16: `Gordon et al. 2016, 826, 104
 I05: `Indebetouw et al. 2005, ApJ, 619, 931
 <https://ui.adsabs.harvard.edu/abs/2005ApJ...619..931I>`_
 
-M14: `Ma\’{\i}z Apell\’aniz et al. 2014, A&A, 564, 63
+M14: `Maiz Apell\’aniz et al. 2014, A&A, 564, 63
 <https://ui.adsabs.harvard.edu/abs/2014A%26A...564A..63M>`_
 
 OD94: `O'Donnell 1994, 422, 1580
