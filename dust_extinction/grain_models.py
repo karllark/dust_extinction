@@ -274,7 +274,7 @@ class ZDA04_MWRV31(BaseExtModel):
 
     Notes
     -----
-    From Zubko, Dwek, & Arendt (2004, ApJS, 152, 211)
+    BARE-GR-S model from Zubko, Dwek, & Arendt (2004, ApJS, 152, 211)
     Calculated by K. Misselt using ZDA04 grain size distributions and compositions
     """
 
