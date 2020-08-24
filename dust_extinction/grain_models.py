@@ -253,7 +253,7 @@ class D03_MWRV55(D03_Base):
         plt.show()
     """
 
-    Rv = 4.0
+    Rv = 5.5
 
     def __init__(self, **kwargs):
 
@@ -275,9 +275,12 @@ class ZDA04_MWRV31(BaseExtModel):
     Notes
     -----
     From Zubko, Dwek, & Arendt (2004, ApJS, 152, 211)
+    Calculated by K. Misselt using ZDA04 grain size distributions and compositions
     """
 
-    x_range = [1e-3, 1e4]
+    x_range = [1e-4, 1e3]
+
+    Rv = 3.1
 
     def __init__(self, **kwargs):
 
