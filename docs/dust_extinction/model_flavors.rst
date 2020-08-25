@@ -396,7 +396,7 @@ Grain models
    import astropy.units as u
 
    from dust_extinction.grain_models import (D03_MWRV31, D03_MWRV40, D03_MWRV55,
-                                             ZDA04_MWRV31)
+                                             ZDA04_MWRV31, WD01)
 
    fig, ax = plt.subplots()
 
@@ -404,15 +404,17 @@ Grain models
    lam = np.logspace(-4.0, 4.0, num=1000)
    x = (1.0 / lam) / u.micron
 
-   models = [D03_MWRV31, D03_MWRV40, D03_MWRV55, ZDA04_MWRV31]
+   models = [WD01, WD01, WD01]
+   modelnames = ["MWRV31", "MWRV40", "MWRV55"]
 
-   for cmodel in models:
-      ext_model = cmodel()
+   for cmodel, cname in zip(models, modelnames):
+      ext_model = cmodel(cname)
+
       indxs, = np.where(np.logical_and(
          x.value >= ext_model.x_range[0],
          x.value <= ext_model.x_range[1]))
       yvals = ext_model(x[indxs])
-      ax.plot(1.0/x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax.plot(lam[indxs], yvals, label=f"{ext_model.__class__.__name__}  {cname}")
 
    ax.set_xlabel('$\lambda$ [$\mu m$]')
    ax.set_ylabel('$A(x)/A(V)$')
