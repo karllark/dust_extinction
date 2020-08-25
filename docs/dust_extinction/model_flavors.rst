@@ -282,6 +282,99 @@ R(V) (+ other variables) dependent prediction models
    plt.show()
 
 
+Grain models
+============
+
+   These models provide literature grain models
+   interpolated between the computed data points.
+   These dust grain models are based on fitting observed extinction curves and
+   other observed properties of dust (e.g., abundances, IR emission).
+   Models are provided for the Milky Way calculated for the X-ray to the submm.
+
+.. plot::
+
+   import numpy as np
+   import matplotlib.pyplot as plt
+   import astropy.units as u
+
+   from dust_extinction.grain_models import WD01, D03, ZDA04
+
+   fig, ax = plt.subplots()
+
+   # generate the curves and plot them
+   lam = np.logspace(-4.0, 4.0, num=1000)
+   x = (1.0 / lam) / u.micron
+
+   models = [WD01, WD01, WD01,
+             D03, D03, D03,
+             ZDA04]
+   modelnames = ["MWRV31", "MWRV40", "MWRV55",
+                 "MWRV31", "MWRV40", "MWRV55",
+                 "BARE-GR-S"]
+
+   for cmodel, cname in zip(models, modelnames):
+      ext_model = cmodel(cname)
+
+      indxs, = np.where(np.logical_and(
+         x.value >= ext_model.x_range[0],
+         x.value <= ext_model.x_range[1]))
+      yvals = ext_model(x[indxs])
+      ax.plot(lam[indxs], yvals, label=f"{ext_model.__class__.__name__}  {cname}")
+
+   ax.set_xlabel('$\lambda$ [$\mu m$]')
+   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_title('Grain Models')
+
+   ax.set_xscale('log')
+   ax.set_yscale('log')
+
+   ax.set_title('Milky Way')
+
+   ax.legend(loc='best')
+   plt.tight_layout()
+   plt.show()
+
+
+.. plot::
+
+  import numpy as np
+  import matplotlib.pyplot as plt
+  import astropy.units as u
+
+  from dust_extinction.grain_models import WD01
+
+  fig, ax = plt.subplots()
+
+  # generate the curves and plot them
+  lam = np.logspace(-4.0, 4.0, num=1000)
+  x = (1.0 / lam) / u.micron
+
+  models = [WD01, WD01, WD01]
+  modelnames = ["LMCAvg", "LMC2", "SMCBar"]
+
+  for cmodel, cname in zip(models, modelnames):
+     ext_model = cmodel(cname)
+
+     indxs, = np.where(np.logical_and(
+        x.value >= ext_model.x_range[0],
+        x.value <= ext_model.x_range[1]))
+     yvals = ext_model(x[indxs])
+     ax.plot(lam[indxs], yvals, label=f"{ext_model.__class__.__name__}  {cname}")
+
+  ax.set_xlabel('$\lambda$ [$\mu m$]')
+  ax.set_ylabel('$A(x)/A(V)$')
+  ax.set_title('Grain Models')
+
+  ax.set_xscale('log')
+  ax.set_yscale('log')
+
+  ax.set_title('LMC & SMC')
+
+  ax.legend(loc='best')
+  plt.tight_layout()
+  plt.show()
+
+
 Shape fitting models
 ====================
 
@@ -375,51 +468,6 @@ Shape fitting models
    ax.set_ylabel('$A(x)/A(V)$')
 
    ax.set_title('P92')
-
-   ax.legend(loc='best')
-   plt.tight_layout()
-   plt.show()
-
-Grain models
-==============
-
-   These models provide literature grain models
-   interpolated between the computed data points.
-   These dust grain models are based on fitting observed extinction curves and
-   other observed properties of dust (e.g., abundances, IR emission).
-   Models are provided for the Milky Way calculated for the X-ray to the submm.
-
-.. plot::
-
-   import numpy as np
-   import matplotlib.pyplot as plt
-   import astropy.units as u
-
-   from dust_extinction.grain_models import (D03_MWRV31, D03_MWRV40, D03_MWRV55,
-                                             ZDA04_MWRV31)
-
-   fig, ax = plt.subplots()
-
-   # generate the curves and plot them
-   lam = np.logspace(-4.0, 4.0, num=1000)
-   x = (1.0 / lam) / u.micron
-
-   models = [D03_MWRV31, D03_MWRV40, D03_MWRV55, ZDA04_MWRV31]
-
-   for cmodel in models:
-      ext_model = cmodel()
-      indxs, = np.where(np.logical_and(
-         x.value >= ext_model.x_range[0],
-         x.value <= ext_model.x_range[1]))
-      yvals = ext_model(x[indxs])
-      ax.plot(1.0/x[indxs], yvals, label=ext_model.__class__.__name__)
-
-   ax.set_xlabel('$\lambda$ [$\mu m$]')
-   ax.set_ylabel('$A(x)/A(V)$')
-   ax.set_title('Grain Models')
-
-   ax.set_xscale('log')
-   ax.set_yscale('log')
 
    ax.legend(loc='best')
    plt.tight_layout()

@@ -12,6 +12,7 @@ from .helpers import (
     param_ave_models_Rv_fA,
     param_ave_models,
     ave_models,
+    grain_models,
 )
 
 
@@ -79,3 +80,10 @@ def test_extinguish_no_av_or_ebv(model):
     with pytest.raises(InputParameterError) as exc:
         ext.extinguish(ext.x_range[0])
     assert exc.value.args[0] == "neither Av or Ebv passed, one required"
+
+
+@pytest.mark.parametrize("model", grain_models)
+def test_possible_grain_model(model):
+    with pytest.raises(InputParameterError) as exc:
+        model("badmodename")
+    assert exc.value.args[0] == "modelname not recognized"
