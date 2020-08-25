@@ -59,6 +59,87 @@ class GMBase(BaseExtModel):
         return f(x)
 
 
+class DBP90(GMBase):
+    r"""
+    Desert et al (1990) Grain Models
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Desert, Boulanger, & Puget (1990, A&A, 237, 215)
+    Computed by DustEm and downloaded from the DustEm website.
+
+    Example showing the possible curves
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.grain_models import DBP90
+
+        fig, ax = plt.subplots()
+
+        ext_model = DBP90()
+
+        lam = np.logspace(np.log10(1.0/ext_model.x_range[1]),
+                          np.log10(1.0/ext_model.x_range[0]),
+                          num=1000)
+        x = (1.0 / lam) / u.micron
+
+        # define the extinction model
+        ax.plot(lam,ext_model(x),label=ext_model.__class__.__name__)
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 1e5, 1.0 / 0.0918]
+
+    possnames = {"MWRV31": ("EXT_DBP90.RES.dat", 3.1)}
+
+    def __init__(self, modelname="MWRV31", **kwargs):
+
+        if modelname not in self.possnames.keys():
+            raise InputParameterError("modelname not recognized")
+        filename = self.possnames[modelname][0]
+        self.Rv = self.possnames[modelname][1]
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        a = Table.read(
+            data_path + filename, data_start=1, header_start=None, format="ascii.basic",
+        )
+
+        self.data_x = 1.0 / a["col1"].data
+
+        # normalized by wavelength closest to V band
+        sindxs = np.argsort(np.absolute(self.data_x - 1.0 / 0.55))
+
+        self.data_axav = a["col8"].data / a["col8"].data[sindxs[0]]
+
+        # accuracy of the data based on calculations
+        self.data_tolerance = 1e-6
+
+        super().__init__(**kwargs)
+
+
 class WD01(GMBase):
     r"""
     Weingartner & Draine (2001) Grain Models
@@ -378,7 +459,7 @@ class C11(GMBase):
         plt.show()
     """
 
-    x_range = [1.0 / 1e5, 1.0 / 1e-2]
+    x_range = [1.0 / 1e5, 1.0 / 4e-2]
 
     possnames = {"MWRV31": ("EXT_C11.RES.dat", 3.1)}
 
@@ -459,7 +540,7 @@ class J13(GMBase):
         plt.show()
     """
 
-    x_range = [1.0 / 1e5, 1.0 / 1e-2]
+    x_range = [1.0 / 1e5, 1.0 / 4e-2]
 
     possnames = {"MWRV31": ("EXT_J13.RES.dat", 3.1)}
 

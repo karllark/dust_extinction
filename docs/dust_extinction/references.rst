@@ -16,6 +16,9 @@ D03: `Draine 2003, ARA&A, 41, 241
 `Draine 2003, ApJ, 598, 1017
 <https://ui.adsabs.harvard.edu/abs/2003ApJ...598.1017D/abstract>`_
 
+DBP90: `Desert, Boulanger, & Puget 1990, A&A, 237, 215
+<https://ui.adsabs.harvard.edu/abs/1990A%26A...237..215D/abstract>`_
+
 F99: `Fitzpatrick 1999, PASP, 111, 63
 <https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F>`_
 
