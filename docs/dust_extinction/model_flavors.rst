@@ -297,20 +297,22 @@ Grain models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.grain_models import WD01, D03, ZDA04
+   from dust_extinction.grain_models import WD01, D03, ZDA04, J13
 
    fig, ax = plt.subplots()
 
    # generate the curves and plot them
-   lam = np.logspace(-4.0, 4.0, num=1000)
+   lam = np.logspace(-4.0, 5.0, num=1000)
    x = (1.0 / lam) / u.micron
 
    models = [WD01, WD01, WD01,
              D03, D03, D03,
-             ZDA04]
+             ZDA04,
+             J13]
    modelnames = ["MWRV31", "MWRV40", "MWRV55",
                  "MWRV31", "MWRV40", "MWRV55",
-                 "BARE-GR-S"]
+                 "BARE-GR-S",
+                 "MWRV31"]
 
    for cmodel, cname in zip(models, modelnames):
       ext_model = cmodel(cname)

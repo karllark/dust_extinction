@@ -43,6 +43,12 @@ G16: `Gordon et al. 2016, 826, 104
 I05: `Indebetouw et al. 2005, ApJ, 619, 931
 <https://ui.adsabs.harvard.edu/abs/2005ApJ...619..931I>`_
 
+J13: `Jones et al. 2013, A&A, 558, 62
+<https://ui.adsabs.harvard.edu/abs/2013A%26A...558A..62J/abstract>`_
+
+KJY14: `Kohler, Jones, & Ysard 2014, A&A, 565, 9
+<https://ui.adsabs.harvard.edu/abs/2014A%26A...565L...9K/abstract>`_
+
 M14: `Maiz Apell\’aniz et al. 2014, A&A, 564, 63
 <https://ui.adsabs.harvard.edu/abs/2014A%26A...564A..63M>`_
 

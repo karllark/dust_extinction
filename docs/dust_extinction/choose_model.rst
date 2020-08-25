@@ -114,26 +114,6 @@ feature in the near UV caused by smoothly tying their optical to the
 optical portions of the :class:`~dust_extinction.parameter_averages.M14`
 models are provided here.
 
-Shape Models
-============
-
-The models that focus on describing the full extinction curve shape are usually
-used to fit measured extinction curves.  These models allow features in the
-extinction curve to be measured (e.g., 2175 A bump or 10 micron silicate
-feature).  The :class:`~dust_extinction.shapes.P92` is the most
-general as it covers the a very broad wavelength range.  The
-:class:`~dust_extinction.shapes.FM90` model has been extensively used,
-but only covers the UV wavelength range.
-
-+------------+--------------+------------------+-------------------+
-| Model      | x range      | wavelength range | # of parameters   |
-|            | [1/micron]   | [micron]         |                   |
-+============+==============+==================+===================+
-| FM90       | 3.13 - 11.0  |    0.0912 - 0.32 |  6                |
-+------------+--------------+------------------+-------------------+
-| P92        | 0.001 - 1000 |     0.001 - 1000 |  19 (24 possible) |
-+------------+--------------+------------------+-------------------+
-
 Grain Models
 ============
 
@@ -168,3 +148,25 @@ observationally (e.g., in the extreme UV below 912 A).
 +--------------+----------------+------------------+--------------+
 | ZDA04 MWRV31 |  0.0001 - 1000 |    0.001 - 10000 |           MW |
 +--------------+----------------+------------------+--------------+
+|   J13 MWRV31 |   0.00001 - 25 |    0.04 - 100000 |           MW |
++--------------+----------------+------------------+--------------+
+
+Shape Models
+============
+
+The models that focus on describing the full extinction curve shape are usually
+used to fit measured extinction curves.  These models allow features in the
+extinction curve to be measured (e.g., 2175 A bump or 10 micron silicate
+feature).  The :class:`~dust_extinction.shapes.P92` is the most
+general as it covers the a very broad wavelength range.  The
+:class:`~dust_extinction.shapes.FM90` model has been extensively used,
+but only covers the UV wavelength range.
+
++------------+--------------+------------------+-------------------+
+| Model      | x range      | wavelength range | # of parameters   |
+|            | [1/micron]   | [micron]         |                   |
++============+==============+==================+===================+
+| FM90       | 3.13 - 11.0  |    0.0912 - 0.32 |  6                |
++------------+--------------+------------------+-------------------+
+| P92        | 0.001 - 1000 |     0.001 - 1000 |  19 (24 possible) |
++------------+--------------+------------------+-------------------+

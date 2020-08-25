@@ -8,10 +8,58 @@ from astropy.modeling import InputParameterError
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .baseclasses import BaseExtModel
 
-__all__ = ["WD01", "D03", "ZDA04"]
+__all__ = ["WD01", "D03", "ZDA04", "J13"]
 
 
-class WD01(BaseExtModel):
+class GMBase(BaseExtModel):
+    r"""
+    Base for Grain Models
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+    """
+
+    def evaluate(self, in_x):
+        """
+        WD01 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
+
+        # define the function allowing for spline interpolation
+        #   fill value needed to handle numerical issues at the edges
+        #   the x values has already been checked to be in range
+        f = interp1d(self.data_x, self.data_axav, fill_value="extrapolate")
+
+        return f(x)
+
+
+class WD01(GMBase):
     r"""
     Weingartner & Draine (2001) Grain Models
 
@@ -98,51 +146,15 @@ class WD01(BaseExtModel):
         # normalized by wavelength closest to V band
         sindxs = np.argsort(np.absolute(self.data_x - 1.0 / 0.55))
 
-        # ext is A(lambda)/A(K)
-        # A(K)/A(V) = 0.112 (F19, R(V) = 3.1)
         self.data_axav = a["cext"].data / a["cext"].data[sindxs[0]]
 
-        # accuracy of the observed data based on calculations
+        # accuracy of the data based on calculations
         self.data_tolerance = 1e-6
 
         super().__init__(**kwargs)
 
-    def evaluate(self, in_x):
-        """
-        WD01 function
 
-        Parameters
-        ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
-
-           internally wavenumbers are used
-
-        Returns
-        -------
-        axav: np array (float)
-            A(x)/A(V) extinction curve [mag]
-
-        Raises
-        ------
-        ValueError
-           Input x values outside of defined range
-        """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
-        # define the function allowing for spline interpolation
-        #   fill value needed to handle numerical issues at the edges
-        #   the x values has already been checked to be in range
-        f = interp1d(self.data_x, self.data_axav, fill_value="extrapolate")
-
-        return f(x)
-
-
-class D03(BaseExtModel):
+class D03(GMBase):
     r"""
     Draine (2003) Grain Models
 
@@ -227,51 +239,15 @@ class D03(BaseExtModel):
         # normalized by wavelength closest to V band
         sindxs = np.argsort(np.absolute(self.data_x - 1.0 / 0.55))
 
-        # ext is A(lambda)/A(K)
-        # A(K)/A(V) = 0.112 (F19, R(V) = 3.1)
         self.data_axav = a["cext"].data / a["cext"].data[sindxs[0]]
 
-        # accuracy of the observed data based on calculations
+        # accuracy of the data based on calculations
         self.data_tolerance = 1e-6
 
         super().__init__(**kwargs)
 
-    def evaluate(self, in_x):
-        """
-        D03 function
 
-        Parameters
-        ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
-
-           internally wavenumbers are used
-
-        Returns
-        -------
-        axav: np array (float)
-            A(x)/A(V) extinction curve [mag]
-
-        Raises
-        ------
-        ValueError
-           Input x values outside of defined range
-        """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
-        # define the function allowing for spline interpolation
-        #   fill value needed to handle numerical issues at the edges
-        #   the x values has already been checked to be in range
-        f = interp1d(self.data_x, self.data_axav, fill_value="extrapolate")
-
-        return f(x)
-
-
-class ZDA04(BaseExtModel):
+class ZDA04(GMBase):
     r"""
     Zubko, Dwek, & Arendt (2004) Grain Models
 
@@ -344,45 +320,90 @@ class ZDA04(BaseExtModel):
         # normalized by wavelength closest to V band
         sindxs = np.argsort(np.absolute(self.data_x - 1.0 / 0.55))
 
-        # ext is A(lambda)/A(K)
-        # A(K)/A(V) = 0.112 (F19, R(V) = 3.1)
         self.data_axav = a["A_lam/A_V"].data / a["A_lam/A_V"].data[sindxs[0]]
 
-        # accuracy of the observed data based on calculations
+        # accuracy of the data based on calculations
         self.data_tolerance = 1e-6
 
         super().__init__(**kwargs)
 
-    def evaluate(self, in_x):
-        """
-        ZDA04 function
 
-        Parameters
-        ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+class J13(GMBase):
+    r"""
+    Jones et al (2013) Grain Models
 
-           internally wavenumbers are used
+    Parameters
+    ----------
+    None
 
-        Returns
-        -------
-        axav: np array (float)
-            A(x)/A(V) extinction curve [mag]
+    Raises
+    ------
+    None
 
-        Raises
-        ------
-        ValueError
-           Input x values outside of defined range
-        """
-        x = _get_x_in_wavenumbers(in_x)
+    Notes
+    -----
+    From Jones et al. (2013, A&A, 558, 62) and Kohler et al. (2014, A&A, 565, 9)
+    Computed by DustEm and downloaded from the DustEm website.
 
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
+    Example showing the possible curves
 
-        # define the function allowing for spline interpolation
-        #   fill value needed to handle numerical issues at the edges
-        #   the x values has already been checked to be in range
-        f = interp1d(self.data_x, self.data_axav, fill_value="extrapolate")
+    .. plot::
+        :include-source:
 
-        return f(x)
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.grain_models import J13
+
+        fig, ax = plt.subplots()
+
+        ext_model = J13()
+
+        lam = np.logspace(np.log10(1.0/ext_model.x_range[1]),
+                          np.log10(1.0/ext_model.x_range[0]),
+                          num=1000)
+        x = (1.0 / lam) / u.micron
+
+        # define the extinction model
+        ax.plot(lam,ext_model(x),label='J13')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 1e5, 1.0 / 1e-2]
+
+    possnames = {"MWRV31": ("EXT_J13.RES.dat", 3.1)}
+
+    def __init__(self, modelname="MWRV31", **kwargs):
+
+        if modelname not in self.possnames.keys():
+            raise InputParameterError("modelname not recognized")
+        filename = self.possnames[modelname][0]
+        self.Rv = self.possnames[modelname][1]
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        a = Table.read(
+            data_path + filename, data_start=1, header_start=None, format="ascii.basic",
+        )
+
+        self.data_x = 1.0 / a["col1"].data
+
+        # normalized by wavelength closest to V band
+        sindxs = np.argsort(np.absolute(self.data_x - 1.0 / 0.55))
+
+        self.data_axav = a["col10"].data / a["col10"].data[sindxs[0]]
+
+        # accuracy of the data based on calculations
+        self.data_tolerance = 1e-6
+
+        super().__init__(**kwargs)
