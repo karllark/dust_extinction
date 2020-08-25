@@ -82,11 +82,8 @@ def test_extinguish_no_av_or_ebv(model):
     assert exc.value.args[0] == "neither Av or Ebv passed, one required"
 
 
-from dust_extinction.grain_models import WD01
-grain_models = [WD01]
-
 @pytest.mark.parametrize("model", grain_models)
 def test_possible_grain_model(model):
     with pytest.raises(InputParameterError) as exc:
-        ext = model("badmodename")
+        model("badmodename")
     assert exc.value.args[0] == "modelname not recognized"

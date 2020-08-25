@@ -2,11 +2,7 @@ import pytest
 import numpy as np
 import astropy.units as u
 
-# average and grain models behave the same
-# from .helpers import grain_models
-
-from dust_extinction.grain_models import WD01
-grain_models = [WD01]
+from .helpers import grain_models
 
 
 @pytest.mark.parametrize("model_class", grain_models)
