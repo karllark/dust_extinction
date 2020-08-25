@@ -8,7 +8,7 @@ from astropy.modeling import InputParameterError
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .baseclasses import BaseExtModel
 
-__all__ = ["WD01", "D03", "ZDA04", "J13"]
+__all__ = ["WD01", "D03", "ZDA04", "C11", "J13"]
 
 
 class GMBase(BaseExtModel):
@@ -328,6 +328,87 @@ class ZDA04(GMBase):
         super().__init__(**kwargs)
 
 
+class C11(GMBase):
+    r"""
+    Compiegne et al (2011) Grain Models
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Compiegne et al. (2011, A&A, 525, 103)
+    Computed by DustEm and downloaded from the DustEm website
+
+    Example showing the possible curves
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.grain_models import C11
+
+        fig, ax = plt.subplots()
+
+        ext_model = C11()
+
+        lam = np.logspace(np.log10(1.0/ext_model.x_range[1]),
+                          np.log10(1.0/ext_model.x_range[0]),
+                          num=1000)
+        x = (1.0 / lam) / u.micron
+
+        # define the extinction model
+        ax.plot(lam,ext_model(x),label=ext_model.__class__.__name__)
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 1e5, 1.0 / 1e-2]
+
+    possnames = {"MWRV31": ("EXT_C11.RES.dat", 3.1)}
+
+    def __init__(self, modelname="MWRV31", **kwargs):
+
+        if modelname not in self.possnames.keys():
+            raise InputParameterError("modelname not recognized")
+        filename = self.possnames[modelname][0]
+        self.Rv = self.possnames[modelname][1]
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        a = Table.read(
+            data_path + filename, data_start=1, header_start=None, format="ascii.basic",
+        )
+
+        self.data_x = 1.0 / a["col1"].data
+
+        # normalized by wavelength closest to V band
+        sindxs = np.argsort(np.absolute(self.data_x - 1.0 / 0.55))
+
+        self.data_axav = a["col12"].data / a["col12"].data[sindxs[0]]
+
+        # accuracy of the data based on calculations
+        self.data_tolerance = 1e-6
+
+        super().__init__(**kwargs)
+
+
 class J13(GMBase):
     r"""
     Jones et al (2013) Grain Models
@@ -366,7 +447,7 @@ class J13(GMBase):
         x = (1.0 / lam) / u.micron
 
         # define the extinction model
-        ax.plot(lam,ext_model(x),label='J13')
+        ax.plot(lam,ext_model(x),label=ext_model.__class__.__name__)
 
         ax.set_xlabel(r'$\lambda$ [$\mu m$]')
         ax.set_ylabel(r'$A(x)/A(V)$')

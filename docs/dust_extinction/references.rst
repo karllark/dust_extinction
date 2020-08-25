@@ -2,6 +2,9 @@
 References
 ##########
 
+C11: `Compiegne et al. 2011, A&A, 525, 103
+<https://ui.adsabs.harvard.edu/abs/2011A%26A...525A.103C/abstract>`_
+
 CCM89: `Cardelli, Clayton, & Mathis 1989, ApJ, 345, 245
 <https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C>`_
 
