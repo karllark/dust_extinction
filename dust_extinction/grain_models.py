@@ -8,7 +8,7 @@ from astropy.modeling import InputParameterError
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .baseclasses import BaseExtModel
 
-__all__ = ["WD01", "D03", "ZDA04", "C11", "J13"]
+__all__ = ["DBP90", "WD01", "D03", "ZDA04", "C11", "J13"]
 
 
 class GMBase(BaseExtModel):
