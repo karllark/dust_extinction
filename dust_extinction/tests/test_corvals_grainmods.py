@@ -16,7 +16,7 @@ def test_corvals(model_class):
         tmodel = model_class(cmodel)
 
         # test array evaluation
-        x_vals = tmodel.data_x
+        x_vals = tmodel.data_x / u.micron
         y_vals = tmodel.data_axav
         tol = tmodel.data_tolerance
         np.testing.assert_allclose(tmodel(x_vals), y_vals, rtol=tol)

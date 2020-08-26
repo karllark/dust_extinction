@@ -2,6 +2,9 @@
 References
 ##########
 
+C11: `Compiegne et al. 2011, A&A, 525, 103
+<https://ui.adsabs.harvard.edu/abs/2011A%26A...525A.103C/abstract>`_
+
 CCM89: `Cardelli, Clayton, & Mathis 1989, ApJ, 345, 245
 <https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C>`_
 
@@ -12,6 +15,9 @@ D03: `Draine 2003, ARA&A, 41, 241
 <https://ui.adsabs.harvard.edu/abs/2003ARA%26A..41..241D/abstract>`_;
 `Draine 2003, ApJ, 598, 1017
 <https://ui.adsabs.harvard.edu/abs/2003ApJ...598.1017D/abstract>`_
+
+DBP90: `Desert, Boulanger, & Puget 1990, A&A, 237, 215
+<https://ui.adsabs.harvard.edu/abs/1990A%26A...237..215D/abstract>`_
 
 F99: `Fitzpatrick 1999, PASP, 111, 63
 <https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F>`_
@@ -42,6 +48,12 @@ G16: `Gordon et al. 2016, 826, 104
 
 I05: `Indebetouw et al. 2005, ApJ, 619, 931
 <https://ui.adsabs.harvard.edu/abs/2005ApJ...619..931I>`_
+
+J13: `Jones et al. 2013, A&A, 558, 62
+<https://ui.adsabs.harvard.edu/abs/2013A%26A...558A..62J/abstract>`_
+
+KJY14: `Kohler, Jones, & Ysard 2014, A&A, 565, 9
+<https://ui.adsabs.harvard.edu/abs/2014A%26A...565L...9K/abstract>`_
 
 M14: `Maiz Apell\’aniz et al. 2014, A&A, 564, 63
 <https://ui.adsabs.harvard.edu/abs/2014A%26A...564A..63M>`_

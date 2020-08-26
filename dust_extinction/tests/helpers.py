@@ -24,7 +24,7 @@ from dust_extinction.averages import (
     GCC09_MWAvg,
     F11_MWGC,
 )
-from dust_extinction.grain_models import WD01, D03, ZDA04
+from dust_extinction.grain_models import DBP90, WD01, D03, ZDA04, C11, J13
 
 param_ave_models_Rv = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19]
 param_ave_models_Rv_fA = [G16]
@@ -42,7 +42,7 @@ ave_models = [
     GCC09_MWAvg,
     F11_MWGC,
 ]
-grain_models = [WD01, D03, ZDA04]
+grain_models = [DBP90, WD01, D03, ZDA04, C11, J13]
 
 all_models = (
     param_ave_models_Rv
