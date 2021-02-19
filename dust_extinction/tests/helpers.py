@@ -14,6 +14,7 @@ from dust_extinction.parameter_averages import (
 from dust_extinction.shapes import FM90, P92
 from dust_extinction.averages import (
     RL85_MWGC,
+    RRP89_MWGC,
     B92_MWAvg,
     G03_SMCBar,
     G03_LMCAvg,
@@ -32,6 +33,7 @@ param_ave_models = param_ave_models_Rv + param_ave_models_Rv_fA
 shape_models = [FM90, P92]
 ave_models = [
     RL85_MWGC,
+    RRP89_MWGC,
     B92_MWAvg,
     G03_SMCBar,
     G03_LMCAvg,

@@ -12,6 +12,7 @@ from .shapes import P92, _curve_F99_method
 
 __all__ = [
     "RL85_MWGC",
+    "RRP89_MWGC",
     "B92_MWAvg",
     "G03_SMCBar",
     "G03_LMCAvg",
@@ -91,6 +92,105 @@ class RL85_MWGC(BaseExtModel):
     def evaluate(self, in_x):
         r"""
         RL85 MWGC function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
+
+        # define the function using simple linear interpolation
+        # avoids negative values of alav that happens with cubic splines
+        f = interp1d(self.obsdata_x, self.obsdata_axav)
+
+        return f(x)
+
+
+class RRP89_MWGC(BaseExtModel):
+    r"""
+    Reike, Rieke, & Paul (1989) MW Average Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Rieke, Rieke, & Paul (1989, ApJ, 336, 752)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import RRP89_MWGC
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = RRP89_MWGC()
+
+        # generate the curves and plot them
+        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.1) * u.micron
+
+        ax.plot(x,ext_model(x),label='RRP89_MWGC')
+        ax.plot(1.0/ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 13.0, 1.0 / 0.90]
+
+    Rv = 3.09
+
+    # fmt: off
+    obsdata_x = 1.0 / np.array(
+        [0.90, 1.25, 1.6, 2.2, 3.5, 4.8, 8.0,
+         9.5, 10.6, 11.0, 13.0]
+    )
+    obsdata_elvebv = np.array(
+        [-1.60, -2.22, -2.55, -2.744, -2.88, -2.99, -3.01,
+         -2.73, -2.87, -2.84, -2.98]
+    )
+    # fmt: on
+    obsdata_axav = obsdata_elvebv / Rv + 1.0
+
+    # accuracy of the observed data based on published table
+    obsdata_tolerance = 1e-6
+
+    def evaluate(self, in_x):
+        r"""
+        RRP89 MWGC function
 
         Parameters
         ----------
