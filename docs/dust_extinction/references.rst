@@ -43,8 +43,10 @@ G03: `Gordon et al. 2003, ApJ, 594, 279
 GCC09: `Gordon, Cartledge, & Clayton 2009, ApJ, 705, 1320
 <https://ui.adsabs.harvard.edu/abs/2009ApJ...705.1320G>`_
 
-G16: `Gordon et al. 2016, 826, 104
+G16: `Gordon et al. 2016, ApJ 826, 104
 <https://ui.adsabs.harvard.edu/abs/2016ApJ...826..104G>`_
+
+G21: Gordon et al. 2021, ApJ, submitted
 
 I05: `Indebetouw et al. 2005, ApJ, 619, 931
 <https://ui.adsabs.harvard.edu/abs/2005ApJ...619..931I>`_
