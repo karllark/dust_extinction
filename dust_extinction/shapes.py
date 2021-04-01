@@ -8,7 +8,7 @@ from astropy.modeling import Fittable1DModel, Parameter
 
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 
-__all__ = ["FM90", "P92"]
+__all__ = ["FM90", "P92", "G21"]
 
 x_range_FM90 = [1.0 / 0.32, 1.0 / 0.0912]
 x_range_P92 = [1.0 / 1e3, 1.0 / 1e-3]
@@ -91,7 +91,7 @@ def _curve_F99_method(
     x_splineval_uv = 10000.0 / np.array([2700.0, 2600.0])
 
     # UV points in input x
-    indxs_uv, = np.where(x >= x_cutval_uv)
+    (indxs_uv,) = np.where(x >= x_cutval_uv)
 
     # add in required spline points, otherwise just spline points
     if len(indxs_uv) > 0:
@@ -115,7 +115,7 @@ def _curve_F99_method(
     #   using cubic spline anchored in UV, optical, and IR
 
     # optical/NIR points in input x
-    indxs_opir, = np.where(x < x_cutval_uv)
+    (indxs_opir,) = np.where(x < x_cutval_uv)
 
     if len(indxs_opir) > 0:
         # spline points
@@ -135,6 +135,37 @@ def _curve_F99_method(
 
     # return A(x)/A(V)
     return axav
+
+
+def _modified_drude(x, scale, x_o, gamma_o, asym):
+    """
+    Modified Drude function to have a variable asymmetry.  Drude profiles
+    are intrinsically asymmetric with the asymmetry fixed by specific central
+    wavelength and width.  This modified Drude introduces an asymmetry
+    parameter that allows for variable asymmetry at fixed central wavelength
+    and width.
+
+    Parameters
+    ----------
+    x : float
+        input wavelengths
+
+    scale : float
+        central amplitude
+
+    x_o : float
+        central wavelength
+
+    gamma_o : float
+        full-width-half-maximum of profile
+
+    asym : float
+        asymmetry where a value of 0 results in a standard Drude profile
+    """
+    gamma = 2.0 * gamma_o / (1.0 + np.exp(asym * (x - x_o)))
+    y = scale * ((gamma / x_o) ** 2) / ((x / x_o - x_o / x) ** 2 + (gamma / x_o) ** 2)
+
+    return y
 
 
 class FM90(Fittable1DModel):
@@ -208,8 +239,8 @@ class FM90(Fittable1DModel):
     C2 = Parameter(description="linear term: slope", default=0.70)
     C3 = Parameter(description="bump: amplitude", default=3.23)
     C4 = Parameter(description="FUV rise: amplitude", default=0.41)
-    xo = Parameter(description="bump: centroid", default=4.60, min=0.)
-    gamma = Parameter(description="bump: width", default=0.99, min=0.)
+    xo = Parameter(description="bump: centroid", default=4.60, min=0.0)
+    gamma = Parameter(description="bump: width", default=0.99, min=0.0)
 
     x_range = x_range_FM90
 
@@ -586,3 +617,156 @@ class P92(Fittable1DModel):
 
     # use numerical derivaties (need to add analytic)
     fit_deriv = None
+
+
+class G21(Fittable1DModel):
+    r"""
+    Gordon et al. (2021) powerlaw plus two modified Drude profiles
+    (for the 10 & 20 micron silicate features)
+    for the 1 to 40 micron A(lambda)/A(V) extinction curve.
+
+    Parameters
+    ----------
+    scale: float
+        amplitude of the powerlaw at 1 micron
+    alpha: float
+        power of powerlaw
+    sil1_amp: float
+        central amplitude of the 10 micron silicate feature
+    sil1_amp: float
+        central amplitude of the 10 micron silicate feature
+    sil1_amp: float
+        central amplitude of the 10 micron silicate feature
+    sil1_amp: float
+        central amplitude of the 10 micron silicate feature
+    sil1_amp: float
+        central amplitude of the 10 micron silicate feature
+
+    Notes
+    -----
+    From Gordon et al. (2021, ApJ, submitted)
+
+    Only applicable at NIR/MIR wavelengths from 1-40 micron
+
+    Example showing a G21 curve with components identified.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.shapes import G21
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        lam = np.logspace(np.log10(1.01), np.log10(39.9), num=1000)
+        x = (1.0/lam)/u.micron
+
+        ext_model = G21()
+        ax.plot(1/x,ext_model(x),label='total')
+
+        ext_model = G21(sil1_amp=0.0, sil2_amp=0.0)
+        ax.plot(1./x,ext_model(x),label='power-law only')
+
+        ext_model = G21(sil2_amp=0.0)
+        ax.plot(1./x,ext_model(x),label='power-law+sil1 only')
+
+        ext_model = G21(sil1_amp=0.0)
+        ax.plot(1./x,ext_model(x),label='power-law+sil2 only')
+
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+
+        ax.set_xlabel('$\lambda$ [$\mu$m]')
+        ax.set_ylabel('$A(x)/A(V)$')
+
+        ax.set_title('G21')
+
+        ax.legend(loc='best')
+        plt.show()
+
+    """
+
+    # inputs = ("x",)
+    # outputs = ("axav",)
+
+    scale = Parameter(description="powerlaw: amplitude", default=0.37, bounds=(0.0, 1.0))
+    alpha = Parameter(description="powerlaw: alpha", default=1.5, bounds=(0.5, 5.0))
+    sil1_amp = Parameter(
+        description="silicate 10um: amplitude", default=0.07, bounds=(0.001, 0.3)
+    )
+    sil1_center = Parameter(
+        description="silicate 10um: center", default=9.87, bounds=(8.0, 12.0)
+    )
+    sil1_fwhm = Parameter(
+        description="silicate 10um: fwhm", default=2.5, bounds=(1.0, 10.0)
+    )
+    sil1_asym = Parameter(
+        description="silicate 10um: asymmetry", default=-0.23, bounds=(-2.0, 2.0)
+    )
+    sil2_amp = Parameter(
+        description="silicate 20um: amplitude", default=0.025, bounds=(0.001, 0.3)
+    )
+    sil2_center = Parameter(
+        description="silicate 20um: center", default=17.0, bounds=(16.0, 24.0)
+    )
+    sil2_fwhm = Parameter(
+        description="silicate 20um: fwhm", default=13.0, bounds=(5.0, 20.0)
+    )
+    sil2_asym = Parameter(
+        description="silicate 20um: asymmetry", default=-0.27, bounds=(-2.0, 2.0)
+    )
+
+    x_range = [1.0 / 40.0, 1.0]
+
+    def evaluate(
+        self,
+        in_x,
+        scale,
+        alpha,
+        sil1_amp,
+        sil1_center,
+        sil1_fwhm,
+        sil1_asym,
+        sil2_amp,
+        sil2_center,
+        sil2_fwhm,
+        sil2_asym,
+    ):
+        """
+        G21 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, "G21")
+
+        wave = 1 / x
+
+        # powerlaw
+        axav = scale * (wave ** (-1.0 * alpha))
+
+        # silicate feature drudes
+        axav += _modified_drude(wave, sil1_amp, sil1_center, sil1_fwhm, sil1_asym)
+        axav += _modified_drude(wave, sil2_amp, sil2_center, sil2_fwhm, sil2_asym)
+
+        return axav

@@ -67,7 +67,8 @@ Average models
                                         I05_MWAvg,
                                         CT06_MWLoc,
                                         CT06_MWGC,
-                                        F11_MWGC)
+                                        F11_MWGC,
+                                        G21_MWAvg)
 
   fig, ax = plt.subplots()
 
@@ -75,7 +76,7 @@ Average models
   x = 1.0 / (np.arange(1.0, 40.0 ,0.1) * u.micron)
 
   models = [RL85_MWGC, RRP89_MWGC, I05_MWAvg, CT06_MWLoc, CT06_MWGC,
-            F11_MWGC]
+            F11_MWGC, G21_MWAvg]
 
   for cmodel in models:
     ext_model = cmodel()
@@ -435,6 +436,8 @@ Shape fitting models
    shape of the ultraviolet extinction.
    The P92 (Pei 1992) uses 19 parameters to fit the shape of the X-ray to
    far-infrared extinction.
+   The G21 (Gordon et al. 2021) models uses 10 parameters to fit the shape
+   of the NIR/MIR 1-40 micron extinction.
 
 .. plot::
 
@@ -520,6 +523,44 @@ Shape fitting models
    ax.set_ylabel('$A(x)/A(V)$')
 
    ax.set_title('P92')
+
+   ax.legend(loc='best')
+   plt.tight_layout()
+   plt.show()
+
+.. plot::
+
+   import numpy as np
+   import matplotlib.pyplot as plt
+   import astropy.units as u
+
+   from dust_extinction.shapes import G21
+
+   fig, ax = plt.subplots()
+
+   # generate the curves and plot them
+   lam = np.logspace(np.log10(1.01), np.log10(39.9), num=1000)
+   x = (1.0/lam)/u.micron
+
+   ext_model = G21()
+   ax.plot(1/x,ext_model(x),label='total')
+
+   ext_model = G21(sil1_amp=0.0, sil2_amp=0.0)
+   ax.plot(1./x,ext_model(x),label='power-law only')
+
+   ext_model = G21(sil2_amp=0.0)
+   ax.plot(1./x,ext_model(x),label='power-law+sil1 only')
+
+   ext_model = G21(sil1_amp=0.0)
+   ax.plot(1./x,ext_model(x),label='power-law+sil2 only')
+
+   ax.set_xscale('log')
+   ax.set_yscale('log')
+
+   ax.set_xlabel('$\lambda$ [$\mu$m]')
+   ax.set_ylabel('$A(x)/A(V)$')
+
+   ax.set_title('G21')
 
    ax.legend(loc='best')
    plt.tight_layout()

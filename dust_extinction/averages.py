@@ -8,7 +8,7 @@ from astropy.table import Table
 
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .baseclasses import BaseExtModel
-from .shapes import P92, _curve_F99_method
+from .shapes import P92, G21, _curve_F99_method
 
 __all__ = [
     "RL85_MWGC",
@@ -22,6 +22,7 @@ __all__ = [
     "CT06_MWLoc",
     "GCC09_MWAvg",
     "F11_MWGC",
+    "G21_MWAvg",
 ]
 
 
@@ -425,7 +426,9 @@ class G03_SMCBar(BaseExtModel):
         xo = 4.6
         gamma = 1.0
 
-        optnir_axav_x = 1.0 / np.array([2.198, 1.65, 1.25, 0.81, 0.65, 0.55, 0.44, 0.37])
+        optnir_axav_x = 1.0 / np.array(
+            [2.198, 1.65, 1.25, 0.81, 0.65, 0.55, 0.44, 0.37]
+        )
         # values at 2.198 and 1.25 changed to provide smooth interpolation
         # as noted in Gordon et al. (2016, ApJ, 826, 104)
         optnir_axav_y = [0.11, 0.169, 0.25, 0.567, 0.801, 1.00, 1.374, 1.672]
@@ -842,7 +845,9 @@ class CT06_MWGC(BaseExtModel):
         # get the tabulated information
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
-        a = Table.read(data_path + "CT06_pixiedust.dat", format="ascii.commented_header")
+        a = Table.read(
+            data_path + "CT06_pixiedust.dat", format="ascii.commented_header"
+        )
 
         self.obsdata_x = 1.0 / a["wave"].data
         # ext is A(lambda)/A(K)
@@ -942,7 +947,9 @@ class CT06_MWLoc(BaseExtModel):
         # get the tabulated information
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
-        a = Table.read(data_path + "CT06_pixiedust.dat", format="ascii.commented_header")
+        a = Table.read(
+            data_path + "CT06_pixiedust.dat", format="ascii.commented_header"
+        )
 
         self.obsdata_x = 1.0 / a["wave"].data
         # ext is A(lambda)/A(K)
@@ -1080,7 +1087,11 @@ class GCC09_MWAvg(BaseExtModel):
             (self.obsdata_axav_fuse, self.obsdata_axav_iue, self.obsdata_axav_bands)
         )
         self.obsdata_axav_unc = np.concatenate(
-            (self.obsdata_axav_unc_fuse, self.obsdata_axav_unc_iue, self.obsdata_axav_unc_bands,)
+            (
+                self.obsdata_axav_unc_fuse,
+                self.obsdata_axav_unc_iue,
+                self.obsdata_axav_unc_bands,
+            )
         )
 
         # accuracy of the observed data based on published table
@@ -1202,7 +1213,9 @@ class F11_MWGC(BaseExtModel):
         # get the tabulated information
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
-        a = Table.read(data_path + "fritz11_galcenter.dat", format="ascii.commented_header")
+        a = Table.read(
+            data_path + "fritz11_galcenter.dat", format="ascii.commented_header"
+        )
 
         self.obsdata_x = 1.0 / a["wave"].data
         # ext is total extinction to GalCenter
@@ -1247,3 +1260,142 @@ class F11_MWGC(BaseExtModel):
         f = interp1d(self.obsdata_x, self.obsdata_axav)
 
         return f(x)
+
+
+class G21_MWAvg(BaseExtModel):
+    r"""
+    Gordon et al. (2021) Milky Way Average Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Gordon et al. (2021, ApJ, submitted)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import G21_MWAvg
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        lam = np.logspace(np.log10(1.01), np.log10(31.9), num=1000)
+        x = (1.0/lam)/u.micron
+
+        # define the extinction model
+        ext_model = G21_MWAvg()
+
+        ax.plot(1.0/x,ext_model(x),label='G21_MWAvg')
+        ax.errorbar(1.0/ext_model.obsdata_x_irs, ext_model.obsdata_axav_irs,
+                    yerr=ext_model.obsdata_axav_unc_irs,
+                    fmt='ko', label='obsdata (IRS)')
+        ax.errorbar(1.0/ext_model.obsdata_x_bands, ext_model.obsdata_axav_bands,
+                    yerr=ext_model.obsdata_axav_unc_bands,
+                    fmt='g^', label='obsdata (photometry)')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 32.0, 1.0]
+
+    Rv = 3.17
+
+    def __init__(self, **kwargs):
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        # GCC09 sigma clipped average of 75 sightlines
+        a = Table.read(data_path + "G21_IRS.dat", format="ascii.commented_header")
+        b = Table.read(data_path + "G21_PHOT.dat", format="ascii.commented_header")
+
+        # IRS range
+        self.obsdata_x_irs = 1.0 / a["wave"].data
+        self.obsdata_axav_irs = a["ext"].data
+        self.obsdata_axav_unc_irs = a["unc"].data
+
+        # Opt/NIR range
+        self.obsdata_x_bands = 1.0 / b["wave"].data
+        self.obsdata_axav_bands = b["ext"].data
+        self.obsdata_axav_unc_bands = b["unc"].data
+
+        # put them together
+        self.obsdata_x = np.concatenate((self.obsdata_x_irs, self.obsdata_x_bands))
+        self.obsdata_axav = np.concatenate(
+            (self.obsdata_axav_irs, self.obsdata_axav_bands)
+        )
+        self.obsdata_axav_unc = np.concatenate(
+            (
+                self.obsdata_axav_unc_irs,
+                self.obsdata_axav_unc_bands,
+            )
+        )
+
+        # accuracy of the observed data based on published table
+        self.obsdata_tolerance = 5e-1
+
+        super().__init__(**kwargs)
+
+    def evaluate(self, in_x):
+        """
+        G21_MWAvg function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
+
+        # G21 parameters fit to the data using uncs as weights
+        g21_fit = G21(
+            scale=0.366,
+            alpha=1.480,
+            sil1_amp=0.06893,
+            sil1_center=9.865,
+            sil1_fwhm=2.507,
+            sil1_asym=-0.232,
+            sil2_amp=0.02684,
+            sil2_center=19.973,
+            sil2_fwhm=16.989,
+            sil2_asym=-0.273,
+        )
+
+        # return A(x)/A(V)
+        return g21_fit(in_x)
