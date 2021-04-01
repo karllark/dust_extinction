@@ -1,7 +1,8 @@
-1.0 (unreleased)
+1.0 (2021-04-01)
 ================
 
-- no changes yet
+- more NIR/MIR average models added (RRP89, G21_MWAvg)
+- dust grain models added (WD01, D03, J13, ZDA04)
 
 0.9 (2020-06-05)
 ================
