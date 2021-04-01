@@ -7,6 +7,7 @@
 ================
 
 - more NIR/MIR average models added (RRP89, G21_MWAvg)
+- NIR/MIR shape model (G21)
 - dust grain models added (WD01, D03, J13, ZDA04)
 
 0.9 (2020-06-05)
