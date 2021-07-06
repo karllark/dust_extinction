@@ -62,3 +62,20 @@ def test_extinction_G16_fA_1_single_values(test_vals):
     # test
     np.testing.assert_allclose(tmodel(x), cor_val, rtol=tolerance)
     np.testing.assert_allclose(tmodel.evaluate(x, 3.1, 1.0), cor_val, rtol=tolerance)
+
+
+def test_extinction_G16_extinguish_values_Ebv():
+    # get the correct values
+    x, cor_vals, tolerance = get_axav_cor_vals_fA_1()
+
+    # calculate the cor_vals in fractional units
+    Rv = 3.1
+    Ebv = 1.0
+    Av = Ebv * Rv
+    cor_vals = np.power(10.0, -0.4 * (cor_vals * Av))
+
+    # initialize extinction model
+    tmodel = G16(RvA=Rv)
+
+    # test
+    np.testing.assert_allclose(tmodel.extinguish(x, Ebv=Ebv), cor_vals, rtol=1e-3)

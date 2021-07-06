@@ -101,6 +101,14 @@ class BaseExtRvAfAModel(BaseExtModel):
     )
     fA = Parameter(description="f_A = mixture coefficent of component A", default=1.0)
 
+    def __init__(self, **kwargs):
+
+        super().__init__(**kwargs)
+
+        # set Rv so that extinguishing by Ebv works
+        # equation 11 in Gordon et al. (2016, ApJ, 826, 104)
+        self.Rv = 1.0 / (self.fA / self.RvA + (1 - self.fA) / 2.74)
+
     @RvA.validator
     def RvA(self, value):
         """
