@@ -78,4 +78,4 @@ def test_extinction_G16_extinguish_values_Ebv():
     tmodel = G16(RvA=Rv)
 
     # test
-    np.testing.assert_allclose(tmodel.extinguish(x, Ebv=Ebv), cor_vals, rtol=1e-3)
+    np.testing.assert_allclose(tmodel.extinguish(x, Ebv=Ebv), cor_vals, rtol=tolerance)
