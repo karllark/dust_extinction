@@ -28,7 +28,7 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
 
         # Test python 3.6, 3.7, and 3.8 by default.
-        python-ver: [6, 7, 8]
+        python-ver: [7, 8, 9, 10]
 
         # Specify which tox environments to test in this list.
         # tox-env: [cov, alldeps, devdeps, astropylts]

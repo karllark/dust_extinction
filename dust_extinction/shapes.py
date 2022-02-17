@@ -10,7 +10,7 @@ from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 
 __all__ = ["FM90", "P92", "G21"]
 
-x_range_FM90 = [1.0 / 0.32, 1.0 / 0.0912]
+x_range_FM90 = [1.0 / 0.35, 1.0 / 0.09]
 x_range_P92 = [1.0 / 1e3, 1.0 / 1e-3]
 
 
@@ -319,6 +319,19 @@ class FM90(Fittable1DModel):
             d_C4[fuv_indxs] = 0.5392 * (y ** 2) + 0.05644 * (y ** 3)
 
         return [d_C1, d_C2, d_C3, d_C4, d_xo, d_gamma]
+
+    # @property
+    # def input_units(self):
+    #     if self.xo.unit is None:
+    #         return None
+    #     return {self.inputs[0]: self.xo.unit}
+    #
+    # def _parameter_units_for_data_units(self, inputs_unit, outputs_unit):
+    #     return {'xo': inputs_unit[self.inputs[0]],
+    #             'C1': outputs_unit[self.outputs[0]],
+    #             'C2': outputs_unit[self.outputs[0]],
+    #             'C3': outputs_unit[self.outputs[0]],
+    #             'C4': outputs_unit[self.outputs[0]]}
 
 
 class P92(Fittable1DModel):
@@ -633,14 +646,20 @@ class G21(Fittable1DModel):
         power of powerlaw
     sil1_amp: float
         central amplitude of the 10 micron silicate feature
-    sil1_amp: float
-        central amplitude of the 10 micron silicate feature
-    sil1_amp: float
-        central amplitude of the 10 micron silicate feature
-    sil1_amp: float
-        central amplitude of the 10 micron silicate feature
-    sil1_amp: float
-        central amplitude of the 10 micron silicate feature
+    sil1_center: float
+        center wavelength of the 10 micron silicate feature
+    sil1_fwhm: float
+        full width at half maximum of the 10 micron silicate feature
+    sil1_asym: float
+        asymmetry of the 10 micron silicate feature
+    sil2_amp: float
+        central amplitude of the 20 micron silicate feature
+    sil2_center: float
+        center wavelength of the 20 micron silicate feature
+    sil2_fwhm: float
+        full width at half maximum of the 20 micron silicate feature
+    sil2_asym: float
+        asymmetry of the 20 micron silicate feature
 
     Notes
     -----
