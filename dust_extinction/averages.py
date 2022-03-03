@@ -5,6 +5,7 @@ import pkg_resources
 import numpy as np
 from scipy.interpolate import interp1d
 from astropy.table import Table
+from astropy.models import PowerLaw1D
 
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .baseclasses import BaseExtModel
@@ -1276,7 +1277,7 @@ class G21_MWAvg(BaseExtModel):
 
     Notes
     -----
-    From Gordon et al. (2021, ApJ, submitted)
+    From Gordon et al. (2021, ApJ, 916, 33)
 
     Example showing the average curve
 
@@ -1398,4 +1399,130 @@ class G21_MWAvg(BaseExtModel):
         )
 
         # return A(x)/A(V)
-        return g21_fit(in_x)
+        return g21_fit(x)
+
+
+class D22_MWAvg(BaseExtModel):
+    r"""
+    Decleir et al. (2022) Milky Way Average Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Decleir et al. (2022, ApJ, submitted)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import G21_MWAvg
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        lam = np.logspace(np.log10(1.01), np.log10(31.9), num=1000)
+        x = (1.0/lam)/u.micron
+
+        # define the extinction model
+        ext_model = G22_MWAvg()
+
+        ax.plot(1.0/x,ext_model(x),label='D22_MWAvg')
+        ax.errorbar(1.0/ext_model.obsdata_x, ext_model.obsdata_axav,
+                    yerr=ext_model.obsdata_axav_unc,
+                    fmt='ko', label='obsdata')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 5.0, 1.0 / 0.85]
+
+    Rv = 3.12
+
+    def __init__(self, **kwargs):
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        # GCC09 sigma clipped average of 13 diffuse sightlines
+        a = Table.read(data_path + "G22_SPEX.dat", format="ascii.commented_header")
+        b = Table.read(data_path + "G22_PHOT.dat", format="ascii.commented_header")
+
+        # Spex data
+        self.obsdata_x_spex = 1.0 / a["wave"].data
+        self.obsdata_axav_spex = a["ext"].data
+        self.obsdata_axav_unc_spex = a["unc"].data
+
+        # Band data
+        self.obsdata_x_bands = 1.0 / b["wave"].data
+        self.obsdata_axav_bands = b["ext"].data
+        self.obsdata_axav_unc_bands = b["unc"].data
+
+        # put them together
+        self.obsdata_x = np.concatenate((self.obsdata_x_spex, self.obsdata_x_bands))
+        self.obsdata_axav = np.concatenate(
+            (self.obsdata_axav_spex, self.obsdata_axav_bands)
+        )
+        self.obsdata_axav_unc = np.concatenate(
+            (
+                self.obsdata_axav_unc_spex,
+                self.obsdata_axav_unc_bands,
+            )
+        )
+
+        # accuracy of the observed data based on published table
+        self.obsdata_tolerance = 5e-1  # check
+
+        super().__init__(**kwargs)
+
+    def evaluate(self, in_x):
+        """
+        D22_MWAvg function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
+
+        # setup the model
+        d22_fit = PowerLaw1D(alpha=1.71, amplitude=0.386, x_0=1.0)
+
+        # return A(x)/A(V)
+        # Note that model in D22 was done versus waelength in microns
+        return d22_fit(1.0 / x)

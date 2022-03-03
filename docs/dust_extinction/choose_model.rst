@@ -23,6 +23,7 @@ simplest models and include models for the MW
 :class:`~dust_extinction.averages.GCC09_MWAvg`,
 :class:`~dust_extinction.averages.F11_MWGC`,
 :class:`~dust_extinction.averages.G21_MWAvg`;
+:class:`~dust_extinction.averages.D22_MWAvg`;
 Note the different valid wavelength ranges), the LMC
 (:class:`~dust_extinction.averages.G03_LMCAvg`,
 :class:`~dust_extinction.averages.G03_LMC2`) and the SMC
@@ -43,6 +44,8 @@ Way, the usual average used is R(V) = 3.1.
 | GCC09_MWAvg  | 0.3 - 10.96 |     0.0912 - 3.3 |           MW |
 +--------------+-------------+------------------+--------------+
 | G21_MWAvg    |  0.3125 - 1 |           1 - 32 |           MW |
++--------------+-------------+------------------+--------------+
+| D22_MWAvg    |  0.2 - 1.25 |          0.8 - 5 |           MW |
 +--------------+-------------+------------------+--------------+
 | CT06_MWLoc   | 0.037 - 0.8 |      1.24 - 27.0 |   MW (Local) |
 +--------------+-------------+------------------+--------------+
@@ -100,6 +103,8 @@ significantly more extinction curves than the
 | G16      | R(V)_A, f_A |  0.3 - 10.0 |        0.1 - 3.3 | MW, LMC, SMC |
 +----------+-------------+-------------+------------------+--------------+
 | F19      |  R(V)       |   0.3 - 8.7 |      0.115 - 3.3 |           MW |
++----------+-------------+-------------+------------------+--------------+
+| D22      |  R(V)       |  0.2 - 1.25 |        0.8 - 5.0 |           MW |
 +----------+-------------+-------------+------------------+--------------+
 
 Notes

@@ -68,7 +68,8 @@ Average models
                                         CT06_MWLoc,
                                         CT06_MWGC,
                                         F11_MWGC,
-                                        G21_MWAvg)
+                                        G21_MWAvg,
+                                        D22_MWAvg)
 
   fig, ax = plt.subplots()
 
@@ -76,7 +77,7 @@ Average models
   x = 1.0 / (np.arange(1.0, 40.0 ,0.1) * u.micron)
 
   models = [RL85_MWGC, RRP89_MWGC, I05_MWAvg, CT06_MWLoc, CT06_MWGC,
-            F11_MWGC, G21_MWAvg]
+            F11_MWGC, G21_MWAvg, D22_MWAvg]
 
   for cmodel in models:
     ext_model = cmodel()
@@ -123,7 +124,7 @@ R(V) (+ other variables) dependent prediction models
    import astropy.units as u
 
    from dust_extinction.parameter_averages import (CCM89, O94, F99, F04,
-                                                   VCG04, GCC09, M14, F19)
+                                                   VCG04, GCC09, M14, F19, D22)
 
    fig, ax = plt.subplots()
 
@@ -132,7 +133,7 @@ R(V) (+ other variables) dependent prediction models
 
    Rv = 3.1
 
-   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19]
+   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19, D22]
 
    for cmodel in models:
       ext_model = cmodel(Rv=Rv)
@@ -159,7 +160,7 @@ R(V) (+ other variables) dependent prediction models
    import astropy.units as u
 
    from dust_extinction.parameter_averages import (CCM89, O94, F99, F04,
-                                                   VCG04, GCC09, M14, F19)
+                                                   VCG04, GCC09, M14, F19, D22)
 
    fig, ax = plt.subplots()
 
@@ -168,7 +169,7 @@ R(V) (+ other variables) dependent prediction models
 
    Rv = 2.0
 
-   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19]
+   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19, D22]
 
    for cmodel in models:
       ext_model = cmodel(Rv=Rv)
@@ -195,7 +196,7 @@ R(V) (+ other variables) dependent prediction models
    import astropy.units as u
 
    from dust_extinction.parameter_averages import (CCM89, O94, F99, F04,
-                                                   VCG04, GCC09, M14, F19)
+                                                   VCG04, GCC09, M14, F19, D22)
 
    fig, ax = plt.subplots()
 
@@ -204,7 +205,7 @@ R(V) (+ other variables) dependent prediction models
 
    Rv = 5.5
 
-   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19]
+   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19, D22]
 
    for cmodel in models:
       ext_model = cmodel(Rv=Rv)
