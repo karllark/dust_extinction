@@ -7,6 +7,7 @@ from scipy import interpolate
 
 import astropy.units as u
 from astropy.table import Table
+from astropy.modeling.models import PowerLaw1D
 
 from .baseclasses import BaseExtRvModel, BaseExtRvAfAModel
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
@@ -1284,22 +1285,7 @@ class D22(BaseExtRvModel):
     """
 
     Rv_range = [2.5, 5.5]
-    x_range = [1 / 5.0, 1 / 0.85]
-
-    def __init__(self, Rv=3.1, **kwargs):
-
-        # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = Table.read(data_path + "F19_tabulated.dat", format="ascii")
-
-        # compute E(lambda-55)/E(B-55) on the tabulated x points
-        self.k_rV_tab_x = a["k_3.02"].data + a["deltak"].data * (Rv - 3.10) * 0.990
-
-        # setup spline interpolation
-        self.spline_rep = interpolate.splrep(a["x"].data, self.k_rV_tab_x)
-
-        super().__init__(Rv, **kwargs)
+    x_range = [1 / 4.0, 1 / 0.85]
 
     def evaluate(self, in_x, Rv):
         """
@@ -1336,11 +1322,13 @@ class D22(BaseExtRvModel):
         # ensure Rv is a single element, not numpy array
         Rv = Rv[0]
 
-        # use spline interpolation to evaluate the curve for the input x values
-        k_rV = interpolate.splev(x, self.spline_rep, der=0)
+        # intercepts
+        mod_a = PowerLaw1D(amplitude=0.377, intercept=1.78, x_0=1.0)
+        a = mod_a(1. / x)
 
-        # convert to A(x)/A(55) from E(x-55)/E(44-55)
-        a_rV = k_rV / Rv + 1.0
+        # slopes
+        # from spline interpolation
+        b = interpolate.splev(x, self.spline_rep, der=0)
 
         # return A(x)/A(55)
-        return a_rV
+        return a + b * (1. / Rv - 1 / 3.1)

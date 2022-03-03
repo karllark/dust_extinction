@@ -5,7 +5,7 @@ import pkg_resources
 import numpy as np
 from scipy.interpolate import interp1d
 from astropy.table import Table
-from astropy.models import PowerLaw1D
+from astropy.modeling.models import PowerLaw1D
 
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .baseclasses import BaseExtModel
@@ -24,6 +24,7 @@ __all__ = [
     "GCC09_MWAvg",
     "F11_MWGC",
     "G21_MWAvg",
+    "D22_MWAvg",
 ]
 
 
@@ -1427,16 +1428,16 @@ class D22_MWAvg(BaseExtModel):
         import matplotlib.pyplot as plt
         import astropy.units as u
 
-        from dust_extinction.averages import G21_MWAvg
+        from dust_extinction.averages import D22_MWAvg
 
         fig, ax = plt.subplots()
 
         # generate the curves and plot them
-        lam = np.logspace(np.log10(1.01), np.log10(31.9), num=1000)
+        lam = np.logspace(np.log10(0.86), np.log10(4.9), num=1000)
         x = (1.0/lam)/u.micron
 
         # define the extinction model
-        ext_model = G22_MWAvg()
+        ext_model = D22_MWAvg()
 
         ax.plot(1.0/x,ext_model(x),label='D22_MWAvg')
         ax.errorbar(1.0/ext_model.obsdata_x, ext_model.obsdata_axav,
@@ -1453,7 +1454,7 @@ class D22_MWAvg(BaseExtModel):
         plt.show()
     """
 
-    x_range = [1.0 / 5.0, 1.0 / 0.85]
+    x_range = [1.0 / 5.0, 1.0 / 0.8]
 
     Rv = 3.12
 
@@ -1463,30 +1464,12 @@ class D22_MWAvg(BaseExtModel):
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
         # GCC09 sigma clipped average of 13 diffuse sightlines
-        a = Table.read(data_path + "G22_SPEX.dat", format="ascii.commented_header")
-        b = Table.read(data_path + "G22_PHOT.dat", format="ascii.commented_header")
+        a = Table.read(data_path + "D22.dat", format="ascii.commented_header")
 
         # Spex data
-        self.obsdata_x_spex = 1.0 / a["wave"].data
-        self.obsdata_axav_spex = a["ext"].data
-        self.obsdata_axav_unc_spex = a["unc"].data
-
-        # Band data
-        self.obsdata_x_bands = 1.0 / b["wave"].data
-        self.obsdata_axav_bands = b["ext"].data
-        self.obsdata_axav_unc_bands = b["unc"].data
-
-        # put them together
-        self.obsdata_x = np.concatenate((self.obsdata_x_spex, self.obsdata_x_bands))
-        self.obsdata_axav = np.concatenate(
-            (self.obsdata_axav_spex, self.obsdata_axav_bands)
-        )
-        self.obsdata_axav_unc = np.concatenate(
-            (
-                self.obsdata_axav_unc_spex,
-                self.obsdata_axav_unc_bands,
-            )
-        )
+        self.obsdata_x = 1.0 / a["wavelength[micron]"].data
+        self.obsdata_axav = a["ave"].data
+        self.obsdata_axav_unc = a["ave_unc"].data
 
         # accuracy of the observed data based on published table
         self.obsdata_tolerance = 5e-1  # check
