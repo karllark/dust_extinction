@@ -1261,7 +1261,7 @@ class D22(BaseExtRvModel):
         import matplotlib.pyplot as plt
         import astropy.units as u
 
-        from dust_extinction.parameter_averages import F19
+        from dust_extinction.parameter_averages import D22
 
         fig, ax = plt.subplots()
 
@@ -1327,7 +1327,7 @@ class D22(BaseExtRvModel):
         a = mod_a(1. / x)
 
         # slopes
-        # from spline interpolation
+        # from spline interpolation - need ot get this info
         b = interpolate.splev(x, self.spline_rep, der=0)
 
         # return A(x)/A(55)
