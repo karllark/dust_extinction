@@ -1400,7 +1400,8 @@ class G21_MWAvg(BaseExtModel):
         )
 
         # return A(x)/A(V)
-        return g21_fit(x)
+        # G21 a full dust_extinction model, hence send in x with units
+        return g21_fit(in_x)
 
 
 class D22_MWAvg(BaseExtModel):
@@ -1479,7 +1480,7 @@ class D22_MWAvg(BaseExtModel):
         self.obsdata_axav_unc = a["ave_unc"].data
 
         # accuracy of the observed data based on published table
-        self.obsdata_tolerance = 5e-1  # check
+        self.obsdata_tolerance = 0.2  # check
 
         super().__init__(**kwargs)
 
