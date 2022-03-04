@@ -167,7 +167,7 @@ R(V) (+ other variables) dependent prediction models
    # generate the curves and plot them
    x = np.arange(0.5,11.0,0.1)/u.micron
 
-   Rv = 2.0
+   Rv = 2.5
 
    models = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19, D22]
 
@@ -182,7 +182,7 @@ R(V) (+ other variables) dependent prediction models
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('$A(x)/A(V)$')
 
-   ax.set_title('R(V) = 2.0')
+   ax.set_title('R(V) = 2.5')
 
    ax.legend(loc='best')
    plt.tight_layout()
