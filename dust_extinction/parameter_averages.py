@@ -1269,23 +1269,34 @@ class D22(BaseExtRvModel):
         text_model = D22()
 
         # generate the curves and plot them
-        x = np.arange(text_model.x_range[0],
-                      text_model.x_range[1],0.1)/u.micron
+        x = np.arange(text_model.x_range[0], text_model.x_range[1], 0.01) / u.micron
 
         Rvs = [2.5, 3.1, 4.0, 4.75, 5.5]
         for cur_Rv in Rvs:
-           ext_model = D22(Rv=cur_Rv)
-           ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+            ext_model = D22(Rv=cur_Rv)
+            ax.plot(1. / x, ext_model(x), label="R(V) = " + str(cur_Rv))
 
-        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel(r'$A(x)/A(V)$')
+        ax.set_xlabel(r"$\lambda$ [$\mu m$]")
+        ax.set_ylabel(r"$A(x)/A(V)$")
 
-        ax.legend(loc='best')
+        ax.legend(loc="best")
         plt.show()
     """
 
     Rv_range = [2.5, 5.5]
     x_range = [1 / 4.0, 1 / 0.85]
+
+    def __init__(self, Rv=3.1, **kwargs):
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        a = Table.read(data_path + "D22_Rv_slope.dat", format="ascii")
+
+        # setup spline interpolation
+        self.spline_rep = interpolate.splrep(a["wavelength[micron]"].data, a["slope"])
+
+        super().__init__(Rv, **kwargs)
 
     def evaluate(self, in_x, Rv):
         """
@@ -1323,12 +1334,12 @@ class D22(BaseExtRvModel):
         Rv = Rv[0]
 
         # intercepts
-        mod_a = PowerLaw1D(amplitude=0.377, intercept=1.78, x_0=1.0)
-        a = mod_a(1. / x)
+        mod_a = PowerLaw1D(amplitude=0.377, alpha=1.78, x_0=1.0)
+        a = mod_a(1.0 / x)
 
         # slopes
         # from spline interpolation - need ot get this info
-        b = interpolate.splev(x, self.spline_rep, der=0)
+        b = interpolate.splev(1.0 / x, self.spline_rep, der=0)
 
         # return A(x)/A(55)
-        return a + b * (1. / Rv - 1 / 3.1)
+        return a + b * (1.0 / Rv - 1 / 3.1)

@@ -1430,28 +1430,35 @@ class D22_MWAvg(BaseExtModel):
 
         from dust_extinction.averages import D22_MWAvg
 
+        mod = D22_MWAvg()
+
         fig, ax = plt.subplots()
 
         # generate the curves and plot them
-        lam = np.logspace(np.log10(0.86), np.log10(4.9), num=1000)
-        x = (1.0/lam)/u.micron
+        lam = np.logspace(np.log10(0.8), np.log10(4.9), num=1000)
+        x = (1.0 / lam) / u.micron
 
         # define the extinction model
         ext_model = D22_MWAvg()
 
-        ax.plot(1.0/x,ext_model(x),label='D22_MWAvg')
-        ax.errorbar(1.0/ext_model.obsdata_x, ext_model.obsdata_axav,
-                    yerr=ext_model.obsdata_axav_unc,
-                    fmt='ko', label='obsdata')
+        ax.plot(1.0 / x, ext_model(x), label="D22_MWAvg")
+        ax.errorbar(
+            1.0 / ext_model.obsdata_x,
+            ext_model.obsdata_axav,
+            yerr=ext_model.obsdata_axav_unc,
+            fmt="ko",
+            label="obsdata",
+        )
 
-        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
-        ax.set_ylabel(r'$A(x)/A(V)$')
+        ax.set_xlabel(r"$\lambda$ [$\mu m$]")
+        ax.set_ylabel(r"$A(x)/A(V)$")
 
-        ax.set_xscale('log')
-        ax.set_yscale('log')
+        ax.set_xscale("log")
+        ax.set_yscale("log")
 
-        ax.legend(loc='best')
+        ax.legend(loc="best")
         plt.show()
+
     """
 
     x_range = [1.0 / 5.0, 1.0 / 0.8]
