@@ -1236,7 +1236,7 @@ class D22(BaseExtRvModel):
 
     Decleir, Gordon, et al. (2022, ApJ, submitted) model.
     Based on a sample of stars observed spectroscopically in the
-    optical with IRTF/SpeX.
+    NIR with IRTF/SpeX.
 
     Parameters
     ----------
@@ -1284,7 +1284,7 @@ class D22(BaseExtRvModel):
     """
 
     Rv_range = [2.5, 5.5]
-    x_range = [1 / 4.0, 1 / 0.85]
+    x_range = [1 / 4.0, 1 / 0.80]
 
     def __init__(self, Rv=3.1, **kwargs):
 
@@ -1338,8 +1338,8 @@ class D22(BaseExtRvModel):
         a = mod_a(1.0 / x)
 
         # slopes
-        # from spline interpolation - need ot get this info
+        # from spline interpolation
         b = interpolate.splev(1.0 / x, self.spline_rep, der=0)
 
-        # return A(x)/A(55)
+        # return A(x)/A(V)
         return a + b * (1.0 / Rv - 1 / 3.1)

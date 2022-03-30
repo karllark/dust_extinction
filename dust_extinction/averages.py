@@ -1431,8 +1431,6 @@ class D22_MWAvg(BaseExtModel):
 
         from dust_extinction.averages import D22_MWAvg
 
-        mod = D22_MWAvg()
-
         fig, ax = plt.subplots()
 
         # generate the curves and plot them
@@ -1471,7 +1469,7 @@ class D22_MWAvg(BaseExtModel):
         # get the tabulated information
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
-        # GCC09 sigma clipped average of 13 diffuse sightlines
+        # D22 sigma clipped average of 13 diffuse sightlines
         a = Table.read(data_path + "D22.dat", format="ascii.commented_header")
 
         # Spex data
@@ -1515,5 +1513,5 @@ class D22_MWAvg(BaseExtModel):
         d22_fit = PowerLaw1D(alpha=1.71, amplitude=0.386, x_0=1.0)
 
         # return A(x)/A(V)
-        # Note that model in D22 was done versus waelength in microns
+        # Note that model in D22 was done versus wavelength in microns
         return d22_fit(1.0 / x)
