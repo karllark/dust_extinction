@@ -7,13 +7,14 @@ from scipy import interpolate
 
 import astropy.units as u
 from astropy.table import Table
+from astropy.modeling.models import PowerLaw1D
 
 from .baseclasses import BaseExtRvModel, BaseExtRvAfAModel
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .averages import G03_SMCBar
 from .shapes import _curve_F99_method
 
-__all__ = ["CCM89", "O94", "F99", "F04", "VCG04", "GCC09", "M14", "G16", "F19"]
+__all__ = ["CCM89", "O94", "F99", "F04", "VCG04", "GCC09", "M14", "G16", "F19", "D22"]
 
 x_range_CCM89 = [0.3, 10.0]
 x_range_O94 = x_range_CCM89
@@ -1227,3 +1228,118 @@ class F19(BaseExtRvModel):
 
         # return A(x)/A(55)
         return a_rV
+
+
+class D22(BaseExtRvModel):
+    r"""
+    Decleir et al (2022) extinction model calculation
+
+    Decleir, Gordon, et al. (2022, ApJ, submitted) model.
+    Based on a sample of stars observed spectroscopically in the
+    NIR with IRTF/SpeX.
+
+    Parameters
+    ----------
+    Rv: float
+        R(V) = A(V)/E(B-V) = total-to-selective extinction
+
+    Raises
+    ------
+    InputParameterError
+       Input Rv values outside of defined range
+
+    Notes
+    -----
+    D22 Milky Way R(V) dependent extinction model
+
+    Example showing D22 curves for a range of R(V) values.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.parameter_averages import D22
+
+        fig, ax = plt.subplots()
+
+        # temp model to get the correct x range
+        text_model = D22()
+
+        # generate the curves and plot them
+        x = np.arange(text_model.x_range[0], text_model.x_range[1], 0.01) / u.micron
+
+        Rvs = [2.5, 3.1, 4.0, 4.75, 5.5]
+        for cur_Rv in Rvs:
+            ext_model = D22(Rv=cur_Rv)
+            ax.plot(1. / x, ext_model(x), label="R(V) = " + str(cur_Rv))
+
+        ax.set_xlabel(r"$\lambda$ [$\mu m$]")
+        ax.set_ylabel(r"$A(x)/A(V)$")
+
+        ax.legend(loc="best")
+        plt.show()
+    """
+
+    Rv_range = [2.5, 5.5]
+    x_range = [1 / 4.0, 1 / 0.80]
+
+    def __init__(self, Rv=3.1, **kwargs):
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        a = Table.read(data_path + "D22_Rv_slope.dat", format="ascii")
+
+        # setup spline interpolation
+        self.spline_rep = interpolate.splrep(a["wavelength[micron]"].data, a["slope"])
+
+        super().__init__(Rv, **kwargs)
+
+    def evaluate(self, in_x, Rv):
+        """
+        D22 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        # convert to wavenumbers (1/micron) if x input in units
+        # otherwise, assume x in appropriate wavenumber units
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
+
+        # just in case someone calls evaluate explicitly
+        Rv = np.atleast_1d(Rv)
+
+        # ensure Rv is a single element, not numpy array
+        Rv = Rv[0]
+
+        # intercepts
+        mod_a = PowerLaw1D(amplitude=0.377, alpha=1.78, x_0=1.0)
+        a = mod_a(1.0 / x)
+
+        # slopes
+        # from spline interpolation
+        b = interpolate.splev(1.0 / x, self.spline_rep, der=0)
+
+        # return A(x)/A(V)
+        return a + b * (1.0 / Rv - 1 / 3.1)

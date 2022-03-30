@@ -3,7 +3,7 @@ References
 ##########
 
 C11: `Compiegne et al. 2011, A&A, 525, 103
-<https://ui.adsabs.harvard.edu/abs/2011A%26A...525A.103C/abstract>`_
+<https://ui.adsabs.harvard.edu/abs/2011A%26A...525A.103C>`_
 
 CCM89: `Cardelli, Clayton, & Mathis 1989, ApJ, 345, 245
 <https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C>`_
@@ -12,12 +12,14 @@ CT06: `Chiar & Tielens 2006, ApJ, 637 774
 <https://ui.adsabs.harvard.edu/abs/2006ApJ...637..774C>`_
 
 D03: `Draine 2003, ARA&A, 41, 241
-<https://ui.adsabs.harvard.edu/abs/2003ARA%26A..41..241D/abstract>`_;
+<https://ui.adsabs.harvard.edu/abs/2003ARA%26A..41..241D>`_;
 `Draine 2003, ApJ, 598, 1017
-<https://ui.adsabs.harvard.edu/abs/2003ApJ...598.1017D/abstract>`_
+<https://ui.adsabs.harvard.edu/abs/2003ApJ...598.1017D>`_
+
+D22: Decleir et al. 2022, ApJ, in press
 
 DBP90: `Desert, Boulanger, & Puget 1990, A&A, 237, 215
-<https://ui.adsabs.harvard.edu/abs/1990A%26A...237..215D/abstract>`_
+<https://ui.adsabs.harvard.edu/abs/1990A%26A...237..215D>`_
 
 F99: `Fitzpatrick 1999, PASP, 111, 63
 <https://ui.adsabs.harvard.edu/abs/1999PASP..111...63F>`_
@@ -46,17 +48,17 @@ GCC09: `Gordon, Cartledge, & Clayton 2009, ApJ, 705, 1320
 G16: `Gordon et al. 2016, ApJ 826, 104
 <https://ui.adsabs.harvard.edu/abs/2016ApJ...826..104G>`_
 
-G21: `Gordon et al. 2021, ApJ, in press
-<https://arxiv.org/abs/2105.05087>`_
+G21: `Gordon et al. 2021, ApJ, 916, 33
+<https://ui.adsabs.harvard.edu/abs/2021ApJ...916...33G>`_
 
 I05: `Indebetouw et al. 2005, ApJ, 619, 931
 <https://ui.adsabs.harvard.edu/abs/2005ApJ...619..931I>`_
 
 J13: `Jones et al. 2013, A&A, 558, 62
-<https://ui.adsabs.harvard.edu/abs/2013A%26A...558A..62J/abstract>`_
+<https://ui.adsabs.harvard.edu/abs/2013A%26A...558A..62J>`_
 
 KJY14: `Kohler, Jones, & Ysard 2014, A&A, 565, 9
-<https://ui.adsabs.harvard.edu/abs/2014A%26A...565L...9K/abstract>`_
+<https://ui.adsabs.harvard.edu/abs/2014A%26A...565L...9K>`_
 
 M14: `Maiz Apell\’aniz et al. 2014, A&A, 564, 63
 <https://ui.adsabs.harvard.edu/abs/2014A%26A...564A..63M>`_
@@ -74,10 +76,10 @@ VCG04: `Valencic, Clayton, & Gordon 2014, 616, 912
 <https://ui.adsabs.harvard.edu/abs/2004ApJ...616..912V>`_
 
 WG01: `Weingartner & Draine 2001, ApJ, 548, 296
-<https://ui.adsabs.harvard.edu/abs/2001ApJ...548..296W/abstract>`_
+<https://ui.adsabs.harvard.edu/abs/2001ApJ...548..296W>`_
 
 ZDA04: `Zubko, Dwek, & Arendt 2004, ApJS, 152, 211
-<https://ui.adsabs.harvard.edu/abs/2004ApJS..152..211Z/abstract>`_
+<https://ui.adsabs.harvard.edu/abs/2004ApJS..152..211Z>`_
 
 Naming Convention
 =================
