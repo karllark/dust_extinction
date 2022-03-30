@@ -1,7 +1,7 @@
-1.1 (unreleased)
+1.1 (2022-03-30)
 ================
 
-- no changes yet
+- Added D22_MWAvg average and D22 parameter average models
 
 1.0 (2021-04-01)
 ================
