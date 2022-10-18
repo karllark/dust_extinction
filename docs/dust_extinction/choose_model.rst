@@ -31,7 +31,7 @@ Note the different valid wavelength ranges), the LMC
 
 One often used alternative to these straight average models is to use one of
 the parameter dependent models with the average R(V) value.  For the Milky
-Way, the usual average used is R(V) = 3.1.
+Way, the usual average used is R(V) = 3.1.  See the next section.
 
 +--------------+-------------+------------------+--------------+
 | Model        | x range     | wavelength range |       galaxy |
@@ -73,46 +73,50 @@ for overall changes in the extinction curve shapes.  For example, the average
 behavior of Milky Way extinction curves has been shown to be dependent on R(V)
 = A(V)/E(B-V).  R(V) roughly tracks with the average dust grain size.
 
-The most general model is :class:`~dust_extinction.parameter_averages.G16` as this
-model encompasses the average measured behavior of extinction curves in the MW,
-LMC, and SMC.  The :class:`~dust_extinction.parameter_averages.G16` model reduces
-to the :class:`~dust_extinction.parameter_averages.F99` model with f\ :sub:`A`\ =
-1.0.  If only MW type extinction is expected, then the
-:class:`~dust_extinction.parameter_averages.F19` model should be considered as it
-is based on spectroscopic extinction curves in the optical and ultraviolet and
-significantly more extinction curves than the
-:class:`~dust_extinction.parameter_averages.CCM89` or
-:class:`~dust_extinction.parameter_averages.O94` models.
+For MW type extinction, the
+:class:`~dust_extinction.parameter_averages.G23` model should be considered as it
+spectroscopically covers the far-ultraviolet (912 A) to mid-infared (30 micron)
+and is based on the spectroscopic extinction curves used for the
+:class:`~dust_extinction.parameter_averages.GCC09`,
+:class:`~dust_extinction.parameter_averages.F19`,
+:class:`~dust_extinction.averages.G21_MWAvg`, and
+:class:`~dust_extinction.parameter_averages.D22` studies.
 
-+----------+-------------+-------------+------------------+--------------+
-| Model    | Parameters  | x range     | wavelength range |       galaxy |
-|          |             | [1/micron]  | [micron]         |              |
-+==========+=============+=============+==================+==============+
-| CCM89    |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW |
-+----------+-------------+-------------+------------------+--------------+
-| O94      |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW |
-+----------+-------------+-------------+------------------+--------------+
-| F99, F04 |  R(V)       |  0.3 - 10.0 |        0.1 - 3.3 |           MW |
-+----------+-------------+-------------+------------------+--------------+
-| VCG04    |  R(V)       |   3.3 - 8.0 |     0.125 - 0.31 |           MW |
-+----------+-------------+-------------+------------------+--------------+
-| GCC09    |  R(V)       |  3.3 - 11.0 |     0.091 - 0.31 |           MW |
-+----------+-------------+-------------+------------------+--------------+
-| M14      |  R_5495     |  0.3 -  3.3 |       0.31 - 3.3 |      MW, LMC |
-+----------+-------------+-------------+------------------+--------------+
-| G16      | R(V)_A, f_A |  0.3 - 10.0 |        0.1 - 3.3 | MW, LMC, SMC |
-+----------+-------------+-------------+------------------+--------------+
-| F19      |  R(V)       |   0.3 - 8.7 |      0.115 - 3.3 |           MW |
-+----------+-------------+-------------+------------------+--------------+
-| D22      |  R(V)       |  0.2 - 1.25 |        0.8 - 5.0 |           MW |
-+----------+-------------+-------------+------------------+--------------+
+A more general model is :class:`~dust_extinction.parameter_averages.G16` as this
+model encompasses the average measured behavior of extinction curves in the MW,
+LMC, and SMC.  But it only covers wavelengths between 1150 A and 3 micron.
+The :class:`~dust_extinction.parameter_averages.G16` model reduces
+to the :class:`~dust_extinction.parameter_averages.F99` model with f\ :sub:`A`\ =
+1.0.
+
+
++----------+-------------+--------------+------------------+--------------+
+| Model    | Parameters  |  x range     | wavelength range |       galaxy |
+|          |             |  [1/micron]  | [micron]         |              |
++==========+=============+==============+==================+==============+
+| CCM89    |  R(V)       |   0.3 - 10.0 |        0.1 - 3.3 |           MW |
++----------+-------------+--------------+------------------+--------------+
+| O94      |  R(V)       |   0.3 - 10.0 |        0.1 - 3.3 |           MW |
++----------+-------------+--------------+------------------+--------------+
+| F99, F04 |  R(V)       |   0.3 - 10.0 |        0.1 - 3.3 |           MW |
++----------+-------------+--------------+------------------+--------------+
+| VCG04    |  R(V)       |    3.3 - 8.0 |     0.125 - 0.31 |           MW |
++----------+-------------+--------------+------------------+--------------+
+| GCC09    |  R(V)       |   3.3 - 11.0 |    0.0912 - 0.31 |           MW |
++----------+-------------+--------------+------------------+--------------+
+| M14      |  R_5495     |   0.3 -  3.3 |       0.31 - 3.3 |      MW, LMC |
++----------+-------------+--------------+------------------+--------------+
+| G16      | R(V)_A, f_A |   0.3 - 10.0 |        0.1 - 3.3 | MW, LMC, SMC |
++----------+-------------+--------------+------------------+--------------+
+| F19      |  R(V)       |    0.3 - 8.7 |      0.115 - 3.3 |           MW |
++----------+-------------+--------------+------------------+--------------+
+| D22      |  R(V)       |   0.2 - 1.25 |        0.8 - 5.0 |           MW |
++----------+-------------+--------------+------------------+--------------+
+| G23      |  R(V)       | 0.033 - 11.0 |    0.0912 - 30.0 |           MW |
++----------+-------------+--------------+------------------+--------------+
 
 Notes
 -----
-
-The :class:`~dust_extinction.parameter_averages.GCC09` model is the only
-model that applies all the way to 912 A, but has the limitation that it
-only applies to the UV spectral region (not derived in the NIR/Optical).
 
 The :class:`~dust_extinction.parameter_averages.M14` models focus on refining
 models in the optical, and use the
