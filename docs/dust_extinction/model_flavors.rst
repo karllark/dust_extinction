@@ -52,7 +52,7 @@ Average models
    ax.xaxis.set_major_formatter(ScalarFormatter())
 
    ax.set_xlabel(r'$\lambda$ [$\mu$m]')
-   ax.set_ylabel(r'$A(x)/A(V)$')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
    ax.set_title('Ultraviolet to Near-Infrared Models')
 
    ax.legend(loc='best')
@@ -135,10 +135,10 @@ R(V) (+ other variables) dependent prediction models
                                                    VCG04, GCC09, M14, F19, D22,
                                                    G23)
 
-   fig, ax = plt.subplots()
+   fig, ax = plt.subplots(ncols=2, figsize=(10, 4))
 
    # generate the curves and plot them
-   x = np.arange(0.5,11.0,0.1)/u.micron
+   x = np.arange(1./30., 1./0.0912, 0.001)/u.micron
 
    Rv = 3.1
 
@@ -150,17 +150,24 @@ R(V) (+ other variables) dependent prediction models
          x.value >= ext_model.x_range[0],
          x.value <= ext_model.x_range[1]))
       yvals = ext_model(x[indxs])
-      ax.plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax[0].plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax[1].plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
 
-   ax.set_xscale('log')
-   ax.xaxis.set_major_formatter(ScalarFormatter())
+   for iax in ax:
+      iax.set_xscale('log')
+      iax.xaxis.set_major_formatter(ScalarFormatter())
 
-   ax.set_xlabel(r'$\lambda$ [$\mu$m]')
-   ax.set_ylabel('$A(x)/A(V)$')
+      iax.set_xlabel(r'$\lambda$ [$\mu$m]')
+      iax.set_ylabel(r'$A(\lambda)/A(V)$')
 
-   ax.set_title('R(V) = 3.1')
+   ax[0].set_title(f'UV-NIR R(V) = {Rv}')
+   ax[0].set_xlim(0.08, 3.0)
+   ax[1].set_title(f'NIR-MIR R(V) = {Rv}')
+   ax[1].set_xlim(1.0, 32.0)
+   ax[1].set_ylim(0.0, 0.50)
 
-   ax.legend(loc='best')
+   ax[0].legend(loc='best')
+   ax[1].legend(loc='best')
    plt.tight_layout()
    plt.show()
 
@@ -176,10 +183,10 @@ R(V) (+ other variables) dependent prediction models
                                                    VCG04, GCC09, M14, F19, D22,
                                                    G23)
 
-   fig, ax = plt.subplots()
+   fig, ax = plt.subplots(ncols=2, figsize=(10, 4))
 
    # generate the curves and plot them
-   x = np.arange(0.5,11.0,0.1)/u.micron
+   x = np.arange(1./30., 1./0.0912, 0.001)/u.micron
 
    Rv = 2.5
 
@@ -191,17 +198,24 @@ R(V) (+ other variables) dependent prediction models
          x.value >= ext_model.x_range[0],
          x.value <= ext_model.x_range[1]))
       yvals = ext_model(x[indxs])
-      ax.plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax[0].plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax[1].plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
 
-   ax.set_xscale('log')
-   ax.xaxis.set_major_formatter(ScalarFormatter())
+   for iax in ax:
+      iax.set_xscale('log')
+      iax.xaxis.set_major_formatter(ScalarFormatter())
 
-   ax.set_xlabel(r'$\lambda$ [$\mu$m]')
-   ax.set_ylabel('$A(x)/A(V)$')
+      iax.set_xlabel(r'$\lambda$ [$\mu$m]')
+      iax.set_ylabel(r'$A(\lambda)/A(V)$')
 
-   ax.set_title('R(V) = 2.5')
+   ax[0].set_title(f'UV-NIR R(V) = {Rv}')
+   ax[0].set_xlim(0.08, 3.0)
+   ax[1].set_title(f'NIR-MIR R(V) = {Rv}')
+   ax[1].set_xlim(1.0, 32.0)
+   ax[1].set_ylim(0.0, 0.50)
 
-   ax.legend(loc='best')
+   ax[0].legend(loc='best')
+   ax[1].legend(loc='best')
    plt.tight_layout()
    plt.show()
 
@@ -217,10 +231,10 @@ R(V) (+ other variables) dependent prediction models
                                                    VCG04, GCC09, M14, F19, D22,
                                                    G23)
 
-   fig, ax = plt.subplots()
+   fig, ax = plt.subplots(ncols=2, figsize=(10, 4))
 
    # generate the curves and plot them
-   x = np.arange(0.5,11.0,0.1)/u.micron
+   x = np.arange(1./30., 1./0.0912, 0.001)/u.micron
 
    Rv = 5.5
 
@@ -232,17 +246,24 @@ R(V) (+ other variables) dependent prediction models
          x.value >= ext_model.x_range[0],
          x.value <= ext_model.x_range[1]))
       yvals = ext_model(x[indxs])
-      ax.plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax[0].plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax[1].plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
 
-   ax.set_xscale('log')
-   ax.xaxis.set_major_formatter(ScalarFormatter())
+   for iax in ax:
+      iax.set_xscale('log')
+      iax.xaxis.set_major_formatter(ScalarFormatter())
 
-   ax.set_xlabel(r'$\lambda$ [$\mu$m]')
-   ax.set_ylabel('$A(x)/A(V)$')
+      iax.set_xlabel(r'$\lambda$ [$\mu$m]')
+      iax.set_ylabel(r'$A(\lambda)/A(V)$')
 
-   ax.set_title('R(V) = 5.5')
+   ax[0].set_title(f'UV-NIR R(V) = {Rv}')
+   ax[0].set_xlim(0.08, 3.0)
+   ax[1].set_title(f'NIR-MIR R(V) = {Rv}')
+   ax[1].set_xlim(1.0, 32.0)
+   ax[1].set_ylim(0.0, 0.50)
 
-   ax.legend(loc='best')
+   ax[0].legend(loc='best')
+   ax[1].legend(loc='best')
    plt.tight_layout()
    plt.show()
 
@@ -272,7 +293,7 @@ R(V) (+ other variables) dependent prediction models
    ax.xaxis.set_major_formatter(ScalarFormatter())
 
    ax.set_xlabel(r'$\lambda$ [$\mu$m]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
 
    ax.set_title('G16; $f_A = 1.0$; $R(V)_A$ variable')
 
@@ -306,7 +327,7 @@ R(V) (+ other variables) dependent prediction models
    ax.xaxis.set_major_formatter(ScalarFormatter())
 
    ax.set_xlabel(r'$\lambda$ [$\mu$m]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
 
    ax.set_title('G16; $f_A$ variable; $R(V)_A = 3.1$')
 
@@ -359,7 +380,7 @@ Grain models
       ax.plot(lam[indxs], yvals, label=f"{ext_model.__class__.__name__}  {cname}")
 
    ax.set_xlabel('$\lambda$ [$\mu m$]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
    ax.set_title('Grain Models')
 
    ax.set_xscale('log')
@@ -408,7 +429,7 @@ Grain models
       ax.plot(lam[indxs], yvals, label=f"{ext_model.__class__.__name__}  {cname}")
 
    ax.set_xlabel('$\lambda$ [$\mu m$]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
    ax.set_title('Grain Models')
 
    ax.set_xscale('log')
@@ -448,7 +469,7 @@ Grain models
      ax.plot(lam[indxs], yvals, label=f"{ext_model.__class__.__name__}  {cname}")
 
   ax.set_xlabel('$\lambda$ [$\mu m$]')
-  ax.set_ylabel('$A(x)/A(V)$')
+  ax.set_ylabel(r'$A(\lambda)/A(V)$')
   ax.set_title('Grain Models')
 
   ax.set_xscale('log')
@@ -557,7 +578,7 @@ Shape fitting models
    ax.set_ylim(1e-3,10.)
 
    ax.set_xlabel('$\lambda$ [$\mu$m]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
 
    ax.set_title('P92')
 
@@ -597,7 +618,7 @@ Shape fitting models
    ax.set_yscale('log')
 
    ax.set_xlabel('$\lambda$ [$\mu$m]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
 
    ax.set_title('G21')
 
