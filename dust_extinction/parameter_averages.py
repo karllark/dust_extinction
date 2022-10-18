@@ -7,14 +7,17 @@ from scipy import interpolate
 
 import astropy.units as u
 from astropy.table import Table
-from astropy.modeling.models import PowerLaw1D
+from astropy.modeling.models import Drude1D, Polynomial1D, PowerLaw1D
 
 from .baseclasses import BaseExtRvModel, BaseExtRvAfAModel
-from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
+from .helpers import _get_x_in_wavenumbers, _test_valid_x_range, _smoothstep
 from .averages import G03_SMCBar
-from .shapes import _curve_F99_method
+from .shapes import _curve_F99_method, _modified_drude, FM90
 
-__all__ = ["CCM89", "O94", "F99", "F04", "VCG04", "GCC09", "M14", "G16", "F19", "D22"]
+# fmt: off
+__all__ = ["CCM89", "O94", "F99", "F04", "VCG04", "GCC09", "M14", "G16", "F19",
+           "D22", "G23"]
+# fmt: on
 
 x_range_CCM89 = [0.3, 10.0]
 x_range_O94 = x_range_CCM89
@@ -24,6 +27,7 @@ x_range_VCG04 = [3.3, 8.0]
 x_range_GCC09 = [3.3, 11.0]
 x_range_M14 = [0.3, 3.3]
 x_range_G16 = [0.3, 10.0]
+x_range_G23 = [1.0 / 30.0, 1.0 / 0.0912]
 
 
 class CCM89(BaseExtRvModel):
@@ -139,8 +143,8 @@ class CCM89(BaseExtRvModel):
 
         # far-NUV
         y = x[fnuv_indxs] - 5.9
-        a[fnuv_indxs] += -0.04473 * (y ** 2) - 0.009779 * (y ** 3)
-        b[fnuv_indxs] += 0.2130 * (y ** 2) + 0.1207 * (y ** 3)
+        a[fnuv_indxs] += -0.04473 * (y**2) - 0.009779 * (y**3)
+        b[fnuv_indxs] += 0.2130 * (y**2) + 0.1207 * (y**3)
 
         # FUV
         y = x[fuv_indxs] - 8.0
@@ -265,8 +269,8 @@ class O94(BaseExtRvModel):
 
         # far-NUV
         y = x[fnuv_indxs] - 5.9
-        a[fnuv_indxs] += -0.04473 * (y ** 2) - 0.009779 * (y ** 3)
-        b[fnuv_indxs] += 0.2130 * (y ** 2) + 0.1207 * (y ** 3)
+        a[fnuv_indxs] += -0.04473 * (y**2) - 0.009779 * (y**3)
+        b[fnuv_indxs] += 0.2130 * (y**2) + 0.1207 * (y**3)
 
         # FUV
         y = x[fuv_indxs] - 8.0
@@ -390,7 +394,7 @@ class F99(BaseExtRvModel):
                 -0.426 + 1.0044 * Rv,
                 -0.050 + 1.0016 * Rv,
                 0.701 + 1.0016 * Rv,
-                1.208 + 1.0032 * Rv - 0.00033 * (Rv ** 2),
+                1.208 + 1.0032 * Rv - 0.00033 * (Rv**2),
             ]
         )
         nir_axebv_y = np.array([0.265, 0.829]) * Rv / 3.1
@@ -526,11 +530,11 @@ class F04(BaseExtRvModel):
                 -0.426 + 1.0044 * Rv,
                 -0.050 + 1.0016 * Rv,
                 0.701 + 1.0016 * Rv,
-                1.208 + 1.0032 * Rv - 0.00033 * (Rv ** 2),
+                1.208 + 1.0032 * Rv - 0.00033 * (Rv**2),
             ]
         )
         # updated NIR curve from F04, note R dependence
-        nir_axebv_y = (0.63 * Rv - 0.84) * nir_axav_x ** 1.84
+        nir_axebv_y = (0.63 * Rv - 0.84) * nir_axav_x**1.84
 
         optnir_axebv_y = np.concatenate([nir_axebv_y, opt_axebv_y])
 
@@ -654,8 +658,8 @@ class VCG04(BaseExtRvModel):
 
         # far-NUV
         y = x[fnuv_indxs] - 5.9
-        a[fnuv_indxs] += -0.0077 * (y ** 2) - 0.0030 * (y ** 3)
-        b[fnuv_indxs] += 0.2060 * (y ** 2) + 0.0550 * (y ** 3)
+        a[fnuv_indxs] += -0.0077 * (y**2) - 0.0030 * (y**3)
+        b[fnuv_indxs] += 0.2060 * (y**2) + 0.0550 * (y**3)
 
         # return A(x)/A(V)
         return a + b / Rv
@@ -765,8 +769,8 @@ class GCC09(BaseExtRvModel):
 
         # far-NUV
         y = x[fnuv_indxs] - 5.9
-        a[fnuv_indxs] += -0.110 * (y ** 2) - 0.0100 * (y ** 3)
-        b[fnuv_indxs] += 0.531 * (y ** 2) + 0.0544 * (y ** 3)
+        a[fnuv_indxs] += -0.110 * (y**2) - 0.0100 * (y**3)
+        b[fnuv_indxs] += 0.531 * (y**2) + 0.0544 * (y**3)
 
         # return A(x)/A(V)
         return a + b / Rv
@@ -876,8 +880,8 @@ class M14(BaseExtRvModel):
         Rv = Rv[0]
 
         # Infrared
-        ai = 0.574 * x ** 1.61
-        bi = -0.527 * x ** 1.61
+        ai = 0.574 * x**1.61
+        bi = -0.527 * x**1.61
 
         # Optical
         x1 = np.array([1.0])
@@ -886,10 +890,10 @@ class M14(BaseExtRvModel):
         x3 = np.array([3.5, 3.9, 4.0, 4.1, 4.2])
         xi3 = x3[-1]
 
-        a1v = 0.574 * x1 ** 1.61
-        a1d = 0.574 * 1.61 * xi1 ** 0.61
-        b1v = -0.527 * x1 ** 1.61
-        b1d = -0.527 * 1.61 * xi1 ** 0.61
+        a1v = 0.574 * x1**1.61
+        a1d = 0.574 * 1.61 * xi1**0.61
+        b1v = -0.527 * x1**1.61
+        b1d = -0.527 * 1.61 * xi1**0.61
 
         a2v = (
             1
@@ -1343,3 +1347,211 @@ class D22(BaseExtRvModel):
 
         # return A(x)/A(V)
         return a + b * (1.0 / Rv - 1 / 3.1)
+
+
+class G23(BaseExtRvModel):
+    r"""
+    Gordon et al. (2023) Milky Way R(V) dependent model
+
+    Parameters
+    ----------
+    Rv: float
+        R(V) = A(V)/E(B-V) = total-to-selective extinction
+
+    Raises
+    ------
+    InputParameterError
+       Input Rv values outside of defined range
+
+    Notes
+    -----
+    From Gordon et al. (2023, in prep.)
+
+    Example showing CCM89 curves for a range of R(V) values.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.parameter_averages import G23
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        lam = np.logspace(np.log10(0.0912), np.log10(30.0), num=1000) * u.micron
+
+        Rvs = [2.5, 3.1, 4.0, 4.75, 5.5]
+        for cur_Rv in Rvs:
+           ext_model = G23(Rv=cur_Rv)
+           ax.plot(lam,ext_model(lam),label='R(V) = ' + str(cur_Rv))
+
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+
+        ax.set_xlabel('$\lambda$ [$\mu$m]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    Rv_range = [2.3, 5.6]
+    x_range = x_range_G23
+
+    def evaluate(self, in_x, Rv):
+        """
+        G22 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, "G22")
+
+        # setup the a & b coefficient vectors
+        n_x = len(x)
+        self.a = np.zeros(n_x)
+        self.b = np.zeros(n_x)
+
+        # define the ranges
+        ir_indxs = np.where(np.logical_and(1.0 / 35.0 <= x, x < 1.0 / 1.0))
+        opt_indxs = np.where(np.logical_and(1.0 / 1.1 <= x, x < 1.0 / 0.3))
+        uv_indxs = np.where(np.logical_and(1.0 / 0.3 <= x, x <= 1.0 / 0.09))
+
+        # overlap ranges
+        optir_waves = [1.0, 1.1]
+        optir_overlap = (x >= 1.0 / optir_waves[1]) & (x <= 1.0 / optir_waves[0])
+        uvopt_waves = [0.3, 0.33]
+        uvopt_overlap = (x >= 1.0 / uvopt_waves[1]) & (x <= 1.0 / uvopt_waves[0])
+
+        # NIR/MIR
+        # fmt: off
+        # (scale, alpha1, alpha2, swave, swidth), sil1, sil2
+        ir_a = [0.37613, 1.78389, 1.57857, 2.25122, 1.73941,
+                0.06769, 9.89753, 2.63511, -0.12937,
+                0.03136, 19.21582, 17., -0.27]
+        ir_b = [-0.9765, 1., -1.07849]
+        # fmt: on
+        self.a[ir_indxs] = self.nirmir_intercept(x[ir_indxs], ir_a)
+
+        irpow = PowerLaw1D()
+        irpow.parameters = ir_b
+        self.b[ir_indxs] = irpow(x[ir_indxs])
+
+        # optical
+        # fmt: off
+        # polynomial coeffs, ISS1, ISS2, ISS3
+        opt_a = [-0.43209, 0.83726, 0.00863, -0.03223, 0.00456,
+                 0.03807, 2.288, 0.243,
+                 0.03045, 2.054, 0.179,
+                 0.01584, 1.587, 0.243]
+        opt_b = [0.09955, -2.39681, 1.6707, -0.25078, 0.01491,
+                 0.17054, 2.288, 0.243,
+                 0.25673, 2.054, 0.179,
+                 0.10227, 1.587, 0.243]
+        # fmt: on
+        m20_model_a = Polynomial1D(4) + Drude1D() + Drude1D() + Drude1D()
+        m20_model_a.parameters = opt_a
+        self.a[opt_indxs] = m20_model_a(x[opt_indxs])
+        m20_model_b = Polynomial1D(4) + Drude1D() + Drude1D() + Drude1D()
+        m20_model_b.parameters = opt_b
+        self.b[opt_indxs] = m20_model_b(x[opt_indxs])
+
+        # overlap between optical/ir
+        weights = (1.0 / optir_waves[1] - x[optir_overlap]) / (
+            1.0 / optir_waves[1] - 1.0 / optir_waves[0]
+        )
+        self.a[optir_overlap] = weights * m20_model_a(x[optir_overlap])
+        self.a[optir_overlap] += (1.0 - weights) * self.nirmir_intercept(
+            x[optir_overlap], ir_a
+        )
+        self.b[optir_overlap] = weights * m20_model_b(x[optir_overlap])
+        self.b[optir_overlap] += (1.0 - weights) * irpow(x[optir_overlap])
+
+        # Ultraviolet
+        uv_a = [0.8186, 0.27952, 1.02801, 0.1098, 4.59999, 0.99004]
+        uv_b = [-2.82009, 1.85701, 3.41764, 0.64931, 4.60002, 0.99008]
+
+        fm90_model_a = FM90()
+        fm90_model_a.parameters = uv_a
+        self.a[uv_indxs] = fm90_model_a(x[uv_indxs] / u.micron)
+        fm90_model_b = FM90()
+        fm90_model_b.parameters = uv_b
+        self.b[uv_indxs] = fm90_model_b(x[uv_indxs] / u.micron)
+
+        # overlap between uv/optical
+        weights = (1.0 / uvopt_waves[1] - x[uvopt_overlap]) / (
+            1.0 / uvopt_waves[1] - 1.0 / uvopt_waves[0]
+        )
+        self.a[uvopt_overlap] = weights * fm90_model_a(x[uvopt_overlap] / u.micron)
+        self.a[uvopt_overlap] += (1.0 - weights) * m20_model_a(x[uvopt_overlap])
+        self.b[uvopt_overlap] = weights * fm90_model_b(x[uvopt_overlap] / u.micron)
+        self.b[uvopt_overlap] += (1.0 - weights) * m20_model_b(x[uvopt_overlap])
+
+        # return A(x)/A(V)
+        return self.a + self.b * (1 / Rv - 1 / 3.1)
+
+    @staticmethod
+    def nirmir_intercept(x, params):
+        """
+        Functional form for the NIR/MIR intercept term.
+        Based on modifying the G21 shape model to have two power laws instead
+        of one with a break wavelength.
+
+        Parameters
+        ----------
+        x: float
+           expects x in wavenumbers [1/micron]
+        params: floats
+           paramters of function
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+        """
+        wave = 1 / x
+
+        # fmt: off
+        (scale, alpha, alpha2, swave, swidth,
+            sil1_amp, sil1_center, sil1_fwhm, sil1_asym,
+            sil2_amp, sil2_center, sil2_fwhm, sil2_asym) = params
+        # fmt: on
+
+        # broken powerlaw with a smooth transition
+        axav_pow1 = scale * (wave ** (-1.0 * alpha))
+
+        norm_ratio = swave ** (-1.0 * alpha) / swave ** (-1.0 * alpha2)
+        axav_pow2 = scale * norm_ratio * (wave ** (-1.0 * alpha2))
+
+        # use smoothstep to smoothly transition between the two powerlaws
+        weights = _smoothstep(
+            wave, x_min=swave - swidth / 2, x_max=swave + swidth / 2, N=1
+        )
+        axav = axav_pow1 * (1.0 - weights) + axav_pow2 * weights
+
+        # silicate feature drudes
+        axav += _modified_drude(wave, sil1_amp, sil1_center, sil1_fwhm, sil1_asym)
+        axav += _modified_drude(wave, sil2_amp, sil2_center, sil2_fwhm, sil2_asym)
+
+        return axav

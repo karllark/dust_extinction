@@ -11,6 +11,7 @@ from dust_extinction.parameter_averages import (
     G16,
     F19,
     D22,
+    G23,
 )
 from dust_extinction.shapes import FM90, P92, G21
 from dust_extinction.averages import (
