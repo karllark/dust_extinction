@@ -1426,7 +1426,7 @@ class G23(BaseExtRvModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, "G22")
+        _test_valid_x_range(x, self.x_range, "G23")
 
         # setup the a & b coefficient vectors
         n_x = len(x)
