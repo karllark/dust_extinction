@@ -27,7 +27,7 @@ x_range_VCG04 = [3.3, 8.0]
 x_range_GCC09 = [3.3, 11.0]
 x_range_M14 = [0.3, 3.3]
 x_range_G16 = [0.3, 10.0]
-x_range_G23 = [1.0 / 30.0, 1.0 / 0.0912]
+x_range_G23 = [1.0 / 32.0, 1.0 / 0.0912]
 
 
 class CCM89(BaseExtRvModel):
@@ -143,8 +143,8 @@ class CCM89(BaseExtRvModel):
 
         # far-NUV
         y = x[fnuv_indxs] - 5.9
-        a[fnuv_indxs] += -0.04473 * (y**2) - 0.009779 * (y**3)
-        b[fnuv_indxs] += 0.2130 * (y**2) + 0.1207 * (y**3)
+        a[fnuv_indxs] += -0.04473 * (y ** 2) - 0.009779 * (y ** 3)
+        b[fnuv_indxs] += 0.2130 * (y ** 2) + 0.1207 * (y ** 3)
 
         # FUV
         y = x[fuv_indxs] - 8.0
@@ -269,8 +269,8 @@ class O94(BaseExtRvModel):
 
         # far-NUV
         y = x[fnuv_indxs] - 5.9
-        a[fnuv_indxs] += -0.04473 * (y**2) - 0.009779 * (y**3)
-        b[fnuv_indxs] += 0.2130 * (y**2) + 0.1207 * (y**3)
+        a[fnuv_indxs] += -0.04473 * (y ** 2) - 0.009779 * (y ** 3)
+        b[fnuv_indxs] += 0.2130 * (y ** 2) + 0.1207 * (y ** 3)
 
         # FUV
         y = x[fuv_indxs] - 8.0
@@ -394,7 +394,7 @@ class F99(BaseExtRvModel):
                 -0.426 + 1.0044 * Rv,
                 -0.050 + 1.0016 * Rv,
                 0.701 + 1.0016 * Rv,
-                1.208 + 1.0032 * Rv - 0.00033 * (Rv**2),
+                1.208 + 1.0032 * Rv - 0.00033 * (Rv ** 2),
             ]
         )
         nir_axebv_y = np.array([0.265, 0.829]) * Rv / 3.1
@@ -530,11 +530,11 @@ class F04(BaseExtRvModel):
                 -0.426 + 1.0044 * Rv,
                 -0.050 + 1.0016 * Rv,
                 0.701 + 1.0016 * Rv,
-                1.208 + 1.0032 * Rv - 0.00033 * (Rv**2),
+                1.208 + 1.0032 * Rv - 0.00033 * (Rv ** 2),
             ]
         )
         # updated NIR curve from F04, note R dependence
-        nir_axebv_y = (0.63 * Rv - 0.84) * nir_axav_x**1.84
+        nir_axebv_y = (0.63 * Rv - 0.84) * nir_axav_x ** 1.84
 
         optnir_axebv_y = np.concatenate([nir_axebv_y, opt_axebv_y])
 
@@ -658,8 +658,8 @@ class VCG04(BaseExtRvModel):
 
         # far-NUV
         y = x[fnuv_indxs] - 5.9
-        a[fnuv_indxs] += -0.0077 * (y**2) - 0.0030 * (y**3)
-        b[fnuv_indxs] += 0.2060 * (y**2) + 0.0550 * (y**3)
+        a[fnuv_indxs] += -0.0077 * (y ** 2) - 0.0030 * (y ** 3)
+        b[fnuv_indxs] += 0.2060 * (y ** 2) + 0.0550 * (y ** 3)
 
         # return A(x)/A(V)
         return a + b / Rv
@@ -769,8 +769,8 @@ class GCC09(BaseExtRvModel):
 
         # far-NUV
         y = x[fnuv_indxs] - 5.9
-        a[fnuv_indxs] += -0.110 * (y**2) - 0.0100 * (y**3)
-        b[fnuv_indxs] += 0.531 * (y**2) + 0.0544 * (y**3)
+        a[fnuv_indxs] += -0.110 * (y ** 2) - 0.0100 * (y ** 3)
+        b[fnuv_indxs] += 0.531 * (y ** 2) + 0.0544 * (y ** 3)
 
         # return A(x)/A(V)
         return a + b / Rv
@@ -880,8 +880,8 @@ class M14(BaseExtRvModel):
         Rv = Rv[0]
 
         # Infrared
-        ai = 0.574 * x**1.61
-        bi = -0.527 * x**1.61
+        ai = 0.574 * x ** 1.61
+        bi = -0.527 * x ** 1.61
 
         # Optical
         x1 = np.array([1.0])
@@ -890,10 +890,10 @@ class M14(BaseExtRvModel):
         x3 = np.array([3.5, 3.9, 4.0, 4.1, 4.2])
         xi3 = x3[-1]
 
-        a1v = 0.574 * x1**1.61
-        a1d = 0.574 * 1.61 * xi1**0.61
-        b1v = -0.527 * x1**1.61
-        b1d = -0.527 * 1.61 * xi1**0.61
+        a1v = 0.574 * x1 ** 1.61
+        a1d = 0.574 * 1.61 * xi1 ** 0.61
+        b1v = -0.527 * x1 ** 1.61
+        b1d = -0.527 * 1.61 * xi1 ** 0.61
 
         a2v = (
             1
@@ -1489,8 +1489,8 @@ class G23(BaseExtRvModel):
         self.b[optir_overlap] += (1.0 - weights) * irpow(x[optir_overlap])
 
         # Ultraviolet
-        uv_a = [0.8186, 0.27952, 1.02801, 0.1098, 4.59999, 0.99004]
-        uv_b = [-2.82009, 1.85701, 3.41764, 0.64931, 4.60002, 0.99008]
+        uv_a = [0.81971, 0.27923, 1.02835, 0.11024, 4.6, 0.99002]
+        uv_b = [-2.79763, 1.85151, 3.42239, 0.65447, 4.60002, 0.99008]
 
         fm90_model_a = FM90()
         fm90_model_a.parameters = uv_a
