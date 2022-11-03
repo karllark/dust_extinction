@@ -1439,7 +1439,7 @@ class G23(BaseExtRvModel):
         uv_indxs = np.where(np.logical_and(1.0 / 0.3 <= x, x <= 1.0 / 0.09))
 
         # overlap ranges
-        optir_waves = [1.0, 1.1]
+        optir_waves = [0.9, 1.1]
         optir_overlap = (x >= 1.0 / optir_waves[1]) & (x <= 1.0 / optir_waves[0])
         uvopt_waves = [0.3, 0.33]
         uvopt_overlap = (x >= 1.0 / uvopt_waves[1]) & (x <= 1.0 / uvopt_waves[0])
@@ -1478,8 +1478,11 @@ class G23(BaseExtRvModel):
         self.b[opt_indxs] = m20_model_b(x[opt_indxs])
 
         # overlap between optical/ir
-        weights = (1.0 / optir_waves[1] - x[optir_overlap]) / (
-            1.0 / optir_waves[1] - 1.0 / optir_waves[0]
+        # weights = (1.0 / optir_waves[1] - x[optir_overlap]) / (
+        #     1.0 / optir_waves[1] - 1.0 / optir_waves[0]
+        # )
+        weights = _smoothstep(
+            1. / x[optir_overlap], x_min=optir_waves[1], x_max=optir_waves[0], N=1
         )
         self.a[optir_overlap] = weights * m20_model_a(x[optir_overlap])
         self.a[optir_overlap] += (1.0 - weights) * self.nirmir_intercept(
@@ -1500,8 +1503,11 @@ class G23(BaseExtRvModel):
         self.b[uv_indxs] = fm90_model_b(x[uv_indxs] / u.micron)
 
         # overlap between uv/optical
-        weights = (1.0 / uvopt_waves[1] - x[uvopt_overlap]) / (
-            1.0 / uvopt_waves[1] - 1.0 / uvopt_waves[0]
+        # weights = (1.0 / uvopt_waves[1] - x[uvopt_overlap]) / (
+        #     1.0 / uvopt_waves[1] - 1.0 / uvopt_waves[0]
+        # )
+        weights = _smoothstep(
+            1. / x[uvopt_overlap], x_min=uvopt_waves[1], x_max=uvopt_waves[0], N=1
         )
         self.a[uvopt_overlap] = weights * fm90_model_a(x[uvopt_overlap] / u.micron)
         self.a[uvopt_overlap] += (1.0 - weights) * m20_model_a(x[uvopt_overlap])
