@@ -99,7 +99,7 @@ def test_AxAvtoExv_with_P92_fitting():
 
     fit = LevMarLSQFitter()
     # accuracy set to avoid warning the fit may have failed
-    p92_fit = fit(p92_init, x, y, acc=1e-3)
+    p92_fit = fit(p92_init, x, y, acc=1e-2)
 
     fit_vals = p92_fit._parameters
 
