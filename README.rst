@@ -25,10 +25,6 @@ Build checks/status
    :target: https://codecov.io/gh/karllark/dust_extinction
    :alt: Test Coverage Status
 
-.. image:: https://img.shields.io/lgtm/grade/python/g/karllark/dust_extinction.svg?logo=lgtm&logoWidth=18
-   :target: https://lgtm.com/projects/g/karllark/dust_extinction/context:python
-   :alt: LGTM Status
-
 .. image:: https://api.codacy.com/project/badge/Grade/748429f338714270bb5fffd87a0183b5
    :target: https://www.codacy.com/manual/kgordon/dust_extinction?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=karllark/dust_extinction&amp;utm_campaign=Badge_Grade
    :alt: Codacy Status
