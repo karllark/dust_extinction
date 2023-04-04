@@ -1,10 +1,10 @@
-cff-version: 1.1.0
+cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
-  - family-names: Gordon
-    given-names: Karl
+  - family-names: "Gordon"
+    given-names: "Karl"
     orcid: https://orcid.org/0000-0001-5340-6774
-title: karllark/dust_extinction: OneRelationForAllWaves
+title: "karllark/dust_extinction: OneRelationForAllWaves"
 version: v1.2
 doi: 10.5281/zenodo.7799360
 date-released: 2023-04-04
