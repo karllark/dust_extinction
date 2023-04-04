@@ -186,7 +186,7 @@ R(V) (+ other variables) dependent prediction models
    fig, ax = plt.subplots(ncols=2, figsize=(10, 4))
 
    # generate the curves and plot them
-   x = np.arange(1./30., 1./0.0912, 0.001)/u.micron
+   x = np.arange(1./32., 1./0.0912, 0.001)/u.micron
 
    Rv = 2.5
 
@@ -234,7 +234,7 @@ R(V) (+ other variables) dependent prediction models
    fig, ax = plt.subplots(ncols=2, figsize=(10, 4))
 
    # generate the curves and plot them
-   x = np.arange(1./30., 1./0.0912, 0.001)/u.micron
+   x = np.arange(1./32., 1./0.0912, 0.001)/u.micron
 
    Rv = 5.5
 
