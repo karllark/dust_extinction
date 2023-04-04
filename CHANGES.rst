@@ -1,4 +1,4 @@
-1.2 (unreleased)
+1.2 (2023-04-04)
 ================
 
 - Added G23 parameter average model
