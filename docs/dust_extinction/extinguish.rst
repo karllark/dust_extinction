@@ -26,9 +26,9 @@ Extinguish a Blackbody
 
    from dust_extinction.parameter_averages import G23
 
-   # generate wavelengths between 0.0912 and 32 microns
+   # generate wavelengths between 0.092 and 31 microns
    #    within the valid range for the G23 R(V) dependent relationship
-   lam = np.logspace(np.log10(0.0912), np.log10(32.0), num=1000)
+   lam = np.logspace(np.log10(0.092), np.log10(31.0), num=1000)
 
    # setup the inputs for the blackbody function
    wavelengths = lam*1e4*u.AA
