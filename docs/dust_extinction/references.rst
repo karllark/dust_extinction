@@ -16,7 +16,8 @@ D03: `Draine 2003, ARA&A, 41, 241
 `Draine 2003, ApJ, 598, 1017
 <https://ui.adsabs.harvard.edu/abs/2003ApJ...598.1017D>`_
 
-D22: Decleir et al. 2022, ApJ, in press
+D22: `Decleir et al. 2022, ApJ, 930, 15
+<https://ui.adsabs.harvard.edu/abs/2022ApJ...930...15D>`_
 
 DBP90: `Desert, Boulanger, & Puget 1990, A&A, 237, 215
 <https://ui.adsabs.harvard.edu/abs/1990A%26A...237..215D>`_
@@ -51,7 +52,7 @@ G16: `Gordon et al. 2016, ApJ 826, 104
 G21: `Gordon et al. 2021, ApJ, 916, 33
 <https://ui.adsabs.harvard.edu/abs/2021ApJ...916...33G>`_
 
-G23: `Gordon et al. 2022, in preparation`
+G23: `Gordon et al. 2022, ApJ, in press
 
 I05: `Indebetouw et al. 2005, ApJ, 619, 931
 <https://ui.adsabs.harvard.edu/abs/2005ApJ...619..931I>`_

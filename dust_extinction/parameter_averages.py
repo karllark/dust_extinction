@@ -1365,7 +1365,7 @@ class G23(BaseExtRvModel):
 
     Notes
     -----
-    From Gordon et al. (2023, in prep.)
+    From Gordon et al. (2023, ApJ, in press)
 
     Example showing CCM89 curves for a range of R(V) values.
 
@@ -1403,7 +1403,7 @@ class G23(BaseExtRvModel):
 
     def evaluate(self, in_x, Rv):
         """
-        G22 function
+        G23 function
 
         Parameters
         ----------
@@ -1492,8 +1492,8 @@ class G23(BaseExtRvModel):
         self.b[optir_overlap] += (1.0 - weights) * irpow(x[optir_overlap])
 
         # Ultraviolet
-        uv_a = [0.81297, 0.2775, 1.06295, 0.11303, 4.59999, 0.99003]
-        uv_b = [-2.97868, 1.89808, 3.10334, 0.65484, 4.60002, 0.99013]
+        uv_a = [0.81297, 0.2775, 1.06295, 0.11303, 4.60, 0.99]
+        uv_b = [-2.97868, 1.89808, 3.10334, 0.65484, 4.60, 0.99]
 
         fm90_model_a = FM90()
         fm90_model_a.parameters = uv_a

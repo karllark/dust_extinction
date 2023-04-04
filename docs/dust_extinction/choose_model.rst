@@ -75,7 +75,7 @@ behavior of Milky Way extinction curves has been shown to be dependent on R(V)
 
 For MW type extinction, the
 :class:`~dust_extinction.parameter_averages.G23` model should be considered as it
-spectroscopically covers the far-ultraviolet (912 A) to mid-infared (30 micron)
+spectroscopically covers the far-ultraviolet (912 A) to mid-infared (32 micron)
 and is based on the spectroscopic extinction curves used for the
 :class:`~dust_extinction.parameter_averages.GCC09`,
 :class:`~dust_extinction.parameter_averages.F19`,
