@@ -1,7 +1,7 @@
 1.2 (unreleased)
 ================
 
-- No changes yet
+- Added G23 parameter average model
 
 1.1 (2022-03-30)
 ================

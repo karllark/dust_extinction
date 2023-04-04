@@ -18,16 +18,17 @@ Extinguish a Blackbody
    :include-source:
 
    import matplotlib.pyplot as plt
+   from matplotlib.ticker import ScalarFormatter
    import numpy as np
 
    import astropy.units as u
    from astropy.modeling.models import BlackBody
 
-   from dust_extinction.parameter_averages import F19
+   from dust_extinction.parameter_averages import G23
 
-   # generate wavelengths between 0.12 and 3 microns
-   #    within the valid range for the F19 R(V) dependent relationship
-   lam = np.logspace(np.log10(0.12), np.log10(3.0), num=1000)
+   # generate wavelengths between 0.092 and 31 microns
+   #    within the valid range for the G23 R(V) dependent relationship
+   lam = np.logspace(np.log10(0.092), np.log10(31.0), num=1000)
 
    # setup the inputs for the blackbody function
    wavelengths = lam*1e4*u.AA
@@ -38,7 +39,7 @@ Extinguish a Blackbody
    flux = bb_lam(wavelengths)
 
    # initialize the model
-   ext = F19(Rv=3.1)
+   ext = G23(Rv=3.1)
 
    # get the extinguished blackbody flux for different amounts of dust
    flux_ext_av05 = flux*ext.extinguish(wavelengths, Av=0.5)
@@ -57,6 +58,7 @@ Extinguish a Blackbody
    ax.set_ylabel('$Flux$')
 
    ax.set_xscale('log')
+   ax.xaxis.set_major_formatter(ScalarFormatter())
    ax.set_yscale('log')
 
    ax.set_title('Example extinguishing a blackbody')

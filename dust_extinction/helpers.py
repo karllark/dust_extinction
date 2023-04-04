@@ -1,11 +1,10 @@
-from __future__ import absolute_import, print_function, division
-
 import warnings
 
 import numpy as np
+from scipy.special import comb
 import astropy.units as u
 
-__all__ = ["_get_x_in_wavenumbers", "_test_valid_x_range"]
+__all__ = ["_get_x_in_wavenumbers", "_test_valid_x_range", "_smoothstep"]
 
 
 def _get_x_in_wavenumbers(in_x):
@@ -67,3 +66,15 @@ def _test_valid_x_range(x, x_range, outname):
             + str(x_range[1])
             + ", x has units 1/micron]"
         )
+
+
+def _smoothstep(x, x_min=0, x_max=1, N=1):
+    x = np.clip((x - x_min) / (x_max - x_min), 0, 1)
+
+    result = 0
+    for n in range(0, N + 1):
+        result += comb(N + n, n) * comb(2 * N + 1, N - n) * (-x) ** n
+
+    result *= x ** (N + 1)
+
+    return result

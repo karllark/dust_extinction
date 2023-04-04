@@ -24,6 +24,7 @@ Average models
 
    import numpy as np
    import matplotlib.pyplot as plt
+   from matplotlib.ticker import ScalarFormatter
    import astropy.units as u
 
    from dust_extinction.averages import (GCC09_MWAvg,
@@ -45,10 +46,13 @@ Average models
          x.value >= ext_model.x_range[0],
          x.value <= ext_model.x_range[1]))
       yvals = ext_model(x[indxs])
-      ax.plot(x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax.plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
 
-   ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_xscale('log')
+   ax.xaxis.set_major_formatter(ScalarFormatter())
+
+   ax.set_xlabel(r'$\lambda$ [$\mu$m]')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
    ax.set_title('Ultraviolet to Near-Infrared Models')
 
    ax.legend(loc='best')
@@ -60,6 +64,7 @@ Average models
 
   import numpy as np
   import matplotlib.pyplot as plt
+  from matplotlib.ticker import ScalarFormatter
   import astropy.units as u
 
   from dust_extinction.averages import (RL85_MWGC,
@@ -87,8 +92,10 @@ Average models
     yvals = ext_model(x[indxs])
     ax.plot(1.0 / x[indxs], yvals, label=ext_model.__class__.__name__)
 
-  ax.set_yscale("log")
-  ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+  ax.set_xscale('log')
+  ax.xaxis.set_major_formatter(ScalarFormatter())
+
+  ax.set_xlabel(r'$\lambda$ [$\mu$m]')
   ax.set_ylabel(r'$A(\lambda)/A(V)$')
   ax.set_title('Near- to Mid-Infrared Models')
 
@@ -121,19 +128,21 @@ R(V) (+ other variables) dependent prediction models
 
    import numpy as np
    import matplotlib.pyplot as plt
+   from matplotlib.ticker import ScalarFormatter
    import astropy.units as u
 
    from dust_extinction.parameter_averages import (CCM89, O94, F99, F04,
-                                                   VCG04, GCC09, M14, F19, D22)
+                                                   VCG04, GCC09, M14, F19, D22,
+                                                   G23)
 
-   fig, ax = plt.subplots()
+   fig, ax = plt.subplots(ncols=2, figsize=(10, 4))
 
    # generate the curves and plot them
-   x = np.arange(0.5,11.0,0.1)/u.micron
+   x = np.arange(1./30., 1./0.0912, 0.001)/u.micron
 
    Rv = 3.1
 
-   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19, D22]
+   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19, D22, G23]
 
    for cmodel in models:
       ext_model = cmodel(Rv=Rv)
@@ -141,14 +150,24 @@ R(V) (+ other variables) dependent prediction models
          x.value >= ext_model.x_range[0],
          x.value <= ext_model.x_range[1]))
       yvals = ext_model(x[indxs])
-      ax.plot(x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax[0].plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax[1].plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
 
-   ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   for iax in ax:
+      iax.set_xscale('log')
+      iax.xaxis.set_major_formatter(ScalarFormatter())
 
-   ax.set_title('R(V) = 3.1')
+      iax.set_xlabel(r'$\lambda$ [$\mu$m]')
+      iax.set_ylabel(r'$A(\lambda)/A(V)$')
 
-   ax.legend(loc='best')
+   ax[0].set_title(f'UV-NIR R(V) = {Rv}')
+   ax[0].set_xlim(0.08, 3.0)
+   ax[1].set_title(f'NIR-MIR R(V) = {Rv}')
+   ax[1].set_xlim(1.0, 32.0)
+   ax[1].set_ylim(0.0, 0.50)
+
+   ax[0].legend(loc='best')
+   ax[1].legend(loc='best')
    plt.tight_layout()
    plt.show()
 
@@ -157,19 +176,21 @@ R(V) (+ other variables) dependent prediction models
 
    import numpy as np
    import matplotlib.pyplot as plt
+   from matplotlib.ticker import ScalarFormatter
    import astropy.units as u
 
    from dust_extinction.parameter_averages import (CCM89, O94, F99, F04,
-                                                   VCG04, GCC09, M14, F19, D22)
+                                                   VCG04, GCC09, M14, F19, D22,
+                                                   G23)
 
-   fig, ax = plt.subplots()
+   fig, ax = plt.subplots(ncols=2, figsize=(10, 4))
 
    # generate the curves and plot them
-   x = np.arange(0.5,11.0,0.1)/u.micron
+   x = np.arange(1./32., 1./0.0912, 0.001)/u.micron
 
    Rv = 2.5
 
-   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19, D22]
+   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19, D22, G23]
 
    for cmodel in models:
       ext_model = cmodel(Rv=Rv)
@@ -177,14 +198,24 @@ R(V) (+ other variables) dependent prediction models
          x.value >= ext_model.x_range[0],
          x.value <= ext_model.x_range[1]))
       yvals = ext_model(x[indxs])
-      ax.plot(x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax[0].plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax[1].plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
 
-   ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   for iax in ax:
+      iax.set_xscale('log')
+      iax.xaxis.set_major_formatter(ScalarFormatter())
 
-   ax.set_title('R(V) = 2.5')
+      iax.set_xlabel(r'$\lambda$ [$\mu$m]')
+      iax.set_ylabel(r'$A(\lambda)/A(V)$')
 
-   ax.legend(loc='best')
+   ax[0].set_title(f'UV-NIR R(V) = {Rv}')
+   ax[0].set_xlim(0.08, 3.0)
+   ax[1].set_title(f'NIR-MIR R(V) = {Rv}')
+   ax[1].set_xlim(1.0, 32.0)
+   ax[1].set_ylim(0.0, 0.50)
+
+   ax[0].legend(loc='best')
+   ax[1].legend(loc='best')
    plt.tight_layout()
    plt.show()
 
@@ -193,19 +224,21 @@ R(V) (+ other variables) dependent prediction models
 
    import numpy as np
    import matplotlib.pyplot as plt
+   from matplotlib.ticker import ScalarFormatter
    import astropy.units as u
 
    from dust_extinction.parameter_averages import (CCM89, O94, F99, F04,
-                                                   VCG04, GCC09, M14, F19, D22)
+                                                   VCG04, GCC09, M14, F19, D22,
+                                                   G23)
 
-   fig, ax = plt.subplots()
+   fig, ax = plt.subplots(ncols=2, figsize=(10, 4))
 
    # generate the curves and plot them
-   x = np.arange(0.5,11.0,0.1)/u.micron
+   x = np.arange(1./32., 1./0.0912, 0.001)/u.micron
 
    Rv = 5.5
 
-   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19, D22]
+   models = [CCM89, O94, F99, F04, VCG04, GCC09, M14, F19, D22, G23]
 
    for cmodel in models:
       ext_model = cmodel(Rv=Rv)
@@ -213,14 +246,24 @@ R(V) (+ other variables) dependent prediction models
          x.value >= ext_model.x_range[0],
          x.value <= ext_model.x_range[1]))
       yvals = ext_model(x[indxs])
-      ax.plot(x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax[0].plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
+      ax[1].plot(1./x[indxs], yvals, label=ext_model.__class__.__name__)
 
-   ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   for iax in ax:
+      iax.set_xscale('log')
+      iax.xaxis.set_major_formatter(ScalarFormatter())
 
-   ax.set_title('R(V) = 5.5')
+      iax.set_xlabel(r'$\lambda$ [$\mu$m]')
+      iax.set_ylabel(r'$A(\lambda)/A(V)$')
 
-   ax.legend(loc='best')
+   ax[0].set_title(f'UV-NIR R(V) = {Rv}')
+   ax[0].set_xlim(0.08, 3.0)
+   ax[1].set_title(f'NIR-MIR R(V) = {Rv}')
+   ax[1].set_xlim(1.0, 32.0)
+   ax[1].set_ylim(0.0, 0.50)
+
+   ax[0].legend(loc='best')
+   ax[1].legend(loc='best')
    plt.tight_layout()
    plt.show()
 
@@ -228,6 +271,7 @@ R(V) (+ other variables) dependent prediction models
 
    import numpy as np
    import matplotlib.pyplot as plt
+   from matplotlib.ticker import ScalarFormatter
    import astropy.units as u
 
    from dust_extinction.parameter_averages import G16
@@ -243,10 +287,13 @@ R(V) (+ other variables) dependent prediction models
    Rvs = [2.0, 3.0, 4.0, 5.0, 6.0]
    for cur_Rv in Rvs:
       ext_model = G16(RvA=cur_Rv, fA=1.0)
-      ax.plot(x,ext_model(x),label=r'$R_A(V) = ' + str(cur_Rv) + '$')
+      ax.plot(1./x,ext_model(x),label=r'$R_A(V) = ' + str(cur_Rv) + '$')
 
-   ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_xscale('log')
+   ax.xaxis.set_major_formatter(ScalarFormatter())
+
+   ax.set_xlabel(r'$\lambda$ [$\mu$m]')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
 
    ax.set_title('G16; $f_A = 1.0$; $R(V)_A$ variable')
 
@@ -258,6 +305,7 @@ R(V) (+ other variables) dependent prediction models
 
    import numpy as np
    import matplotlib.pyplot as plt
+   from matplotlib.ticker import ScalarFormatter
    import astropy.units as u
 
    from dust_extinction.parameter_averages import G16
@@ -273,10 +321,13 @@ R(V) (+ other variables) dependent prediction models
    fAs = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
    for cur_fA in fAs:
       ext_model = G16(RvA=3.1, fA=cur_fA)
-      ax.plot(x,ext_model(x),label=r'$f_A = ' + str(cur_fA) + '$')
+      ax.plot(1./x,ext_model(x),label=r'$f_A = ' + str(cur_fA) + '$')
 
-   ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_xscale('log')
+   ax.xaxis.set_major_formatter(ScalarFormatter())
+
+   ax.set_xlabel(r'$\lambda$ [$\mu$m]')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
 
    ax.set_title('G16; $f_A$ variable; $R(V)_A = 3.1$')
 
@@ -329,7 +380,7 @@ Grain models
       ax.plot(lam[indxs], yvals, label=f"{ext_model.__class__.__name__}  {cname}")
 
    ax.set_xlabel('$\lambda$ [$\mu m$]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
    ax.set_title('Grain Models')
 
    ax.set_xscale('log')
@@ -346,6 +397,7 @@ Grain models
 
    import numpy as np
    import matplotlib.pyplot as plt
+   from matplotlib.ticker import ScalarFormatter
    import astropy.units as u
 
    from dust_extinction.grain_models import DBP90, WD01, D03, ZDA04, C11, J13
@@ -377,10 +429,11 @@ Grain models
       ax.plot(lam[indxs], yvals, label=f"{ext_model.__class__.__name__}  {cname}")
 
    ax.set_xlabel('$\lambda$ [$\mu m$]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
    ax.set_title('Grain Models')
 
    ax.set_xscale('log')
+   ax.xaxis.set_major_formatter(ScalarFormatter())
    ax.set_yscale('log')
 
    ax.set_title('Milky Way - Ultraviolet to Mid-Infrared')
@@ -416,7 +469,7 @@ Grain models
      ax.plot(lam[indxs], yvals, label=f"{ext_model.__class__.__name__}  {cname}")
 
   ax.set_xlabel('$\lambda$ [$\mu m$]')
-  ax.set_ylabel('$A(x)/A(V)$')
+  ax.set_ylabel(r'$A(\lambda)/A(V)$')
   ax.set_title('Grain Models')
 
   ax.set_xscale('log')
@@ -444,6 +497,7 @@ Shape fitting models
 
    import numpy as np
    import matplotlib.pyplot as plt
+   from matplotlib.ticker import ScalarFormatter
    import astropy.units as u
 
    from dust_extinction.shapes import FM90
@@ -454,18 +508,21 @@ Shape fitting models
    x = np.arange(3.8,11.0,0.1)/u.micron
 
    ext_model = FM90()
-   ax.plot(x,ext_model(x),label='total')
+   ax.plot(1./x,ext_model(x),label='total')
 
    ext_model = FM90(C3=0.0, C4=0.0)
-   ax.plot(x,ext_model(x),label='linear term')
+   ax.plot(1./x,ext_model(x),label='linear term')
 
    ext_model = FM90(C1=0.0, C2=0.0, C4=0.0)
-   ax.plot(x,ext_model(x),label='bump term')
+   ax.plot(1./x,ext_model(x),label='bump term')
 
    ext_model = FM90(C1=0.0, C2=0.0, C3=0.0)
-   ax.plot(x,ext_model(x),label='FUV rise term')
+   ax.plot(1./x,ext_model(x),label='FUV rise term')
 
-   ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+   ax.set_xscale('log')
+   ax.xaxis.set_major_formatter(ScalarFormatter())
+   ax.xaxis.set_minor_formatter(ScalarFormatter())
+   ax.set_xlabel(r'$\lambda$ [$\mu$m]')
    ax.set_ylabel('$E(\lambda - V)/E(B - V)$')
 
    ax.set_title('FM90')
@@ -521,7 +578,7 @@ Shape fitting models
    ax.set_ylim(1e-3,10.)
 
    ax.set_xlabel('$\lambda$ [$\mu$m]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
 
    ax.set_title('P92')
 
@@ -533,6 +590,7 @@ Shape fitting models
 
    import numpy as np
    import matplotlib.pyplot as plt
+   from matplotlib.ticker import ScalarFormatter
    import astropy.units as u
 
    from dust_extinction.shapes import G21
@@ -556,10 +614,11 @@ Shape fitting models
    ax.plot(1./x,ext_model(x),label='power-law+sil2 only')
 
    ax.set_xscale('log')
+   ax.xaxis.set_major_formatter(ScalarFormatter())
    ax.set_yscale('log')
 
    ax.set_xlabel('$\lambda$ [$\mu$m]')
-   ax.set_ylabel('$A(x)/A(V)$')
+   ax.set_ylabel(r'$A(\lambda)/A(V)$')
 
    ax.set_title('G21')
 

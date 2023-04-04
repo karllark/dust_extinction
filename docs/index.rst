@@ -74,10 +74,10 @@ Define a model, specifically the F99 model with an R(V) = 3.1.
 
 .. code-block:: python
 
-    from dust_extinction.parameter_averages import F99
+    from dust_extinction.parameter_averages import G23
 
     # define the model
-    ext = F99(Rv=3.1)
+    ext = G23(Rv=3.1)
 
 Extinguish (redden) a spectrum with a screen of F99 dust with an E(B-V) of 0.5.
 Can also specify the dust column with Av (this case equivalent to Av = 0.5*Rv =
@@ -102,10 +102,10 @@ equivalent A(V) column.
     import matplotlib.pyplot as plt
     import astropy.units as u
     from astropy.modeling.models import BlackBody
-    from dust_extinction.parameter_averages import F99
+    from dust_extinction.parameter_averages import G23
 
     # define the model
-    ext = F99(Rv=3.1)
+    ext = G23(Rv=3.1)
 
     # wavelengths and spectrum are 1D arrays
     # wavelengths between 1000 and 30000 A
