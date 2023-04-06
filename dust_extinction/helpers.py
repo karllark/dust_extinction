@@ -56,7 +56,8 @@ def _test_valid_x_range(x, x_range, outname):
     outname: str
        name of curve for error message
     """
-    if np.logical_or(np.any(x < x_range[0]), np.any(x > x_range[1])):
+    deltacheck = 1e-6  # delta to allow for small numerical issues
+    if np.logical_or(np.any(x <= (x_range[0] - deltacheck)), np.any(x >= (x_range[1] + deltacheck))):
         raise ValueError(
             "Input x outside of range defined for "
             + outname
