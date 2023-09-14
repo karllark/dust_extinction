@@ -75,12 +75,15 @@ behavior of Milky Way extinction curves has been shown to be dependent on R(V)
 
 For MW type extinction, the
 :class:`~dust_extinction.parameter_averages.G23` model should be considered as it
-spectroscopically covers the far-ultraviolet (912 A) to mid-infared (32 micron)
+spectroscopically covers the far-ultraviolet (912 A) to mid-infrared (32 micron)
 and is based on the spectroscopic extinction curves used for the
 :class:`~dust_extinction.parameter_averages.GCC09`,
 :class:`~dust_extinction.parameter_averages.F19`,
 :class:`~dust_extinction.averages.G21_MWAvg`, and
 :class:`~dust_extinction.parameter_averages.D22` studies.
+For those who wish to bypass the python implementation of the 
+:class:`~dust_extinction.parameter_averages.G23` model, tables for the range
+of valid R(V) values with 0.1 steps are `available <https://stsci.box.com/v/ExtinctionTables>`_.
 
 A more general model is :class:`~dust_extinction.parameter_averages.G16` as this
 model encompasses the average measured behavior of extinction curves in the MW,
