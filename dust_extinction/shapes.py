@@ -6,7 +6,7 @@ from astropy.modeling import Fittable1DModel, Parameter
 
 from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 
-__all__ = ["FM90", "P92", "G21"]
+__all__ = ["FM90", "FM90_B3", "P92", "G21"]
 
 x_range_FM90 = [1.0 / 0.35, 1.0 / 0.09]
 x_range_P92 = [1.0 / 1e3, 1.0 / 1e-3]
@@ -179,7 +179,7 @@ class FM90(Fittable1DModel):
        slope of liner term
 
     C3: float
-       amplitude of "2175 A" bump
+       strength of "2175 A" bump (true amplitude is C3/gamma^2)
 
     C4: float
        amplitude of FUV rise
@@ -330,6 +330,128 @@ class FM90(Fittable1DModel):
     #             'C2': outputs_unit[self.outputs[0]],
     #             'C3': outputs_unit[self.outputs[0]],
     #             'C4': outputs_unit[self.outputs[0]]}
+
+
+class FM90_B3(Fittable1DModel):
+    r"""
+    Fitzpatrick & Massa (1990) 6 parameter ultraviolet shape model
+    Version with bump amplitude B3 = C3/gamma^2
+
+    Parameters
+    ----------
+    C1: float
+       y-intercept of linear term
+
+    C2: float
+       slope of liner term
+
+    B3: float
+       amplitude of "2175 A" bump
+
+    C4: float
+       amplitude of FUV rise
+
+    xo: float
+       centroid of "2175 A" bump
+
+    gamma: float
+       width of "2175 A" bump
+
+    Notes
+    -----
+    From Fitzpatrick & Massa (1990, ApJS, 72, 163)
+
+    Only applicable at UV wavelengths
+
+    Example showing a FM90 curve with components identified.
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.shapes import FM90_B3
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        x = np.arange(3.8,8.6,0.1)/u.micron
+
+        ext_model = FM90_B3()
+        ax.plot(x,ext_model(x),label='total')
+
+        ext_model = FM90_B3(B3=0.0, C4=0.0)
+        ax.plot(x,ext_model(x),label='linear term')
+
+        ext_model = FM90_B3(C1=0.0, C2=0.0, C4=0.0)
+        ax.plot(x,ext_model(x),label='bump term')
+
+        ext_model = FM90_B3(C1=0.0, C2=0.0, B3=0.0)
+        ax.plot(x,ext_model(x),label='FUV rise term')
+
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$E(\lambda - V)/E(B - V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+    n_inputs = 1
+    n_outputs = 1
+
+    C1 = Parameter(description="linear term: y-intercept", default=0.10)
+    C2 = Parameter(description="linear term: slope", default=0.70)
+    B3 = Parameter(description="bump: amplitude", default=3.23)
+    C4 = Parameter(description="FUV rise: amplitude", default=0.41)
+    xo = Parameter(description="bump: centroid", default=4.60, min=0.0)
+    gamma = Parameter(description="bump: width", default=0.99, min=0.0)
+
+    x_range = x_range_FM90
+
+    @staticmethod
+    def evaluate(in_x, C1, C2, B3, C4, xo, gamma):
+        """
+        FM90 function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        exvebv: np array (float)
+            E(x-V)/E(B-V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, x_range_FM90, "FM90")
+
+        # linear term
+        exvebv = C1 + C2 * x
+
+        # bump term
+        x2 = x ** 2
+        exvebv += (B3 * gamma ** 2) * (x2 / ((x2 - xo ** 2) ** 2 + x2 * (gamma ** 2)))
+
+        # FUV rise term
+        fnuv_indxs = np.where(x >= 5.9)
+        if len(fnuv_indxs) > 0:
+            y = x[fnuv_indxs] - 5.9
+            exvebv[fnuv_indxs] += C4 * (0.5392 * (y ** 2) + 0.05644 * (y ** 3))
+
+        # return E(x-V)/E(B-V)
+        return exvebv
 
 
 class P92(Fittable1DModel):
