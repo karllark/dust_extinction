@@ -435,7 +435,7 @@ class FM90_B3(Fittable1DModel):
         x = _get_x_in_wavenumbers(in_x)
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_FM90, "FM90")
+        _test_valid_x_range(x, x_range_FM90, "FM90_B3")
 
         # linear term
         exvebv = C1 + C2 * x
