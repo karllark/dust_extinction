@@ -2,5 +2,5 @@ from importlib.metadata import version as _version, PackageNotFoundError
 
 try:
     __version__ = _version(__name__)
-except PackageNotFoundError:
+except PackageNotFoundError:  # pragma: no cover
     pass
