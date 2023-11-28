@@ -115,7 +115,6 @@ class DBP90(GMBase):
     possnames = {"MWRV31": ("EXT_DBP90.RES.dat", 3.1)}
 
     def __init__(self, modelname="MWRV31", **kwargs):
-
         if modelname not in self.possnames.keys():
             raise InputParameterError("modelname not recognized")
         filename = self.possnames[modelname][0]
@@ -125,7 +124,10 @@ class DBP90(GMBase):
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
         a = Table.read(
-            data_path + filename, data_start=1, header_start=None, format="ascii.basic",
+            data_path + filename,
+            data_start=1,
+            header_start=None,
+            format="ascii.basic",
         )
 
         self.data_x = 1.0 / a["col1"].data
@@ -204,7 +206,6 @@ class WD01(GMBase):
     }
 
     def __init__(self, modelname="MWRV31", **kwargs):
-
         if modelname not in self.possnames.keys():
             raise InputParameterError("modelname not recognized")
         filename = self.possnames[modelname][0]
@@ -297,7 +298,6 @@ class D03(GMBase):
     }
 
     def __init__(self, modelname="MWRV31", **kwargs):
-
         if modelname not in self.possnames.keys():
             raise InputParameterError("modelname not recognized")
         filename = self.possnames[modelname][0]
@@ -386,7 +386,6 @@ class ZDA04(GMBase):
     possnames = {"BARE-GR-S": ("zubko2004_bare-gr-s_alam_av.dat", 3.1)}
 
     def __init__(self, modelname="BARE-GR-S", **kwargs):
-
         if modelname not in self.possnames.keys():
             raise InputParameterError("modelname not recognized")
         filename = self.possnames[modelname][0]
@@ -395,7 +394,10 @@ class ZDA04(GMBase):
         # get the tabulated information
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
-        a = Table.read(data_path + filename, format="ascii.basic",)
+        a = Table.read(
+            data_path + filename,
+            format="ascii.basic",
+        )
 
         self.data_x = 1.0 / a["lam[um]"].data
 
@@ -465,7 +467,6 @@ class C11(GMBase):
     possnames = {"MWRV31": ("EXT_C11.RES.dat", 3.1)}
 
     def __init__(self, modelname="MWRV31", **kwargs):
-
         if modelname not in self.possnames.keys():
             raise InputParameterError("modelname not recognized")
         filename = self.possnames[modelname][0]
@@ -475,7 +476,10 @@ class C11(GMBase):
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
         a = Table.read(
-            data_path + filename, data_start=1, header_start=None, format="ascii.basic",
+            data_path + filename,
+            data_start=1,
+            header_start=None,
+            format="ascii.basic",
         )
 
         self.data_x = 1.0 / a["col1"].data
@@ -546,7 +550,6 @@ class J13(GMBase):
     possnames = {"MWRV31": ("EXT_J13.RES.dat", 3.1)}
 
     def __init__(self, modelname="MWRV31", **kwargs):
-
         if modelname not in self.possnames.keys():
             raise InputParameterError("modelname not recognized")
         filename = self.possnames[modelname][0]
@@ -556,7 +559,10 @@ class J13(GMBase):
         data_path = pkg_resources.resource_filename("dust_extinction", "data/")
 
         a = Table.read(
-            data_path + filename, data_start=1, header_start=None, format="ascii.basic",
+            data_path + filename,
+            data_start=1,
+            header_start=None,
+            format="ascii.basic",
         )
 
         self.data_x = 1.0 / a["col1"].data
@@ -586,7 +592,7 @@ class HD23(GMBase):
 
     Notes
     -----
-    From Hensley & Draine (2023, ApJ, 948, 55).  File from 
+    From Hensley & Draine (2023, ApJ, 948, 55).  File from
     https://dataverse.harvard.edu/dataverse/astrodust
 
     Example showing the possible curves
@@ -627,7 +633,6 @@ class HD23(GMBase):
     possnames = {"MWRV31": ("astrodust+PAH_MW_RV3.1.fits", 3.1)}
 
     def __init__(self, modelname="MWRV31", **kwargs):
-
         if modelname not in self.possnames.keys():
             raise InputParameterError("modelname not recognized")
         filename = self.possnames[modelname][0]
