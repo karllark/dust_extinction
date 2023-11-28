@@ -492,6 +492,9 @@ Shape fitting models
    These models are used to fit the detailed shape of dust extinction curves.
    The FM90 (Fitzpatrick & Mass 1990) model uses 6 parameters to fit the
    shape of the ultraviolet extinction.
+   Note there are two forms of the FM90 model, FM90 that implements the model
+   as published and FM90_B3 that B3 = C3/gamma^2 as the explicit amplitude of
+   the 2175 A bump (easier to interpret).
    The P92 (Pei 1992) uses 19 parameters to fit the shape of the X-ray to
    far-infrared extinction.
    The G21 (Gordon et al. 2021) models uses 10 parameters to fit the shape
