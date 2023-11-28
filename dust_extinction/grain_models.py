@@ -628,7 +628,7 @@ class HD23(GMBase):
         plt.show()
     """
 
-    x_range = [1.0 / 1e5, 1.0 / 4e-2]
+    x_range = [1.0 / 3e4, 1.0 / 0.1]
 
     possnames = {"MWRV31": ("astrodust+PAH_MW_RV3.1.fits", 3.1)}
 
