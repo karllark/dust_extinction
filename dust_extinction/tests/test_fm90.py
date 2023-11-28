@@ -79,7 +79,7 @@ def test_FM90_fitting():
     # convert to E(x-V)/E(B0V)
     y = (g03_model.obsdata_axav - 1.0) * g03_model.Rv
     # only fit the UV portion (FM90 only valid in UV)
-    gindxs, = np.where(x > 3.125)
+    (gindxs,) = np.where(x > 3.125)
 
     fm90_init = FM90()
     fit = LevMarLSQFitter()
