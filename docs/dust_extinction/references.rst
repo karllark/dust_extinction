@@ -52,8 +52,11 @@ G16: `Gordon et al. 2016, ApJ 826, 104
 G21: `Gordon et al. 2021, ApJ, 916, 33
 <https://ui.adsabs.harvard.edu/abs/2021ApJ...916...33G>`_
 
-G23: `Gordon et al. 2022, ApJ, in press
-<https://arxiv.org/abs/2304.01991>`_
+G23: `Gordon et al. 2022, ApJ, 950, 86
+<https://ui.adsabs.harvard.edu/abs/2023ApJ...950...86G/abstract>`_
+
+HD23: `Hensley & Draine 2023, ApJ, 948, 55
+<https://ui.adsabs.harvard.edu/abs/2023ApJ...948...55H/abstract>`_
 
 I05: `Indebetouw et al. 2005, ApJ, 619, 931
 <https://ui.adsabs.harvard.edu/abs/2005ApJ...619..931I>`_
