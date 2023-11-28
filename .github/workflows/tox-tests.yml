@@ -81,7 +81,7 @@ jobs:
         python -m pip install tox
     - name: Test with tox
       run: |
-        tox -e py38-astropylts
+        tox -e py39-astropylts
 
   # Coverage test
   cov_test:
@@ -99,7 +99,7 @@ jobs:
         python -m pip install tox
     - name: Test with tox
       run: |
-        tox -e py38-cov
+        tox -e py311-cov
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v1
       with:
