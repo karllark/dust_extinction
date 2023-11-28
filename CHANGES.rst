@@ -1,7 +1,15 @@
-1.3 (unreleased)
+1.4 (unreleased)
 ================
 
 - no changes yet
+
+1.3 (2023-11-28)
+================
+
+- Added HD23 dust grain model
+- Added FM90_B3 shape model
+- updated docs
+- removed astropy 6.0 deprecated features
 
 1.2 (2023-04-04)
 ================
