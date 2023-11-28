@@ -1485,9 +1485,7 @@ class G23(BaseExtRvModel):
             1.0 / x[optir_overlap], x_min=optir_waves[0], x_max=optir_waves[1], N=1
         )
         self.a[optir_overlap] = (1.0 - weights) * m20_model_a(x[optir_overlap])
-        self.a[optir_overlap] += weights * self.nirmir_intercept(
-            x[optir_overlap], ir_a
-        )
+        self.a[optir_overlap] += weights * self.nirmir_intercept(x[optir_overlap], ir_a)
         self.b[optir_overlap] = (1.0 - weights) * m20_model_b(x[optir_overlap])
         self.b[optir_overlap] += weights * irpow(x[optir_overlap])
 
@@ -1509,9 +1507,13 @@ class G23(BaseExtRvModel):
         weights = _smoothstep(
             1.0 / x[uvopt_overlap], x_min=uvopt_waves[0], x_max=uvopt_waves[1], N=1
         )
-        self.a[uvopt_overlap] = (1.0 - weights) * fm90_model_a(x[uvopt_overlap] / u.micron)
+        self.a[uvopt_overlap] = (1.0 - weights) * fm90_model_a(
+            x[uvopt_overlap] / u.micron
+        )
         self.a[uvopt_overlap] += weights * m20_model_a(x[uvopt_overlap])
-        self.b[uvopt_overlap] = (1.0 - weights) * fm90_model_b(x[uvopt_overlap] / u.micron)
+        self.b[uvopt_overlap] = (1.0 - weights) * fm90_model_b(
+            x[uvopt_overlap] / u.micron
+        )
         self.b[uvopt_overlap] += weights * m20_model_b(x[uvopt_overlap])
 
         # return A(x)/A(V)

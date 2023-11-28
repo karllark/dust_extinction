@@ -274,14 +274,14 @@ class FM90(Fittable1DModel):
         exvebv = C1 + C2 * x
 
         # bump term
-        x2 = x ** 2
-        exvebv += C3 * (x2 / ((x2 - xo ** 2) ** 2 + x2 * (gamma ** 2)))
+        x2 = x**2
+        exvebv += C3 * (x2 / ((x2 - xo**2) ** 2 + x2 * (gamma**2)))
 
         # FUV rise term
         fnuv_indxs = np.where(x >= 5.9)
         if len(fnuv_indxs) > 0:
             y = x[fnuv_indxs] - 5.9
-            exvebv[fnuv_indxs] += C4 * (0.5392 * (y ** 2) + 0.05644 * (y ** 3))
+            exvebv[fnuv_indxs] += C4 * (0.5392 * (y**2) + 0.05644 * (y**3))
 
         # return E(x-V)/E(B-V)
         return exvebv
@@ -294,9 +294,9 @@ class FM90(Fittable1DModel):
         x = in_x
 
         # useful quantitites
-        x2 = x ** 2
-        xo2 = xo ** 2
-        g2 = gamma ** 2
+        x2 = x**2
+        xo2 = xo**2
+        g2 = gamma**2
         x2mxo2_2 = (x2 - xo2) ** 2
         denom = (x2mxo2_2 - x2 * g2) ** 2
 
@@ -308,13 +308,13 @@ class FM90(Fittable1DModel):
 
         d_xo = (4.0 * C2 * x2 * xo * (x2 - xo2)) / denom
 
-        d_gamma = (2.0 * C2 * (x2 ** 2) * gamma) / denom
+        d_gamma = (2.0 * C2 * (x2**2) * gamma) / denom
 
         d_C4 = np.zeros((len(x)))
         fuv_indxs = np.where(x >= 5.9)
         if len(fuv_indxs) > 0:
             y = x[fuv_indxs] - 5.9
-            d_C4[fuv_indxs] = 0.5392 * (y ** 2) + 0.05644 * (y ** 3)
+            d_C4[fuv_indxs] = 0.5392 * (y**2) + 0.05644 * (y**3)
 
         return [d_C1, d_C2, d_C3, d_C4, d_xo, d_gamma]
 
@@ -441,14 +441,14 @@ class FM90_B3(Fittable1DModel):
         exvebv = C1 + C2 * x
 
         # bump term
-        x2 = x ** 2
-        exvebv += (B3 * gamma ** 2) * (x2 / ((x2 - xo ** 2) ** 2 + x2 * (gamma ** 2)))
+        x2 = x**2
+        exvebv += (B3 * gamma**2) * (x2 / ((x2 - xo**2) ** 2 + x2 * (gamma**2)))
 
         # FUV rise term
         fnuv_indxs = np.where(x >= 5.9)
         if len(fnuv_indxs) > 0:
             y = x[fnuv_indxs] - 5.9
-            exvebv[fnuv_indxs] += C4 * (0.5392 * (y ** 2) + 0.05644 * (y ** 3))
+            exvebv[fnuv_indxs] += C4 * (0.5392 * (y**2) + 0.05644 * (y**3))
 
         # return E(x-V)/E(B-V)
         return exvebv
@@ -832,7 +832,9 @@ class G21(Fittable1DModel):
     # inputs = ("x",)
     # outputs = ("axav",)
 
-    scale = Parameter(description="powerlaw: amplitude", default=0.37, bounds=(0.0, 1.0))
+    scale = Parameter(
+        description="powerlaw: amplitude", default=0.37, bounds=(0.0, 1.0)
+    )
     alpha = Parameter(description="powerlaw: alpha", default=1.5, bounds=(0.5, 5.0))
     sil1_amp = Parameter(
         description="silicate 10um: amplitude", default=0.07, bounds=(0.001, 0.3)
