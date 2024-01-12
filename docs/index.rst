@@ -29,10 +29,10 @@ User Documentation
 .. toctree::
    :maxdepth: 2
 
-   Extinction versus Attenuation <dust_extinction/extinction.rst>
-   Flavors of Models <dust_extinction/model_flavors.rst>
-   How to choose a model <dust_extinction/choose_model.rst>
-   Extinguish (or unextinguish) data <dust_extinction/extinguish.rst>
+   Extinction versus Attenuation (what is the difference) <dust_extinction/extinction.rst>
+   Flavors of Models (including plots of all models) <dust_extinction/model_flavors.rst>
+   How to choose a model (including listing of all models) <dust_extinction/choose_model.rst>
+   Extinguish (or unextinguish) data (how to correct/account for extinction) <dust_extinction/extinguish.rst>
    Fitting extinction curves <dust_extinction/fit_extinction.rst>
    References <dust_extinction/references.rst>
 
