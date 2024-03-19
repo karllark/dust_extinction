@@ -1,5 +1,3 @@
-from __future__ import absolute_import, print_function, division
-
 import pkg_resources
 
 import numpy as np
@@ -1367,7 +1365,7 @@ class G23(BaseExtRvModel):
     -----
     From Gordon et al. (2023, ApJ, in press)
 
-    Example showing CCM89 curves for a range of R(V) values.
+    Example showing G23 curves for a range of R(V) values.
 
     .. plot::
         :include-source:
