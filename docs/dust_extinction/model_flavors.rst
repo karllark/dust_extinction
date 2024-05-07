@@ -13,8 +13,9 @@ Average models
    Models are provided for the Milky Way for the optical (Bastiaansen 1992),
    ultraviolet through near-infrared
    (Gordon, Cartlege, & Clayton 2009) and near- and mid-infrared
-   (Rieke & Lebofsky 1985; Indebetouw et al. 2005; Chiar & Tielens 2006; Fritz et al. 2011)
-   and the Magellanic Clouds (Gordon et al. 2003).
+   (Rieke & Lebofsky 1985; Indebetouw et al. 2005; Chiar & Tielens 2006; Fritz et al. 2011;
+   Gordon et al. 2021; Decleir et al. 2022)
+   and the Magellanic Clouds (Gordon et al. 2003; Gordon et al. 2024).
 
    For the Milky Way for the ultraviolet through near-infrared,
    one of the R(V) dependent models with R(V) = 3.1
@@ -31,14 +32,15 @@ Average models
                                          B92_MWAvg,
                                          G03_SMCBar,
                                          G03_LMCAvg,
-					                               G03_LMC2)
+					                          G03_LMC2,
+                                         G24_SMCAvg)
 
    fig, ax = plt.subplots()
 
    # generate the curves and plot them
    x = np.arange(0.3,11.0,0.1)/u.micron
 
-   models = [GCC09_MWAvg, B92_MWAvg, G03_SMCBar, G03_LMCAvg, G03_LMC2]
+   models = [GCC09_MWAvg, B92_MWAvg, G03_SMCBar, G03_LMCAvg, G03_LMC2, G24_SMCAvg]
 
    for cmodel in models:
       ext_model = cmodel()
@@ -111,8 +113,9 @@ R(V) (+ other variables) dependent prediction models
 
    The R(V) dependent models include CCM89 the original such model
    (Cardelli, Clayton, and Mathis 1989), the O94 model that updates the
-   optical portion of the CCM89 model (O'Donnell 1994), and the F99 model
-   (Fitzpatrick 1999) updated as F04 (Fitzpatrick 2004),
+   optical portion of the CCM89 model (O'Donnell 1994), the F99 model
+   (Fitzpatrick 1999) updated as F04 (Fitzpatrick 2004), and the
+   fully spectroscopic far-UV to mid-IR G23 (Gordon et al. 2023).
    These models are based on the average
    behavior of extinction in the Milky Way as a function of R(V).
    The M14 model refines the optical portion of the CCM89 model

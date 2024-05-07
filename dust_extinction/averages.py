@@ -24,7 +24,7 @@ __all__ = [
     "G21_MWAvg",
     "D22_MWAvg",
     "G24_SMCAvg",
-    "G24_SMCBumps"
+    #    "G24_SMCBumps"
 ]
 
 
@@ -1581,7 +1581,7 @@ class G24_SMCAvg(BaseExtModel):
         self.obsdata_axav_unc = a["unc"].data
 
         # accuracy of the observed data based on published table
-        self.obsdata_tolerance = 0.2  # check
+        self.obsdata_tolerance = 0.1  # large value driven by short wavelength uncertainties
 
         super().__init__(**kwargs)
 
@@ -1614,9 +1614,7 @@ class G24_SMCAvg(BaseExtModel):
         xo = 4.59
         gamma = 0.95
 
-        optnir_axav_x = 1.0 / np.array(
-            [2.198, 1.65, 1.25, 0.55, 0.44, 0.37]
-        )
+        optnir_axav_x = 1.0 / np.array([2.198, 1.65, 1.25, 0.55, 0.44, 0.37])
         optnir_axav_y = [0.075, 0.137, 0.333, 1.021, 1.345, 1.507]
 
         # return A(x)/A(V)
