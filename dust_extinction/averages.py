@@ -24,7 +24,7 @@ __all__ = [
     "G21_MWAvg",
     "D22_MWAvg",
     "G24_SMCAvg",
-    #    "G24_SMCBumps"
+    "G24_SMCBumps",
 ]
 
 
@@ -1581,7 +1581,9 @@ class G24_SMCAvg(BaseExtModel):
         self.obsdata_axav_unc = a["unc"].data
 
         # accuracy of the observed data based on published table
-        self.obsdata_tolerance = 0.1  # large value driven by short wavelength uncertainties
+        self.obsdata_tolerance = (
+            0.1  # large value driven by short wavelength uncertainties
+        )
 
         super().__init__(**kwargs)
 
@@ -1616,6 +1618,129 @@ class G24_SMCAvg(BaseExtModel):
 
         optnir_axav_x = 1.0 / np.array([2.198, 1.65, 1.25, 0.55, 0.44, 0.37])
         optnir_axav_y = [0.075, 0.137, 0.333, 1.021, 1.345, 1.507]
+
+        # return A(x)/A(V)
+        return _curve_F99_method(
+            in_x,
+            self.Rv,
+            C1,
+            C2,
+            C3,
+            C4,
+            xo,
+            gamma,
+            optnir_axav_x,
+            optnir_axav_y,
+            self.x_range,
+            self.__class__.__name__,
+        )
+
+
+class G24_SMCBumps(BaseExtModel):
+    r"""
+    Gordon et al (2024) SMC Bumps Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Gordon et al. (2024, ApJ, in press)
+
+    Two data points in the FUV from the data file giving the observed average were removed
+    as they are *very* deviate from the FM90 parametrization.  This cause the automated tests
+    to fail.
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import G24_SMCBumps
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = G24_SMCBumps()
+
+        # generate the curves and plot them
+        x = np.arange(ext_model.x_range[0], ext_model.x_range[1],0.1)/u.micron
+
+        ax.plot(x,ext_model(x),label='G24 SMC Bumps')
+        ax.plot(ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [0.3, 10.0]
+
+    Rv = 2.59
+
+    def __init__(self, **kwargs):
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        # D22 sigma clipped average of 13 diffuse sightlines
+        a = Table.read(data_path + "G24_SMCBumps.dat", format="ascii.commented_header")
+
+        # data
+        self.obsdata_x = 1.0 / a["wave"].data
+        self.obsdata_axav = a["A(l)/A(V)"].data
+        self.obsdata_axav_unc = a["unc"].data
+
+        # accuracy of the observed data based on published table
+        self.obsdata_tolerance = (
+            0.1  # large value driven by short wavelength uncertainties
+        )
+
+        super().__init__(**kwargs)
+
+    def evaluate(self, in_x):
+        """
+        G24 SMCBumps function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        C1 = -2.87
+        C2 = 1.51
+        C3 = 2.64
+        C4 = 0.25
+        xo = 4.73
+        gamma = 1.16
+
+        optnir_axav_x = 1.0 / np.array([2.198, 1.65, 1.25, 0.55, 0.44, 0.37])
+        optnir_axav_y = [0.068, 0.174, 0.302, 1.017, 1.394, 1.675]
 
         # return A(x)/A(V)
         return _curve_F99_method(

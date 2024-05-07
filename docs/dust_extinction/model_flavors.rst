@@ -33,14 +33,16 @@ Average models
                                          G03_SMCBar,
                                          G03_LMCAvg,
 					                          G03_LMC2,
-                                         G24_SMCAvg)
+                                         G24_SMCAvg,
+                                         G24_SMCBumps)
 
    fig, ax = plt.subplots()
 
    # generate the curves and plot them
    x = np.arange(0.3,11.0,0.1)/u.micron
 
-   models = [GCC09_MWAvg, B92_MWAvg, G03_SMCBar, G03_LMCAvg, G03_LMC2, G24_SMCAvg]
+   models = [GCC09_MWAvg, B92_MWAvg, G03_SMCBar, G03_LMCAvg, G03_LMC2, 
+             G24_SMCAvg, G24_SMCBumps]
 
    for cmodel in models:
       ext_model = cmodel()
