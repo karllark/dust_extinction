@@ -74,14 +74,14 @@ jobs:
     - name: Set up python for astropy lts test
       uses: actions/setup-python@v4
       with:
-        python-version: 3.10
+        python-version: 3.11
     - name: Install base dependencies
       run: |
         python -m pip install --upgrade pip
         python -m pip install tox
     - name: Test with tox
       run: |
-        tox -e py310-astropylts
+        tox -e py311-astropylts
 
   # Coverage test
   cov_test:
