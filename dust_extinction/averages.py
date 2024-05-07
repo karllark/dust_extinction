@@ -23,6 +23,8 @@ __all__ = [
     "F11_MWGC",
     "G21_MWAvg",
     "D22_MWAvg",
+    "G24_SMCAvg",
+    "G24_SMCBumps"
 ]
 
 
@@ -1513,3 +1515,122 @@ class D22_MWAvg(BaseExtModel):
         # return A(x)/A(V)
         # Note that model in D22 was done versus wavelength in microns
         return d22_fit(1.0 / x)
+
+
+class G24_SMCAvg(BaseExtModel):
+    r"""
+    Gordon et al (2024) SMC Average Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Gordon et al. (2024, ApJ, in press)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import G24_SMCAvg
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = G24_SMCAvg()
+
+        # generate the curves and plot them
+        x = np.arange(ext_model.x_range[0], ext_model.x_range[1],0.1)/u.micron
+
+        ax.plot(x,ext_model(x),label='G24 SMC Average')
+        ax.plot(ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [0.3, 10.0]
+
+    Rv = 3.06
+
+    def __init__(self, **kwargs):
+
+        # get the tabulated information
+        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
+
+        # D22 sigma clipped average of 13 diffuse sightlines
+        a = Table.read(data_path + "G24_SMCAvg.dat", format="ascii.commented_header")
+
+        # data
+        self.obsdata_x = 1.0 / a["wave"].data
+        self.obsdata_axav = a["A(l)/A(V)"].data
+        self.obsdata_axav_unc = a["unc"].data
+
+        # accuracy of the observed data based on published table
+        self.obsdata_tolerance = 0.2  # check
+
+        super().__init__(**kwargs)
+
+    def evaluate(self, in_x):
+        """
+        G24 SMCAvg function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        C1 = -5.07
+        C2 = 2.30
+        C3 = 0.12
+        C4 = 0.08
+        xo = 4.59
+        gamma = 0.95
+
+        optnir_axav_x = 1.0 / np.array(
+            [2.198, 1.65, 1.25, 0.55, 0.44, 0.37]
+        )
+        optnir_axav_y = [0.075, 0.137, 0.333, 1.021, 1.345, 1.507]
+
+        # return A(x)/A(V)
+        return _curve_F99_method(
+            in_x,
+            self.Rv,
+            C1,
+            C2,
+            C3,
+            C4,
+            xo,
+            gamma,
+            optnir_axav_x,
+            optnir_axav_y,
+            self.x_range,
+            self.__class__.__name__,
+        )
