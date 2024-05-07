@@ -1,7 +1,7 @@
-1.4 (unreleased)
+1.4 (2024-05-07)
 ================
 
-- Added G24 averages
+- Added G24 Average and Bumps average models
 
 1.3 (2023-11-28)
 ================
