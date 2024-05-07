@@ -22,12 +22,14 @@ simplest models and include models for the MW
 :class:`~dust_extinction.averages.CT06_MWGC`,
 :class:`~dust_extinction.averages.GCC09_MWAvg`,
 :class:`~dust_extinction.averages.F11_MWGC`,
-:class:`~dust_extinction.averages.G21_MWAvg`;
+:class:`~dust_extinction.averages.G21_MWAvg`,
 :class:`~dust_extinction.averages.D22_MWAvg`;
 Note the different valid wavelength ranges), the LMC
 (:class:`~dust_extinction.averages.G03_LMCAvg`,
 :class:`~dust_extinction.averages.G03_LMC2`) and the SMC
-(:class:`~dust_extinction.averages.G03_SMCBar`).
+(:class:`~dust_extinction.averages.G03_SMCBar`,
+:class:`~dust_extinction.averages.G24_SMCAvg`,
+:class:`~dust_extinction.averages.G24_SMCBumps`).
 
 One often used alternative to these straight average models is to use one of
 the parameter dependent models with the average R(V) value.  For the Milky
@@ -63,7 +65,10 @@ Way, the usual average used is R(V) = 3.1.  See the next section.
 +--------------+-------------+------------------+--------------+
 | G03_SMCBar   |  0.3 - 10.0 |        0.1 - 3.3 |          SMC |
 +--------------+-------------+------------------+--------------+
-
+| G24_SMCAvg   |  0.3 - 10.0 |        0.1 - 3.3 |          SMC |
++--------------+-------------+------------------+--------------+
+| G24_SMCBumps |  0.3 - 10.0 |        0.1 - 3.3 |          SMC |
++--------------+-------------+------------------+--------------+
 
 Parameter Dependent Average Curves
 ----------------------------------
