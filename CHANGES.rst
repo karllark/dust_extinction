@@ -1,7 +1,7 @@
 1.4 (unreleased)
 ================
 
-- no changes yet
+- Added G24 averages
 
 1.3 (2023-11-28)
 ================
