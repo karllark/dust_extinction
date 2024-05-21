@@ -10,6 +10,17 @@ To install::
 
     pip install dust_extinction
 
+Citation
+--------
+
+Please cite the original papers for the models used.  The papers for each model 
+are given `here <https://dust-extinction.readthedocs.io/en/latest/dust_extinction/references.html>`_.
+
+In addition, please cite the latest release of the package given below.
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.11235336.svg
+  :target: https://doi.org/10.5281/zenodo.11235336
+
 Build checks/status
 -------------------
 
@@ -43,6 +54,14 @@ Packaging
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
+
+Citation
+--------
+
+Please cite the original papers for the 
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.11235336.svg
+  :target: https://doi.org/10.5281/zenodo.11235336
 
 Documentation
 -------------
