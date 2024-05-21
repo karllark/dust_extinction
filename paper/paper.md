@@ -43,13 +43,13 @@ extinction curves and examples are shown in Fig.~\autoref{fig:averages}.  The Pa
 The final type of models are Shape models that provide flexible functional forms
 that fit selected wavelength ranges (see Fig.~\autoref{fig:shapes} for an example).
 
-![Examples of Average models [@Bastiaansen92; @Gordon03; @Gordon09; @Gordon21; @Gordon24].\label{fig:averages}](average_models_uv_nir.png){ width=50% }
+![Examples of Average models [@Bastiaansen92; @Gordon03; @Gordon09; @Gordon21; @Gordon24].\label{fig:averages}](average_models_uv_nir.png){ width=70% }
 
 ![Examples of Parameter Average models [@Cardelli89; @ODonnell94; @Fitzpatrick99; @Fitzpatrick04; @Valencic04; @Gordon09; @MaizApellaniz14; @Fitzpatrick19; @Decleir22; @Gordon23].\label{fig:parameter_averages}](parameter_average_models.png)
 
-![Examples of Grain models [@Desert90; @Weingartner01; @Draine03; @Zubko04; @Compiegne11; @Jones13; @Hensley23].\label{fig:grain}](grain_models.png){ width=50% }
+![Examples of Grain models [@Desert90; @Weingartner01; @Draine03; @Zubko04; @Compiegne11; @Jones13; @Hensley23].\label{fig:grain}](grain_models.png){ width=70% }
 
-![Examples of a Shape model [@Fitzpatrick90].\label{fig:shapes}](shape_models.png){ width=50% }
+![Examples of a Shape model [@Fitzpatrick90].\label{fig:shapes}](shape_models.png){ width=70% }
 
 The wavelength dependence of extinction for a model is computed by passing a
 wavelength or frequency vector with astropy units. Each model has a valid
