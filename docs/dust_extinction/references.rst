@@ -20,7 +20,6 @@ the works that provided a substantial input for that specific model.
 | G23          | GCC09, F19, G21, D22 |
 +--------------+----------------------+
 
-
 In addition, please cite the dust_extinction package 
 (BibTex format found on "Cite this repository" button on main repository page).
 
@@ -29,7 +28,7 @@ Gordon, K. (2024). dust_extinction (Version v1.4.1) [Computer software]. https:/
 Naming Convention
 =================
 
-The names of models are use the paper where they were presented and are
+The names of models use the paper where they were presented and are
 based on the author last name initials and year published.
 For papers with 3 or fewer authors, the initials of all the authors are used.
 For papers with 4 or more authors, only the initial of the 1st authors is used.
