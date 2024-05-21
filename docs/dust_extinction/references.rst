@@ -2,6 +2,43 @@
 References
 ##########
 
+How to Cite
+===========
+
+Please cite the papers presenting the models.  For some models, it is nice to also cite 
+the works that provided a substantial input for that specific model.
+
++--------------+----------------------+
+| Model        | Substantial Input    |
++==============+======================+
+| CCM89        | FM88                 |
++--------------+----------------------+
+| O94          | CCM89                |
++--------------+----------------------+
+| G03          | GC98, MCG99          |
++--------------+----------------------+
+| G23          | GCC09, F19, G21, D22 |
++--------------+----------------------+
+
+In addition, please cite the dust_extinction package 
+(BibTex format found on "Cite this repository" button on main github repository page).
+
+Gordon, K. (2024). dust_extinction (Version v1.4.1) [Computer software]. https://doi.org/10.5281/zenodo.11235336
+
+Naming Convention
+=================
+
+The names of models use the paper where they were presented and are
+based on the author last name initials and year published.
+For papers with 3 or fewer authors, the initials of all the authors are used.
+For papers with 4 or more authors, only the initial of the 1st author is used.
+
+Model References
+================
+
+B92: `Bastiaansen 1992, A&AS, 92, 449
+<https://ui.adsabs.harvard.edu/abs/1992A%26AS...93..449B>`_
+
 C11: `Compiegne et al. 2011, A&A, 525, 103
 <https://ui.adsabs.harvard.edu/abs/2011A%26A...525A.103C>`_
 
@@ -28,6 +65,9 @@ F99: `Fitzpatrick 1999, PASP, 111, 63
 F04: `Fitzpatrick 2004, ASP Conf. Ser. 309, Astrophysics of Dust, 33
 <https://ui.adsabs.harvard.edu/abs/2004ASPC..309...33F>`_
 
+FM88: `Fitzpatrick & Massa 1988, ApJ, 328, 734
+<https://ui.adsabs.harvard.edu/abs/1988ApJ...328..734F>`_
+
 FM90: `Fitzpatrick & Massa 1990, ApJS, 72, 163
 <https://ui.adsabs.harvard.edu/abs/1990ApJS...72..163F>`_
 
@@ -39,6 +79,9 @@ F19: `Fitzpatrick, Massa, Gordon, et al. 2019, ApJ, 886, 108
 
 F11: `Fritz et al. 2011, ApJ, 737, 73
 <https://ui.adsabs.harvard.edu/abs/2011ApJ...737...73F>`_
+
+GC98: `Gordon & Clayton 1998, ApJ, 500, 816
+<https://ui.adsabs.harvard.edu/abs/1998ApJ...500..816G>`_
 
 G03: `Gordon et al. 2003, ApJ, 594, 279
 <https://ui.adsabs.harvard.edu/abs/2003ApJ...594..279G>`_
@@ -69,6 +112,9 @@ J13: `Jones et al. 2013, A&A, 558, 62
 KJY14: `Kohler, Jones, & Ysard 2014, A&A, 565, 9
 <https://ui.adsabs.harvard.edu/abs/2014A%26A...565L...9K>`_
 
+MCG99: `Misselt, Clayton, & Gordon 1999, ApJ, 515, 128
+<https://ui.adsabs.harvard.edu/abs/1999ApJ...515..128M>`_
+
 M14: `Maiz Apell\’aniz et al. 2014, A&A, 564, 63
 <https://ui.adsabs.harvard.edu/abs/2014A%26A...564A..63M>`_
 
@@ -90,10 +136,3 @@ WG01: `Weingartner & Draine 2001, ApJ, 548, 296
 ZDA04: `Zubko, Dwek, & Arendt 2004, ApJS, 152, 211
 <https://ui.adsabs.harvard.edu/abs/2004ApJS..152..211Z>`_
 
-Naming Convention
-=================
-
-The names of models are use the paper where they were presented and are
-based on the author last name initials and year published.
-For papers with 3 or fewer authors, the initials of all the authors are used.
-For papers with 4 or more authors, only the initial of the 1st authors is used.
