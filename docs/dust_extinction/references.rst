@@ -21,7 +21,7 @@ the works that provided a substantial input for that specific model.
 +--------------+----------------------+
 
 In addition, please cite the dust_extinction package 
-(BibTex format found on "Cite this repository" button on main repository page).
+(BibTex format found on "Cite this repository" button on main github repository page).
 
 Gordon, K. (2024). dust_extinction (Version v1.4.1) [Computer software]. https://doi.org/10.5281/zenodo.11235336
 
@@ -31,7 +31,7 @@ Naming Convention
 The names of models use the paper where they were presented and are
 based on the author last name initials and year published.
 For papers with 3 or fewer authors, the initials of all the authors are used.
-For papers with 4 or more authors, only the initial of the 1st authors is used.
+For papers with 4 or more authors, only the initial of the 1st author is used.
 
 Model References
 ================
