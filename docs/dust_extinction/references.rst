@@ -6,8 +6,20 @@ How to Cite
 ===========
 
 Please cite the papers presenting the models.  For some models, it is nice to also cite 
-the works that provided a substantial input for that specific model.  
-For example, CCM89 was based on FM88.
+the works that provided a substantial input for that specific model.
+
++--------------+----------------------+
+| Model        | Substantial Input    |
++==============+======================+
+| CCM89        | FM88                 |
++--------------+----------------------+
+| O94          | CCM89                |
++--------------+----------------------+
+| G03          | GC98, MCG99          |
++--------------+----------------------+
+| G23          | GCC09, F19, G21, D22 |
++--------------+----------------------+
+
 
 In addition, please cite the dust_extinction package 
 (BibTex format found on "Cite this repository" button on main repository page).
@@ -66,6 +78,9 @@ F19: `Fitzpatrick, Massa, Gordon, et al. 2019, ApJ, 886, 108
 F11: `Fritz et al. 2011, ApJ, 737, 73
 <https://ui.adsabs.harvard.edu/abs/2011ApJ...737...73F>`_
 
+GC98: `Gordon & Clayton 1998, ApJ, 500, 816
+<https://ui.adsabs.harvard.edu/abs/1998ApJ...500..816G>`_
+
 G03: `Gordon et al. 2003, ApJ, 594, 279
 <https://ui.adsabs.harvard.edu/abs/2003ApJ...594..279G>`_
 
@@ -94,6 +109,9 @@ J13: `Jones et al. 2013, A&A, 558, 62
 
 KJY14: `Kohler, Jones, & Ysard 2014, A&A, 565, 9
 <https://ui.adsabs.harvard.edu/abs/2014A%26A...565L...9K>`_
+
+MCG99: `Misselt, Clayton, & Gordon 1999, ApJ, 515, 128
+<https://ui.adsabs.harvard.edu/abs/1999ApJ...515..128M>`_
 
 M14: `Maiz Apell\’aniz et al. 2014, A&A, 564, 63
 <https://ui.adsabs.harvard.edu/abs/2014A%26A...564A..63M>`_
