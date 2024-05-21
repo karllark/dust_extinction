@@ -1565,7 +1565,7 @@ class G24_SMCAvg(BaseExtModel):
 
     x_range = [0.3, 10.0]
 
-    Rv = 3.06
+    Rv = 3.02
 
     def __init__(self, **kwargs):
 
@@ -1612,12 +1612,12 @@ class G24_SMCAvg(BaseExtModel):
         C1 = -5.07
         C2 = 2.30
         C3 = 0.12
-        C4 = 0.08
+        C4 = 0.07
         xo = 4.59
         gamma = 0.95
 
         optnir_axav_x = 1.0 / np.array([2.198, 1.65, 1.25, 0.55, 0.44, 0.37])
-        optnir_axav_y = [0.075, 0.137, 0.333, 1.021, 1.345, 1.507]
+        optnir_axav_y = [0.062, 0.125, 0.324, 1.021, 1.349, 1.514]
 
         # return A(x)/A(V)
         return _curve_F99_method(
@@ -1688,7 +1688,7 @@ class G24_SMCBumps(BaseExtModel):
 
     x_range = [0.3, 10.0]
 
-    Rv = 2.59
+    Rv = 2.55
 
     def __init__(self, **kwargs):
 
@@ -1732,15 +1732,15 @@ class G24_SMCBumps(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        C1 = -2.87
+        C1 = -2.85
         C2 = 1.51
         C3 = 2.64
         C4 = 0.25
         xo = 4.73
-        gamma = 1.16
+        gamma = 1.15
 
         optnir_axav_x = 1.0 / np.array([2.198, 1.65, 1.25, 0.55, 0.44, 0.37])
-        optnir_axav_y = [0.068, 0.174, 0.302, 1.017, 1.394, 1.675]
+        optnir_axav_y = [0.055, 0.162, 0.293, 1.017, 1.400, 1.684]
 
         # return A(x)/A(V)
         return _curve_F99_method(
