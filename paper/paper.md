@@ -4,6 +4,10 @@ tags:
   - Python
   - astronomy
   - milky way
+  - magellanic clouds
+  - dust
+  - extinction
+  - interstellar
 authors:
   - name: Karl D. Gordon
     orcid: 0000-0001-5340-6774
