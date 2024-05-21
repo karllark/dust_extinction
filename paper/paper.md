@@ -11,7 +11,6 @@ tags:
 authors:
   - name: Karl D. Gordon
     orcid: 0000-0001-5340-6774
-    equal-contrib: true
     affiliation: 1
 affiliations:
  - name: Space Telescope Science Institute, 3700 San Martin Drive, Baltimore, MD, 21218, USA
