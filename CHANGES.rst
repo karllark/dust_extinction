@@ -3,7 +3,7 @@
 
 - no changes yet
 
-1.4 (2024-05-21)
+1.4.1 (2024-05-21)
 ================
 
 - Minor updates to G24 models
