@@ -2,6 +2,29 @@
 References
 ##########
 
+How to Cite
+===========
+
+Please cite the papers presenting the models.  For some models, it is nice to also cite 
+the works that provided a substantial input for that specific model.  
+For example, CCM89 was based on FM88.
+
+In addition, please cite the dust_extinction package 
+(BibTex format found on "Cite this repository" button on main repository page).
+
+Gordon, K. (2024). dust_extinction (Version v1.4.1) [Computer software]. https://doi.org/10.5281/zenodo.11235336
+
+Naming Convention
+=================
+
+The names of models are use the paper where they were presented and are
+based on the author last name initials and year published.
+For papers with 3 or fewer authors, the initials of all the authors are used.
+For papers with 4 or more authors, only the initial of the 1st authors is used.
+
+Model References
+================
+
 C11: `Compiegne et al. 2011, A&A, 525, 103
 <https://ui.adsabs.harvard.edu/abs/2011A%26A...525A.103C>`_
 
@@ -27,6 +50,9 @@ F99: `Fitzpatrick 1999, PASP, 111, 63
 
 F04: `Fitzpatrick 2004, ASP Conf. Ser. 309, Astrophysics of Dust, 33
 <https://ui.adsabs.harvard.edu/abs/2004ASPC..309...33F>`_
+
+FM88: `Fitzpatrick & Massa 1988, ApJ, 328, 734
+<https://ui.adsabs.harvard.edu/abs/1988ApJ...328..734F>`_
 
 FM90: `Fitzpatrick & Massa 1990, ApJS, 72, 163
 <https://ui.adsabs.harvard.edu/abs/1990ApJS...72..163F>`_
@@ -90,10 +116,3 @@ WG01: `Weingartner & Draine 2001, ApJ, 548, 296
 ZDA04: `Zubko, Dwek, & Arendt 2004, ApJS, 152, 211
 <https://ui.adsabs.harvard.edu/abs/2004ApJS..152..211Z>`_
 
-Naming Convention
-=================
-
-The names of models are use the paper where they were presented and are
-based on the author last name initials and year published.
-For papers with 3 or fewer authors, the initials of all the authors are used.
-For papers with 4 or more authors, only the initial of the 1st authors is used.

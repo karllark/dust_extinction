@@ -55,14 +55,6 @@ Packaging
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
 
-Citation
---------
-
-Please cite the original papers for the 
-
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.11235336.svg
-  :target: https://doi.org/10.5281/zenodo.11235336
-
 Documentation
 -------------
 
