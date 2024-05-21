@@ -41,13 +41,13 @@ ranges.
 
 The types of extinction models supported are Averages, Parameter Averages, Grain Models, and Shape.  [explain each kind]  [provide plots]
 
-![Examples of Average models [@Bastiaansen92; @Gordon03; @Gordon09; @Gordon21; @Gordon24].\label{fig:averages}](average_models_uv_nir.png)
+![Examples of Average models [@Bastiaansen92; @Gordon03; @Gordon09; @Gordon21; @Gordon24].\label{fig:averages}](average_models_uv_nir.png){ width=50% }
 
 ![Examples of Parameter Average models [@Cardelli89; @ODonnell94; @Fitzpatrick99; @Fitzpatrick04; @Valencic04; @Gordon09; @MaizApellaniz14; @Fitzpatrick19; @Decleir22; @Gordon23].\label{fig:parameter_averages}](parameter_average_models.png)
 
-![Examples of Grain models [@Desert90; @Weingartner01; @Draine03; @Zubko04; @Compiegne11; @Jones13; @Hensley23].\label{fig:grain}](parameter_average_models.png)
+![Examples of Grain models [@Desert90; @Weingartner01; @Draine03; @Zubko04; @Compiegne11; @Jones13; @Hensley23].\label{fig:grain}](parameter_average_models.png){ width=50% }
 
-![Examples of a Shape models [@Fitzpatrick90].\label{fig:shapes}](shape_models.png)
+![Examples of a Shape models [@Fitzpatrick90].\label{fig:shapes}](shape_models.png){ width=50% }
 
 The wavelength dependence of extinction for a model is computing by passing a
 wavelength or frequency vector with astropy units. Each model has a valid
