@@ -27,8 +27,8 @@ scattering photons out of the line-of-sight. The wavelength dependence of dust
 extinction (also know as extinction curves) provides fundamental information
 about the size, composition, and shape of interstellar dust grain. In general,
 models giving the wavelength dependence of extinction are used to model or
-correct the effects of dust on observations a single star.  This python package
-provides most of the extinction models published in one place with a 
+correct the effects of dust on observations a single star. This python package
+provides most of the extinction models published in one place with a
 straightforward interface.
 
 # Statement of need
@@ -38,25 +38,28 @@ in the literature. Having one python package providing these models ensures
 that they are straightforward to use and are used within their valid wavelength
 ranges.
 
-The types of extinction models supported are Averages, Parameter Averages, Grain Models, and Shape.  [explain each kind]  [provide plots]
+The types of extinction models supported are Averages, Parameter Averages, Grain Models, and Shape.  The Averages are straight averages of a set of measured 
+extinction curves and examples are shown in Fig.~\autoref{fig:averages}.  The Parameter Averages are extinction curve averages that depend on a parameter, usually $R(V) = A(V)/E(B-V)$.  Fig.~\autoref{fig:parameter_average} shows examples of these models.  The Grain Models are those extinction curves based on dust grain models that are based on fitting dust extinction, emission, and other observations.  See Fig.~\autoref{fig:grain} and note that these models provide dust extinction predictions from the X-ray through submm wavelengths.  
+The final type of models are Shape models that provide flexible functional forms
+that fit selected wavelength ranges (see Fig.~\autoref{fig:shapes} for an example).
 
 ![Examples of Average models [@Bastiaansen92; @Gordon03; @Gordon09; @Gordon21; @Gordon24].\label{fig:averages}](average_models_uv_nir.png){ width=50% }
 
 ![Examples of Parameter Average models [@Cardelli89; @ODonnell94; @Fitzpatrick99; @Fitzpatrick04; @Valencic04; @Gordon09; @MaizApellaniz14; @Fitzpatrick19; @Decleir22; @Gordon23].\label{fig:parameter_averages}](parameter_average_models.png)
 
-![Examples of Grain models [@Desert90; @Weingartner01; @Draine03; @Zubko04; @Compiegne11; @Jones13; @Hensley23].\label{fig:grain}](parameter_average_models.png){ width=50% }
+![Examples of Grain models [@Desert90; @Weingartner01; @Draine03; @Zubko04; @Compiegne11; @Jones13; @Hensley23].\label{fig:grain}](grain_models.png){ width=50% }
 
-![Examples of a Shape models [@Fitzpatrick90].\label{fig:shapes}](shape_models.png){ width=50% }
+![Examples of a Shape model [@Fitzpatrick90].\label{fig:shapes}](shape_models.png){ width=50% }
 
-The wavelength dependence of extinction for a model is computing by passing a
+The wavelength dependence of extinction for a model is computed by passing a
 wavelength or frequency vector with astropy units. Each model has a valid
 wavelength range this is enforced as extrapolation is not supported. The model
 output is in the standard $A(\lambda)/A(V)$ units where $A(\lambda) is the
 extinction at wavelength $\lambda$ and $A(V)$ is the extinction in the Johnson
 V band. Every model has a helper `extinguish` function that alternatively
-provides the fractional effects of extinction for a specific dust column
-$A(V)$. This allows for the effects of dust to be modeled for or removed from
-an observation.
+provides the fractional effects of extinction for a specific dust column (e.g.,
+$A(V)$ value). This allows for the effects of dust to be modeled for or removed
+from an observation.
 
 This package does not implement dust attenuation models. Dust attenuation
 results in observations of more complex systems like a star with nearby,
