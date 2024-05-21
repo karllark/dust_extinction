@@ -36,6 +36,9 @@ For papers with 4 or more authors, only the initial of the 1st authors is used.
 Model References
 ================
 
+B92: `Bastiaansen 1992, A&AS, 92, 449
+<https://ui.adsabs.harvard.edu/abs/1992A%26AS...93..449B>`_
+
 C11: `Compiegne et al. 2011, A&A, 525, 103
 <https://ui.adsabs.harvard.edu/abs/2011A%26A...525A.103C>`_
 
