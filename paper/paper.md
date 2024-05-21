@@ -36,12 +36,20 @@ straightforward interface.
 Many observational and theoretical based extinction curves have been presented
 in the literature. Having one python package providing these models ensures
 that they are straightforward to use and are used within their valid wavelength
-ranges.
+and parameter (where appropriate) ranges.
 
-The types of extinction models supported are Averages, Parameter Averages, Grain Models, and Shape.  The Averages are straight averages of a set of measured 
-extinction curves and examples are shown in Fig.~\autoref{fig:averages}.  The Parameter Averages are extinction curve averages that depend on a parameter, usually $R(V) = A(V)/E(B-V)$.  Fig.~\autoref{fig:parameter_average} shows examples of these models.  The Grain Models are those extinction curves based on dust grain models that are based on fitting dust extinction, emission, and other observations.  See Fig.~\autoref{fig:grain} and note that these models provide dust extinction predictions from the X-ray through submm wavelengths.  
-The final type of models are Shape models that provide flexible functional forms
-that fit selected wavelength ranges (see Fig.~\autoref{fig:shapes} for an example).
+The types of extinction models supported are Averages, Parameter Averages,
+Grain Models, and Shapes. The Averages are straight averages of a set of
+measured extinction curves and examples are shown in Fig.
+\autoref{fig:averages}. The Parameter Averages are extinction curve averages
+that depend on a parameter, usually $R(V) = A(V)/E(B-V)$. Fig.
+\autoref{fig:parameter_averages} shows examples of these models. The Grain
+Models are those extinction curves based on dust grain models that are based on
+fitting dust extinction, emission, and other observations. See Fig.
+\autoref{fig:grain} and note that these models provide dust extinction
+predictions from the X-ray through submm wavelengths. The final type of models
+are Shapes that provide flexible functional forms that fit selected wavelength
+ranges (see Fig. \autoref{fig:shapes} for an example).
 
 ![Examples of Average models [@Bastiaansen92; @Gordon03; @Gordon09; @Gordon21; @Gordon24].\label{fig:averages}](average_models_uv_nir.png){ width=70% }
 
@@ -54,7 +62,7 @@ that fit selected wavelength ranges (see Fig.~\autoref{fig:shapes} for an exampl
 The wavelength dependence of extinction for a model is computed by passing a
 wavelength or frequency vector with astropy units. Each model has a valid
 wavelength range this is enforced as extrapolation is not supported. The model
-output is in the standard $A(\lambda)/A(V)$ units where $A(\lambda) is the
+output is in the standard $A(\lambda)/A(V)$ units where $A(\lambda)$ is the
 extinction at wavelength $\lambda$ and $A(V)$ is the extinction in the Johnson
 V band. Every model has a helper `extinguish` function that alternatively
 provides the fractional effects of extinction for a specific dust column (e.g.,
