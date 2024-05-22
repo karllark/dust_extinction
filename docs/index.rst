@@ -7,10 +7,13 @@ Interstellar Dust Extinction
 ``dust_extinction`` is a python package to provide models of interstellar dust
 extinction curves.
 
-Extinction describes the effects of dust on a single star.  The dust along the
-line-of-sight to the stars removes flux by absorbing photons or scattering
-photons out of the line-of-sight.  In general, extinction models are used to
-model or correct the effects of dust on observations a single star.
+Extinction describes the effects of dust on observations of single star due to
+the dust along the line-of-sight to a star removiong flux by absorbing photons
+and scattering photons out of the line-of-sight. The wavelength dependence of
+dust extinction (also know as extinction curves) provides fundamental
+information about the size, composition, and shape of interstellar dust grain.
+In general, extinction models are used to model or correct the effects of dust
+on observations.
 
 In contrast, dust attenuation refers to the effects of dust on the measurements
 of groups of stars mixed with dust or stars with circumstellar dust.
