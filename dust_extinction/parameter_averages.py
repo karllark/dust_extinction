@@ -1,4 +1,4 @@
-import pkg_resources
+import importlib.resources as importlib_resources
 
 import numpy as np
 from scipy import interpolate
@@ -1175,9 +1175,9 @@ class F19(BaseExtRvModel):
     def __init__(self, Rv=3.1, **kwargs):
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = Table.read(data_path + "F19_tabulated.dat", format="ascii")
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(data_path / "F19_tabulated.dat", format="ascii")
 
         # compute E(lambda-55)/E(B-55) on the tabulated x points
         self.k_rV_tab_x = a["k_3.02"].data + a["deltak"].data * (Rv - 3.10) * 0.990
@@ -1291,9 +1291,9 @@ class D22(BaseExtRvModel):
     def __init__(self, Rv=3.1, **kwargs):
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = Table.read(data_path + "D22_Rv_slope.dat", format="ascii")
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(data_path / "D22_Rv_slope.dat", format="ascii")
 
         # setup spline interpolation
         self.spline_rep = interpolate.splrep(a["wavelength[micron]"].data, a["slope"])

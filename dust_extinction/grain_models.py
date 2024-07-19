@@ -1,4 +1,5 @@
-import pkg_resources
+import importlib.resources as importlib_resources
+
 from scipy.interpolate import interp1d
 import numpy as np
 
@@ -121,14 +122,14 @@ class DBP90(GMBase):
         self.Rv = self.possnames[modelname][1]
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = Table.read(
-            data_path + filename,
-            data_start=1,
-            header_start=None,
-            format="ascii.basic",
-        )
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(
+                data_path / filename,
+                data_start=1,
+                header_start=None,
+                format="ascii.basic",
+            )
 
         self.data_x = 1.0 / a["col1"].data
 
@@ -212,17 +213,17 @@ class WD01(GMBase):
         self.Rv = self.possnames[modelname][1]
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = Table.read(
-            data_path + filename,
-            format="ascii.fixed_width",
-            header_start=None,
-            data_start=41,
-            names=("wave", "albedo", "g", "cext"),
-            col_starts=(0, 10, 18, 25),
-            col_ends=(9, 16, 24, 34),
-        )
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(
+                data_path / filename,
+                format="ascii.fixed_width",
+                header_start=None,
+                data_start=41,
+                names=("wave", "albedo", "g", "cext"),
+                col_starts=(0, 10, 18, 25),
+                col_ends=(9, 16, 24, 34),
+            )
 
         self.data_x = 1.0 / a["wave"].data
 
@@ -304,17 +305,17 @@ class D03(GMBase):
         self.Rv = self.possnames[modelname][1]
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = Table.read(
-            data_path + filename,
-            format="ascii.fixed_width",
-            header_start=None,
-            data_start=67,
-            names=("wave", "albedo", "g", "cext"),
-            col_starts=(0, 12, 19, 26),
-            col_ends=(11, 18, 25, 35),
-        )
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(
+                data_path / filename,
+                format="ascii.fixed_width",
+                header_start=None,
+                data_start=67,
+                names=("wave", "albedo", "g", "cext"),
+                col_starts=(0, 12, 19, 26),
+                col_ends=(11, 18, 25, 35),
+            )
 
         self.data_x = 1.0 / a["wave"].data
 
@@ -392,12 +393,12 @@ class ZDA04(GMBase):
         self.Rv = self.possnames[modelname][1]
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = Table.read(
-            data_path + filename,
-            format="ascii.basic",
-        )
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(
+                data_path / filename,
+                format="ascii.basic",
+            )
 
         self.data_x = 1.0 / a["lam[um]"].data
 
@@ -473,14 +474,14 @@ class C11(GMBase):
         self.Rv = self.possnames[modelname][1]
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = Table.read(
-            data_path + filename,
-            data_start=1,
-            header_start=None,
-            format="ascii.basic",
-        )
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(
+                data_path / filename,
+                data_start=1,
+                header_start=None,
+                format="ascii.basic",
+            )
 
         self.data_x = 1.0 / a["col1"].data
 
@@ -556,14 +557,14 @@ class J13(GMBase):
         self.Rv = self.possnames[modelname][1]
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = Table.read(
-            data_path + filename,
-            data_start=1,
-            header_start=None,
-            format="ascii.basic",
-        )
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(
+                data_path / filename,
+                data_start=1,
+                header_start=None,
+                format="ascii.basic",
+            )
 
         self.data_x = 1.0 / a["col1"].data
 
@@ -639,9 +640,9 @@ class HD23(GMBase):
         self.Rv = self.possnames[modelname][1]
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = getdata(data_path + filename, 2)
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = getdata(data_path / filename, 2)
 
         self.data_x = 1.0 / a[:, 0]
 
