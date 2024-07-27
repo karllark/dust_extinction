@@ -22,10 +22,10 @@ bibliography: paper.bib
 # Summary
 
 Extinction describes the effects of dust on observations of single star due to
-the dust along the line-of-sight to a star removiong flux by absorbing photons
+the dust along the line-of-sight to a star removing flux by absorbing photons
 and scattering photons out of the line-of-sight. The wavelength dependence of
 dust extinction (also know as extinction curves) provides fundamental
-information about the size, composition, and shape of interstellar dust grain.
+information about the size, composition, and shape of interstellar dust grains.
 In general, models giving the wavelength dependence of extinction are used to
 model or correct the effects of dust on observations. This python astropy
 affiliated package [@Astropy22] provides many of the published extinction models
@@ -33,7 +33,7 @@ in one place with a consistent interface.
 
 # Statement of need
 
-Many observational and theoretical based extinction curves have been presented
+Many observation- and theory-based extinction curves have been presented
 in the literature. Having one python package providing these models ensures
 that they are straightforward to use and used within their valid wavelength
 and parameter (where appropriate) ranges.
@@ -46,7 +46,7 @@ A(V)/E(B-V)$ which is the ratio of total to selective extinction. Fig.
 \autoref{fig:parameter_averages} shows examples of such models. The Grain
 Models are those extinction curves computed using dust grain models. See Fig.
 \autoref{fig:grain} and note that these models provide dust extinction
-predictions from the X-ray through submm wavelengths. The final type of models
+predictions from X-ray through submm wavelengths. The final type of models
 are Shapes that provide flexible functional forms that fit selected wavelength
 ranges (see Fig. \autoref{fig:shapes} for an example).
 
@@ -61,7 +61,7 @@ width=70% }
 
 The wavelength dependence of extinction for a model is computed by passing a
 wavelength or frequency vector with units. Each model has a valid wavelength
-range that is enforced as extrapolation is not supported. The model output is in
+range that is enforced, as extrapolation is not supported. The model output is in
 the standard $A(\lambda)/A(V)$ units where $A(\lambda)$ is the extinction at
 wavelength $\lambda$ and $A(V)$ is the extinction in the V band. Every model has
 a helper `extinguish` function that alternatively provides the fractional
@@ -73,8 +73,8 @@ results when observing more complex systems like a star with nearby,
 circumstellar dust or a galaxy with many stars extinguished by different amounts
 of dust. In both cases, the wavelength dependence of effects of dust are
 dependent not just on the dust grain properties, but also the effects of the
-dust radiative transfer [@Steinacker13]. Specifically, the averaging of sources
-extinguished by differing amount of dust and the inclusion of a significnat
+dust radiative transfer [@Steinacker13]. Specifically, these effects are the averaging of sources
+extinguished by differing amount of dust and the inclusion of a significant
 number of photons scattered into the observing beam.
 
 Any published dust extinction model is welcome for inclusion in this package.
