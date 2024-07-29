@@ -1,4 +1,4 @@
-import pkg_resources
+import importlib.resources as importlib_resources
 
 import numpy as np
 from scipy.interpolate import interp1d
@@ -845,11 +845,11 @@ class CT06_MWGC(BaseExtModel):
     def __init__(self, **kwargs):
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = Table.read(
-            data_path + "CT06_pixiedust.dat", format="ascii.commented_header"
-        )
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(
+                data_path / "CT06_pixiedust.dat", format="ascii.commented_header"
+            )
 
         self.obsdata_x = 1.0 / a["wave"].data
         # ext is A(lambda)/A(K)
@@ -947,11 +947,11 @@ class CT06_MWLoc(BaseExtModel):
     def __init__(self, **kwargs):
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = Table.read(
-            data_path + "CT06_pixiedust.dat", format="ascii.commented_header"
-        )
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(
+                data_path / "CT06_pixiedust.dat", format="ascii.commented_header"
+            )
 
         self.obsdata_x = 1.0 / a["wave"].data
         # ext is A(lambda)/A(K)
@@ -1059,12 +1059,12 @@ class GCC09_MWAvg(BaseExtModel):
     def __init__(self, **kwargs):
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        # GCC09 sigma clipped average of 75 sightlines
-        a = Table.read(data_path + "GCC09_FUSE.dat", format="ascii.commented_header")
-        b = Table.read(data_path + "GCC09_IUE.dat", format="ascii.commented_header")
-        c = Table.read(data_path + "GCC09_PHOT.dat", format="ascii.commented_header")
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            # GCC09 sigma clipped average of 75 sightlines
+            a = Table.read(data_path / "GCC09_FUSE.dat", format="ascii.commented_header")
+            b = Table.read(data_path / "GCC09_IUE.dat", format="ascii.commented_header")
+            c = Table.read(data_path / "GCC09_PHOT.dat", format="ascii.commented_header")
 
         # FUSE range
         self.obsdata_x_fuse = a["x"].data
@@ -1213,11 +1213,11 @@ class F11_MWGC(BaseExtModel):
     def __init__(self, **kwargs):
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        a = Table.read(
-            data_path + "fritz11_galcenter.dat", format="ascii.commented_header"
-        )
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(
+                data_path / "fritz11_galcenter.dat", format="ascii.commented_header"
+            )
 
         self.obsdata_x = 1.0 / a["wave"].data
         # ext is total extinction to GalCenter
@@ -1325,11 +1325,11 @@ class G21_MWAvg(BaseExtModel):
     def __init__(self, **kwargs):
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        # GCC09 sigma clipped average of 75 sightlines
-        a = Table.read(data_path + "G21_IRS.dat", format="ascii.commented_header")
-        b = Table.read(data_path + "G21_PHOT.dat", format="ascii.commented_header")
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            # GCC09 sigma clipped average of 75 sightlines
+            a = Table.read(data_path / "G21_IRS.dat", format="ascii.commented_header")
+            b = Table.read(data_path / "G21_PHOT.dat", format="ascii.commented_header")
 
         # IRS range
         self.obsdata_x_irs = 1.0 / a["wave"].data
@@ -1467,10 +1467,10 @@ class D22_MWAvg(BaseExtModel):
     def __init__(self, **kwargs):
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        # D22 sigma clipped average of 13 diffuse sightlines
-        a = Table.read(data_path + "D22.dat", format="ascii.commented_header")
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            # D22 sigma clipped average of 13 diffuse sightlines
+            a = Table.read(data_path / "D22.dat", format="ascii.commented_header")
 
         # Spex data
         self.obsdata_x = 1.0 / a["wavelength[micron]"].data
@@ -1570,10 +1570,10 @@ class G24_SMCAvg(BaseExtModel):
     def __init__(self, **kwargs):
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        # D22 sigma clipped average of 13 diffuse sightlines
-        a = Table.read(data_path + "G24_SMCAvg.dat", format="ascii.commented_header")
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            # D22 sigma clipped average of 13 diffuse sightlines
+            a = Table.read(data_path / "G24_SMCAvg.dat", format="ascii.commented_header")
 
         # data
         self.obsdata_x = 1.0 / a["wave"].data
@@ -1693,10 +1693,10 @@ class G24_SMCBumps(BaseExtModel):
     def __init__(self, **kwargs):
 
         # get the tabulated information
-        data_path = pkg_resources.resource_filename("dust_extinction", "data/")
-
-        # D22 sigma clipped average of 13 diffuse sightlines
-        a = Table.read(data_path + "G24_SMCBumps.dat", format="ascii.commented_header")
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            # D22 sigma clipped average of 13 diffuse sightlines
+            a = Table.read(data_path / "G24_SMCBumps.dat", format="ascii.commented_header")
 
         # data
         self.obsdata_x = 1.0 / a["wave"].data
