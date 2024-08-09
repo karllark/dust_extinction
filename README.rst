@@ -83,7 +83,7 @@ contributors are very welcome!
 New to github or open source projects?  If you are unsure about where to start
 or haven't used github before, please feel free to contact `@karllark`.
 Want more information about how to make a contribution?  Take a look at
-the astropy `contributing`_ and `developer`_ documentation.
+the astropy `developer`_ documentation.
 
 Feedback and feature requests?   Is there something missing you would like
 to see?  Please open an issue or send an email to  `@karllark`.
@@ -129,6 +129,5 @@ which is licensed under the BSD 3-clause licence. See the licenses folder for
 more information.
 
 .. _AstroPy: https://www.astropy.org/
-.. _contributing: https://docs.astropy.org/en/stable/index.html#contributing
-.. _developer: https://docs.astropy.org/en/stable/index.html#developer-documentation
-.. _Astropy Code of Conduct:  https://www.astropy.org/about.html#codeofconduct
+.. _developer: https://docs.astropy.org/en/latest/index_dev.html
+.. _Astropy Code of Conduct:  https://www.astropy.org/code_of_conduct.html

@@ -73,7 +73,7 @@ Notebooks
 A great way to show how to use the `dust_extinction` package is using a
 jupyter notebook.  Check out the
 `Analyzing interstellar reddening and calculating synthetic photometry
-<http://learn.astropy.org/tutorials/color-excess.html>`_
+<https://learn.astropy.org/tutorials/color-excess.html>`_
 notebook that was created as part of the
 `Learn.Astropy
-<http://learn.astropy.org/>`_ effort.
+<https://learn.astropy.org/>`_ effort.
