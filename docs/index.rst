@@ -39,11 +39,11 @@ User Documentation
    Fitting extinction curves <dust_extinction/fit_extinction.rst>
    References <dust_extinction/references.rst>
 
-User Documentation
-==================
+Dev Documentation
+=================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    Model Base Classes (how to add a model) <dust_extinction/dev_model.rst>
 

@@ -1,6 +1,5 @@
 import importlib.resources as importlib_resources
 
-from scipy.interpolate import interp1d
 import numpy as np
 
 from astropy.table import Table

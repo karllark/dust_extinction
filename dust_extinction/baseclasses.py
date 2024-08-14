@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.interpolate import interp1d
 
 from astropy.modeling import Model, Parameter, InputParameterError
 
@@ -156,7 +157,7 @@ class BaseExtRvAfAModel(BaseExtModel):
             )
 
 
-class GMBase(BaseExtModel):
+class BaseExtGrainModel(BaseExtModel):
     r"""
     Base for Grain Models
 
