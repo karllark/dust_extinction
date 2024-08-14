@@ -1,3 +1,5 @@
+.. _fit_curves:
+
 #####################
 Fit Extinction Curves
 #####################

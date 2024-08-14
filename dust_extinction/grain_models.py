@@ -1,67 +1,18 @@
 import importlib.resources as importlib_resources
 
-from scipy.interpolate import interp1d
 import numpy as np
 
 from astropy.table import Table
 from astropy.modeling import InputParameterError
 from astropy.io.fits import getdata
 
-from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
-from .baseclasses import BaseExtModel
+from dust_extinction.baseclasses import BaseExtGrainModel
+
 
 __all__ = ["DBP90", "WD01", "D03", "ZDA04", "C11", "J13", "HD23"]
 
 
-class GMBase(BaseExtModel):
-    r"""
-    Base for Grain Models
-
-    Parameters
-    ----------
-    None
-
-    Raises
-    ------
-    None
-    """
-
-    def evaluate(self, in_x):
-        """
-        WD01 function
-
-        Parameters
-        ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
-
-           internally wavenumbers are used
-
-        Returns
-        -------
-        axav: np array (float)
-            A(x)/A(V) extinction curve [mag]
-
-        Raises
-        ------
-        ValueError
-           Input x values outside of defined range
-        """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
-        # define the function allowing for spline interpolation
-        #   fill value needed to handle numerical issues at the edges
-        #   the x values has already been checked to be in range
-        f = interp1d(self.data_x, self.data_axav, fill_value="extrapolate")
-
-        return f(x)
-
-
-class DBP90(GMBase):
+class DBP90(BaseExtGrainModel):
     r"""
     Desert et al (1990) Grain Models
 
@@ -144,7 +95,7 @@ class DBP90(GMBase):
         super().__init__(**kwargs)
 
 
-class WD01(GMBase):
+class WD01(BaseExtGrainModel):
     r"""
     Weingartner & Draine (2001) Grain Models
 
@@ -238,7 +189,7 @@ class WD01(GMBase):
         super().__init__(**kwargs)
 
 
-class D03(GMBase):
+class D03(BaseExtGrainModel):
     r"""
     Draine (2003) Grain Models
 
@@ -330,7 +281,7 @@ class D03(GMBase):
         super().__init__(**kwargs)
 
 
-class ZDA04(GMBase):
+class ZDA04(BaseExtGrainModel):
     r"""
     Zubko, Dwek, & Arendt (2004) Grain Models
 
@@ -413,7 +364,7 @@ class ZDA04(GMBase):
         super().__init__(**kwargs)
 
 
-class C11(GMBase):
+class C11(BaseExtGrainModel):
     r"""
     Compiegne et al (2011) Grain Models
 
@@ -496,7 +447,7 @@ class C11(GMBase):
         super().__init__(**kwargs)
 
 
-class J13(GMBase):
+class J13(BaseExtGrainModel):
     r"""
     Jones et al (2013) Grain Models
 
@@ -579,7 +530,7 @@ class J13(GMBase):
         super().__init__(**kwargs)
 
 
-class HD23(GMBase):
+class HD23(BaseExtGrainModel):
     r"""
     Hensley & Draine (2023) Grain Model
 

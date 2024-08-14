@@ -98,8 +98,8 @@ G21: `Gordon et al. 2021, ApJ, 916, 33
 G23: `Gordon et al. 2023, ApJ, 950, 86
 <https://ui.adsabs.harvard.edu/abs/2023ApJ...950...86G>`_
 
-G24: `Gordon et al. 2024, ApJ, in press
-<https://ui.adsabs.harvard.edu/abs/2024arXiv240512792G>`_
+G24: `Gordon et al. 2024, ApJ, 970, 51
+<https://ui.adsabs.harvard.edu/abs/2024ApJ...970...51G>`_
 
 HD23: `Hensley & Draine 2023, ApJ, 948, 55
 <https://ui.adsabs.harvard.edu/abs/2023ApJ...948...55H>`_

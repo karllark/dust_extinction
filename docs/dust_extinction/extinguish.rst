@@ -1,3 +1,5 @@
+.. _extinguish_example:
+
 ###############################
 Extinguish or Unextinguish Data
 ###############################
