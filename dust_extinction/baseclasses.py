@@ -2,12 +2,14 @@ import numpy as np
 
 from astropy.modeling import Model, Parameter, InputParameterError
 
-__all__ = ["BaseExtModel", "BaseExtRvModel", "BaseExtRvAfAModel"]
+from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
+
+__all__ = ["BaseExtModel", "BaseExtRvModel", "BaseExtRvAfAModel", "BaseExtGrainModel"]
 
 
 class BaseExtModel(Model):
     """
-    Base Extinction Model.  Do not use.
+    Base Extinction Model.  Do not use directly.
     """
 
     n_inputs = 1
@@ -55,7 +57,7 @@ class BaseExtModel(Model):
 
 class BaseExtRvModel(BaseExtModel):
     """
-    Base Extinction R(V)-dependent Model.  Do not use.
+    Base Extinction R(V)-dependent Model.  Do not use directly.
     """
 
     Rv = Parameter(
@@ -89,7 +91,7 @@ class BaseExtRvModel(BaseExtModel):
 
 class BaseExtRvAfAModel(BaseExtModel):
     """
-    Base Extinction R(V)_A, f_A -dependent Model.  Do not use.
+    Base Extinction R(V)_A, f_A -dependent Model.  Do not use directly.
     """
 
     RvA = Parameter(
@@ -152,3 +154,51 @@ class BaseExtRvAfAModel(BaseExtModel):
                 + " and "
                 + str(self.fA_range[1])
             )
+
+
+class GMBase(BaseExtModel):
+    r"""
+    Base for Grain Models
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+    """
+
+    def evaluate(self, in_x):
+        """
+        Generic dust grain model function
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        x = _get_x_in_wavenumbers(in_x)
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
+
+        # define the function allowing for spline interpolation
+        #   fill value needed to handle numerical issues at the edges
+        #   the x values has already been checked to be in range
+        f = interp1d(self.data_x, self.data_axav, fill_value="extrapolate")
+
+        return f(x)
