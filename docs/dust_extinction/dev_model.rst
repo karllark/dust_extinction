@@ -40,7 +40,7 @@ Thus all `shape` models have:
 BaseExtModel
 ============
 
-The :class:`~dust_extinction.BaseExtModel` provides the base model for all 
+The :class:`~dust_extinction.baseclasses.BaseExtModel` provides the base model for all 
 the rest of the `dust_extinction` models.   This model provides the 
 `extinguish` member function (see :ref:`extinguish_example`).
 
@@ -55,7 +55,7 @@ all the `average` models have:
 BaseExtRvModel
 ==============
 
-The :class:`~dust_extinction.BaseExtRvModel` provides the base model for all 
+The :class:`~dust_extinction.baseclasses.BaseExtRvModel` provides the base model for all 
 the ``dust_extinction`` models that are depending on `Rv` only.  `Rv` is the
 ratio of absolute to selective extinction (i.e., R(V) = A(V)/E(B-V)).
 
@@ -67,26 +67,30 @@ These are the majority of the `parameter_average` models and they have:
 * A member variable `Rv_range` that provides the valid range of `Rv` values.
 * A validator member function called `Rv` tagged with `@Rv.validator` that validates the input `Rv` based on the `Rv_range`.
 
-BaseExtRvfAModel
-================
+BaseExtRvAfAModel
+=================
 
-The :class:`~dust_extinction.BaseExtRvfAModel` provides the base model for all 
-the ``dust_extinction`` models that are depending on `Rv` and `fA`.
+The :class:`~dust_extinction.baseclasses.BaseExtRvAfAModel` provides the base model for all 
+the ``dust_extinction`` models that are depending on `RvA` and `fA`.
+These models are a mixture of two ``dust_extinction`` models where the A component
+is dependent on `Rv` and the B component is not.
+The `RvA` gives the R(V) value of component A and `fA` gives the fraction of the A 
+component and (1 - fA) gives the fraction of the B component.
 
 These `parameter_average` models have:
 
 * The member variable `x_range` and function `evaluate` (see :ref:`allmods`). The `evaluate` function that calculates the extinction curve based on the `Rv` and `fA` values.
 * The member function `extinguish`.
-* Member variables `Rv` and `fA` defined using the astropy `Parameter` function.
-* A member variable `Rv_range` that provides the valid range of `Rv` values.
+* Member variables `RvA` and `fA` defined using the astropy `Parameter` function.
+* A member variable `RvA_range` that provides the valid range of `RvA` values.
 * A member variable `fA_range` that provides the valid range of `fA` values.
-* A validator member function called `Rv` tagged with `@Rv.validator` that validates the input `Rv` based on the `Rv_range`.
+* A validator member function called `RvA` tagged with `@RvA.validator` that validates the input `Rv` based on the `Rv_range`.
 * A validator member function called `fA` tagged with `@fA.validator` that validates the input `fA` based on the `fA_range`.
 
 BaseExtGrainModel
 =================
 
-The :class:`~dust_extinction.BaseExtGrainModel` provides the base model for all 
+The :class:`~dust_extinction.baseclasses.BaseExtGrainModel` provides the base model for all 
 the ``dust_extinction`` models that are based on dust grain models.  All these 
 models are provided as tabulated data tables.
 
