@@ -63,21 +63,22 @@ width=70% }
 
 The wavelength dependence of extinction for a model is computed by passing a
 wavelength or frequency vector with units. Each model has a valid wavelength
-range that is enforced, as extrapolation is not supported. The model output is in
-the standard $A(\lambda)/A(V)$ units where $A(\lambda)$ is the extinction at
-wavelength $\lambda$ and $A(V)$ is the extinction in the V band. Every model has
-a helper `extinguish` function that alternatively provides the fractional
-effects of extinction for a specific dust column (e.g., $A(V)$ value). This
-allows for the effects of dust to be modeled for or removed from an observation.
+range that is enforced, as extrapolation is not supported. The model output is
+in the standard $A(\lambda)/A(V)$ units where $A(\lambda)$ is the extinction in
+magnitudes at wavelength $\lambda$ and $A(V)$ is the extinction in magnitudes
+in the V band. Every model has a helper `extinguish` function that
+alternatively provides the fractional effects of extinction for a specific dust
+column (e.g., $A(V)$ value). This allows for the effects of dust to be modeled
+for or removed from an observation.
 
 This package does not implement dust attenuation models[^1]. Dust attenuation
-results when observing more complex systems like a star with nearby,
-circumstellar dust or a galaxy with many stars extinguished by different amounts
-of dust. In both cases, the wavelength dependence of effects of dust are
-dependent not just on the dust grain properties, but also the effects of the
-dust radiative transfer [@Steinacker13]. Specifically, these effects are the averaging of sources
-extinguished by differing amount of dust and the inclusion of a significant
-number of photons scattered into the observing beam.
+results when observing more complex systems such as a star with nearby,
+circumstellar dust or a galaxy with many stars extinguished by different
+amounts of dust. In both cases, the wavelength dependence of effects of dust
+are dependent not just on the dust grain properties, but also the effects of
+the dust radiative transfer [@Steinacker13]. Specifically, these effects are
+the averaging of sources extinguished by differing amount of dust and the
+inclusion of a significant number of photons scattered into the observing beam.
 
 [^1]: See [karllark/dust_attenuation](https://github.com/karllark/dust_attenuation).
 
