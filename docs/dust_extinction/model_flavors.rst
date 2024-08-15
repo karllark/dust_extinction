@@ -356,7 +356,7 @@ Grain models
    import matplotlib.pyplot as plt
    import astropy.units as u
 
-   from dust_extinction.grain_models import DBP90, WD01, D03, ZDA04, C11, J13, HD23
+   from dust_extinction.grain_models import DBP90, WD01, D03, ZDA04, C11, J13, HD23, Y24
 
    fig, ax = plt.subplots()
 
@@ -369,12 +369,14 @@ Grain models
              D03, D03, D03,
              ZDA04,
              C11, J13,
-             HD23]
+             HD23,
+             Y24]
    modelnames = ["MWRV31",
                  "MWRV31", "MWRV40", "MWRV55",
                  "MWRV31", "MWRV40", "MWRV55",
                  "BARE-GR-S",
                  "MWRV31", "MWRV31",
+                 "MWRV31",
                  "MWRV31"]
 
    for cmodel, cname in zip(models, modelnames):
@@ -407,7 +409,7 @@ Grain models
    from matplotlib.ticker import ScalarFormatter
    import astropy.units as u
 
-   from dust_extinction.grain_models import DBP90, WD01, D03, ZDA04, C11, J13, HD23
+   from dust_extinction.grain_models import DBP90, WD01, D03, ZDA04, C11, J13, HD23, Y24
 
    fig, ax = plt.subplots()
 
@@ -420,12 +422,14 @@ Grain models
              D03, D03, D03,
              ZDA04,
              C11, J13,
-             HD23]
+             HD23,
+             Y24]
    modelnames = ["MWRV31",
                  "MWRV31", "MWRV40", "MWRV55",
                  "MWRV31", "MWRV40", "MWRV55",
                  "BARE-GR-S",
                  "MWRV31", "MWRV31",
+                 "MWRV31",
                  "MWRV31"]
 
    for cmodel, cname in zip(models, modelnames):
