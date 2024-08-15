@@ -63,6 +63,66 @@ GitHub: `dust_extinction <https://github.com/karllark/dust_extinction>`_
 Quick Start
 ===========
 
+Extinction Curve
+----------------
+
+How to get the A(x)/A(V) extinction curve for an input set of x wavelength values.
+
+Define a model, specifically the G23 model with an R(V) = 3.1.
+
+.. code-block:: python
+
+    from dust_extinction.parameter_averages import G23
+
+    # define the model
+    extmod = G23(Rv=3.1)
+
+Define the wavelengths 
+
+.. code-block:: python
+
+    wavelengths = np.logspace(np.log10(0.1), np.log10(30.0), num=1000)*u.micron
+
+Get the extinction values in A(lambda)/A(V) units.
+
+.. code-block:: python
+
+    ext = extmod(wavelengths)
+
+.. plot::
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import astropy.units as u
+    from dust_extinction.parameter_averages import G23
+
+    # define the model
+    extmod = G23(Rv=3.1)
+
+    # wavelengths as 1D arrays
+    wavelengths = np.logspace(np.log10(0.1), np.log10(30.0), num=1000)*u.micron
+
+    # extinction at the wavelengths
+    ext = extmod(wavelengths)
+
+    # plot the intrinsic and extinguished fluxes
+    fig, ax = plt.subplots()
+
+    ax.plot(wavelengths, ext, label='G23 (Rv=3.1)', linewidth=6, alpha=0.5)
+
+    ax.set_xlabel(r'$\lambda$ [{}]'.format(wavelengths.unit))
+    ax.set_ylabel(r'$A(\lambda)/A(V)$')
+
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+
+    ax.legend(loc='best')
+    plt.tight_layout()
+    plt.show()
+
+Extinguish/Unextinguish a Spectrum
+----------------------------------
+
 How to extinguish (redden) and unextinguish (deredden) a spectrum:
 
 Generate a spectrum to use.  In this case a blackbody model, but can be an
@@ -77,11 +137,11 @@ wavelength array should have astropy.units associated with it.
 
     # wavelengths and spectrum are 1D arrays
     # wavelengths between 1000 and 30000 A
-    wavelengths = np.logspace(np.log10(1000), np.log10(3e4), num=1000)*u.AA
+    wavelengths = np.logspace(np.log10(0.1), np.log10(30.0), num=1000)*u.micron
     bb_lam = BlackBody(10000*u.K, scale=1.0 * u.erg / (u.cm ** 2 * u.AA * u.s * u.sr))
     spectrum = bb_lam(wavelengths)
 
-Define a model, specifically the F99 model with an R(V) = 3.1.
+Define a model, specifically the G23 model with an R(V) = 3.1.
 
 .. code-block:: python
 
@@ -90,7 +150,7 @@ Define a model, specifically the F99 model with an R(V) = 3.1.
     # define the model
     ext = G23(Rv=3.1)
 
-Extinguish (redden) a spectrum with a screen of F99 dust with an E(B-V) of 0.5.
+Extinguish (redden) a spectrum with a screen of G23 dust with an E(B-V) of 0.5.
 Can also specify the dust column with Av (this case equivalent to Av = 0.5*Rv =
 1.55).
 
@@ -99,12 +159,13 @@ Can also specify the dust column with Av (this case equivalent to Av = 0.5*Rv =
     # extinguish (redden) the spectrum
     spectrum_ext = spectrum*ext.extinguish(wavelengths, Ebv=0.5)
 
-Unextinguish (deredden) a spectrum with a screen of F99 dust with the
+Unextinguish (deredden) a spectrum with a screen of G23 dust with the
 equivalent A(V) column.
 
 .. code-block:: python
 
     # unextinguish (deredden) the spectrum
+    # Av = 1.55 = R(V) * E(B-V) = 3.1 * 0.5
     spectrum_noext = spectrum_ext/ext.extinguish(wavelengths, Av=1.55)
 
 .. plot::
@@ -119,8 +180,7 @@ equivalent A(V) column.
     ext = G23(Rv=3.1)
 
     # wavelengths and spectrum are 1D arrays
-    # wavelengths between 1000 and 30000 A
-    wavelengths = np.logspace(np.log10(1000), np.log10(3e4), num=1000)*u.AA
+    wavelengths = np.logspace(np.log10(0.1), np.log10(30.0), num=1000)*u.micron
     bb_lam = BlackBody(10000*u.K, scale=1.0 * u.erg / (u.cm ** 2 * u.AA * u.s * u.sr))
     spectrum = bb_lam(wavelengths)
 
@@ -128,6 +188,7 @@ equivalent A(V) column.
     spectrum_ext = spectrum*ext.extinguish(wavelengths, Ebv=0.5)
 
     # unextinguish (deredden) the spectrum
+    # Av = 1.55 = R(V) * E(B-V) = 3.1 * 0.5
     spectrum_noext = spectrum_ext/ext.extinguish(wavelengths, Av=1.55)
 
     # plot the intrinsic and extinguished fluxes

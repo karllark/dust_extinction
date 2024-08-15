@@ -6,6 +6,12 @@ The ``dust_extinction`` package provides a suite of dust extinction models.
 Which model to use can depend on the wavelength range of interest, the expected
 type of extinction, or some other property.
 
+After initialization, all models return the
+A(x)/A(V) extinction values for the input x values, except for the 
+:class:`~dust_extinction.shapes.FM90` shape model that returns E(x-V)/(E(B-V))
+extinction values.  The input x should be wavelengths/frequencies with 
+`astropy units <https://docs.astropy.org/en/stable/units/index.html>`_.
+
 Average Models
 ==============
 

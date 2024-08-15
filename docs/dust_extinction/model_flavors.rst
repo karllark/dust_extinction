@@ -2,8 +2,12 @@
 Model Flavors
 #############
 
-There are three different types of models: average, R(V)+ dependent prediction,
-and shape fitting.
+There are four different types of models: average, R(V)+ dependent prediction,
+shape fitting, and grain models.  After initialization, all models return the
+A(x)/A(V) extinction values for the input x values, except for the 
+:class:`~dust_extinction.shapes.FM90` shape model that returns E(x-V)/(E(B-V))
+extinction values.  The input x should be wavelengths/frequencies with 
+`astropy units <https://docs.astropy.org/en/stable/units/index.html>`_.
 
 Average models
 ==============
