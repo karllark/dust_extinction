@@ -108,3 +108,4 @@ These `grain_model` models have:
 * The member variable `x_range` and function `evaluate` (see :ref:`allmods`). The `evaluate` function is inherited from the `BaseExtGrainModel`.
 * The member function `extinguish` inherited from the `BaseExtGrainModel`.
 * A member parameter `possnames` that is a dictionary with a key that is a tag for the model (e.g., `MWRV31`) and a tuple that is (filename, Rv).  This key is used when initialized a `grain_model`.
+* The member function `__init__` that reads in the tabular data into member functions `data_x` and `data_axav`.
