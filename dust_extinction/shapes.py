@@ -233,12 +233,13 @@ class FM90(Fittable1DModel):
     n_inputs = 1
     n_outputs = 1
 
-    C1 = Parameter(description="linear term: y-intercept", default=0.10)
-    C2 = Parameter(description="linear term: slope", default=0.70)
-    C3 = Parameter(description="bump: amplitude", default=3.23)
-    C4 = Parameter(description="FUV rise: amplitude", default=0.41)
-    xo = Parameter(description="bump: centroid", default=4.60, min=0.0)
-    gamma = Parameter(description="bump: width", default=0.99, min=0.0)
+    # bounds based on Gordon et al. (2024) results
+    C1 = Parameter(description="linear term: y-intercept", default=0.10, bounds=(-10.0, 5.0))
+    C2 = Parameter(description="linear term: slope", default=0.70, bounds=(-0.1, 5.0))
+    C3 = Parameter(description="bump: amplitude", default=3.23, bounds=(-1.0, 6.0))
+    C4 = Parameter(description="FUV rise: amplitude", default=0.41, bounds=(-0.5, 1.5))
+    xo = Parameter(description="bump: centroid", default=4.59, min=0.0, bounds=(4.5, 4.9))
+    gamma = Parameter(description="bump: width", default=0.95, min=0.0, bounds=(0.6, 1.7))
 
     x_range = x_range_FM90
 
@@ -400,12 +401,13 @@ class FM90_B3(Fittable1DModel):
     n_inputs = 1
     n_outputs = 1
 
-    C1 = Parameter(description="linear term: y-intercept", default=0.10)
-    C2 = Parameter(description="linear term: slope", default=0.70)
-    B3 = Parameter(description="bump: amplitude", default=3.23)
-    C4 = Parameter(description="FUV rise: amplitude", default=0.41)
-    xo = Parameter(description="bump: centroid", default=4.60, min=0.0)
-    gamma = Parameter(description="bump: width", default=0.99, min=0.0)
+    # bounds based on Gordon et al. (2024) results
+    C1 = Parameter(description="linear term: y-intercept", default=0.10, bounds=(-10.0, 5.0))
+    C2 = Parameter(description="linear term: slope", default=0.70, bounds=(-0.1, 5.0))
+    B3 = Parameter(description="bump: amplitude", default=3.23, bounds=(-1.0, 6.0))
+    C4 = Parameter(description="FUV rise: amplitude", default=0.41, bounds=(-0.5, 1.5))
+    xo = Parameter(description="bump: centroid", default=4.59, min=0.0, bounds=(4.5, 4.9))
+    gamma = Parameter(description="bump: width", default=0.95, min=0.0, bounds=(0.6, 1.7))
 
     x_range = x_range_FM90
 
