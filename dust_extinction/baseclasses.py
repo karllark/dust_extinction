@@ -100,7 +100,7 @@ class BaseExtRvAfAModel(BaseExtModel):
         + "total-to-selective extinction of component A",
         default=3.1,
     )
-    fA = Parameter(description="f_A = mixture coefficent of component A", default=1.0)
+    fA = Parameter(description="f_A = mixture coefficient of component A", default=1.0)
 
     def __init__(self, **kwargs):
 

@@ -131,7 +131,7 @@ RL85: `Rieke & Lebofsky 1985, ApJ,288, 618
 VCG04: `Valencic, Clayton, & Gordon 2014, 616, 912
 <https://ui.adsabs.harvard.edu/abs/2004ApJ...616..912V>`_
 
-WG01: `Weingartner & Draine 2001, ApJ, 548, 296
+WD01: `Weingartner & Draine 2001, ApJ, 548, 296
 <https://ui.adsabs.harvard.edu/abs/2001ApJ...548..296W>`_
 
 ZDA04: `Zubko, Dwek, & Arendt 2004, ApJS, 152, 211
