@@ -658,7 +658,7 @@ class Y24(BaseExtGrainModel):
         plt.show()
     """
 
-    x_range = [1.0 / 3e4, 1.0 / 0.1]
+    x_range = [1.0 / 1e5, 1.0 / 4e-2]
 
     possnames = {"MWRV31": ("THEMIS_2.0_EXT_2.RES.txt", 3.1)}
 
