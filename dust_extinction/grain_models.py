@@ -449,7 +449,7 @@ class C11(BaseExtGrainModel):
 
 class J13(BaseExtGrainModel):
     r"""
-    Jones et al (2013) Grain Models
+    Jones et al (2013) Grain Models (aka THEMIS 1.0)
 
     Parameters
     ----------
@@ -610,7 +610,7 @@ class HD23(BaseExtGrainModel):
 
 class Y24(BaseExtGrainModel):
     r"""
-    Ysard et al. (2024) Grain Model
+    Ysard et al. (2024) Grain Model (aka THEMIS 2.0)
 
     Parameters
     ----------

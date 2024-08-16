@@ -379,14 +379,19 @@ Grain models
                  "MWRV31",
                  "MWRV31"]
 
-   for cmodel, cname in zip(models, modelnames):
+   colors = plt.get_cmap("tab20")
+
+   for k, cmodel in enumerate(models):
+      cname = modelnames[k]
+      ccolor = colors(k % 20)
+
       ext_model = cmodel(cname)
 
       indxs, = np.where(np.logical_and(
          x.value >= ext_model.x_range[0],
          x.value <= ext_model.x_range[1]))
       yvals = ext_model(x[indxs])
-      ax.plot(lam[indxs], yvals, label=f"{ext_model.__class__.__name__}  {cname}")
+      ax.plot(lam[indxs], yvals, label=f"{ext_model.__class__.__name__}  {cname}", color=ccolor)
 
    ax.set_xlabel('$\lambda$ [$\mu m$]')
    ax.set_ylabel(r'$A(\lambda)/A(V)$')
@@ -432,14 +437,18 @@ Grain models
                  "MWRV31",
                  "MWRV31"]
 
-   for cmodel, cname in zip(models, modelnames):
+   colors = plt.get_cmap("tab20")
+
+   for k, cmodel in enumerate(models):
+      cname = modelnames[k]
+      ccolor = colors(k % 20)
       ext_model = cmodel(cname)
 
       indxs, = np.where(np.logical_and(
          x.value >= ext_model.x_range[0],
          x.value <= ext_model.x_range[1]))
       yvals = ext_model(x[indxs])
-      ax.plot(lam[indxs], yvals, label=f"{ext_model.__class__.__name__}  {cname}")
+      ax.plot(lam[indxs], yvals, label=f"{ext_model.__class__.__name__}  {cname}", color=ccolor)
 
    ax.set_xlabel('$\lambda$ [$\mu m$]')
    ax.set_ylabel(r'$A(\lambda)/A(V)$')
