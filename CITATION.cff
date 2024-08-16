@@ -5,7 +5,7 @@ authors:
     given-names: "Karl"
     orcid: https://orcid.org/0000-0001-5340-6774
 title: "dust_extinction"
-version: v1.4.1
-doi: 10.5281/zenodo.11235336
+version: v1.5
+doi: 10.5281/zenodo.13333814
 date-released: 2024-05-21
 url: "https://github.com/karllark/dust_extinction"

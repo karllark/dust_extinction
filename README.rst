@@ -19,9 +19,8 @@ are given `here <https://dust-extinction.readthedocs.io/en/latest/dust_extinctio
 In addition, please cite the latest release of the package given below.
 (Hopefully soon to be replaced with a JOSS paper.)
 
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.11235336.svg
-  :target: https://doi.org/10.5281/zenodo.11235336
-  :alt: current code version DOI
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.13333814.svg
+  :target: https://doi.org/10.5281/zenodo.13333814
 
 .. image:: https://joss.theoj.org/papers/42619ff7078a218d14893ff2da4f6ca6/status.svg
   :target: https://joss.theoj.org/papers/42619ff7078a218d14893ff2da4f6ca6
