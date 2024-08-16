@@ -57,7 +57,7 @@ width=70% }
 
 ![Examples of Parameter Average models [@Cardelli89; @ODonnell94; @Fitzpatrick99; @Fitzpatrick04; @Valencic04; @Gordon09; @MaizApellaniz14; @Fitzpatrick19; @Decleir22; @Gordon23].\label{fig:parameter_averages}](parameter_average_models.png)
 
-![Examples of Grain models that are based on fitting observed extinction curves as well as other dust observables (e.g., emission and polarization) [@Desert90; @Weingartner01; @Draine03; @Zubko04; @Compiegne11; @Jones13; @Hensley23; &Ysard24].\label{fig:grain}](grain_models.png){ width=70% }
+![Examples of Grain models that are based on fitting observed extinction curves as well as other dust observables (e.g., emission and polarization) [@Desert90; @Weingartner01; @Draine03; @Zubko04; @Compiegne11; @Jones13; @Hensley23; @Ysard24].\label{fig:grain}](grain_models.png){ width=70% }
 
 ![Example of a Shape model that is focused on decomposing the UV extinction curve [@Fitzpatrick90].\label{fig:shapes}](shape_models.png){ width=70% }
 
