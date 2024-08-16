@@ -260,7 +260,7 @@ class B92_MWAvg(BaseExtModel):
         # generate the curves and plot them
         x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.1) * u.micron
 
-        ax.plot(x,ext_model(x),label='B1992')
+        ax.plot(x,ext_model(x),label='B92')
         ax.plot(1.0/ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
                 label='obsdata')
 
@@ -295,7 +295,7 @@ class B92_MWAvg(BaseExtModel):
 
     def evaluate(self, in_x):
         """
-        B1992 function
+        B92 function
 
         Parameters
         ----------
@@ -372,6 +372,16 @@ class G03_SMCBar(BaseExtModel):
 
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
+
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
 
         ax.legend(loc='best')
         plt.show()
@@ -494,6 +504,16 @@ class G03_LMCAvg(BaseExtModel):
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
 
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
+
         ax.legend(loc='best')
         plt.show()
     """
@@ -615,6 +635,16 @@ class G03_LMC2(BaseExtModel):
 
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
+
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
 
         ax.legend(loc='best')
         plt.show()
@@ -1048,6 +1078,16 @@ class GCC09_MWAvg(BaseExtModel):
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
 
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.09, 0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
+
         ax.legend(loc='best')
         plt.show()
     """
@@ -1062,9 +1102,13 @@ class GCC09_MWAvg(BaseExtModel):
         ref = importlib_resources.files("dust_extinction") / "data"
         with importlib_resources.as_file(ref) as data_path:
             # GCC09 sigma clipped average of 75 sightlines
-            a = Table.read(data_path / "GCC09_FUSE.dat", format="ascii.commented_header")
+            a = Table.read(
+                data_path / "GCC09_FUSE.dat", format="ascii.commented_header"
+            )
             b = Table.read(data_path / "GCC09_IUE.dat", format="ascii.commented_header")
-            c = Table.read(data_path / "GCC09_PHOT.dat", format="ascii.commented_header")
+            c = Table.read(
+                data_path / "GCC09_PHOT.dat", format="ascii.commented_header"
+            )
 
         # FUSE range
         self.obsdata_x_fuse = a["x"].data
@@ -1559,6 +1603,16 @@ class G24_SMCAvg(BaseExtModel):
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
 
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
+
         ax.legend(loc='best')
         plt.show()
     """
@@ -1573,7 +1627,9 @@ class G24_SMCAvg(BaseExtModel):
         ref = importlib_resources.files("dust_extinction") / "data"
         with importlib_resources.as_file(ref) as data_path:
             # D22 sigma clipped average of 13 diffuse sightlines
-            a = Table.read(data_path / "G24_SMCAvg.dat", format="ascii.commented_header")
+            a = Table.read(
+                data_path / "G24_SMCAvg.dat", format="ascii.commented_header"
+            )
 
         # data
         self.obsdata_x = 1.0 / a["wave"].data
@@ -1682,6 +1738,16 @@ class G24_SMCBumps(BaseExtModel):
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
 
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
+
         ax.legend(loc='best')
         plt.show()
     """
@@ -1696,7 +1762,9 @@ class G24_SMCBumps(BaseExtModel):
         ref = importlib_resources.files("dust_extinction") / "data"
         with importlib_resources.as_file(ref) as data_path:
             # D22 sigma clipped average of 13 diffuse sightlines
-            a = Table.read(data_path / "G24_SMCBumps.dat", format="ascii.commented_header")
+            a = Table.read(
+                data_path / "G24_SMCBumps.dat", format="ascii.commented_header"
+            )
 
         # data
         self.obsdata_x = 1.0 / a["wave"].data

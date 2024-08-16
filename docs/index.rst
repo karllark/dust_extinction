@@ -8,7 +8,7 @@ Interstellar Dust Extinction
 extinction curves.
 
 Extinction describes the effects of dust on observations of single star due to
-the dust along the line-of-sight to a star removiong flux by absorbing photons
+the dust along the line-of-sight to a star removing flux by absorbing photons
 and scattering photons out of the line-of-sight. The wavelength dependence of
 dust extinction (also know as extinction curves) provides fundamental
 information about the size, composition, and shape of interstellar dust grain.
