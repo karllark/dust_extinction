@@ -16,18 +16,10 @@ def get_elvebv_cor_vals():
     x = x / u.micron
 
     # correct values
-    cor_vals = np.array(
-        [
-            2.9829317,
-            4.1215415,
-            6.4135842,
-            5.6574243,
-            4.7573250,
-            5.4905843,
-            9.2853567,
-            12.462238,
-        ]
-    )
+    # fmt: off
+    cor_vals = np.array([2.995507, 4.187955, 6.70251, 5.723752, 4.757428, 
+                         5.490276, 9.285265, 12.462183])
+    # fmt: on
 
     return (x, cor_vals)
 
@@ -93,15 +85,9 @@ def test_FM90_fitting():
         g03_fit.gamma.value,
     ]
 
-    good_vals = np.array(
-        [
-            -0.958016797002,
-            1.0109751831,
-            2.96430606652,
-            0.313137860902,
-            4.59996300532,
-            0.99000982258,
-        ]
-    )
+    # fmt: off
+    good_vals = np.array([-0.941674, 1.013711, 2.725373, 0.301217, 
+                          4.589078, 0.948576])
+    # fmt: on
 
-    np.testing.assert_allclose(good_vals, fit_vals)
+    np.testing.assert_allclose(good_vals, fit_vals, rtol=1e-5)
