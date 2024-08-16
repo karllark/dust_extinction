@@ -17,7 +17,7 @@ def get_elvebv_cor_vals():
 
     # correct values
     # fmt: off
-    cor_vals = np.array([2.995507, 4.187955, 6.70251, 5.723752, 4.757428, 
+    cor_vals = np.array([2.995507, 4.187955, 6.70251, 5.723752, 4.757428,
                          5.490276, 9.285265, 12.462183])
     # fmt: on
 
@@ -86,7 +86,7 @@ def test_FM90_fitting():
     ]
 
     # fmt: off
-    good_vals = np.array([-0.941674, 1.013711, 2.725373, 0.301217, 
+    good_vals = np.array([-0.941674, 1.013711, 2.725373, 0.301217,
                           4.589078, 0.948576])
     # fmt: on
 
