@@ -449,7 +449,7 @@ class C11(BaseExtGrainModel):
 
 class J13(BaseExtGrainModel):
     r"""
-    Jones et al (2013) Grain Models
+    Jones et al (2013) Grain Models (aka THEMIS 1.0)
 
     Parameters
     ----------
@@ -601,6 +601,88 @@ class HD23(BaseExtGrainModel):
         sindxs = np.argsort(np.absolute(self.data_x - 1.0 / 0.55))
 
         self.data_axav = a[:, 3] / a[sindxs[0], 3]
+
+        # accuracy of the data based on calculations
+        self.data_tolerance = 1e-6
+
+        super().__init__(**kwargs)
+
+
+class Y24(BaseExtGrainModel):
+    r"""
+    Ysard et al. (2024) Grain Model (aka THEMIS 2.0)
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Ysard et al. (2024, A&A, 684, 34).  File from
+    https://www.ias.u-psud.fr/themis/downloads_2.html
+
+    Example showing the possible curves
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.grain_models import Y24
+
+        fig, ax = plt.subplots()
+
+        ext_model = Y24()
+
+        lam = np.logspace(np.log10(1.0/ext_model.x_range[1]),
+                          np.log10(1.0/ext_model.x_range[0]),
+                          num=1000)
+        x = (1.0 / lam) / u.micron
+
+        # define the extinction model
+        ax.plot(lam,ext_model(x),label=ext_model.__class__.__name__)
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 1e5, 1.0 / 4e-2]
+
+    possnames = {"MWRV31": ("THEMIS_2.0_EXT_2.RES.txt", 3.1)}
+
+    def __init__(self, modelname="MWRV31", **kwargs):
+        if modelname not in self.possnames.keys():
+            raise InputParameterError("modelname not recognized")
+        filename = self.possnames[modelname][0]
+        self.Rv = self.possnames[modelname][1]
+
+        # get the tabulated information
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(
+                data_path / filename,
+                data_start=1,
+                header_start=None,
+                format="ascii.basic",
+            )
+        self.data_x = 1.0 / a["col1"]
+
+        # normalized by wavelength closest to V band
+        sindxs = np.argsort(np.absolute(self.data_x - 1.0 / 0.55))
+
+        self.data_axav = a["col8"].data / a["col8"].data[sindxs[0]]
 
         # accuracy of the data based on calculations
         self.data_tolerance = 1e-6
