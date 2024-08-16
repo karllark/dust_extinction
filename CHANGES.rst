@@ -1,7 +1,10 @@
-1.5 (unreleased)
+1.5 (2024-08-16)
 ================
 
-- no changes yet
+- Add Y24 dust grain model
+- Added JOSS paper
+- Added development documentation
+- Other documentation updates
 
 1.4.1 (2024-05-21)
 ================
