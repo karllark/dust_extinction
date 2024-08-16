@@ -70,6 +70,16 @@ class CCM89(BaseExtRvModel):
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
 
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
+
         ax.legend(loc='best')
         plt.show()
     """
@@ -195,6 +205,16 @@ class O94(BaseExtRvModel):
 
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
+
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
 
         ax.legend(loc='best')
         plt.show()
@@ -324,6 +344,16 @@ class F99(BaseExtRvModel):
 
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
+
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
 
         ax.legend(loc='best')
         plt.show()
@@ -464,6 +494,16 @@ class F04(BaseExtRvModel):
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
 
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
+
         ax.legend(loc='best')
         plt.show()
     """
@@ -599,6 +639,16 @@ class VCG04(BaseExtRvModel):
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
 
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.12, 0.15, 0.2, 0.3])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
+
         ax.legend(loc='best')
         plt.show()
     """
@@ -708,6 +758,16 @@ class GCC09(BaseExtRvModel):
 
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
+
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.09, 0.1, 0.12, 0.15, 0.2, 0.3])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
 
         ax.legend(loc='best')
         plt.show()
@@ -833,6 +893,16 @@ class M14(BaseExtRvModel):
         for cur_Rv in Rvs:
            ext_model = M14(Rv=cur_Rv)
            ax.plot(x,ext_model(x),label='R(V) = ' + str(cur_Rv))
+
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.3, 0.5, 1.0, 2.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
 
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
@@ -1029,6 +1099,16 @@ class G16(BaseExtRvAfAModel):
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
 
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
+
         ax.legend(loc='best', title=r'$f_A = 1.0$')
         plt.show()
 
@@ -1057,6 +1137,16 @@ class G16(BaseExtRvAfAModel):
 
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
+
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
 
         ax.legend(loc='best', title=r'$R_A(V) = 3.1$')
         plt.show()
@@ -1164,6 +1254,16 @@ class F19(BaseExtRvModel):
 
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
+
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
 
         ax.legend(loc='best')
         plt.show()

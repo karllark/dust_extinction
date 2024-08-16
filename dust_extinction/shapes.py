@@ -227,14 +227,27 @@ class FM90(Fittable1DModel):
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$E(\lambda - V)/E(B - V)$')
 
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.12, 0.15, 0.2, 0.3])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
+
         ax.legend(loc='best')
         plt.show()
     """
+
     n_inputs = 1
     n_outputs = 1
 
     # bounds based on Gordon et al. (2024) results
-    C1 = Parameter(description="linear term: y-intercept", default=0.10, bounds=(-10.0, 5.0))
+    C1 = Parameter(
+        description="linear term: y-intercept", default=0.10, bounds=(-10.0, 5.0)
+    )
     C2 = Parameter(description="linear term: slope", default=0.70, bounds=(-0.1, 5.0))
     C3 = Parameter(description="bump: amplitude", default=3.23, bounds=(-1.0, 6.0))
     C4 = Parameter(description="FUV rise: amplitude", default=0.41, bounds=(-0.5, 1.5))
@@ -395,14 +408,27 @@ class FM90_B3(Fittable1DModel):
         ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
         ax.set_ylabel(r'$E(\lambda - V)/E(B - V)$')
 
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.12, 0.15, 0.2, 0.3])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
+
         ax.legend(loc='best')
         plt.show()
     """
+
     n_inputs = 1
     n_outputs = 1
 
     # bounds based on Gordon et al. (2024) results
-    C1 = Parameter(description="linear term: y-intercept", default=0.10, bounds=(-10.0, 5.0))
+    C1 = Parameter(
+        description="linear term: y-intercept", default=0.10, bounds=(-10.0, 5.0)
+    )
     C2 = Parameter(description="linear term: slope", default=0.70, bounds=(-0.1, 5.0))
     B3 = Parameter(description="bump: amplitude", default=3.23, bounds=(-1.0, 6.0))
     C4 = Parameter(description="FUV rise: amplitude", default=0.41, bounds=(-0.5, 1.5))
@@ -592,6 +618,7 @@ class P92(Fittable1DModel):
         ax.legend(loc='best')
         plt.show()
     """
+
     n_inputs = 1
     n_outputs = 1
 
