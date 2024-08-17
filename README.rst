@@ -52,9 +52,9 @@ Packaging
    :target: https://badge.fury.io/py/dust-extinction
    :alt: pypi dust_extinction
 
-.. image:: https://anaconda.org/conda-forge/dust_extinction/badges/version.svg
-   :target: https://github.com/conda-forge/dust_extinction-feedstock
-   :alt: dust_extinction feedstock and install directions
+.. image:: https://img.shields.io/conda/vn/conda-forge/dust_extinction.svg
+   :target: https://anaconda.org/conda-forge/dust_extinction
+   :alt: Conda Version
 
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org
