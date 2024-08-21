@@ -47,7 +47,7 @@ Parameter Averages are extinction curve averages that depend on a parameter,
 often $R(V) = A(V)/E(B-V)$ which is the ratio of total to selective extinction.
 \autoref{fig:parameter_averages} shows examples of such models. The Grain odels
 are those extinction curves computed using dust grain models
-(\autoref{fig:grain)}. Note that only these models provide dust extinction
+(\autoref{fig:grain}). Note that only these models provide dust extinction
 predictions from X-ray through submm wavelengths. The final type of models are
 Shapes that provide flexible functional forms that fit selected wavelength
 ranges (see \autoref{fig:shapes} for examples).
