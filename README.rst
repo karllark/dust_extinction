@@ -18,14 +18,16 @@ Please cite `Gordon 2024, JOSS, 9(100), 7023 <https://joss.theoj.org/papers/10.2
 In additon, please cite the original papers for the models used.  The papers for each model 
 are given `here <https://dust-extinction.readthedocs.io/en/latest/dust_extinction/references.html>`_.
 
-.. image:: https://joss.theoj.org/papers/42619ff7078a218d14893ff2da4f6ca6/status.svg
-  :target: https://joss.theoj.org/papers/42619ff7078a218d14893ff2da4f6ca6
-  :alt: JOSS status
-
 Documentation
 -------------
 
-See `readthedocs <http://dust-extinction.readthedocs.io>`_.
+See `readthedocs <http://dust-extinction.readthedocs.io>`_ for full documentation.
+
+Package paper:
+
+.. image:: https://joss.theoj.org/papers/42619ff7078a218d14893ff2da4f6ca6/status.svg
+  :target: https://joss.theoj.org/papers/42619ff7078a218d14893ff2da4f6ca6
+  :alt: JOSS status
 
 Build checks/status
 -------------------
