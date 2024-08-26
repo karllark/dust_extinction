@@ -26,6 +26,14 @@ and uses the
 `astropy.modeling <https://docs.astropy.org/en/stable/modeling/>`_
 framework.
 
+Citation
+========
+
+Please cite `Gordon 2024, JOSS, 9(100), 7023 <https://joss.theoj.org/papers/10.21105/joss.07023>`_.
+
+In additon, please cite the original papers for the models used.  The papers for each model 
+are given `here <https://dust-extinction.readthedocs.io/en/latest/dust_extinction/references.html>`_.
+
 User Documentation
 ==================
 

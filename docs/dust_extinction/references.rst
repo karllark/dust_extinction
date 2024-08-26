@@ -2,10 +2,14 @@
 References
 ##########
 
+
+
 How to Cite
 ===========
 
-Please cite the papers presenting the models.  For some models, it is nice to also cite 
+Please cite `Gordon 2024, JOSS 9(100), 7023 <https://joss.theoj.org/papers/10.21105/joss.07023>`_.
+
+In addition, please cite the papers presenting the models.  For some models, it is nice to also cite 
 the works that provided a substantial input for that specific model.
 
 +--------------+----------------------+
@@ -19,11 +23,6 @@ the works that provided a substantial input for that specific model.
 +--------------+----------------------+
 | G23          | GCC09, F19, G21, D22 |
 +--------------+----------------------+
-
-In addition, please cite the dust_extinction package 
-(BibTex format found on "Cite this repository" button on main github repository page).
-
-Gordon, K. (2024). dust_extinction (Version v1.4.1) [Computer software]. https://doi.org/10.5281/zenodo.11235336
 
 Naming Convention
 =================
