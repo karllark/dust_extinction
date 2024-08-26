@@ -13,18 +13,19 @@ To install::
 Citation
 --------
 
-Please cite the original papers for the models used.  The papers for each model 
+Please cite `Gordon 2024, JOSS, 9(100), 7023 <https://joss.theoj.org/papers/10.21105/joss.07023>`_.
+
+In additon, please cite the original papers for the models used.  The papers for each model 
 are given `here <https://dust-extinction.readthedocs.io/en/latest/dust_extinction/references.html>`_.
-
-In addition, please cite the latest release of the package given below.
-(Hopefully soon to be replaced with a JOSS paper.)
-
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.13333814.svg
-  :target: https://doi.org/10.5281/zenodo.13333814
 
 .. image:: https://joss.theoj.org/papers/42619ff7078a218d14893ff2da4f6ca6/status.svg
   :target: https://joss.theoj.org/papers/42619ff7078a218d14893ff2da4f6ca6
   :alt: JOSS status
+
+Documentation
+-------------
+
+See `readthedocs <http://dust-extinction.readthedocs.io>`_.
 
 Build checks/status
 -------------------
@@ -60,15 +61,11 @@ Packaging
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
 
-Documentation
--------------
-
-Using `readthedocs <http://dust-extinction.readthedocs.io>`_.
 
 In Development!
 ---------------
 
-This code is currently in active development.
+This code is in active development.
 Contributions welcome (see below).
 
 Contributors
