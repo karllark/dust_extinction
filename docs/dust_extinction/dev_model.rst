@@ -16,7 +16,7 @@ All
 All dust extinction models have at least the following:
 
 * A member variable `x_range` that that define the valid range of wavelengths. These are defined in inverse microns as is common for extinction curve research.
-* A member function `evaluate` that computes the extinction at a given `x` and any model parameter values.  The `x` values are checked to be within the valid `x_range`. The `x` values should have astropy.units.  If they do not, then they are assumed to be in inverse microns and a warning is issued stating such.
+* A member function `evaluate` that computes the extinction at a given `x` and any model parameter values.  The `x` values are checked to be within the valid `x_range`. The `x` values should have astropy.units.
 
 All of these classes used in ``dust_extinction`` are based on the 
 `Model <https://docs.astropy.org/en/stable/modeling/>`_ astropy.modeling class.

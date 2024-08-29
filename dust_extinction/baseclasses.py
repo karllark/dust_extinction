@@ -2,8 +2,9 @@ import numpy as np
 from scipy.interpolate import interp1d
 
 from astropy.modeling import Model, Parameter, InputParameterError
+from astropy import units as u
 
-from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
+from .helpers import _test_valid_x_range
 
 __all__ = ["BaseExtModel", "BaseExtRvModel", "BaseExtRvAfAModel", "BaseExtGrainModel"]
 
@@ -15,6 +16,19 @@ class BaseExtModel(Model):
 
     n_inputs = 1
     n_outputs = 1
+    input_units = {"x": u.micron**-1}
+    return_units = {"y": u.dimensionless_unscaled}
+    input_units_equivalencies = {"x": u.spectral()}
+    _input_units_strict = True
+
+    def bounding_box(self):
+        return self.x_range / self.input_units["x"]
+
+    def prepare_inputs(self, *args, **kwargs):
+        xs, *rest = super().prepare_inputs(*args, **kwargs)
+        for x in xs:
+            _test_valid_x_range(x.value, self.x_range, self.__class__.__name__)
+        return xs, *rest
 
     def extinguish(self, x, Av=None, Ebv=None):
         """
@@ -170,15 +184,14 @@ class BaseExtGrainModel(BaseExtModel):
     None
     """
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         Generic dust grain model function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -192,14 +205,9 @@ class BaseExtGrainModel(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
         # define the function allowing for spline interpolation
         #   fill value needed to handle numerical issues at the edges
         #   the x values has already been checked to be in range
         f = interp1d(self.data_x, self.data_axav, fill_value="extrapolate")
 
-        return f(x)
+        return f(x.value)

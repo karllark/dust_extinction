@@ -8,7 +8,7 @@ from astropy.table import Table
 from astropy.modeling.models import Drude1D, Polynomial1D, PowerLaw1D
 
 from .baseclasses import BaseExtRvModel, BaseExtRvAfAModel
-from .helpers import _get_x_in_wavenumbers, _test_valid_x_range, _smoothstep
+from .helpers import _smoothstep
 from .averages import G03_SMCBar
 from .shapes import _curve_F99_method, _modified_drude, FM90
 
@@ -88,15 +88,14 @@ class CCM89(BaseExtRvModel):
     x_range = x_range_CCM89
 
     @staticmethod
-    def evaluate(in_x, Rv):
+    def evaluate(x, Rv):
         """
         CCM89 function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -110,15 +109,12 @@ class CCM89(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_CCM89, "CCM89")
+        shape = np.shape(x)
+        x = np.atleast_1d(x.value)
 
         # setup the a & b coefficient vectors
-        n_x = len(x)
-        a = np.zeros(n_x)
-        b = np.zeros(n_x)
+        a = np.zeros(x.shape)
+        b = np.zeros(x.shape)
 
         # define the ranges
         ir_indxs = np.where(np.logical_and(0.3 <= x, x < 1.1))
@@ -160,7 +156,7 @@ class CCM89(BaseExtRvModel):
         b[fuv_indxs] = np.polyval((0.374, -0.42, 4.257, 13.67), y)
 
         # return A(x)/A(V)
-        return a + b / Rv
+        return (a + b / Rv).reshape(shape)
 
 
 class O94(BaseExtRvModel):
@@ -224,15 +220,14 @@ class O94(BaseExtRvModel):
     x_range = x_range_O94
 
     @staticmethod
-    def evaluate(in_x, Rv):
+    def evaluate(x, Rv):
         """
         O94 function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -246,15 +241,12 @@ class O94(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_O94, "O94")
+        shape = np.shape(x)
+        x = np.atleast_1d(x.value)
 
         # setup the a & b coefficient vectors
-        n_x = len(x)
-        a = np.zeros(n_x)
-        b = np.zeros(n_x)
+        a = np.zeros(x.shape)
+        b = np.zeros(x.shape)
 
         # define the ranges
         ir_indxs = np.where(np.logical_and(0.3 <= x, x < 1.1))
@@ -296,7 +288,7 @@ class O94(BaseExtRvModel):
         b[fuv_indxs] = np.polyval((0.374, -0.42, 4.257, 13.67), y)
 
         # return A(x)/A(V)
-        return a + b / Rv
+        return (a + b / Rv).reshape(shape)
 
 
 class F99(BaseExtRvModel):
@@ -362,15 +354,14 @@ class F99(BaseExtRvModel):
     Rv_range = [2.0, 6.0]
     x_range = x_range_F99
 
-    def evaluate(self, in_x, Rv):
+    def evaluate(self, x, Rv):
         """
         F99 function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -430,7 +421,7 @@ class F99(BaseExtRvModel):
 
         # return A(x)/A(V)
         return _curve_F99_method(
-            in_x,
+            x.value,
             Rv,
             C1,
             C2,
@@ -511,15 +502,14 @@ class F04(BaseExtRvModel):
     Rv_range = [2.0, 6.0]
     x_range = x_range_F04
 
-    def evaluate(self, in_x, Rv):
+    def evaluate(self, x, Rv):
         """
         F04 function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -578,7 +568,7 @@ class F04(BaseExtRvModel):
 
         # return A(x)/A(V)
         return _curve_F99_method(
-            in_x,
+            x.value,
             Rv,
             C1,
             C2,
@@ -657,16 +647,16 @@ class VCG04(BaseExtRvModel):
     x_range = x_range_VCG04
 
     @staticmethod
-    def evaluate(in_x, Rv):
+    def evaluate(x, Rv):
         """
         VCG04 function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
-           internally wavenumbers are used
+        x: float
+            expects either x in units of wavelengths, frequency, or wavenumber
+
+            internally wavenumbers are used
 
         Returns
         -------
@@ -678,17 +668,12 @@ class VCG04(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-        # convert to wavenumbers (1/micron) if x input in units
-        # otherwise, assume x in appropriate wavenumber units
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_VCG04, "VCG04")
+        shape = np.shape(x)
+        x = np.atleast_1d(x.value)
 
         # setup the a & b coefficient vectors
-        n_x = len(x)
-        a = np.zeros(n_x)
-        b = np.zeros(n_x)
+        a = np.zeros(x.shape)
+        b = np.zeros(x.shape)
 
         # define the ranges
         nuv_indxs = np.where(np.logical_and(3.3 <= x, x <= 8.0))
@@ -710,7 +695,7 @@ class VCG04(BaseExtRvModel):
         b[fnuv_indxs] += 0.2060 * (y**2) + 0.0550 * (y**3)
 
         # return A(x)/A(V)
-        return a + b / Rv
+        return (a + b / Rv).reshape(shape)
 
 
 class GCC09(BaseExtRvModel):
@@ -777,15 +762,14 @@ class GCC09(BaseExtRvModel):
     x_range = x_range_GCC09
 
     @staticmethod
-    def evaluate(in_x, Rv):
+    def evaluate(x, Rv):
         """
         GCC09 function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -799,17 +783,12 @@ class GCC09(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-        # convert to wavenumbers (1/micron) if x input in units
-        # otherwise, assume x in appropriate wavenumber units
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_GCC09, "GCC09")
+        shape = np.shape(x)
+        x = np.atleast_1d(x.value)
 
         # setup the a & b coefficient vectors
-        n_x = len(x)
-        a = np.zeros(n_x)
-        b = np.zeros(n_x)
+        a = np.zeros(x.shape)
+        b = np.zeros(x.shape)
 
         # define the ranges
         nuv_indxs = np.where(np.logical_and(3.3 <= x, x <= 11.0))
@@ -831,7 +810,7 @@ class GCC09(BaseExtRvModel):
         b[fnuv_indxs] += 0.531 * (y**2) + 0.0544 * (y**3)
 
         # return A(x)/A(V)
-        return a + b / Rv
+        return (a + b / Rv).reshape(shape)
 
 
 class M14(BaseExtRvModel):
@@ -914,15 +893,14 @@ class M14(BaseExtRvModel):
     Rv_range = [2.0, 6.0]
     x_range = x_range_M14
 
-    def evaluate(self, in_x, Rv):
+    def evaluate(self, x, Rv):
         """
         M14 function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -936,10 +914,7 @@ class M14(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
+        x = x.value
 
         # just in case someone calls evaluate explicitly
         Rv = np.atleast_1d(Rv)
@@ -1157,15 +1132,14 @@ class G16(BaseExtRvAfAModel):
     x_range = x_range_G16
 
     @staticmethod
-    def evaluate(in_x, RvA, fA):
+    def evaluate(x, RvA, fA):
         """
         G16 function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -1179,10 +1153,7 @@ class G16(BaseExtRvAfAModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_G16, "G16")
+        x = x.value
 
         # just in case someone calls evaluate explicitly
         RvA = np.atleast_1d(RvA)
@@ -1287,15 +1258,14 @@ class F19(BaseExtRvModel):
 
         super().__init__(Rv, **kwargs)
 
-    def evaluate(self, in_x, Rv):
+    def evaluate(self, x, Rv):
         """
         F19 function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -1309,13 +1279,6 @@ class F19(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-        # convert to wavenumbers (1/micron) if x input in units
-        # otherwise, assume x in appropriate wavenumber units
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
         # just in case someone calls evaluate explicitly
         Rv = np.atleast_1d(Rv)
 
@@ -1323,7 +1286,7 @@ class F19(BaseExtRvModel):
         Rv = Rv[0]
 
         # use spline interpolation to evaluate the curve for the input x values
-        k_rV = interpolate.splev(x, self.spline_rep, der=0)
+        k_rV = interpolate.splev(x.value, self.spline_rep, der=0)
 
         # convert to A(x)/A(55) from E(x-55)/E(44-55)
         a_rV = k_rV / Rv + 1.0
@@ -1400,15 +1363,14 @@ class D22(BaseExtRvModel):
 
         super().__init__(Rv, **kwargs)
 
-    def evaluate(self, in_x, Rv):
+    def evaluate(self, x, Rv):
         """
         D22 function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -1422,12 +1384,7 @@ class D22(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-        # convert to wavenumbers (1/micron) if x input in units
-        # otherwise, assume x in appropriate wavenumber units
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
+        x = x.value
 
         # just in case someone calls evaluate explicitly
         Rv = np.atleast_1d(Rv)
@@ -1499,15 +1456,14 @@ class G23(BaseExtRvModel):
     Rv_range = [2.3, 5.6]
     x_range = x_range_G23
 
-    def evaluate(self, in_x, Rv):
+    def evaluate(self, x, Rv):
         """
         G23 function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -1521,15 +1477,12 @@ class G23(BaseExtRvModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, "G23")
+        shape = np.shape(x)
+        x = np.atleast_1d(x.value)
 
         # setup the a & b coefficient vectors
-        n_x = len(x)
-        self.a = np.zeros(n_x)
-        self.b = np.zeros(n_x)
+        self.a = np.zeros(x.shape)
+        self.b = np.zeros(x.shape)
 
         # define the ranges
         ir_indxs = np.where(np.logical_and(1.0 / 35.0 <= x, x < 1.0 / 1.0))
@@ -1615,7 +1568,7 @@ class G23(BaseExtRvModel):
         self.b[uvopt_overlap] += weights * m20_model_b(x[uvopt_overlap])
 
         # return A(x)/A(V)
-        return self.a + self.b * (1 / Rv - 1 / 3.1)
+        return (self.a + self.b * (1 / Rv - 1 / 3.1)).reshape(shape)
 
     @staticmethod
     def nirmir_intercept(x, params):

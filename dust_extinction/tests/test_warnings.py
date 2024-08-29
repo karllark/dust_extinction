@@ -16,17 +16,6 @@ from .helpers import (
 )
 
 
-@pytest.mark.parametrize("model", all_models)
-def test_nounits_warning(model):
-    ext = model()
-    x = np.arange(ext.x_range[0], ext.x_range[1], 0.1)
-
-    with pytest.warns(
-        UserWarning, match="x has no units, assuming x units are inverse microns"
-    ):
-        ext(x)
-
-
 @pytest.mark.skip("Testing for no warnings got more complicated/does not work")
 @pytest.mark.parametrize("model", all_models)
 def test_units_nowarning_expected(model):
@@ -67,7 +56,6 @@ def test_invalid_wavenumbers(model):
     tmodel = model()
     x_invalid_all = [-1.0, 0.9 * tmodel.x_range[0], 1.1 * tmodel.x_range[1]]
     for x_invalid in x_invalid_all:
-        _invalid_x_range(x_invalid, tmodel, tmodel.__class__.__name__)
         _invalid_x_range(x_invalid / u.micron, tmodel, tmodel.__class__.__name__)
         _invalid_x_range(u.micron / x_invalid, tmodel, tmodel.__class__.__name__)
         _invalid_x_range(
@@ -79,7 +67,7 @@ def test_invalid_wavenumbers(model):
 def test_extinguish_no_av_or_ebv(model):
     ext = model()
     with pytest.raises(InputParameterError) as exc:
-        ext.extinguish(ext.x_range[0])
+        ext.extinguish(ext.x_range[0] / u.micron)
     assert exc.value.args[0] == "neither Av or Ebv passed, one required"
 
 

@@ -75,7 +75,7 @@ def test_FM90_fitting():
 
     fm90_init = FM90()
     fit = LevMarLSQFitter()
-    g03_fit = fit(fm90_init, x[gindxs], y[gindxs])
+    g03_fit = fit(fm90_init, x[gindxs] / u.micron, y[gindxs])
     fit_vals = [
         g03_fit.C1.value,
         g03_fit.C2.value,

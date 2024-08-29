@@ -4,7 +4,7 @@ from scipy import interpolate
 import astropy.units as u
 from astropy.modeling import Fittable1DModel, Parameter
 
-from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
+from .baseclasses import BaseExtModel
 
 __all__ = ["FM90", "FM90_B3", "P92", "G21"]
 
@@ -13,7 +13,7 @@ x_range_P92 = [1.0 / 1e3, 1.0 / 1e-3]
 
 
 def _curve_F99_method(
-    in_x,
+    x,
     Rv,
     C1,
     C2,
@@ -32,8 +32,7 @@ def _curve_F99_method(
     Parameters
     ----------
     in_x: float
-        expects either x in units of wavelengths or frequency
-        or assumes wavelengths in wavenumbers [1/micron]
+        assumes wavelengths in wavenumbers [1/micron]
 
         internally wavenumbers are used
 
@@ -74,13 +73,10 @@ def _curve_F99_method(
     ValueError
         Input x values outside of defined range
     """
-    x = _get_x_in_wavenumbers(in_x)
-
-    # check that the wavenumbers are within the defined range
-    _test_valid_x_range(x, valid_x_range, model_name)
-
     # initialize extinction curve storage
-    axav = np.zeros(len(x))
+    shape = np.shape(x)
+    x = np.atleast_1d(x)
+    axav = np.zeros(x.shape)
 
     # x value above which FM90 parametrization used
     x_cutval_uv = 10000.0 / 2700.0
@@ -132,7 +128,7 @@ def _curve_F99_method(
         axav[indxs_opir] = interpolate.splev(x[indxs_opir], spline_rep, der=0)
 
     # return A(x)/A(V)
-    return axav
+    return axav.reshape(shape)
 
 
 def _modified_drude(x, scale, x_o, gamma_o, asym):
@@ -166,7 +162,15 @@ def _modified_drude(x, scale, x_o, gamma_o, asym):
     return y
 
 
-class FM90(Fittable1DModel):
+class BaseExtFittable1DModel(BaseExtModel, Fittable1DModel):
+
+    def _parameter_units_for_data_units(self, inputs_unit, outputs_unit):
+        # Declare that all of the parameters are dimensionless,
+        # regardless of the input units.
+        return dict.fromkeys(self.param_names)
+
+
+class FM90(BaseExtFittable1DModel):
     r"""
     Fitzpatrick & Massa (1990) 6 parameter ultraviolet shape model
 
@@ -241,9 +245,6 @@ class FM90(Fittable1DModel):
         plt.show()
     """
 
-    n_inputs = 1
-    n_outputs = 1
-
     # bounds based on Gordon et al. (2024) results
     C1 = Parameter(
         description="linear term: y-intercept", default=0.10, bounds=(-10.0, 5.0)
@@ -257,15 +258,14 @@ class FM90(Fittable1DModel):
     x_range = x_range_FM90
 
     @staticmethod
-    def evaluate(in_x, C1, C2, C3, C4, xo, gamma):
+    def evaluate(x, C1, C2, C3, C4, xo, gamma):
         """
         FM90 function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -279,10 +279,8 @@ class FM90(Fittable1DModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_FM90, "FM90")
+        shape = np.shape(x)
+        x = np.atleast_1d(x.value)
 
         # linear term
         exvebv = C1 + C2 * x
@@ -298,14 +296,15 @@ class FM90(Fittable1DModel):
             exvebv[fnuv_indxs] += C4 * (0.5392 * (y**2) + 0.05644 * (y**3))
 
         # return E(x-V)/E(B-V)
-        return exvebv
+        return exvebv.reshape(shape)
 
     @staticmethod
-    def fit_deriv(in_x, C1, C2, C3, C4, xo, gamma):
+    def fit_deriv(x, C1, C2, C3, C4, xo, gamma):
         """
         Derivatives of the FM90 function with respect to the parameters
         """
-        x = in_x
+        shape = np.shape(x)
+        x = np.atleast_1d(x.value)
 
         # useful quantitites
         x2 = x**2
@@ -315,7 +314,7 @@ class FM90(Fittable1DModel):
         denom = (x2mxo2_2 - x2 * g2) ** 2
 
         # derivatives
-        d_C1 = np.full((len(x)), 1.0)
+        d_C1 = np.full(x.shape, 1.0)
         d_C2 = x
 
         d_C3 = x2 / (x2mxo2_2 + x2 * g2)
@@ -324,13 +323,15 @@ class FM90(Fittable1DModel):
 
         d_gamma = (2.0 * C2 * (x2**2) * gamma) / denom
 
-        d_C4 = np.zeros((len(x)))
+        d_C4 = np.zeros(x.shape)
         fuv_indxs = np.where(x >= 5.9)
         if len(fuv_indxs) > 0:
             y = x[fuv_indxs] - 5.9
             d_C4[fuv_indxs] = 0.5392 * (y**2) + 0.05644 * (y**3)
 
-        return [d_C1, d_C2, d_C3, d_C4, d_xo, d_gamma]
+        return [d_C1.reshape(shape), d_C2.reshape(shape), d_C3.reshape(shape),
+                d_C4.reshape(shape), d_xo.reshape(shape),
+                d_gamma.reshape(shape)]
 
     # @property
     # def input_units(self):
@@ -346,7 +347,7 @@ class FM90(Fittable1DModel):
     #             'C4': outputs_unit[self.outputs[0]]}
 
 
-class FM90_B3(Fittable1DModel):
+class FM90_B3(BaseExtFittable1DModel):
     r"""
     Fitzpatrick & Massa (1990) 6 parameter ultraviolet shape model
     Version with bump amplitude B3 = C3/gamma^2
@@ -422,9 +423,6 @@ class FM90_B3(Fittable1DModel):
         plt.show()
     """
 
-    n_inputs = 1
-    n_outputs = 1
-
     # bounds based on Gordon et al. (2024) results
     C1 = Parameter(
         description="linear term: y-intercept", default=0.10, bounds=(-10.0, 5.0)
@@ -438,15 +436,14 @@ class FM90_B3(Fittable1DModel):
     x_range = x_range_FM90
 
     @staticmethod
-    def evaluate(in_x, C1, C2, B3, C4, xo, gamma):
+    def evaluate(x, C1, C2, B3, C4, xo, gamma):
         """
         FM90 function
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -460,10 +457,7 @@ class FM90_B3(Fittable1DModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_FM90, "FM90_B3")
+        x = x.value
 
         # linear term
         exvebv = C1 + C2 * x
@@ -482,7 +476,7 @@ class FM90_B3(Fittable1DModel):
         return exvebv
 
 
-class P92(Fittable1DModel):
+class P92(BaseExtFittable1DModel):
     r"""
     Pei (1992) 24 parameter shape model
 
@@ -619,9 +613,6 @@ class P92(Fittable1DModel):
         plt.show()
     """
 
-    n_inputs = 1
-    n_outputs = 1
-
     # constant for conversion from Ax/Ab to (more standard) Ax/Av
     AbAv = 1.0 / 3.08 + 1.0
 
@@ -711,7 +702,7 @@ class P92(Fittable1DModel):
 
     def evaluate(
         self,
-        in_x,
+        x,
         BKG_amp,
         BKG_lambda,
         BKG_b,
@@ -742,9 +733,8 @@ class P92(Fittable1DModel):
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
            internally wavenumbers are used
 
@@ -758,10 +748,7 @@ class P92(Fittable1DModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
+        x = x.value
 
         # calculate the terms
         lam = 1.0 / x
@@ -781,7 +768,7 @@ class P92(Fittable1DModel):
     fit_deriv = None
 
 
-class G21(Fittable1DModel):
+class G21(BaseExtFittable1DModel):
     r"""
     Gordon et al. (2021) powerlaw plus two modified Drude profiles
     (for the 10 & 20 micron silicate features)
@@ -894,7 +881,7 @@ class G21(Fittable1DModel):
 
     def evaluate(
         self,
-        in_x,
+        x,
         scale,
         alpha,
         sil1_amp,
@@ -911,9 +898,8 @@ class G21(Fittable1DModel):
 
         Parameters
         ----------
-        in_x: float
-           expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+        x: float
+           expects either x in units of wavelengths, frequency, or wavenumber
 
         Returns
         -------
@@ -925,12 +911,8 @@ class G21(Fittable1DModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
 
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, "G21")
-
-        wave = 1 / x
+        wave = 1 / x.value
 
         # powerlaw
         axav = scale * (wave ** (-1.0 * alpha))

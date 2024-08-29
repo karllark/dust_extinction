@@ -1,7 +1,13 @@
 1.6.dev (unreleased)
 ================
 
-- none yet
+- Define the ``input_units``, ``return_units``, ``input_units_equivalencies``,
+  and ``bounding_box`` properties for all models. Use Astropy models' built-in
+  unit conversion support.
+
+- All models now require inputs with valid units (wavelength, wavenumber, or
+  frequency). Dimensionless inputs are no longer automatically converted to
+  wavenumber.
 
 1.5 (2024-08-16)
 ================

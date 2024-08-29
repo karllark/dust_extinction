@@ -40,7 +40,7 @@ def test_extinction_G16_fA_0_values():
 
     # get the correct values
     gmodel = G03_SMCBar()
-    x = gmodel.obsdata_x
+    x = gmodel.obsdata_x / u.micron
     cor_vals = gmodel.obsdata_axav
     tolerance = gmodel.obsdata_tolerance
 
