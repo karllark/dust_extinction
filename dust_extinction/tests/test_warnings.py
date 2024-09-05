@@ -14,6 +14,7 @@ from .helpers import (
     ave_models,
     grain_models,
 )
+from ..warnings import SpectralUnitsWarning
 
 
 @pytest.mark.parametrize("model", all_models)
@@ -22,7 +23,8 @@ def test_nounits_warning(model):
     x = np.arange(ext.x_range[0], ext.x_range[1], 0.1)
 
     with pytest.warns(
-        UserWarning, match="x has no units, assuming x units are inverse microns"
+        SpectralUnitsWarning,
+        match="x has no units, assuming x units are inverse microns"
     ):
         ext(x)
 

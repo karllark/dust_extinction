@@ -1,0 +1,2 @@
+class SpectralUnitsWarning(UserWarning):
+    pass
