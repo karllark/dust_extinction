@@ -5,7 +5,6 @@ from scipy.interpolate import interp1d
 from astropy.table import Table
 from astropy.modeling.models import PowerLaw1D
 
-from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
 from .baseclasses import BaseExtModel
 from .shapes import P92, G21, _curve_F99_method
 
@@ -92,13 +91,14 @@ class RL85_MWGC(BaseExtModel):
     # accuracy of the observed data based on published table
     obsdata_tolerance = 1e-6
 
-    def evaluate(self, in_x):
+    @classmethod
+    def evaluate(cls, x):
         r"""
         RL85 MWGC function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -114,14 +114,9 @@ class RL85_MWGC(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
         # define the function using simple linear interpolation
         # avoids negative values of alav that happens with cubic splines
-        f = interp1d(self.obsdata_x, self.obsdata_axav)
+        f = interp1d(cls.obsdata_x, cls.obsdata_axav)
 
         return f(x)
 
@@ -191,13 +186,14 @@ class RRP89_MWGC(BaseExtModel):
     # accuracy of the observed data based on published table
     obsdata_tolerance = 1e-6
 
-    def evaluate(self, in_x):
+    @classmethod
+    def evaluate(cls, x):
         r"""
         RRP89 MWGC function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -213,14 +209,9 @@ class RRP89_MWGC(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
         # define the function using simple linear interpolation
         # avoids negative values of alav that happens with cubic splines
-        f = interp1d(self.obsdata_x, self.obsdata_axav)
+        f = interp1d(cls.obsdata_x, cls.obsdata_axav)
 
         return f(x)
 
@@ -293,13 +284,14 @@ class B92_MWAvg(BaseExtModel):
     # accuracy of the observed data based on published table
     obsdata_tolerance = 6e-3
 
-    def evaluate(self, in_x):
+    @classmethod
+    def evaluate(cls, x):
         """
         B92 function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -315,14 +307,8 @@ class B92_MWAvg(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.name)
-
         # define the function allowing for spline interpolation
-        f = interp1d(self.obsdata_x, self.obsdata_axav)
+        f = interp1d(cls.obsdata_x, cls.obsdata_axav)
 
         return f(x)
 
@@ -409,13 +395,13 @@ class G03_SMCBar(BaseExtModel):
     # accuracy of the observed data based on published table
     obsdata_tolerance = 6e-2
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         G03 SMCBar function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -447,7 +433,7 @@ class G03_SMCBar(BaseExtModel):
 
         # return A(x)/A(V)
         return _curve_F99_method(
-            in_x,
+            x,
             self.Rv,
             C1,
             C2,
@@ -457,8 +443,6 @@ class G03_SMCBar(BaseExtModel):
             gamma,
             optnir_axav_x,
             optnir_axav_y,
-            self.x_range,
-            self.__class__.__name__,
         )
 
 
@@ -540,13 +524,13 @@ class G03_LMCAvg(BaseExtModel):
     # accuracy of the observed data based on published table
     obsdata_tolerance = 6e-2
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         G03 LMCAvg function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -576,7 +560,7 @@ class G03_LMCAvg(BaseExtModel):
 
         # return A(x)/A(V)
         return _curve_F99_method(
-            in_x,
+            x,
             self.Rv,
             C1,
             C2,
@@ -586,8 +570,6 @@ class G03_LMCAvg(BaseExtModel):
             gamma,
             optnir_axav_x,
             optnir_axav_y,
-            self.x_range,
-            self.__class__.__name__,
         )
 
 
@@ -672,13 +654,13 @@ class G03_LMC2(BaseExtModel):
     # accuracy of the observed data based on published table
     obsdata_tolerance = 6e-2
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         G03 LMC2 function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -708,7 +690,7 @@ class G03_LMC2(BaseExtModel):
 
         # return A(x)/A(V)
         return _curve_F99_method(
-            in_x,
+            x,
             self.Rv,
             C1,
             C2,
@@ -718,8 +700,6 @@ class G03_LMC2(BaseExtModel):
             gamma,
             optnir_axav_x,
             optnir_axav_y,
-            self.x_range,
-            self.__class__.__name__,
         )
 
 
@@ -789,13 +769,13 @@ class I05_MWAvg(BaseExtModel):
     # accuracy of the observed data based on published table
     obsdata_tolerance = 1e-6
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         I05 MWAvg function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -811,11 +791,6 @@ class I05_MWAvg(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
         # define the function allowing for spline interpolation
         f = interp1d(self.obsdata_x, self.obsdata_axav)
 
@@ -891,13 +866,13 @@ class CT06_MWGC(BaseExtModel):
 
         super().__init__(**kwargs)
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         CT06 MWGC function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -913,11 +888,6 @@ class CT06_MWGC(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
         # define the function allowing for spline interpolation
         f = interp1d(self.obsdata_x, self.obsdata_axav)
 
@@ -993,13 +963,13 @@ class CT06_MWLoc(BaseExtModel):
 
         super().__init__(**kwargs)
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         CG06 MWLoc function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -1015,11 +985,6 @@ class CT06_MWLoc(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
         # define the function allowing for spline interpolation
         f = interp1d(self.obsdata_x, self.obsdata_axav)
 
@@ -1145,13 +1110,13 @@ class GCC09_MWAvg(BaseExtModel):
 
         super().__init__(**kwargs)
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         GCC09_MWAvg function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -1167,11 +1132,6 @@ class GCC09_MWAvg(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
         # P92 parameters fit to the data using uncs as weights
         p92_fit = P92(
             BKG_amp=203.805939127,
@@ -1201,7 +1161,7 @@ class GCC09_MWAvg(BaseExtModel):
         )
 
         # return A(x)/A(V)
-        return p92_fit(in_x)
+        return p92_fit(x)
 
 
 class F11_MWGC(BaseExtModel):
@@ -1275,13 +1235,13 @@ class F11_MWGC(BaseExtModel):
 
         super().__init__(**kwargs)
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         F11 MWGC function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -1297,11 +1257,6 @@ class F11_MWGC(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
         # define the function allowing for spline interpolation
         f = interp1d(self.obsdata_x, self.obsdata_axav)
 
@@ -1402,13 +1357,13 @@ class G21_MWAvg(BaseExtModel):
 
         super().__init__(**kwargs)
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         G21_MWAvg function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -1424,11 +1379,6 @@ class G21_MWAvg(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
         # G21 parameters fit to the data using uncs as weights
         g21_fit = G21(
             scale=0.366,
@@ -1445,7 +1395,7 @@ class G21_MWAvg(BaseExtModel):
 
         # return A(x)/A(V)
         # G21 a full dust_extinction model, hence send in x with units
-        return g21_fit(in_x)
+        return g21_fit(x)
 
 
 class D22_MWAvg(BaseExtModel):
@@ -1526,13 +1476,13 @@ class D22_MWAvg(BaseExtModel):
 
         super().__init__(**kwargs)
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         D22_MWAvg function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -1548,11 +1498,6 @@ class D22_MWAvg(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
         # setup the model
         d22_fit = PowerLaw1D(alpha=1.71, amplitude=0.386, x_0=1.0)
 
@@ -1643,13 +1588,13 @@ class G24_SMCAvg(BaseExtModel):
 
         super().__init__(**kwargs)
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         G24 SMCAvg function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -1677,7 +1622,7 @@ class G24_SMCAvg(BaseExtModel):
 
         # return A(x)/A(V)
         return _curve_F99_method(
-            in_x,
+            x,
             self.Rv,
             C1,
             C2,
@@ -1687,8 +1632,6 @@ class G24_SMCAvg(BaseExtModel):
             gamma,
             optnir_axav_x,
             optnir_axav_y,
-            self.x_range,
-            self.__class__.__name__,
         )
 
 
@@ -1778,13 +1721,13 @@ class G24_SMCBumps(BaseExtModel):
 
         super().__init__(**kwargs)
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         G24 SMCBumps function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -1812,7 +1755,7 @@ class G24_SMCBumps(BaseExtModel):
 
         # return A(x)/A(V)
         return _curve_F99_method(
-            in_x,
+            x,
             self.Rv,
             C1,
             C2,
@@ -1822,6 +1765,4 @@ class G24_SMCBumps(BaseExtModel):
             gamma,
             optnir_axav_x,
             optnir_axav_y,
-            self.x_range,
-            self.__class__.__name__,
         )

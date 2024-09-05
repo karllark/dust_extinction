@@ -108,4 +108,3 @@ def test_corvals(model_class, test_parameters):
         # test single value evalutation
         for x, y in zip(x_vals, y_vals):
             np.testing.assert_allclose(tmodel(x), y, atol=tol)
-            np.testing.assert_allclose(tmodel.evaluate(x, Rv), y, atol=tol)

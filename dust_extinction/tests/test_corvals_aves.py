@@ -19,7 +19,6 @@ def test_corvals(model_class):
     # test single value evalutation
     for x, y in zip(x_vals, y_vals):
         np.testing.assert_allclose(tmodel(x), y, rtol=tol)
-        np.testing.assert_allclose(tmodel.evaluate(x), y, rtol=tol)
 
 
 @pytest.mark.parametrize("model_class", ave_models)

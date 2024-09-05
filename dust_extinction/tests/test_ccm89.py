@@ -230,4 +230,3 @@ def test_extinction_CCM89_single_values(test_vals):
 
     # test
     np.testing.assert_allclose(tmodel(x), cor_val)
-    np.testing.assert_allclose(tmodel.evaluate(x, 3.1), cor_val)

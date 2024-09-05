@@ -1,7 +1,16 @@
 1.6.dev (unreleased)
 ================
 
-- none yet
+- Refactor model input unit conversion and wavenumber bounds checking:
+
+  - The models' evaluate methods are no longer meant to be called directly.
+
+  - The BaseExtModel class now overrides the prepare_inputs method so that
+    unit conversion and bounds checking is done prior to calling the subclass'
+    evaluate method. Subclasses are no longer responsible for doing the unit
+    conversion and bounds checking themselves.
+
+  - Use Astropy's built-in input model units handling.
 
 1.5 (2024-08-16)
 ================
