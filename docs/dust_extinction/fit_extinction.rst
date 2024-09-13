@@ -29,6 +29,7 @@ extinction curve for the LMC outside of the LMC2 supershell region
 
     from dust_extinction.averages import G03_LMCAvg
     from dust_extinction.shapes import FM90
+    from dust_extinction.warnings import SpectralUnitsWarning
 
     # get an observed extinction curve to fit
     g03_model = G03_LMCAvg()
@@ -49,9 +50,9 @@ extinction curve for the LMC outside of the LMC2 supershell region
     #   use the initialized model as the starting point
 
     # ignore some warnings
-    #   UserWarning is to avoid the units of x warning
+    #   SpectralUnitsWarning is to avoid the units of x warning
     with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=UserWarning)
+        warnings.simplefilter("ignore", category=SpectralUnitsWarning)
         g03_fit = fit(fm90_init, x[gindxs].value, y[gindxs])
 
     # plot the observed data, initial guess, and final fit
@@ -100,6 +101,7 @@ between data points.
 
    from dust_extinction.averages import GCC09_MWAvg
    from dust_extinction.shapes import P92
+   from dust_extinction.warnings import SpectralUnitsWarning
 
    # get an observed extinction curve to fit
    g09_model = GCC09_MWAvg()
@@ -134,11 +136,11 @@ between data points.
    #   accuracy set to avoid warning the fit may have failed
 
    # ignore some warnings
-   #   UserWarning is to avoid the units of x warning
+   #   SpectralUnitsWarning is to avoid the units of x warning
    #   AstropyWarning ignored to avoid the "fit may have been unsuccessful" warning
    #   fit is fine, but this means the build of the docs fails
    with warnings.catch_warnings():
-       warnings.simplefilter("ignore", category=UserWarning)
+       warnings.simplefilter("ignore", category=SpectralUnitsWarning)
        warnings.simplefilter("ignore", category=AstropyWarning)
        p92_fit = fit(p92_init, x.value, y, weights=1.0 / y_unc)
 
