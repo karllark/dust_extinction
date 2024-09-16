@@ -2,8 +2,9 @@ import numpy as np
 from scipy.interpolate import interp1d
 
 from astropy.modeling import Model, Parameter, InputParameterError
+from astropy import units as u
 
-from .helpers import _get_x_in_wavenumbers, _test_valid_x_range
+from .helpers import _warn_no_units, _test_valid_x_range
 
 __all__ = ["BaseExtModel", "BaseExtRvModel", "BaseExtRvAfAModel", "BaseExtGrainModel"]
 
@@ -15,6 +16,40 @@ class BaseExtModel(Model):
 
     n_inputs = 1
     n_outputs = 1
+    input_units = {"x": u.micron**-1}
+    return_units = {"y": u.dimensionless_unscaled}
+    input_units_equivalencies = {"x": u.spectral()}
+    _input_units_strict = True
+    _input_units_allow_dimensionless = True
+
+    def _prepare_input_single(self, x):
+        """Check input units and bounds for a single input."""
+
+        # Get the value of the input in the internal units (1 / micron).
+        # Because we set the model's input_units_strict and
+        # input_units_allow_dimensionless to True, by this point one of the
+        # following must hold:
+        #   - The input is in units of 1 / micron.
+        #   - The input has units of None.
+        #   - The input has units of dimensionless_unscaled.
+        #   - The input is simple Numpy array and not a Quantity.
+        # In the last three cases, we raise a warning that we are assuming
+        # that the units are 1 /micron.
+        if not isinstance(x, u.Quantity):
+            _warn_no_units()
+        elif x.unit is None or x.unit is u.dimensionless_unscaled:
+            x = x.value
+            _warn_no_units()
+        else:
+            assert x.unit == self.input_units["x"]
+            x = x.value
+
+        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
+        return x
+
+    def prepare_inputs(self, *args, **kwargs):
+        xs, *rest = super().prepare_inputs(*args, **kwargs)
+        return [self._prepare_input_single(x) for x in xs], *rest
 
     def extinguish(self, x, Av=None, Ebv=None):
         """
@@ -170,13 +205,13 @@ class BaseExtGrainModel(BaseExtModel):
     None
     """
 
-    def evaluate(self, in_x):
+    def evaluate(self, x):
         """
         Generic dust grain model function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in wavenumbers [1/micron]
 
@@ -192,11 +227,6 @@ class BaseExtGrainModel(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        x = _get_x_in_wavenumbers(in_x)
-
-        # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, self.x_range, self.__class__.__name__)
-
         # define the function allowing for spline interpolation
         #   fill value needed to handle numerical issues at the edges
         #   the x values has already been checked to be in range

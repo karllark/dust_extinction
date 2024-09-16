@@ -48,18 +48,6 @@ def test_extinction_FM90_single_values(xtest_vals):
 
     # test
     np.testing.assert_allclose(tmodel(x), cor_val)
-    np.testing.assert_allclose(
-        tmodel.evaluate(
-            x,
-            FM90.C1.default,
-            FM90.C2.default,
-            FM90.C3.default,
-            FM90.C4.default,
-            FM90.xo.default,
-            FM90.gamma.default,
-        ),
-        cor_val,
-    )
 
 
 def test_FM90_fitting():

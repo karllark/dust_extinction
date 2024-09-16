@@ -70,4 +70,3 @@ def test_extinction_VCG04_single_values(test_vals):
 
     # test
     np.testing.assert_allclose(tmodel(x), cor_val, rtol=1e-5)
-    np.testing.assert_allclose(tmodel.evaluate(x, 3.1), cor_val, rtol=1e-5)
