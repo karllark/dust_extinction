@@ -121,8 +121,7 @@ def _curve_F99_method(
 
         spline_x = np.concatenate([x_splineval_optir, x_splineval_uv])
         spline_y = np.concatenate([y_splineval_optir, y_splineval_uv])
-        spline_rep = interpolate.splrep(spline_x, spline_y)
-        axav[indxs_opir] = interpolate.splev(x[indxs_opir], spline_rep, der=0)
+        axav[indxs_opir] = interpolate.CubicSpline(spline_x, spline_y, bc_type='natural')(x[indxs_opir])
 
     # return A(x)/A(V)
     return axav
