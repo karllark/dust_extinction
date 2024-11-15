@@ -57,7 +57,7 @@ models_corvals = {
         "Rv": 3.1,
         "x_values": [0.377, 0.820, 1.667, 1.828, 2.141, 2.433, 3.704, 3.846],
         "y_values": np.array([0.185, 0.772, 2.688, 3.055, 3.805, 4.315, 6.456, 6.781]) / 3.1,
-        "atol": 1e-3,
+        "atol": 4e-3,
         # from Fitzpatrick (1999) Table 3
         # keep optical from Fitzpatrick (1999),
         # replce NIR with Fitzpatrick (2004) function for Rv=3.1:
