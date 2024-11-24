@@ -97,7 +97,7 @@ def _curve_F99_method(
 
     # FM90 model and values
     if fm90_version == "B3":
-        fm90_model = FM90(C1=C1, C2=C2, B3=bump_param, C4=C4, xo=xo, gamma=gamma)
+        fm90_model = FM90_B3(C1=C1, C2=C2, B3=bump_param, C4=C4, xo=xo, gamma=gamma)
     else:
         fm90_model = FM90(C1=C1, C2=C2, C3=bump_param, C4=C4, xo=xo, gamma=gamma)
     # evaluate model and get results in A(x)/A(V)

@@ -60,7 +60,7 @@ models_corvals = {
         "atol": 4e-3,
         # from Fitzpatrick (1999) Table 3
         # keep optical from Fitzpatrick (1999),
-        # replce NIR with Fitzpatrick (2004) function for Rv=3.1:
+        # replace NIR with Fitzpatrick (2004) function for Rv=3.1:
         # (0.63*3.1 - 0.84)*x**1.84
     },
     M14: {
