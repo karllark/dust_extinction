@@ -17,12 +17,13 @@ def _curve_F99_method(
     Rv,
     C1,
     C2,
-    C3,
+    bump_param,
     C4,
     xo,
     gamma,
     optnir_axav_x,
     optnir_axav_y,
+    fm90_version="C3",
 ):
     """
     Function to return extinction using F99 method
@@ -44,8 +45,9 @@ def _curve_F99_method(
     C2: float
         slope of liner term: FM90 parameter
 
-    C3: float
-        amplitude of "2175 A" bump: FM90 parameter
+    bump_param: float
+        C3 for fm90_version = "C3"
+        B3 for fm90_version = "B3"
 
     C4: float
         amplitude of FUV rise: FM90 parameter
@@ -61,6 +63,9 @@ def _curve_F99_method(
 
     optnir_axav_y: float array
         vector of y values for optical/NIR A(x)/A(V) curve
+
+    fm90_version: str
+        "C3" for standard FM90, "B3" for FM90_B3 for true bump amplitude version
 
     Returns
     -------
@@ -91,7 +96,10 @@ def _curve_F99_method(
         xuv = x_splineval_uv
 
     # FM90 model and values
-    fm90_model = FM90(C1=C1, C2=C2, C3=C3, C4=C4, xo=xo, gamma=gamma)
+    if fm90_version == "B3":
+        fm90_model = FM90(C1=C1, C2=C2, B3=bump_param, C4=C4, xo=xo, gamma=gamma)
+    else:
+        fm90_model = FM90(C1=C1, C2=C2, C3=bump_param, C4=C4, xo=xo, gamma=gamma)
     # evaluate model and get results in A(x)/A(V)
     axav_fm90 = fm90_model(xuv / u.micron) / Rv + 1.0
 
