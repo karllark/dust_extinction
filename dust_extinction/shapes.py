@@ -849,25 +849,25 @@ class G21(BaseExtModel, Fittable1DModel):
     )
     alpha = Parameter(description="powerlaw: alpha", default=1.5, bounds=(0.5, 5.0))
     sil1_amp = Parameter(
-        description="silicate 10um: amplitude", default=0.07, bounds=(0.001, 0.3)
+        description="silicate 10um: amplitude", default=0.067, bounds=(0.001, 0.3)
     )
     sil1_center = Parameter(
-        description="silicate 10um: center", default=9.87, bounds=(8.0, 12.0)
+        description="silicate 10um: center", default=9.84, bounds=(8.0, 12.0)
     )
     sil1_fwhm = Parameter(
-        description="silicate 10um: fwhm", default=2.5, bounds=(1.0, 10.0)
+        description="silicate 10um: fwhm", default=2.21, bounds=(1.0, 10.0)
     )
     sil1_asym = Parameter(
-        description="silicate 10um: asymmetry", default=-0.23, bounds=(-2.0, 2.0)
+        description="silicate 10um: asymmetry", default=-0.25, bounds=(-2.0, 2.0)
     )
     sil2_amp = Parameter(
-        description="silicate 20um: amplitude", default=0.025, bounds=(0.001, 0.3)
+        description="silicate 20um: amplitude", default=0.027, bounds=(0.001, 0.3)
     )
     sil2_center = Parameter(
-        description="silicate 20um: center", default=17.0, bounds=(16.0, 24.0)
+        description="silicate 20um: center", default=19.26, bounds=(16.0, 24.0)
     )
     sil2_fwhm = Parameter(
-        description="silicate 20um: fwhm", default=13.0, bounds=(5.0, 20.0)
+        description="silicate 20um: fwhm", default=17.0, bounds=(5.0, 20.0)
     )
     sil2_asym = Parameter(
         description="silicate 20um: asymmetry", default=-0.27, bounds=(-2.0, 2.0)
