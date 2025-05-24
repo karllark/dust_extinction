@@ -1,8 +1,7 @@
-import numpy as np
 from astropy import units as u
 
-from .parameter_averages import CCM89 # Still default model
 from .baseclasses import BaseExtModel, BaseExtRvModel
+
 
 def deredden_flux(wavelengths, flux, model_class, av=None, ebv=None, rv=3.1):
     """
@@ -111,28 +110,30 @@ def deredden_flux(wavelengths, flux, model_class, av=None, ebv=None, rv=3.1):
 
     # Ensure wavelengths are in appropriate units for the model
     if not isinstance(wavelengths, u.Quantity):
-        waves_for_model = wavelengths * u.micron # Default assumption
+        waves_for_model = wavelengths * u.micron  # Default assumption
     else:
         waves_for_model = wavelengths
 
-    if av_value is not None: # A(V) takes precedence
+    if av_value is not None:  # A(V) takes precedence
         # For models that might still need Rv for their own setup, even if Av is given to extinguish
         if issubclass(model_class, BaseExtRvModel):
             model_instance = model_class(Rv=rv)
         else:
             try:
                 model_instance = model_class()
-            except Exception as e: # pragma: no cover
-                 raise RuntimeError(
+            except Exception as e:  # pragma: no cover
+                raise RuntimeError(
                     f"Failed to initialize model {model_class.__name__} without parameters. "
                     f"Original error: {e}"
                 )
         attenuation_factor = model_instance.extinguish(waves_for_model, Av=av_value)
-    elif ebv_value is not None: # Use E(B-V)
+    elif ebv_value is not None:  # Use E(B-V)
         if issubclass(model_class, BaseExtRvModel):
             model_instance = model_class(Rv=rv)
             # This extinguish call will use model_instance.Rv internally
-            attenuation_factor = model_instance.extinguish(waves_for_model, Ebv=ebv_value)
+            attenuation_factor = model_instance.extinguish(
+                waves_for_model, Ebv=ebv_value
+            )
         else:
             # Non-R(V) dependent models cannot use E(B-V) to determine A(V)
             # as they don't have an Rv attribute intrinsically.
@@ -142,8 +143,10 @@ def deredden_flux(wavelengths, flux, model_class, av=None, ebv=None, rv=3.1):
                 f"A(V) must be provided directly via the 'av' parameter "
                 f"when using this model."
             )
-    else: # Should be caught by the initial check, but as a safeguard
-        raise ValueError("Internal error: No valid extinction parameter determined.") # pragma: no cover
+    else:  # Should be caught by the initial check, but as a safeguard
+        raise ValueError(
+            "Internal error: No valid extinction parameter determined."
+        )  # pragma: no cover
 
     flux_dereddened = flux / attenuation_factor
     return flux_dereddened
