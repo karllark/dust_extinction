@@ -831,7 +831,7 @@ class G21(BaseExtModel, Fittable1DModel):
         ax.set_xscale('log')
         ax.set_yscale('log')
 
-        ax.set_xlabel('$\lambda$ [$\mu$m]')
+        ax.set_xlabel(r'$\lambda$ [$\mu$m]')
         ax.set_ylabel('$A(x)/A(V)$')
 
         ax.set_title('G21')

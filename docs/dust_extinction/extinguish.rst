@@ -1,3 +1,5 @@
+.. _extinguish_example:
+
 Extinguishing Flux (Applying Reddening)
 =======================================
 
@@ -22,14 +24,13 @@ Example:
    from astropy.visualization import quantity_support
    quantity_support()
 
-   from dust_extinction.parameter_averages import CCM89
-   from dust_extinction.helpers importExtCurve
+   from dust_extinction.parameter_averages import G23
 
    # generate the curves and plot them
    fig, ax = plt.subplots()
 
    # temp model to get the correct x range
-   text_model =ExtCurve()
+   text_model = G23()
 
    # generate the curves and plot them
    x = np.arange(text_model.x_range[0], text_model.x_range[1],0.1)/u.micron
@@ -38,7 +39,7 @@ Example:
    source_flux = np.ones(len(x))
 
    # define an extinction model
-   ext_model = CCM89(Rv=3.1)
+   ext_model = G23(Rv=3.1)
 
    # extinguish (redden) the source flux
    #   the Av parameter is the full extinction in V
@@ -60,14 +61,14 @@ Example:
 
    ax.set_xlabel('$x$ [$\mu m^{-1}$]')
    ax.set_ylabel('Flux')
-   ax.set_title('Extinction with CCM89 (Rv=3.1)')
+   ax.set_title('Extinction with G23 (Rv=3.1)')
 
    ax.legend(loc='best')
    plt.tight_layout()
    plt.show()
 
 This is a simple example that uses the CCM89 model.  Other models are available
-(see :ref:`models_table`).
+(see :ref:`model_flavors`).
 
 More examples are available in an `Astropy tutorial
 <http://learn.astropy.org/rst-tutorials/Dust-Extinction-Absorption-Correcting-Flux.html?highlight=extinction>`_

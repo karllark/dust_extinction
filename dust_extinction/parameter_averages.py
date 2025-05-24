@@ -1436,7 +1436,7 @@ class G23(BaseExtRvModel):
         ax.set_xscale('log')
         ax.set_yscale('log')
 
-        ax.set_xlabel('$\lambda$ [$\mu$m]')
+        ax.set_xlabel(r'$\lambda$ [$\mu$m]')
         ax.set_ylabel(r'$A(x)/A(V)$')
 
         ax.legend(loc='best')

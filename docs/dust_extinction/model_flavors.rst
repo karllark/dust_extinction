@@ -1,3 +1,5 @@
+.. _model_flavors:
+
 #############
 Model Flavors
 #############

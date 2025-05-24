@@ -56,6 +56,7 @@ def deredden_flux(wavelengths, flux, model_class, av=None, ebv=None, rv=3.1):
     where `attenuation_factor` is obtained from `model_instance.extinguish(...)`.
 
     If `av` is given, it's used directly.
+
     If `ebv` is given and `av` is not:
         - If `model_class` is a subclass of `BaseExtRvModel` (like CCM89, O94, F99),
           it's initialized with `Rv=rv`, and then `extinguish` is called with `Ebv=ebv`.
