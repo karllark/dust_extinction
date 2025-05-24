@@ -18,3 +18,5 @@ Details
 .. automodapi:: dust_extinction.conversions
 
 .. automodapi:: dust_extinction.baseclasses
+
+.. automodapi:: dust_extinction.deredden
