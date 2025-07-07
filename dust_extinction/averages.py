@@ -24,6 +24,7 @@ __all__ = [
     "D22_MWAvg",
     "G24_SMCAvg",
     "G24_SMCBumps",
+    "C25_M31Avg",
 ]
 
 
@@ -1571,7 +1572,6 @@ class G24_SMCAvg(BaseExtModel):
         # get the tabulated information
         ref = importlib_resources.files("dust_extinction") / "data"
         with importlib_resources.as_file(ref) as data_path:
-            # D22 sigma clipped average of 13 diffuse sightlines
             a = Table.read(
                 data_path / "G24_SMCAvg.dat", format="ascii.commented_header"
             )
@@ -1704,9 +1704,8 @@ class G24_SMCBumps(BaseExtModel):
         # get the tabulated information
         ref = importlib_resources.files("dust_extinction") / "data"
         with importlib_resources.as_file(ref) as data_path:
-            # D22 sigma clipped average of 13 diffuse sightlines
             a = Table.read(
-                data_path / "G24_SMCBumps.dat", format="ascii.commented_header"
+                data_path / "C25_M31Ave.dat", format="ascii.commented_header"
             )
 
         # data
@@ -1752,6 +1751,136 @@ class G24_SMCBumps(BaseExtModel):
 
         optnir_axav_x = 1.0 / np.array([2.198, 1.65, 1.25, 0.55, 0.44, 0.37])
         optnir_axav_y = [0.055, 0.162, 0.293, 1.017, 1.400, 1.684]
+
+        # return A(x)/A(V)
+        return _curve_F99_method(
+            x,
+            self.Rv,
+            C1,
+            C2,
+            C3,
+            C4,
+            xo,
+            gamma,
+            optnir_axav_x,
+            optnir_axav_y,
+        )
+
+
+class C25_M31Avg(BaseExtModel):
+    r"""
+    Clayton et al (2025) M31 Average Extinction Curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Clayton et al. (2025, ApJ, in press)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import C25_M31Avg
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = C25_M31Avg()
+
+        # generate the curves and plot them
+        x = np.arange(ext_model.x_range[0], ext_model.x_range[1],0.1)/u.micron
+
+        ax.plot(x,ext_model(x),label='C25 M31 Average')
+        ax.plot(ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        # for 2nd x-axis with lambda values
+        axis_xs = np.array([0.1, 0.12, 0.15, 0.2, 0.3, 0.5, 1.0])
+        new_ticks = 1 / axis_xs
+        new_ticks_labels = ["%.2f" % z for z in axis_xs]
+        tax = ax.twiny()
+        tax.set_xlim(ax.get_xlim())
+        tax.set_xticks(new_ticks)
+        tax.set_xticklabels(new_ticks_labels)
+        tax.set_xlabel(r"$\lambda$ [$\mu$m]")
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [0.3, 10.0]
+
+    Rv = 2.55
+
+    def __init__(self, **kwargs):
+
+        # get the tabulated information
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            # D22 sigma clipped average of 13 diffuse sightlines
+            a = Table.read(
+                data_path / "G24_SMCBumps.dat", format="ascii.commented_header"
+            )
+
+        # data
+        self.obsdata_x = 1.0 / a["wave"].data
+        self.obsdata_axav = a["A(l)/A(V)"].data
+        self.obsdata_axav_unc = a["unc"].data
+
+        # accuracy of the observed data based on published table
+        self.obsdata_tolerance = (
+            0.1  # large value driven by short wavelength uncertainties
+        )
+
+        super().__init__(**kwargs)
+
+    def evaluate(self, x):
+        """
+        C15 M31Avg function
+
+        Parameters
+        ----------
+        x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in wavenumbers [1/micron]
+
+           internally wavenumbers are used
+
+        Returns
+        -------
+        axav: np array (float)
+            A(x)/A(V) extinction curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        C1 = -2.85
+        C2 = 1.21
+        B3 = 3.00
+        C4 = 0.13
+        xo = 4.623
+        gamma = 1.04
+        C3 = B3 * (gamma**2)
+
+        optnir_axav_x = 1.0 / np.array([1.537, 1.153, 0.805, 0.475, 0.335])
+        optnir_axav_y = [0.143, 0.331, 0.545, 1.205, 1.703]
 
         # return A(x)/A(V)
         return _curve_F99_method(
