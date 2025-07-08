@@ -1413,7 +1413,7 @@ class D22_MWAvg(BaseExtModel):
 
     Notes
     -----
-    From Decleir et al. (2022, ApJ, submitted)
+    From Decleir et al. (2022, ApJ, 930, 15)
 
     Example showing the average curve
 
@@ -1521,7 +1521,7 @@ class G24_SMCAvg(BaseExtModel):
 
     Notes
     -----
-    From Gordon et al. (2024, ApJ, in press)
+    From Gordon et al. (2024, ApJ, 970, 51)
 
     Example showing the average curve
 
@@ -1649,7 +1649,7 @@ class G24_SMCBumps(BaseExtModel):
 
     Notes
     -----
-    From Gordon et al. (2024, ApJ, in press)
+    From Gordon et al. (2024, ApJ, 970, 51)
 
     Two data points in the FUV from the data file giving the observed average were removed
     as they are *very* deviate from the FM90 parametrization.  This cause the automated tests
@@ -1705,7 +1705,7 @@ class G24_SMCBumps(BaseExtModel):
         ref = importlib_resources.files("dust_extinction") / "data"
         with importlib_resources.as_file(ref) as data_path:
             a = Table.read(
-                data_path / "C25_M31Ave.dat", format="ascii.commented_header"
+                data_path / "G24_SMCBumps.dat", format="ascii.commented_header"
             )
 
         # data
@@ -1783,6 +1783,10 @@ class C25_M31Avg(BaseExtModel):
     -----
     From Clayton et al. (2025, ApJ, in press)
 
+    One data point in the FUV from the data file giving the observed average was removed
+    as it is *very* deviate from the FM90 parametrization.  This cause the automated tests
+    to fail.
+
     Example showing the average curve
 
     .. plot::
@@ -1825,7 +1829,7 @@ class C25_M31Avg(BaseExtModel):
 
     x_range = [0.3, 10.0]
 
-    Rv = 2.55
+    Rv = 3.20
 
     def __init__(self, **kwargs):
 
@@ -1834,7 +1838,7 @@ class C25_M31Avg(BaseExtModel):
         with importlib_resources.as_file(ref) as data_path:
             # D22 sigma clipped average of 13 diffuse sightlines
             a = Table.read(
-                data_path / "G24_SMCBumps.dat", format="ascii.commented_header"
+                data_path / "C25_M31Ave.dat", format="ascii.commented_header"
             )
 
         # data
@@ -1871,7 +1875,7 @@ class C25_M31Avg(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        C1 = -2.85
+        C1 = -1.57
         C2 = 1.21
         B3 = 3.00
         C4 = 0.13
