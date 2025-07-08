@@ -41,6 +41,8 @@ B92: `Bastiaansen 1992, A&AS, 92, 449
 C11: `Compiegne et al. 2011, A&A, 525, 103
 <https://ui.adsabs.harvard.edu/abs/2011A%26A...525A.103C>`_
 
+C25: Clayton et al. 2025, submitted
+
 CCM89: `Cardelli, Clayton, & Mathis 1989, ApJ, 345, 245
 <https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C>`_
 
