@@ -9,10 +9,9 @@ description = "Interstellar Dust Extinction Models"
 
 # Long description from README.rst
 readme = "README.rst"
-readme-content-type = "text/x-rst"
 
 # Python version requirement
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 
 # Author information
 authors = [
