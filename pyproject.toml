@@ -1,3 +1,30 @@
+[project]
+name = "dust_extinction"
+
+# Version is provided by setuptools-scm
+dynamic = ["version"]
+
+# Short description
+description = "Interstellar Dust Extinction Models"
+
+# Long description from README.rst
+readme = "README.rst"
+readme-content-type = "text/x-rst"
+
+# Python version requirement
+requires-python = ">=3.7"
+
+# Author information
+authors = [
+  { name = "Karl Gordon", email = "kgordon@stsci.edu" }
+]
+
+# License details
+license = { text = "BSD 3-Clause", file = "licenses/LICENSE.rst" }
+
+# Project URL
+urls = { "Home" = "http://dust-extinction.readthedocs.io/" }
+
 [build-system]
 
 requires = ["setuptools",
@@ -5,7 +32,3 @@ requires = ["setuptools",
             "wheel"]
 
 build-backend = 'setuptools.build_meta'
-
-[project]
-# For PEP 621 version must be defined as dynamic. This is now enforced in setuptools_scm >v9.0.3
-dynamic = ["version"]
