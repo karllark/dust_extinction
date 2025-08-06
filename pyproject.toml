@@ -1,3 +1,46 @@
+[project]
+name = "dust_extinction"
+
+# Version is provided by setuptools-scm
+dynamic = ["version"]
+
+# Short description
+description = "Interstellar Dust Extinction Models"
+
+# Long description from README.rst
+readme = "README.rst"
+
+# Python version requirement
+requires-python = ">=3.8"
+
+# Author information
+authors = [
+  { name = "Karl Gordon", email = "kgordon@stsci.edu" }
+]
+
+# License details
+license = { file = "LICENSE" }
+
+# Project URL
+urls = { "Home" = "http://dust-extinction.readthedocs.io/" }
+
+# Core dependencies (install_requires)
+dependencies = [
+  "astropy",
+  "scipy"
+]
+
+# Optional dependencies (extras_require)
+[project.optional-dependencies]
+test = [
+  "pytest-astropy"
+]
+docs = [
+  "sphinx-astropy",
+  "matplotlib",
+  "graphviz"
+]
+
 [build-system]
 
 requires = ["setuptools",
