@@ -19,7 +19,7 @@ authors = [
 ]
 
 # License details
-license = { file = "licenses/LICENSE.rst" }
+license = { file = "LICENSE" }
 
 # Project URL
 urls = { "Home" = "http://dust-extinction.readthedocs.io/" }
