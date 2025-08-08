@@ -238,7 +238,7 @@ contributors who will abide by the `Python Software Foundation Code of Conduct
 <https://www.python.org/psf/conduct/>`_.
 
 ``dust_extinction`` follows the same workflow and coding guidelines as
-`Astropy`_.  Take a look at the astropy 
+`Astropy <https://docs.astropy.org/>`_.  Take a look at the astropy
 `developer <https://docs.astropy.org/en/latest/index_dev.html>`_ documentation for
 guidelines.
 
