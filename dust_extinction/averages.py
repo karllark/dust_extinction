@@ -1902,7 +1902,7 @@ class C25_M31Avg(BaseExtModel):
         )
 
 
-class C25_M31Avg(BaseExtModel):
+class G25_M33Avg(BaseExtModel):
     r"""
     Gordon et al (2025) M33 Average Extinction Curve
 
