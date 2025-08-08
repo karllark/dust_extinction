@@ -1,4 +1,9 @@
-1.6.dev (unreleased)
+1.7.dev (unreleased)
+====================
+
+- no changes yet
+
+1.6 (2025-08-08)
 ================
 
 - add G25 M33Avg model
