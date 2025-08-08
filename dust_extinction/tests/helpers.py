@@ -31,6 +31,7 @@ from dust_extinction.averages import (
     G24_SMCAvg,
     G24_SMCBumps,
     C25_M31Avg,
+    G25_M33Avg,
 )
 from dust_extinction.grain_models import DBP90, WD01, D03, ZDA04, C11, J13, HD23, Y24
 
@@ -55,6 +56,7 @@ ave_models = [
     G24_SMCAvg,
     G24_SMCBumps,
     C25_M31Avg,
+    G25_M33Avg,
 ]
 grain_models = [DBP90, WD01, D03, ZDA04, C11, J13, HD23, Y24]
 

@@ -17,10 +17,10 @@ Average models
    Models are provided for the Milky Way for the optical (Bastiaansen 1992),
    ultraviolet through near-infrared
    (Gordon, Cartlege, & Clayton 2009) and near- and mid-infrared
-   (Rieke & Lebofsky 1985; Indebetouw et al. 2005; Chiar & Tielens 2006; Fritz et al. 2011;
-   Gordon et al. 2021; Decleir et al. 2022),
+   (Rieke & Lebofsky 1985; Indebetouw et al. 2005; Chiar & Tielens 2006; 
+   Fritz et al. 2011; Gordon et al. 2021; Decleir et al. 2022),
    the Magellanic Clouds (Gordon et al. 2003; Gordon et al. 2024),
-   and M31 (Clayton et al. 2025).
+   M31 (Clayton et al. 2025), and M33 (Gordon et al. 2023).
 
    For the Milky Way for the ultraviolet through near-infrared,
    one of the R(V) dependent models with R(V) = 3.1
@@ -40,7 +40,8 @@ Average models
 					                          G03_LMC2,
                                          G24_SMCAvg,
                                          G24_SMCBumps,
-                                         C25_M31Avg)
+                                         C25_M31Avg,
+                                         G25_M33Avg)
 
    fig, ax = plt.subplots()
 
@@ -48,7 +49,7 @@ Average models
    x = np.arange(0.3,11.0,0.1)/u.micron
 
    models = [GCC09_MWAvg, B92_MWAvg, G03_SMCBar, G03_LMCAvg, G03_LMC2, 
-             G24_SMCAvg, G24_SMCBumps, C25_M31Avg]
+             G24_SMCAvg, G24_SMCBumps, C25_M31Avg, G25_M33Avg]
 
    for cmodel in models:
       ext_model = cmodel()
