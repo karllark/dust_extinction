@@ -59,7 +59,11 @@ default_role = 'py:obj'
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"python": ("https://docs.python.org/", None)}
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/', None),
+    'numpy': ('https://docs.scipy.org/doc/numpy/', None),
+    'astropy': ('https://docs.astropy.org/en/stable/', None),  # Example entry
+}
 
 # -- Options for HTML output -------------------------------------------------
 
