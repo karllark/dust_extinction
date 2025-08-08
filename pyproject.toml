@@ -1,50 +1,111 @@
+[build-system]
+requires = [
+  "setuptools>=62.1",
+  "setuptools_scm[toml]>=8.0.0",
+  "wheel",]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "dust_extinction"
-
-# Version is provided by setuptools-scm
+description = "Interstellar Dust Extinction Models"
+requires-python = ">=3.10"
+readme = { file = "README.rst", content-type = "text/x-rst" }
+license = { file = "LICENSE" }
+authors = [
+  { name = "Karl D. Gordon", email = "kgordon@stsci.edu" },
+]
+dependencies = ["astropy", "scipy"]
 dynamic = ["version"]
 
-# Short description
-description = "Interstellar Dust Extinction Models"
-
-# Long description from README.rst
-readme = "README.rst"
-
-# Python version requirement
-requires-python = ">=3.8"
-
-# Author information
-authors = [
-  { name = "Karl Gordon", email = "kgordon@stsci.edu" }
-]
-
-# License details
-license = { file = "LICENSE" }
-
-# Project URL
-urls = { "Home" = "http://dust-extinction.readthedocs.io/" }
-
-# Core dependencies (install_requires)
-dependencies = [
-  "astropy",
-  "scipy"
-]
-
-# Optional dependencies (extras_require)
 [project.optional-dependencies]
 test = [
-  "pytest-astropy"
+    "pytest",
+    "pytest-doctestplus",
+    "pytest-cov",
+    "matplotlib"
 ]
 docs = [
-  "sphinx-astropy",
-  "matplotlib",
-  "graphviz"
+    "sphinx",
+    "sphinx-automodapi",
+    "matplotlib",
+    "graphviz"
+]
+[project.urls]
+repository = "https://github.com/karllark/dust_extinction"
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["dust_extinction*"]
+
+[tool.setuptools.package-data]
+dust_extinction = ["data/*"]
+
+[tool.setuptools_scm]
+version_file = "dust_extinction/version.py"
+
+[tool.pytest.ini_options]
+testpaths = [
+  "dust_extinction",
+  "docs",
+]
+doctest_plus = "enabled"
+text_file_format = "rst"
+addopts = "--doctest-rst"
+norecursedirs = [
+  "dust_extinction[\\/]_dev",
+  "dust_extinction/docs/_build/*",
+  "dust_extinction/docs/api/*"
 ]
 
-[build-system]
+[tool.coverage.run]
+omit = [
+ "dust_extinction/__init*",
+ "dust_extinction/conftest.py",
+ "dust_extinction/*setup_package*",
+ "dust_extinction/tests/*",
+ "dust_extinction/*/tests/*",
+ "dust_extinction/extern/*",
+ "dust_extinction/version*",
+ "*/dust_extinction/__init*",
+ "*/dust_extinction/conftest.py",
+ "*/dust_extinction/*setup_package*",
+ "*/dust_extinction/tests/*",
+ "*/dust_extinction/*/tests/*",
+ "*/dust_extinction/extern/*",
+ "*/dust_extinction/version*",
+]
 
-requires = ["setuptools",
-            "setuptools_scm",
-            "wheel"]
+[tool.coverage.report]
+exclude_lines = [
+  # Have to re-enable the standard pragma
+  "pragma: no cover",
+  # Don't complain about packages we have installed
+  "except ImportError",
+  # Don't complain if tests don't hit assertions
+  "raise AssertionError",
+  "raise NotImplementedError",
+  # Don't complain about script hooks
+  "def main(.*):",
+  # Ignore branches that don't pertain to this version of Python
+  "pragma: py{ignore_python_version}",
+  # Don't complain about IPython completion helper
+  "def _ipython_key_completions_",
+  # typing.TYPE_CHECKING is False at runtime
+  "if TYPE_CHECKING:",
+  # Ignore typing overloads
+  "@overload",
+]
 
-build-backend = 'setuptools.build_meta'
+[tool.flake8]
+    exclude = ["sphinx","*parsetab.py","conftest.py","docs/conf.py","setup.py"]
+    max-complexity = 10
+    max-line-length = 100
+    extend-ignore = """
+        W503,
+        E203,
+        E501,
+    """
+  
