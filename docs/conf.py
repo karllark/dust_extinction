@@ -62,7 +62,7 @@ default_role = 'py:obj'
 intersphinx_mapping = {
     'python': ('https://docs.python.org/', None),
     'numpy': ('https://docs.scipy.org/doc/numpy/', None),
-    'astropy': ('https://docs.astropy.org/en/stable/', None),  # Example entry
+    'Astropy': ('https://docs.astropy.org/en/stable/', None),  # Example entry
 }
 
 # -- Options for HTML output -------------------------------------------------
