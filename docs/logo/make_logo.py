@@ -1,7 +1,6 @@
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.patches as patches
 
 import astropy.units as u
 from dust_extinction.parameter_averages import G23
