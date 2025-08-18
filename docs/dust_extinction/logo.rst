@@ -9,11 +9,12 @@ the final logo human created.
 Details
 =======
 
-Extinction curve is for MW R(V) = 3.1 (G23, Gordon et al. 2023) and is log in the UV and 
-linear in the MIR - so 2175 A and 10 and 20 micron silicate features can be seen.  
-Code provided in the repository in the docs directory.
+Extinction curve is for the Milky Way R(V) = 3.1 (G23, Gordon et al. 2023) and is log in the UV and 
+linear in the MIR.  This allows the 2175 A carbonaceous bump and 10/20 micron silicate features 
+to be seen.
 
-Fewer stars are seen in the UV than in the MIR - symbolic of the higher extinction in the UV.
+Above the extinction curve, fewer stars are seen in the UV than in the MIR, 
+symbolic of the higher extinction in the UV.
 
 Shield evokes how dust shields us from photons (a nice positive way view).
 
