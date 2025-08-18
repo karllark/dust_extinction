@@ -4,6 +4,10 @@
 Interstellar Dust Extinction
 ############################
 
+.. image:: dust_extinction/images/dust_extinction_logo_small.png
+   :alt: dust_extinction logo
+   :align: right
+
 ``dust_extinction`` is a python package to provide models of interstellar dust
 extinction curves.
 
@@ -46,6 +50,7 @@ User Documentation
    Extinguish (or unextinguish) data (how to correct/account for extinction) <dust_extinction/extinguish.rst>
    Fitting extinction curves <dust_extinction/fit_extinction.rst>
    References <dust_extinction/references.rst>
+   Logo <dust_extinction/logo.rst>
 
 Dev Documentation
 =================

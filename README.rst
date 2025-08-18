@@ -1,3 +1,7 @@
+.. image:: docs/dust_extinction/images/dust_extinction_logo_tiny.png
+   :alt: dust_extinction logo
+   :align: left
+
 Astronomical dust extinction
 ============================
 
