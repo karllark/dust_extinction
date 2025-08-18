@@ -1,9 +1,9 @@
-Astronomical dust extinction
-============================
-
 .. image:: docs/dust_extinction/images/dust_extinction_logo_tiny.png
    :alt: dust_extinction logo
-   :align: right
+   :align: left
+
+Astronomical dust extinction
+============================
 
 This package provides astronomical interstellar dust extinction curves
 implemented using the astropy.modeling framework.
