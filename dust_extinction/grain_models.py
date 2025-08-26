@@ -688,3 +688,74 @@ class Y24(BaseExtGrainModel):
         self.data_tolerance = 1e-6
 
         super().__init__(**kwargs)
+
+
+class KP5(BaseExtGrainModel):
+    r"""
+    Pontoppidan et al. (2024) protostellar envelope extinction curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Pontoppidan et al. (2024, RNAAS, 8, 68)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.averages import KP5_MW
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = KP5_MW()
+
+        # generate the curves and plot them
+        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.1) * u.micron
+
+        ax.plot(x,ext_model(x),label='KP5_MW')
+        ax.plot(1.0/ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
+                label='obsdata')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 1996., 1.0 / 0.1]
+
+    Rv = 3.1  # assumed!
+
+    def __init__(self, **kwargs):
+
+        # get the tabulated information
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(
+                data_path / "kp5.dat", format="ascii.commented_header"
+            )
+
+        self.data_x = 1.0 / a["wavelength"]
+
+        # normalized by wavelength closest to V band
+        sindxs = np.argsort(np.absolute(self.data_x - 1.0 / 0.55))
+
+        self.data_axav = a['kabs']/a['kabs'][sindxs[0]]
+
+        self.data_tolerance = 1e-6
+
+        super().__init__(**kwargs)
