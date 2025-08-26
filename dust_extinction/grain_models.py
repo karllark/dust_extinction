@@ -723,7 +723,7 @@ class KP5(BaseExtGrainModel):
         ext_model = KP5()
 
         # generate the curves and plot them
-        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.1) * u.micron
+        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.01) * u.micron
 
         ax.plot(x,ext_model(x),label='KP5')
 
