@@ -715,19 +715,17 @@ class KP5(BaseExtGrainModel):
         import matplotlib.pyplot as plt
         import astropy.units as u
 
-        from dust_extinction.averages import KP5_MW
+        from dust_extinction.grain_models import KP5
 
         fig, ax = plt.subplots()
 
         # define the extinction model
-        ext_model = KP5_MW()
+        ext_model = KP5()
 
         # generate the curves and plot them
         x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.1) * u.micron
 
-        ax.plot(x,ext_model(x),label='KP5_MW')
-        ax.plot(1.0/ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
-                label='obsdata')
+        ax.plot(x,ext_model(x),label='KP5')
 
         ax.set_xlabel(r'$\lambda$ [$\mu m$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
