@@ -9,7 +9,7 @@ from astropy.io.fits import getdata
 from dust_extinction.baseclasses import BaseExtGrainModel
 
 
-__all__ = ["DBP90", "WD01", "D03", "ZDA04", "C11", "J13", "HD23"]
+__all__ = ["DBP90", "WD01", "D03", "ZDA04", "C11", "J13", "HD23", "Y24", "KP5"]
 
 
 class DBP90(BaseExtGrainModel):
@@ -734,25 +734,35 @@ class KP5(BaseExtGrainModel):
         plt.show()
     """
 
-    x_range = [1.0 / 1996., 1.0 / 0.1]
+    x_range = [1.0 / 2000., 1.0 / 0.099]
 
     Rv = 3.1  # assumed!
 
-    def __init__(self, **kwargs):
+    possnames = {"KP5": ("kp5.dat", 3.1)}
+
+    def __init__(self, modelname="KP5", **kwargs):
+        if modelname not in self.possnames.keys():
+            raise InputParameterError("modelname not recognized")
+        filename = self.possnames[modelname][0]
+        self.Rv = self.possnames[modelname][1]
 
         # get the tabulated information
         ref = importlib_resources.files("dust_extinction") / "data"
         with importlib_resources.as_file(ref) as data_path:
             a = Table.read(
-                data_path / "kp5.dat", format="ascii.commented_header"
+                data_path / filename, format="ascii.commented_header"
             )
 
+        # wavelength in microns
+        # data_x is inverse microns
         self.data_x = 1.0 / a["wavelength"]
 
         # normalized by wavelength closest to V band
-        sindxs = np.argsort(np.absolute(self.data_x - 1.0 / 0.55))
+        sindx = np.argmin(np.absolute(self.data_x - 1.0 / 0.55))
 
-        self.data_axav = a['kabs']/a['kabs'][sindxs[0]]
+        atot = a['kabs'] + a['ksca']
+
+        self.data_axav = atot/atot[sindx]
 
         self.data_tolerance = 1e-6
 
