@@ -9,7 +9,7 @@ from astropy.io.fits import getdata
 from dust_extinction.baseclasses import BaseExtGrainModel
 
 
-__all__ = ["DBP90", "WD01", "D03", "ZDA04", "C11", "J13", "HD23", "Y24", "KP5"]
+__all__ = ["DBP90", "WD01", "D03", "ZDA04", "C11", "J13", "HD23", "Y24", "P24"]
 
 
 class DBP90(BaseExtGrainModel):
@@ -690,7 +690,7 @@ class Y24(BaseExtGrainModel):
         super().__init__(**kwargs)
 
 
-class KP5(BaseExtGrainModel):
+class P24(BaseExtGrainModel):
     r"""
     Pontoppidan et al. (2024) protostellar envelope extinction curve
 
@@ -715,17 +715,18 @@ class KP5(BaseExtGrainModel):
         import matplotlib.pyplot as plt
         import astropy.units as u
 
-        from dust_extinction.grain_models import KP5
+        from dust_extinction.grain_models import P24
 
         fig, ax = plt.subplots()
 
         # define the extinction model
-        ext_model = KP5()
+        ext_model = P24()
 
         # generate the curves and plot them
-        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0], 0.01) * u.micron
+        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0],
+                      0.01) * u.micron
 
-        ax.plot(x,ext_model(x),label='KP5')
+        ax.plot(x,ext_model(x),label='P24')
 
         ax.set_xlabel(r'$\lambda$ [$\mu m$]')
         ax.set_ylabel(r'$A(x)/A(V)$')
@@ -738,9 +739,9 @@ class KP5(BaseExtGrainModel):
 
     Rv = 3.1  # assumed!
 
-    possnames = {"KP5": ("kp5.dat", 3.1)}
+    possnames = {"P24": ("p24.dat", 3.1)}
 
-    def __init__(self, modelname="KP5", **kwargs):
+    def __init__(self, modelname="P24", **kwargs):
         if modelname not in self.possnames.keys():
             raise InputParameterError("modelname not recognized")
         filename = self.possnames[modelname][0]
