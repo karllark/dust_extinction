@@ -1,7 +1,7 @@
 1.7.dev (unreleased)
 ====================
 
-- no changes yet
+- added util function to write files G23 models with a range of R(V) values
 
 1.6 (2025-08-08)
 ================
