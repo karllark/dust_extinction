@@ -100,7 +100,8 @@ and is based on the spectroscopic extinction curves used for the
 :class:`~dust_extinction.parameter_averages.D22` studies.
 For those who wish to bypass the python implementation of the 
 :class:`~dust_extinction.parameter_averages.G23` model, tables for the range
-of valid R(V) values with 0.1 steps are `available <https://stsci.box.com/v/ExtinctionTables>`_.
+of valid R(V) values with 0.1 steps using `utils/save_to_ascii.py` are
+`available <https://stsci.box.com/v/ExtinctionTables>`_.
 
 A more general model is :class:`~dust_extinction.parameter_averages.G16` as this
 model encompasses the average measured behavior of extinction curves in the MW,
