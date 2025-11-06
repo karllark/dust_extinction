@@ -763,7 +763,7 @@ class P24(BaseExtGrainModel):
 
         atot = a['kabs'] + a['ksca']
 
-        self.data_axav = atot/atot[sindx]
+        self.data_axav = atot / atot[sindx]
 
         self.data_tolerance = 1e-6
 
