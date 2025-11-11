@@ -385,7 +385,7 @@ Grain models
                  "MWRV31", "MWRV31",
                  "MWRV31",
                  "MWRV31",
-                 "KP5 MWRV31"]
+                 "MWRV31"]
 
    colors = plt.get_cmap("tab20")
 
@@ -444,7 +444,7 @@ Grain models
                  "MWRV31", "MWRV31",
                  "MWRV31",
                  "MWRV31",
-                 "KP5 MWRV31"]
+                 "MWRV31"]
 
    colors = plt.get_cmap("tab20")
 

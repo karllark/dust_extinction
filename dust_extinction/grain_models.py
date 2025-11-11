@@ -739,9 +739,9 @@ class P24(BaseExtGrainModel):
 
     Rv = 3.1  # assumed!
 
-    possnames = {"P24": ("p24.dat", 3.1)}
+    possnames = {"MWRV31": ("p24.dat", 3.1)}
 
-    def __init__(self, modelname="P24", **kwargs):
+    def __init__(self, modelname="MWRV31", **kwargs):
         if modelname not in self.possnames.keys():
             raise InputParameterError("modelname not recognized")
         filename = self.possnames[modelname][0]
