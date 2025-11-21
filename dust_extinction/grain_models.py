@@ -9,7 +9,7 @@ from astropy.io.fits import getdata
 from dust_extinction.baseclasses import BaseExtGrainModel
 
 
-__all__ = ["DBP90", "WD01", "D03", "ZDA04", "C11", "J13", "HD23"]
+__all__ = ["DBP90", "WD01", "D03", "ZDA04", "C11", "J13", "HD23", "Y24", "P24"]
 
 
 class DBP90(BaseExtGrainModel):
@@ -685,6 +685,86 @@ class Y24(BaseExtGrainModel):
         self.data_axav = a["col8"].data / a["col8"].data[sindxs[0]]
 
         # accuracy of the data based on calculations
+        self.data_tolerance = 1e-6
+
+        super().__init__(**kwargs)
+
+
+class P24(BaseExtGrainModel):
+    r"""
+    Pontoppidan et al. (2024) protostellar envelope extinction curve
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    None
+
+    Notes
+    -----
+    From Pontoppidan et al. (2024, RNAAS, 8, 68)
+
+    Example showing the average curve
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_extinction.grain_models import P24
+
+        fig, ax = plt.subplots()
+
+        # define the extinction model
+        ext_model = P24()
+
+        # generate the curves and plot them
+        x = np.arange(1.0/ext_model.x_range[1], 1.0/ext_model.x_range[0],
+                      0.01) * u.micron
+
+        ax.plot(x,ext_model(x),label='P24')
+
+        ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+        ax.set_ylabel(r'$A(x)/A(V)$')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = [1.0 / 2000., 1.0 / 0.099]
+
+    Rv = 3.1  # assumed!
+
+    possnames = {"KP5": ("p24.dat", 3.1)}
+
+    def __init__(self, modelname="KP5", **kwargs):
+        if modelname not in self.possnames.keys():
+            raise InputParameterError("modelname not recognized")
+        filename = self.possnames[modelname][0]
+        self.Rv = self.possnames[modelname][1]
+
+        # get the tabulated information
+        ref = importlib_resources.files("dust_extinction") / "data"
+        with importlib_resources.as_file(ref) as data_path:
+            a = Table.read(
+                data_path / filename, format="ascii.commented_header"
+            )
+
+        # wavelength in microns
+        # data_x is inverse microns
+        self.data_x = 1.0 / a["wavelength"]
+
+        # normalized by wavelength closest to V band
+        sindx = np.argmin(np.absolute(self.data_x - 1.0 / 0.55))
+
+        atot = a['kabs'] + a['ksca']
+
+        self.data_axav = atot / atot[sindx]
+
         self.data_tolerance = 1e-6
 
         super().__init__(**kwargs)

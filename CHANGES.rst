@@ -2,6 +2,7 @@
 ====================
 
 - added util function to write files G23 models with a range of R(V) values
+- add P24 dust grain model
 
 1.6 (2025-08-08)
 ================

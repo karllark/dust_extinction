@@ -141,6 +141,9 @@ WD01: `Weingartner & Draine 2001, ApJ, 548, 296
 Y24: `Ysard et al. 2024, A&A, 684, 34
 <https://ui.adsabs.harvard.edu/abs/2024A%26A...684A..34Y>`_
 
+P24: `Pontoppidan et al. 2024, RNAAS, 8, 68
+<https://ui.adsabs.harvard.edu/abs/2024RNAAS...8...68P>`_
+
 ZDA04: `Zubko, Dwek, & Arendt 2004, ApJS, 152, 211
 <https://ui.adsabs.harvard.edu/abs/2004ApJS..152..211Z>`_
 
