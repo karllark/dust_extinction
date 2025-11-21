@@ -1618,7 +1618,7 @@ class G24_SMCAvg(BaseExtModel):
         xo = 4.59
         gamma = 0.95
 
-        optnir_axav_x = 1.0 / np.array([2.198, 1.65, 1.25, 0.55, 0.44, 0.37])
+        optnir_axav_x = 1.0 / np.array([2.174, 1.622, 1.231, 0.544, 0.438, 0.363])
         optnir_axav_y = [0.062, 0.125, 0.324, 1.021, 1.349, 1.514]
 
         # return A(x)/A(V)
@@ -1750,7 +1750,7 @@ class G24_SMCBumps(BaseExtModel):
         xo = 4.73
         gamma = 1.15
 
-        optnir_axav_x = 1.0 / np.array([2.198, 1.65, 1.25, 0.55, 0.44, 0.37])
+        optnir_axav_x = 1.0 / np.array([2.174, 1.622, 1.231, 0.544, 0.438, 0.363])
         optnir_axav_y = [0.055, 0.162, 0.293, 1.017, 1.400, 1.684]
 
         # return A(x)/A(V)
