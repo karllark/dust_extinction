@@ -41,8 +41,8 @@ B92: `Bastiaansen 1992, A&AS, 92, 449
 C11: `Compiegne et al. 2011, A&A, 525, 103
 <https://ui.adsabs.harvard.edu/abs/2011A%26A...525A.103C>`_
 
-C25: `Clayton et al. 2025, ApJ, in press
-<https://arxiv.org/abs/2507.08612>`_
+C25: `Clayton et al. 2025, ApJ, 989, 61
+<https://scixplorer.org/abs/2025ApJ...989...61C/abstract>`_
 
 CCM89: `Cardelli, Clayton, & Mathis 1989, ApJ, 345, 245
 <https://ui.adsabs.harvard.edu/abs/1989ApJ...345..245C>`_
@@ -103,7 +103,7 @@ G23: `Gordon et al. 2023, ApJ, 950, 86
 G24: `Gordon et al. 2024, ApJ, 970, 51
 <https://ui.adsabs.harvard.edu/abs/2024ApJ...970...51G>`_
 
-G25: Gordon et al. 2025, submitted
+G26: Gordon et al. 2026, submitted
 
 HD23: `Hensley & Draine 2023, ApJ, 948, 55
 <https://ui.adsabs.harvard.edu/abs/2023ApJ...948...55H>`_

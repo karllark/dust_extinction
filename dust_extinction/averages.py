@@ -1782,7 +1782,7 @@ class C25_M31Avg(BaseExtModel):
 
     Notes
     -----
-    From Clayton et al. (2025, ApJ, in press)
+    From Clayton et al. (2025, ApJ, 989, 61
 
     One data point in the FUV from the data file giving the observed average was removed
     as it is *very* deviate from the FM90 parametrization.  This cause the automated tests
@@ -1916,7 +1916,7 @@ class G26_M33Avg(BaseExtModel):
 
     Notes
     -----
-    From Gordon et al. (2025, ApJ, submitted)
+    From Gordon et al. (2026, ApJ, submitted)
 
     Example showing the average curve
 
