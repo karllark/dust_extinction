@@ -25,7 +25,7 @@ __all__ = [
     "G24_SMCAvg",
     "G24_SMCBumps",
     "C25_M31Avg",
-    "G25_M33Avg",
+    "G26_M33Avg",
 ]
 
 
@@ -1782,7 +1782,7 @@ class C25_M31Avg(BaseExtModel):
 
     Notes
     -----
-    From Clayton et al. (2025, ApJ, in press)
+    From Clayton et al. (2025, ApJ, 989, 61)
 
     One data point in the FUV from the data file giving the observed average was removed
     as it is *very* deviate from the FM90 parametrization.  This cause the automated tests
@@ -1902,9 +1902,9 @@ class C25_M31Avg(BaseExtModel):
         )
 
 
-class G25_M33Avg(BaseExtModel):
+class G26_M33Avg(BaseExtModel):
     r"""
-    Gordon et al (2025) M33 Average Extinction Curve
+    Gordon et al (2026) M33 Average Extinction Curve
 
     Parameters
     ----------
@@ -1916,7 +1916,7 @@ class G25_M33Avg(BaseExtModel):
 
     Notes
     -----
-    From Gordon et al. (2025, ApJ, submitted)
+    From Gordon et al. (2026, ApJ, submitted)
 
     Example showing the average curve
 
@@ -1927,17 +1927,17 @@ class G25_M33Avg(BaseExtModel):
         import matplotlib.pyplot as plt
         import astropy.units as u
 
-        from dust_extinction.averages import G25_M33Avg
+        from dust_extinction.averages import G26_M33Avg
 
         fig, ax = plt.subplots()
 
         # define the extinction model
-        ext_model = G25_M33Avg()
+        ext_model = G26_M33Avg()
 
         # generate the curves and plot them
         x = np.arange(ext_model.x_range[0], ext_model.x_range[1],0.1)/u.micron
 
-        ax.plot(x,ext_model(x),label='G25 M33 Average')
+        ax.plot(x,ext_model(x),label='G26 M33 Average')
         ax.plot(ext_model.obsdata_x, ext_model.obsdata_axav, 'ko',
                 label='obsdata')
 
@@ -1969,7 +1969,7 @@ class G25_M33Avg(BaseExtModel):
         with importlib_resources.as_file(ref) as data_path:
             # D22 sigma clipped average of 13 diffuse sightlines
             a = Table.read(
-                data_path / "G25_M33Ave.dat", format="ascii.commented_header"
+                data_path / "G26_M33Ave.dat", format="ascii.commented_header"
             )
 
         # data
@@ -1986,7 +1986,7 @@ class G25_M33Avg(BaseExtModel):
 
     def evaluate(self, x):
         """
-        G25 M33Avg function
+        G26 M33Avg function
 
         Parameters
         ----------
