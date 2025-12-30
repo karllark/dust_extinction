@@ -37,7 +37,7 @@ Note the different valid wavelength ranges), the LMC
 :class:`~dust_extinction.averages.G24_SMCAvg`,
 :class:`~dust_extinction.averages.G24_SMCBumps`); the M31
 (:class:`~dust_extinction.averages.C25_M31Avg`); and M33Avg
-(:class:`~dust_extinction.averages.G25_M33Avg`).
+(:class:`~dust_extinction.averages.G26_M33Avg`).
 
 One often used alternative to these straight average models is to use one of
 the parameter dependent models with the average R(V) value.  For the Milky
@@ -79,7 +79,7 @@ Way, the usual average used is R(V) = 3.1.  See the next section.
 +--------------+-------------+------------------+--------------+
 | C25_M31Avg   |  0.3 - 10.0 |        0.1 - 3.3 |          M31 |
 +--------------+-------------+------------------+--------------+
-| G25_M33Avg   |  0.3 - 10.0 |        0.1 - 3.3 |          M33 |
+| G26_M33Avg   |  0.3 - 10.0 |        0.1 - 3.3 |          M33 |
 +--------------+-------------+------------------+--------------+
 
 Parameter Dependent Average Curves

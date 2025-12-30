@@ -41,7 +41,7 @@ Average models
                                          G24_SMCAvg,
                                          G24_SMCBumps,
                                          C25_M31Avg,
-                                         G25_M33Avg)
+                                         G26_M33Avg)
 
    fig, ax = plt.subplots()
 
@@ -49,7 +49,7 @@ Average models
    x = np.arange(0.3,11.0,0.1)/u.micron
 
    models = [GCC09_MWAvg, B92_MWAvg, G03_SMCBar, G03_LMCAvg, G03_LMC2, 
-             G24_SMCAvg, G24_SMCBumps, C25_M31Avg, G25_M33Avg]
+             G24_SMCAvg, G24_SMCBumps, C25_M31Avg, G26_M33Avg]
 
    for cmodel in models:
       ext_model = cmodel()
