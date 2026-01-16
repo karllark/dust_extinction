@@ -1396,7 +1396,10 @@ class D22(BaseExtRvModel):
 
 class G23(BaseExtRvModel):
     r"""
-    Gordon et al. (2023) Milky Way R(V) dependent model
+    Gordon et al. (2023) Milky Way R(V) dependent model.  A normalization of
+    0.9854 has been applied to correct for the ~1.5% offset found between the
+    F19 ground-based photometry and Hubble STIS spectroscopy.  Details are in
+    the "Normalization" section of the dust_extinction docs.
 
     Parameters
     ----------
@@ -1556,7 +1559,7 @@ class G23(BaseExtRvModel):
         self.b[uvopt_overlap] += weights * m20_model_b(x[uvopt_overlap])
 
         # return A(x)/A(V)
-        return self.a + self.b * (1 / Rv - 1 / 3.1)
+        return (self.a + self.b * (1 / Rv - 1 / 3.1)) / 0.9854
 
     @staticmethod
     def nirmir_intercept(x, params):
