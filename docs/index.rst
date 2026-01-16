@@ -48,6 +48,7 @@ User Documentation
    Flavors of Models (including plots of all models) <dust_extinction/model_flavors.rst>
    How to choose a model (including listing of all models) <dust_extinction/choose_model.rst>
    Extinguish (or unextinguish) data (how to correct/account for extinction) <dust_extinction/extinguish.rst>
+   Normalization (variations between curves) <dust_extinction/normalization_details.rst>
    Fitting extinction curves <dust_extinction/fit_extinction.rst>
    References <dust_extinction/references.rst>
    Logo <dust_extinction/logo.rst>
