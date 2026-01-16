@@ -275,13 +275,19 @@ class B92_MWAvg(BaseExtModel):
          0.4999, 0.4708, 0.4496, 0.4395, 0.4192,
          0.4038, 0.3785, 0.36, 0.3493, 0.3402]
     )
-    obsdata_axav = np.array(
-        [0.849, 0.891, 0.941, 0.998, 1.045, 1.088,
-         1.139, 1.176, 1.226, 1.279, 1.34 , 1.418,
-         1.473, 1.507, 1.556, 1.595, 1.659, 1.718,
-         1.761, 1.795]
+    obsdata_Elm15_E22m15 = np.array(
+        [-0.327, -0.236, -0.128, -0.004, 0.098, 0.190,
+         0.301, 0.383, 0.491, 0.606, 0.738, 0.907,
+         1.027, 1.100, 1.206, 1.292, 1.431, 1.559,
+         1.651, 1.725]
     )
     # fmt: on
+    # determine values needed to convert to E(lambda-V)/E(B-V)
+    EVBm15_E22m15 = np.interp([1 / 0.55, 1 / 0.44], obsdata_x, obsdata_Elm15_E22m15)
+    obsdata_elvebv = (obsdata_Elm15_E22m15 - EVBm15_E22m15[0]) / (
+        EVBm15_E22m15[1] - EVBm15_E22m15[0]
+    )
+    obsdata_axav = obsdata_elvebv / Rv + 1.0
 
     # accuracy of the observed data based on published table
     obsdata_tolerance = 6e-3
