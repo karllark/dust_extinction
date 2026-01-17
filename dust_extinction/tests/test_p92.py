@@ -4,7 +4,7 @@ import pytest
 import astropy.units as u
 from astropy.modeling.fitting import LevMarLSQFitter
 
-from ..shapes import P92
+from dust_extinction.shapes import P92
 
 
 def get_axav_cor_vals():
@@ -61,7 +61,6 @@ def test_extinction_P92_single_values(xtest_vals):
     np.testing.assert_allclose(tmodel(x), cor_val, rtol=0.25, atol=0.01)
 
 
-# @pytest.mark.skip(reason="failing due to an issue with the fitting")
 def test_P92_fitting():
 
     # get an observed extinction curve to fit
