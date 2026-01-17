@@ -1399,12 +1399,15 @@ class G23(BaseExtRvModel):
     Gordon et al. (2023) Milky Way R(V) dependent model.  A normalization of
     0.9854 has been applied to correct for the ~1.5% offset found between the
     F19 ground-based photometry and Hubble STIS spectroscopy.  Details are in
-    the "Normalization" section of the dust_extinction docs.
+    the "Normalization Details" section of the dust_extinction docs.
 
     Parameters
     ----------
     Rv: float
         R(V) = A(V)/E(B-V) = total-to-selective extinction
+
+    renorm: boolean
+        renormalize by dividing by 0.9854 (see above) [default = True]
 
     Raises
     ------
@@ -1448,6 +1451,15 @@ class G23(BaseExtRvModel):
 
     Rv_range = [2.3, 5.6]
     x_range = x_range_G23
+
+    def __init__(self, renorm=True, **kwargs):
+
+        if renorm:
+            self.normval = 0.9854
+        else:
+            self.normval = 1.0
+
+        super().__init__(**kwargs)
 
     def evaluate(self, x, Rv):
         """
@@ -1559,7 +1571,7 @@ class G23(BaseExtRvModel):
         self.b[uvopt_overlap] += weights * m20_model_b(x[uvopt_overlap])
 
         # return A(x)/A(V)
-        return (self.a + self.b * (1 / Rv - 1 / 3.1)) / 0.9854
+        return (self.a + self.b * (1 / Rv - 1 / 3.1)) / self.normval
 
     @staticmethod
     def nirmir_intercept(x, params):

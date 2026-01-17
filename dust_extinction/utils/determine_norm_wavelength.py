@@ -5,6 +5,7 @@ from dust_extinction.tests.helpers import ave_models, param_ave_models, grain_mo
 
 
 print("V band normalization wavelength = A(l)/A(V) = 1")
+print("B band normalization wavelength = A(l)/A(V) = 1 + 1/R(V)")
 optwaves = np.arange(0.7, 0.4, -0.01) * u.micron
 twave = 1 / 0.55
 for cmodel in ave_models + param_ave_models + grain_models:
@@ -12,7 +13,16 @@ for cmodel in ave_models + param_ave_models + grain_models:
     if (twave > cmod.x_range[0]) & (twave < cmod.x_range[1]):
         mvals = cmod(optwaves)
         nwave = np.interp([1.0], mvals, optwaves)
-        print(cmod.__class__.__name__, nwave)
+        nwave2 = np.interp([1.0 + 1 / cmod.Rv], mvals, optwaves)
+        Rv = cmod.Rv
+        if not isinstance(Rv, float):
+            Rv = Rv.value
+        print(
+            f"| {cmod.__class__.__name__:12.12s} | {nwave.squeeze().value:18.4f} | {nwave2.squeeze().value:27.4f} | {Rv:.2f} |"
+        )
+        print(
+            "+--------------+--------------------+-----------------------------+------+"
+        )
     else:
         print(cmod.__class__.__name__, " wave coverage doesn't include V band")
 
@@ -33,3 +43,16 @@ for cmodel in param_ave_models[0:-1]:
         diff = mvals1 - mvals2
         nwave = np.interp([0.0], diff, optwaves)
         print(cmod1.__class__.__name__, nwave, cmod1(nwave))
+
+
+# test the G23 original
+cmod1 = cmodel(Rv=2.5, renorm=False)
+cmod2 = cmodel(Rv=5.0, renorm=False)
+
+mvals1 = cmod1(optwaves)
+mvals2 = cmod2(optwaves)
+
+# find the wavelength where the difference in the curves is zero
+diff = mvals1 - mvals2
+nwave = np.interp([0.0], diff, optwaves)
+print(cmod1.__class__.__name__, "orig", nwave, cmod1(nwave))
