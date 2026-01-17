@@ -622,7 +622,7 @@ class P92(BaseExtModel, Fittable1DModel):
 
     FUV_amp = Parameter(description="FUV term: amplitude", default=14.0 * AbAv, min=0.0)
     FUV_lambda = Parameter(
-        description="FUV term: center wavelength", default=0.07, bounds=(0.06, 0.08)
+        description="FUV term: center wavelength", default=0.08, bounds=(0.06, 0.09)
     )
     FUV_b = Parameter(description="FUV term: b coefficient", default=4.0)
     FUV_n = Parameter(description="FUV term: n coefficient", default=6.5)
