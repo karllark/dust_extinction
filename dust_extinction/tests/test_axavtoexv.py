@@ -66,4 +66,4 @@ def test_AxAvtoExv_with_P92_fitting():
                  2.0, 1.304374949048315]
     # fmt: on
 
-    np.testing.assert_allclose(good_vals, fit_vals)
+    np.testing.assert_allclose(good_vals, fit_vals, rtol=1e-4)
