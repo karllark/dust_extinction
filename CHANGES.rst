@@ -1,8 +1,11 @@
-1.7.dev (unreleased)
+1.7 (2026-02-06)
 ====================
 
+- added documentation on extinction curve normalization details
+- updated name of M33Avg to G26
 - added util function to write files G23 models with a range of R(V) values
 - add P24 dust grain model
+- minor bug fixes
 
 1.6 (2025-08-08)
 ================
