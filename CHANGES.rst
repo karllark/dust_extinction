@@ -1,5 +1,10 @@
-1.7 (2026-02-06)
+1.8.dev (unreleased)
 ====================
+
+- no changes yet
+
+1.7 (2026-02-06)
+================
 
 - added documentation on extinction curve normalization details
 - updated name of M33Avg to G26
