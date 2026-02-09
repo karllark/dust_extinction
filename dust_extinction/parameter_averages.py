@@ -350,8 +350,7 @@ class F99(BaseExtRvModel):
     Rv_range = [2.0, 6.0]
     x_range = x_range_F99
 
-    @staticmethod
-    def evaluate(x, Rv):
+    def evaluate(self, x, Rv):
         """
         F99 function
 
@@ -429,6 +428,7 @@ class F99(BaseExtRvModel):
             gamma,
             optnir_axav_x,
             optnir_axebv_y / Rv,
+            x_range=self.x_range,
         )
 
 
@@ -498,8 +498,7 @@ class F04(BaseExtRvModel):
     Rv_range = [2.0, 6.0]
     x_range = x_range_F04
 
-    @staticmethod
-    def evaluate(x, Rv):
+    def evaluate(self, x, Rv):
         """
         F04 function
 
@@ -576,6 +575,7 @@ class F04(BaseExtRvModel):
             gamma,
             optnir_axav_x,
             optnir_axebv_y / Rv,
+            x_range=self.x_range,
         )
 
 

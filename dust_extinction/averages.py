@@ -451,6 +451,7 @@ class G03_SMCBar(BaseExtModel):
             gamma,
             optnir_axav_x,
             optnir_axav_y,
+            x_range=self.x_range,
         )
 
 
@@ -578,6 +579,7 @@ class G03_LMCAvg(BaseExtModel):
             gamma,
             optnir_axav_x,
             optnir_axav_y,
+            x_range=self.x_range,
         )
 
 
@@ -708,6 +710,7 @@ class G03_LMC2(BaseExtModel):
             gamma,
             optnir_axav_x,
             optnir_axav_y,
+            x_range=self.x_range,
         )
 
 
@@ -1639,6 +1642,7 @@ class G24_SMCAvg(BaseExtModel):
             gamma,
             optnir_axav_x,
             optnir_axav_y,
+            x_range=self.x_range,
         )
 
 
@@ -1771,6 +1775,7 @@ class G24_SMCBumps(BaseExtModel):
             gamma,
             optnir_axav_x,
             optnir_axav_y,
+            x_range=self.x_range,
         )
 
 
@@ -1905,6 +1910,7 @@ class C25_M31Avg(BaseExtModel):
             gamma,
             optnir_axav_x,
             optnir_axav_y,
+            x_range=self.x_range,
         )
 
 
@@ -2035,4 +2041,5 @@ class G26_M33Avg(BaseExtModel):
             gamma,
             optnir_axav_x,
             optnir_axav_y,
+            x_range=self.x_range,
         )
