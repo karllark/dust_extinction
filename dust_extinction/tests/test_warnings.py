@@ -14,7 +14,8 @@ from .helpers import (
     ave_models,
     grain_models,
 )
-from ..warnings import SpectralUnitsWarning
+from dust_extinction.warnings import SpectralUnitsWarning
+from dust_extinction.shapes import FM90
 
 
 @pytest.mark.parametrize("model", all_models)
@@ -24,9 +25,43 @@ def test_nounits_warning(model):
 
     with pytest.warns(
         SpectralUnitsWarning,
-        match="x has no units, assuming x units are inverse microns"
+        match="x has no units, assuming x units are inverse microns",
     ):
         ext(x)
+
+
+def test_dimensionless_unscaled_warning():
+    """Test that Quantity with dimensionless_unscaled units triggers warning and works"""
+
+    # Use an actual model that inherits from BaseExtModel
+    model = FM90()
+
+    # Test with dimensionless_unscaled units (should execute lines 41-42)
+    x_dimless = np.array([3.0, 4.0, 5.0]) * u.dimensionless_unscaled
+
+    with pytest.warns(
+        SpectralUnitsWarning,
+        match="x has no units, assuming x units are inverse microns",
+    ):
+        # Test the _prepare_input_single method directly to bypass astropy's unit validation
+        result = model._prepare_input_single(x_dimless)
+
+    # Verify it returns the value as expected (line 41: x = x.value)
+    expected = np.array([3.0, 4.0, 5.0])
+    np.testing.assert_array_equal(result, expected)
+
+    # Test with None units (should also execute lines 41-42)
+    x_none = u.Quantity(np.array([3.0, 4.0, 5.0]), unit=None)
+
+    with pytest.warns(
+        SpectralUnitsWarning,
+        match="x has no units, assuming x units are inverse microns",
+    ):
+        # Test the _prepare_input_single method directly
+        result_none = model._prepare_input_single(x_none)
+
+    # Verify it returns the value as expected (line 41: x = x.value)
+    np.testing.assert_array_equal(result_none, expected)
 
 
 @pytest.mark.skip("Testing for no warnings got more complicated/does not work")
