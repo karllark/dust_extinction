@@ -129,7 +129,9 @@ def _curve_F99_method(
 
         spline_x = np.concatenate([x_splineval_optir, x_splineval_uv])
         spline_y = np.concatenate([y_splineval_optir, y_splineval_uv])
-        axav[indxs_opir] = interpolate.CubicSpline(spline_x, spline_y, bc_type='natural')(x[indxs_opir])
+        axav[indxs_opir] = interpolate.CubicSpline(
+            spline_x, spline_y, bc_type="natural"
+        )(x[indxs_opir])
 
     # return A(x)/A(V)
     return axav
@@ -305,7 +307,7 @@ class FM90(BaseExtModel, Fittable1DModel):
         xo2 = xo**2
         g2 = gamma**2
         x2mxo2_2 = (x2 - xo2) ** 2
-        denom = (x2mxo2_2 - x2 * g2) ** 2
+        denom = (x2mxo2_2 + x2 * g2) ** 2
 
         # derivatives
         d_C1 = np.full((len(x)), 1.0)
@@ -313,9 +315,9 @@ class FM90(BaseExtModel, Fittable1DModel):
 
         d_C3 = x2 / (x2mxo2_2 + x2 * g2)
 
-        d_xo = (4.0 * C2 * x2 * xo * (x2 - xo2)) / denom
+        d_xo = (4.0 * C3 * x2 * xo * (x2 - xo2)) / denom
 
-        d_gamma = (2.0 * C2 * (x2**2) * gamma) / denom
+        d_gamma = (-2.0 * C3 * (x2**2) * gamma) / denom
 
         d_C4 = np.zeros((len(x)))
         fuv_indxs = np.where(x >= 5.9)
@@ -468,6 +470,46 @@ class FM90_B3(BaseExtModel, Fittable1DModel):
 
         # return E(x-V)/E(B-V)
         return exvebv
+
+    @staticmethod
+    def fit_deriv(x, C1, C2, B3, C4, xo, gamma):
+        """
+        Derivatives of the FM90_B3 function with respect to the parameters
+        """
+        # useful quantitites
+        x2 = x**2
+        xo2 = xo**2
+        g2 = gamma**2
+        x2mxo2_2 = (x2 - xo2) ** 2
+        denom = (x2mxo2_2 + x2 * g2) ** 2
+
+        # derivatives
+        d_C1 = np.full((len(x)), 1.0)
+        d_C2 = x
+
+        # For B3: derivative of (B3 * gamma^2 * x2 / D) with respect to B3
+        # where D = (x2 - xo2)^2 + x2 * g2
+        d_B3 = (g2 * x2) / (x2mxo2_2 + x2 * g2)
+
+        # For xo: derivative of (B3 * gamma^2 * x2 / D) with respect to xo
+        # d_xo = (4 * B3 * gamma^2 * x2 * xo * (x2 - xo2)) / D^2
+        d_xo = (4.0 * B3 * g2 * x2 * xo * (x2 - xo2)) / denom
+
+        # For gamma: derivative of (B3 * gamma^2 * x2 / D) with respect to gamma
+        # Need product rule: derivative of (B3 * gamma^2) * (x2/D) + (B3 * gamma^2) * derivative of (x2/D)
+        # d_gamma = (2 * B3 * gamma * x2 / D) + (B3 * gamma^2 * (-2 * x2^2 * gamma) / D^2)
+        # d_gamma = (2 * B3 * gamma * x2 * D - 2 * B3 * gamma^3 * x2^2) / D^2
+        # d_gamma = (2 * B3 * gamma * x2 * (x2mxo2_2 + x2 * g2) - 2 * B3 * gamma^3 * x2^2) / D^2
+        # d_gamma = (2 * B3 * gamma * x2 * x2mxo2_2) / D^2
+        d_gamma = (2.0 * B3 * gamma * x2 * x2mxo2_2) / denom
+
+        d_C4 = np.zeros((len(x)))
+        fuv_indxs = np.where(x >= 5.9)
+        if len(fuv_indxs) > 0:
+            y = x[fuv_indxs] - 5.9
+            d_C4[fuv_indxs] = 0.5392 * (y**2) + 0.05644 * (y**3)
+
+        return [d_C1, d_C2, d_B3, d_C4, d_xo, d_gamma]
 
 
 class P92(BaseExtModel, Fittable1DModel):

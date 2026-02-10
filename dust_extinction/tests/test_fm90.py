@@ -74,8 +74,8 @@ def test_FM90_fitting():
     ]
 
     # fmt: off
-    good_vals = np.array([-0.941674, 1.013711, 2.725373, 0.301217,
-                          4.589078, 0.948576])
+    good_vals = np.array([-1.029999, 1.027479, 2.830405, 0.291653,
+                          4.572539, 0.963727])
     # fmt: on
 
     np.testing.assert_allclose(good_vals, fit_vals, rtol=1e-5)
