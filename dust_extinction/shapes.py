@@ -24,6 +24,7 @@ def _curve_F99_method(
     optnir_axav_x,
     optnir_axav_y,
     fm90_version="C3",
+    x_range=None,
 ):
     """
     Function to return extinction using F99 method
@@ -67,6 +68,9 @@ def _curve_F99_method(
     fm90_version: str
         "C3" for standard FM90, "B3" for FM90_B3 for true bump amplitude version
 
+    x_range: 2 floats, optional
+        allowed min/max of x for validation. If None, uses FM90 default range.
+
     Returns
     -------
     axav: np array (float)
@@ -100,6 +104,10 @@ def _curve_F99_method(
         fm90_model = FM90_B3(C1=C1, C2=C2, B3=bump_param, C4=C4, xo=xo, gamma=gamma)
     else:
         fm90_model = FM90(C1=C1, C2=C2, C3=bump_param, C4=C4, xo=xo, gamma=gamma)
+    # us the x_range instead of the default if input
+    if x_range is not None:
+        fm90_model.x_range = x_range
+
     # evaluate model and get results in A(x)/A(V)
     axav_fm90 = fm90_model(xuv / u.micron) / Rv + 1.0
 
