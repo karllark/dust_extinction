@@ -64,11 +64,12 @@ Extinguish a Blackbody
 Unreddening/Reddening
 =======================
 
-The `dust_extinction.unred` module provides a general function to deredden or redden
-spectra using any dust extinction model. This is a modern implementation of the classic
-IDL `ccm_unred` function, but uses the Gordon et al. (2023) extinction model by default.
+The `dust_extinction.conv_functions.unred` module provides a general function to
+deredden or redden spectra using any dust extinction model. This is a modern
+implementation of the classic IDL `ccm_unred` function, but uses the Gordon et
+al. (2023) extinction model by default.
 
-.. autofunction:: dust_extinction.unred.unred
+.. autofunction:: dust_extinction.conv_functions.unred
 
 .. py:function:: unred
     .. py:function:: unred(wave, flux, ebv, ext_model=None, R_V=3.1)
