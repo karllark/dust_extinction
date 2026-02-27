@@ -37,7 +37,7 @@ Extinguish a Blackbody
    temperature = 10000*u.K
 
    # get the blackbody flux
-   bb_lam = BlackBody(10000*u.K, scale=1.0 * u.erg / (u.cm ** 2 * u.AA * u.s * u.sr))
+   bb_lam = BlackBody(temperature, scale=1.0 * u.erg / (u.cm ** 2 * u.AA * u.s * u.sr))
    flux = bb_lam(wavelengths)
 
    # initialize the model
@@ -47,6 +47,65 @@ Extinguish a Blackbody
    flux_ext_av05 = flux*ext.extinguish(wavelengths, Av=0.5)
    flux_ext_av15 = flux*ext.extinguish(wavelengths, Av=1.5)
    flux_ext_ebv10 = flux*ext.extinguish(wavelengths, Ebv=1.0)
+
+   # plot the intrinsic and extinguished fluxes
+   fig, ax = plt.subplots()
+
+   ax.plot(wavelengths, flux, label='Intrinsic')
+   ax.plot(wavelengths, flux_ext_av05, label='$A(V) = 0.5$')
+   ax.plot(wavelengths, flux_ext_av15, label='$A(V) = 1.5$')
+   ax.plot(wavelengths, flux_ext_ebv10, label='$E(B-V) = 1.0$')
+
+   ax.set_xlabel('$\lambda$ [$\AA$]')
+   ax.set_ylabel('$Flux$')
+
+   ax.set_xscale('log')
+   ax.xaxis.set_major_formatter(ScalarFormatter())
+   ax.set_yscale('log')
+
+   ax.set_title('Example extinguishing a blackbody')
+
+   ax.legend(loc='best')
+   plt.tight_layout()
+   plt.show()
+
+Convenience Function: unred
+===========================
+
+The `dust_extinction.conv_functions.unred` module provides a general function to
+deredden or redden spectra using any dust extinction model. This is a modern
+implementation of the classic IDL `ccm_unred` function, but uses the G23
+extinction model by default.
+
+.. plot::
+   :include-source:
+
+   import matplotlib.pyplot as plt
+   from matplotlib.ticker import ScalarFormatter
+   import numpy as np
+
+   import astropy.units as u
+   from astropy.modeling.models import BlackBody
+
+   from dust_extinction.conv_functions import unred
+
+   # generate wavelengths between 0.092 and 31 microns
+   #    within the valid range for the G23 R(V) dependent relationship
+   lam = np.logspace(np.log10(0.092), np.log10(31.0), num=1000)
+
+   # setup the inputs for the blackbody function
+   wavelengths = lam*1e4*u.AA
+   temperature = 10000*u.K
+
+   # get the blackbody flux
+   bb_lam = BlackBody(temperature, scale=1.0 * u.erg / (u.cm ** 2 * u.AA * u.s * u.sr))
+   flux = bb_lam(wavelengths)
+
+   # get the extinguished blackbody flux for different amounts of dust
+   # unred function takes E(B-V), not A(V) so divide by R(V)=3.1
+   flux_ext_av05 = unred(wavelengths, flux, 0.5 / 3.1)
+   flux_ext_av15 = unred(wavelengths, flux, 1.5 / 3.1)
+   flux_ext_ebv10 = unred(wavelengths, flux, 1.0)
 
    # plot the intrinsic and extinguished fluxes
    fig, ax = plt.subplots()

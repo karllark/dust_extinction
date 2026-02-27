@@ -86,9 +86,9 @@ def unred(wave, flux, ebv, ext_model=None, R_V=3.1):
     a_lambda_over_av = ext_model(x_wave)
 
     # Calculate the correction factor
-    # For dereddening: multiply by 10^(0.4 * A(λ) * E(B-V) * R_V)
+    # For dereddening: multiply by 10^(-0.4 * A(λ) * E(B-V) * R_V)
     # For reddening (negative ebv): same formula works
-    correction_factor = np.power(10.0, 0.4 * a_lambda_over_av * ebv * R_V)
+    correction_factor = np.power(10.0, -0.4 * a_lambda_over_av * ebv * R_V)
 
     # Apply correction
     return flux * correction_factor
