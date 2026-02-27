@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from dust_extinction import unred
+from dust_extinction.conv_functions import unred
 from dust_extinction.parameter_averages import G23, F99
 
 
