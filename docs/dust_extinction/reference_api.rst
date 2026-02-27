@@ -12,6 +12,11 @@ Models
 
 .. automodapi:: dust_extinction.grain_models
 
+Convenience Functions
+*********************
+
+.. automodapi:: dust_extinction.conv_functions
+
 Details
 *******
 
