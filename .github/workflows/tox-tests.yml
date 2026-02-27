@@ -36,7 +36,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up python 3.${{ matrix.python-ver }} with tox environment py3${{ matrix.python-ver }}-${{ matrix.tox-env }} on ${{ matrix.os }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.${{ matrix.python-ver }}
     - name: Install base dependencies
@@ -72,7 +72,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up python for astropy lts test
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.11
     - name: Install base dependencies
@@ -90,7 +90,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up python for coverage test
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.12
     - name: Install base dependencies
@@ -120,7 +120,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python to build docs with sphinx
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.12
     - name: Install base dependencies
@@ -140,7 +140,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Python codestyle check
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.12
     - name: Install base dependencies
