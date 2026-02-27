@@ -51,7 +51,7 @@ def unred(wave, flux, ebv, ext_model=None, R_V=3.1):
     Examples
     --------
     >>> import numpy as np
-    >>> from dust_extinction.unred import unred
+    >>> from dust_extinction.conv_functions import unred
     >>>
     >>> # Example wavelengths (3000-8000 Angstroms)
     >>> wave = np.linspace(3000, 8000, 100)
@@ -86,9 +86,9 @@ def unred(wave, flux, ebv, ext_model=None, R_V=3.1):
     a_lambda_over_av = ext_model(x_wave)
 
     # Calculate the correction factor
-    # For dereddening: multiply by 10^(-0.4 * A(λ) * E(B-V) * R_V)
+    # For dereddening: multiply by 10^(0.4 * A(λ) * E(B-V) * R_V)
     # For reddening (negative ebv): same formula works
-    correction_factor = np.power(10.0, -0.4 * a_lambda_over_av * ebv * R_V)
+    correction_factor = np.power(10.0, 0.4 * a_lambda_over_av * ebv * R_V)
 
     # Apply correction
     return flux * correction_factor
