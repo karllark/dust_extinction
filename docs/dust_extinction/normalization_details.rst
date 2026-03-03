@@ -25,7 +25,7 @@ extinction curves for spectroscopic observations.
 Simple measurements reveal that different authors have assumed different
 wavelengths for the V and B bands. Other details in the construction of the
 extinction curves can also impact the effective wavelengths of the V and B bands
-(e.g., optical extinction shape in absence of V or B band photomtery). The table
+(e.g., optical extinction shape in absence of V or B band photometry). The table
 below gives the wavelengths of the V and B bands by determining where the
 A(lambda)/A(V) extinction curves have values of 1 (V band) and 1 + 1/R(V) (B
 band). The R(V) values are the average R(V) for the average models and R(V) = 3.1
