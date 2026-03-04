@@ -14,15 +14,19 @@ license = { file = "LICENSE" }
 authors = [
   { name = "Karl D. Gordon", email = "kgordon@stsci.edu" },
 ]
-dependencies = ["astropy", "scipy"]
+dependencies = [
+    "astropy>=6.2.1",
+    "numpy>=1.26.0",
+    "scipy>=1.13.0",
+]
 dynamic = ["version"]
 
 [project.optional-dependencies]
 test = [
-    "pytest",
-    "pytest-doctestplus",
-    "pytest-cov",
-    "matplotlib"
+    "pytest>=8.0.0",
+    "pytest-doctestplus>=1.7.1",
+    "pytest-cov>=6.0.0",
+    "matplotlib>=3.7.0"
 ]
 docs = [
     "sphinx",
