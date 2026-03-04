@@ -10,7 +10,8 @@ name = "dust_extinction"
 description = "Interstellar Dust Extinction Models"
 requires-python = ">=3.10"
 readme = { file = "README.rst", content-type = "text/x-rst" }
-license = { file = "LICENSE" }
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
 authors = [
   { name = "Karl D. Gordon", email = "kgordon@stsci.edu" },
 ]
