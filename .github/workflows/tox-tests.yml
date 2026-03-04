@@ -33,6 +33,12 @@ jobs:
         # Specify which tox environments to test in this list.
         # tox-env: [cov, alldeps, devdeps, astropylts]
         # tox-env: alldeps
+
+        include:
+          - os: ubuntu-24.04
+            python-ver: 11
+            tox-env: oldestdeps
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up python 3.${{ matrix.python-ver }} with tox environment py3${{ matrix.python-ver }}-${{ matrix.tox-env }} on ${{ matrix.os }}

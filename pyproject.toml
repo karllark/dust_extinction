@@ -113,3 +113,22 @@ exclude_lines = [
         E203,
         E501,
     """
+
+[tool.uv]
+# constrain packages that *may* be required transitively and without
+# an explicit lower bound to prevent build errors with ancient versions
+# when running oldestdeps
+constraint-dependencies = [
+    "setuptools>=70.0.0",
+]
+# the following transitive dependencies should *never* be built from source in CI:
+# prefer versions that have compatible binaries to strictly oldest-compatible ones
+no-build-package = [
+    # via astropy
+    "pyyaml",
+
+    # via matplotlib
+    "pillow",
+    "contourpy",
+    "kiwisolver",
+]
