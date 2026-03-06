@@ -1,8 +1,8 @@
 [build-system]
 requires = [
-  "setuptools>=62.1",
+  "setuptools>=77.0.1",
   "setuptools_scm[toml]>=8.0.0",
-  "wheel",]
+]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -10,7 +10,8 @@ name = "dust_extinction"
 description = "Interstellar Dust Extinction Models"
 requires-python = ">=3.10"
 readme = { file = "README.rst", content-type = "text/x-rst" }
-license = { file = "LICENSE" }
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
 authors = [
   { name = "Karl D. Gordon", email = "kgordon@stsci.edu" },
 ]
