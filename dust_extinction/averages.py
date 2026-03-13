@@ -1533,6 +1533,10 @@ class G24_SMCAvg(BaseExtModel):
     -----
     From Gordon et al. (2024, ApJ, 970, 51)
 
+    The observed A(lambda)/A(V) values at JHK wavelengths were
+    changed to provide smooth interpolation just like G02_SMCBar
+    as noted in Gordon et al. (2016, ApJ, 826, 104)
+
     Example showing the average curve
 
     .. plot::
@@ -1628,7 +1632,7 @@ class G24_SMCAvg(BaseExtModel):
         gamma = 0.95
 
         optnir_axav_x = 1.0 / np.array([2.174, 1.622, 1.231, 0.544, 0.438, 0.363])
-        optnir_axav_y = [0.062, 0.125, 0.324, 1.021, 1.349, 1.514]
+        optnir_axav_y = [0.109, 0.183, 0.290, 1.021, 1.349, 1.514]
 
         # return A(x)/A(V)
         return _curve_F99_method(
