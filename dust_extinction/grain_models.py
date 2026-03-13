@@ -182,6 +182,8 @@ class WD01(BaseExtGrainModel):
         sindxs = np.argsort(np.absolute(self.data_x - 1.0 / 0.55))
 
         self.data_axav = a["cext"].data / a["cext"].data[sindxs[0]]
+        self.data_albedo = a["albedo"]
+        self.data_g = a["g"]
 
         # accuracy of the data based on calculations
         self.data_tolerance = 1e-6
