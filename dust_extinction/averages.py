@@ -1632,7 +1632,7 @@ class G24_SMCAvg(BaseExtModel):
         gamma = 0.95
 
         optnir_axav_x = 1.0 / np.array([2.174, 1.622, 1.231, 0.544, 0.438, 0.363])
-        optnir_axav_y = [0.109, 0.183, 0.290, 1.021, 1.349, 1.514]
+        optnir_axav_y = [0.109, 0.183, 0.290, 1.021, 1.349, 1.63]
 
         # return A(x)/A(V)
         return _curve_F99_method(
