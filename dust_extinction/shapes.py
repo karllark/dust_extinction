@@ -8,7 +8,7 @@ from .baseclasses import BaseExtModel
 
 __all__ = ["FM90", "FM90_B3", "P92", "G21"]
 
-x_range_FM90 = [1.0 / 0.35, 1.0 / 0.09]
+x_range_FM90 = [1.0 / 0.34, 1.0 / 0.0912]
 x_range_P92 = [1.0 / 1e3, 1.0 / 1e-3]
 
 
