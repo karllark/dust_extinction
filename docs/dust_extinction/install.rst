@@ -5,10 +5,9 @@ How to Install
 From source
 ===========
 
-``dust_extinction`` can be installed from the source code in the normal
-python fashion after downloading it from the git repo::
+To install ``dust_extinction`` from a source checkout, use pip::
 
-    python setup.py install
+    pip install -e .
 
 Using pip
 =========

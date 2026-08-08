@@ -227,9 +227,9 @@ class BaseExtGrainModel(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        # define the function allowing for spline interpolation
-        #   fill value needed to handle numerical issues at the edges
-        #   the x values has already been checked to be in range
-        f = interp1d(self.data_x, self.data_axav, fill_value="extrapolate")
+        # Cache the interpolator so repeated evaluations reuse the same object.
+        # fill_value is needed to handle numerical issues at the edges.
+        if getattr(self, "_interp", None) is None:
+            self._interp = interp1d(self.data_x, self.data_axav, fill_value="extrapolate")
 
-        return f(x)
+        return self._interp(x)
