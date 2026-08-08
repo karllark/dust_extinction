@@ -293,6 +293,7 @@ class B92_MWAvg(BaseExtModel):
 
     # accuracy of the observed data based on published table
     obsdata_tolerance = 6e-3
+    _interp = None
 
     @classmethod
     def evaluate(cls, x):
@@ -317,10 +318,10 @@ class B92_MWAvg(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        # define the function allowing for spline interpolation
-        f = interp1d(cls.obsdata_x, cls.obsdata_axav)
+        if cls._interp is None:
+            cls._interp = interp1d(cls.obsdata_x, cls.obsdata_axav)
 
-        return f(x)
+        return cls._interp(x)
 
 
 class G03_SMCBar(BaseExtModel):
@@ -404,6 +405,7 @@ class G03_SMCBar(BaseExtModel):
 
     # accuracy of the observed data based on published table
     obsdata_tolerance = 6e-2
+    _interp = None
 
     def evaluate(self, x):
         """
@@ -781,6 +783,8 @@ class I05_MWAvg(BaseExtModel):
 
     # accuracy of the observed data based on published table
     obsdata_tolerance = 1e-6
+    _interp = None
+    _interp = None
 
     def evaluate(self, x):
         """
