@@ -93,6 +93,8 @@ class RL85_MWGC(BaseExtModel):
     # accuracy of the observed data based on published table
     obsdata_tolerance = 1e-6
 
+    _interp = None
+
     @classmethod
     def evaluate(cls, x):
         r"""
@@ -116,11 +118,10 @@ class RL85_MWGC(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        # define the function using simple linear interpolation
-        # avoids negative values of alav that happens with cubic splines
-        f = interp1d(cls.obsdata_x, cls.obsdata_axav)
+        if cls._interp is None:
+            cls._interp = interp1d(cls.obsdata_x, cls.obsdata_axav)
 
-        return f(x)
+        return cls._interp(x)
 
 
 class RRP89_MWGC(BaseExtModel):
@@ -188,6 +189,8 @@ class RRP89_MWGC(BaseExtModel):
     # accuracy of the observed data based on published table
     obsdata_tolerance = 1e-6
 
+    _interp = None
+
     @classmethod
     def evaluate(cls, x):
         r"""
@@ -211,11 +214,10 @@ class RRP89_MWGC(BaseExtModel):
         ValueError
            Input x values outside of defined range
         """
-        # define the function using simple linear interpolation
-        # avoids negative values of alav that happens with cubic splines
-        f = interp1d(cls.obsdata_x, cls.obsdata_axav)
+        if cls._interp is None:
+            cls._interp = interp1d(cls.obsdata_x, cls.obsdata_axav)
 
-        return f(x)
+        return cls._interp(x)
 
 
 class B92_MWAvg(BaseExtModel):
